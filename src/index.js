@@ -15,7 +15,7 @@ async function startServer() {
 
   logger.info('Server started successfully')
   logger.info(
-    `Access your frontend on http://localhost:${appConfig.get(
+    `Access your backend on http://localhost:${appConfig.get(
       'port'
     )}${appConfig.get('appPathPrefix')}`
   )
