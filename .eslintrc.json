@@ -1,0 +1,14 @@
+{
+  "env": {
+    "es2022": true,
+    "node": true,
+    "jest": true
+  },
+  "extends": ["standard", "prettier"],
+  "overrides": [],
+  "parserOptions": {
+    "ecmaVersion": "latest"
+  },
+  "rules": {},
+  "ignorePatterns": [".server", "src/__fixtures__", "coverage"]
+}
