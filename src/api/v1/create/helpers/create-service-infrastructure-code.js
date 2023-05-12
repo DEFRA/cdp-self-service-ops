@@ -4,7 +4,7 @@ import { addRepositoryName } from '~/src/api/v1/create/helpers/add-repository-na
 
 async function createServiceInfrastructureCode(repositoryName) {
   const filePath = 'snd/ecr_repo_names.json'
-  const fileRepository = 'tf-svc-infra'
+  const fileRepository = appConfig.get('githubRepoServiceInfra')
 
   const { data } = await octokit.rest.repos.getContent({
     mediaType: {
@@ -32,7 +32,7 @@ async function createServiceInfrastructureCode(repositoryName) {
     changes: [
       {
         files: {
-          filePath: repositoryNamesJson
+          [filePath]: repositoryNamesJson
         },
         commit: `🤖 add ${repositoryName} to ecr repo names list`
       }

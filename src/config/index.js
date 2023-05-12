@@ -61,6 +61,18 @@ const appConfig = convict({
     default: 'tf-svc',
     env: 'GITHUB_REPO_DEPLOYMENTS'
   },
+  githubRepoServiceInfra :{
+    doc: 'github repo to update the service infrastructure in',
+    format: String,
+    default: 'tf-svc-infra',
+    env: 'GITHUB_REPO_SERVICE_INFRA'
+  },
+  githubRepoServicePermissions :{
+    doc: 'github repo to update the service permissions in',
+    format: String,
+    default: 'tf-core',
+    env: 'GITHUB_REPO_SERVICE_PERMISSIONS'
+  },
   isProduction: {
     doc: 'If this application running in the production environment',
     format: Boolean,
