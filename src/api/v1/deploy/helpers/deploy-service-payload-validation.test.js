@@ -1,17 +1,17 @@
 import { deployServicePayloadSchema } from './deploy-service-payload-validation'
-import Joi, { func, string } from 'joi'
+import Joi from 'joi'
 
 describe('deploy-service-payload', () => {
 
-  let schema = deployServicePayloadSchema()
+  const schema = deployServicePayloadSchema()
 
   test('payload only accepts valid looking versions', () => {
-    let payload = {image: "foo", version: "v1.0.0", cluster: "frontend"}
+    const payload = {image: "foo", version: "v1.0.0", cluster: "frontend"}
     expect(Joi.assert(payload, schema)).toBeUndefined()
   })
 
   test('payload fails on invalid versions', () => {
-    let payload = {image: "foo", version: "latest", cluster: "frontend"}
+    const payload = {image: "foo", version: "latest", cluster: "frontend"}
     expect(schema.validate(payload).error).not.toBeUndefined()
   })
 
@@ -22,7 +22,7 @@ describe('deploy-service-payload', () => {
 
 
   test('payload fails on invalid cluster', () => {
-    let payload = {image: "foo", version: "latest", cluster: "somewhere"}
+    const payload = {image: "foo", version: "latest", cluster: "somewhere"}
     expect(schema.validate(payload).error).not.toBeUndefined()
   })
 

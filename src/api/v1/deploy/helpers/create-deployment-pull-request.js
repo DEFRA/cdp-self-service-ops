@@ -1,11 +1,6 @@
-import { func } from '~/node_modules/joi/lib/index'
 import { appConfig } from '~/src/config'
 import { createLogger } from '~/src/helpers/logger'
 import { octokit } from '~/src/helpers/oktokit'
-
-function isServiceAlreadyDeployed() {
-  // TODO
-}
 
 async function createDeploymentPullRequest(image, version, cluster) {
   const logger = createLogger()
@@ -26,8 +21,8 @@ async function createDeploymentPullRequest(image, version, cluster) {
   // TODO: validate the content
   const services = JSON.parse(data)
 
-  var idx = services.findIndex((d) => d.container_image == image)
-  if (idx == -1) {
+  const idx = services.findIndex((d) => d.container_image === image)
+  if (idx === -1) {
     logger.info(
       `No deploy found for ${image} in ${cluster} generating a new one.`
     )
@@ -62,7 +57,7 @@ function createNewDeployment(image, version) {
     container_port: 3000,
     container_version: version,
     desired_count: 2,
-    healthcheck: '/cdp-basic-node-frontend',
+    healthcheck: '/health',
     name: image,
     task_cpu: 512,
     task_memory: 1024
