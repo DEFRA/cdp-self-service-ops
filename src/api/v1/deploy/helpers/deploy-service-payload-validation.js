@@ -1,4 +1,4 @@
-import Joi, { func, string } from 'joi'
+import Joi from 'joi'
 
 function deployServicePayloadSchema() {
 
