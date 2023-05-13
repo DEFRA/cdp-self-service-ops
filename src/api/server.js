@@ -31,7 +31,12 @@ async function createServer() {
 
   await server.register(router)
 
-  await server.register(routerV1)
+  await server.register(routerV1, {
+    routes: { prefix: '/v1' }
+  })
+
+
+
 
   server.ext('onPreResponse', catchAll)
 
