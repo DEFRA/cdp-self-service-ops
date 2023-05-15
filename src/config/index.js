@@ -55,19 +55,19 @@ const appConfig = convict({
     format: String,
     default: '2022-11-28'
   },
-  githubRepoDeployments :{
+  githubRepoDeployments: {
     doc: 'github repo to update the deployments file in',
     format: String,
     default: 'tf-svc',
     env: 'GITHUB_REPO_DEPLOYMENTS'
   },
-  githubRepoServiceInfra :{
+  githubRepoServiceInfra: {
     doc: 'github repo to update the service infrastructure in',
     format: String,
     default: 'tf-svc-infra',
     env: 'GITHUB_REPO_SERVICE_INFRA'
   },
-  githubRepoServicePermissions :{
+  githubRepoServicePermissions: {
     doc: 'github repo to update the service permissions in',
     format: String,
     default: 'tf-core',

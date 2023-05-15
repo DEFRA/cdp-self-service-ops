@@ -84,6 +84,7 @@ export GITHUB_REPO_DEPLOYMENTS=a-test-repo
 ### Usage
 
 Deploy a service:
+
 ```
 curl -H "Content-type: application/json" -d '{"image": "foo-frontend", "version": "v0.1.0", "cluster": "frontend"}' 'http://localhost:3009/cdp-self-service-ops/v1/deploy-service'
 ```

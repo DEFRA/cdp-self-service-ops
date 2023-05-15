@@ -32,11 +32,8 @@ async function createServer() {
   await server.register(router)
 
   await server.register(routerV1, {
-    routes: { prefix: '/v1' }
+    routes: { prefix: `${appConfig.get('appPathPrefix')}/v1` }
   })
-
-
-
 
   server.ext('onPreResponse', catchAll)
 
