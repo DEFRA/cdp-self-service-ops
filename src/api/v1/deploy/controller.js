@@ -15,7 +15,7 @@ const deployServiceController = {
   handler: async (request, h) => {
     try {
       await createDeploymentPullRequest(
-        request.payload.image,
+        request.payload.imageName,
         request.payload.version,
         request.payload.cluster
       )
