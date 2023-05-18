@@ -39,7 +39,7 @@ async function createDeploymentPullRequest(imageName, version, cluster) {
     repo: fileRepository,
     title: `Deploy ${imageName}:${version} to ${cluster} cluster`,
     body: `Auto generated Pull Request to set ${imageName} to use version ${version} in '${filePath}'`,
-    head: `deploy-${imageName}-${version}_${new Date().getTime()}`,
+    head: `deploy-${imageName}-${version}-${new Date().getTime()}`,
     changes: [
       {
         files: {

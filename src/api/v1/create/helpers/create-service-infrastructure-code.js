@@ -28,7 +28,7 @@ async function createServiceInfrastructureCode(repositoryName) {
     repo: fileRepository,
     title: `Add ${repositoryName} to ECR repositories list`,
     body: `Auto generated Pull Request to add ${repositoryName} to the '${filePath}' list.`,
-    head: `add-${repositoryName}-to-ecr-repos`,
+    head: `add-${repositoryName}-to-ecr-repos-${new Date().getTime()}`,
     changes: [
       {
         files: {
