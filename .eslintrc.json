@@ -9,6 +9,10 @@
   "parserOptions": {
     "ecmaVersion": "latest"
   },
-  "rules": {},
+  "plugins": ["prettier"],
+  "rules": {
+    "prettier/prettier": "error",
+    "no-console": "error"
+  },
   "ignorePatterns": [".server", "src/__fixtures__", "coverage"]
 }
