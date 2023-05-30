@@ -1,27 +1,61 @@
-function addRepoToPermissionList(repository, content) {
-  const lines = content.split('\n')
-  let insertAt = -1
+import Joi from 'joi'
 
-  for (let i = 0; i < lines.length; i++) {
-    if (lines[i].startsWith('  gh_action_repos = [')) {
-      while (i++ < lines.length && !lines[i].endsWith(']')) {
-        const serviceName = lines[i].trim()
+import { createLogger } from '~/src/helpers/logger'
 
-        // return early if the repo has already been added.
-        // TODO: maybe regex this, we have to consider quotes and trailing commas"
-        if (serviceName === `"${repository}",`) {
-          return content
-        }
-      }
-      insertAt = i
-      break
+function addGithubPermission({
+  repositories,
+  fileRepository,
+  filePath,
+  org,
+  repositoryName
+}) {
+  const logger = createLogger()
+
+  const parsedRepositories = JSON.parse(repositories)
+  const repositoriesSchema = Joi.array().items(
+    Joi.string().pattern(/^[a-zA-Z0-9][\w-]*[a-zA-Z0-9]\/[a-zA-Z0-9][\w-]*[a-zA-Z0-9]$/)
+  )
+
+  const preAdditionValidationResult = repositoriesSchema.validate(
+    parsedRepositories,
+    {
+      abortEarly: false
     }
+  )
+
+  if (preAdditionValidationResult?.error) {
+    logger.error(
+      `File '${filePath}' from '${fileRepository} failed schema validation`
+    )
+
+    throw new Error('File failed schema validation')
   }
 
-  // note: ensure whitespace is unchanged so as not to break the tf-fmt check
-  lines[insertAt] = `    "${repository}",\n  ]`
+  const entry = `${org}/${repositoryName}`
 
-  return lines.join('\n')
+  // TODO: should we throw an error if its already created or just go with it?
+  if(parsedRepositories.find(r => r === entry) === undefined) {
+    parsedRepositories.push(entry)
+  }
+  
+  const postAdditionValidationResult = repositoriesSchema.validate(
+    parsedRepositories,
+    {
+      abortEarly: false
+    }
+  )
+
+  if (postAdditionValidationResult?.error) {
+    logger.error(
+      `Addition of '${entry}' to '${filePath}' from '${fileRepository} failed schema validation`
+    )
+
+    throw new Error(
+      'Post repository name addition, file failed schema validation'
+    )
+  }
+
+  return JSON.stringify(parsedRepositories, null, 2)
 }
 
-export { addRepoToPermissionList }
+export { addGithubPermission }
