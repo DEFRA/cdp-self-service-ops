@@ -1,13 +1,9 @@
 import Joi from 'joi'
+import { templates } from './service-templates'
 
 function createServiceValidationSchema() {
   // TODO get this from the Database (when it exists)
-  const serviceTypes = [
-    'cdp-node-frontend-template',
-    'cdp-node-backend-template',
-    'cdp-dotnet-backend-template',
-    'cdp-java-backend-template'
-  ]
+  const serviceTypes = Object.keys(templates)
 
   // TODO get this from the Database (when it exists)
   const owningTeams = [

@@ -25,7 +25,6 @@ async function createServiceInfrastructureCode(repositoryName) {
     repositoryName
   })
 
-
   const githubPermissionsData = await octokit.rest.repos.getContent({
     mediaType: {
       format: 'raw'

@@ -13,7 +13,9 @@ function addGithubPermission({
 
   const parsedRepositories = JSON.parse(repositories)
   const repositoriesSchema = Joi.array().items(
-    Joi.string().pattern(/^[a-zA-Z0-9][\w-]*[a-zA-Z0-9]\/[a-zA-Z0-9][\w-]*[a-zA-Z0-9]$/)
+    Joi.string().pattern(
+      /^[a-zA-Z0-9][\w-]*[a-zA-Z0-9]\/[a-zA-Z0-9][\w-]*[a-zA-Z0-9]$/
+    )
   )
 
   const preAdditionValidationResult = repositoriesSchema.validate(
@@ -34,10 +36,10 @@ function addGithubPermission({
   const entry = `${org}/${repositoryName}`
 
   // TODO: should we throw an error if its already created or just go with it?
-  if(parsedRepositories.find(r => r === entry) === undefined) {
+  if (parsedRepositories.find((r) => r === entry) === undefined) {
     parsedRepositories.push(entry)
   }
-  
+
   const postAdditionValidationResult = repositoriesSchema.validate(
     parsedRepositories,
     {
