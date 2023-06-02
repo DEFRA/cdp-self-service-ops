@@ -16,7 +16,7 @@ const deployServiceController = {
   handler: async (request, h) => {
     try {
       // TODO: get cluster name from request
-      const cluster = detectCluster('snd', request.payload.imageName)
+      const cluster = await detectCluster('snd', request.payload.imageName)
 
       h.request.logger.info(
         `Deploying ${request.payload.imageName}:${request.payload.version} to ${cluster}`
@@ -43,11 +43,11 @@ const detectCluster = async (env, imageName) => {
   const backends = await fetchGithubFileRaw(env + '/backend_services.json')
   const frontends = await fetchGithubFileRaw(env + '/frontend_services.json')
 
-  if (backends.find((i) => i.container_image === imageName) != null) {
+  if (backends.find((i) => i.container_image === imageName)) {
     return 'backend'
   }
 
-  if (frontends.find((i) => i.container_image === imageName) != null) {
+  if (frontends.find((i) => i.container_image === imageName)) {
     return 'frontend'
   }
 
