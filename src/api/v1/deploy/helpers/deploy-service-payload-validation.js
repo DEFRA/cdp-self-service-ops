@@ -5,7 +5,8 @@ function deployServicePayloadSchema() {
     imageName: Joi.string().min(1).required(),
     version: Joi.string()
       .pattern(/^v?\d+\.\d+\.\d+$/)
-      .required()
+      .required(),
+    cluster: Joi.string()
   })
 }
 
