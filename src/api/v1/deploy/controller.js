@@ -1,5 +1,6 @@
 import { deployServicePayloadSchema } from './helpers/deploy-service-payload-validation'
 import { createDeploymentPullRequest } from './helpers/create-deployment-pull-request'
+import { fetchGithubFileRaw } from './helpers/fetch-github-file-raw'
 
 const deployServiceController = {
   options: {
@@ -14,10 +15,16 @@ const deployServiceController = {
   },
   handler: async (request, h) => {
     try {
+      // TODO: get cluster name from request
+      const cluster = detectCluster('snd', request.payload.imageName)
+
+      h.request.logger.info(
+        `Deploying ${request.payload.imageName}:${request.payload.version} to ${cluster}`
+      )
       await createDeploymentPullRequest(
         request.payload.imageName,
         request.payload.version,
-        request.payload.cluster
+        cluster
       )
       return h.response({ message: 'success' }).code(200)
     } catch (error) {
@@ -30,6 +37,23 @@ const deployServiceController = {
         .code(error?.status)
     }
   }
+}
+
+const detectCluster = async (env, imageName) => {
+  const backends = await fetchGithubFileRaw(env + '/backend_services.json')
+  const frontends = await fetchGithubFileRaw(env + '/frontend_services.json')
+
+  if (backends.find((i) => i.container_image === imageName) != null) {
+    return 'backend'
+  }
+
+  if (frontends.find((i) => i.container_image === imageName) != null) {
+    return 'frontend'
+  }
+
+  throw new Error(
+    `Unable to determin which cluster to deploy ${imageName} belongs to.`
+  )
 }
 
 export { deployServiceController }

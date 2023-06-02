@@ -2,7 +2,7 @@ import { appConfig } from '~/src/config'
 import { createLogger } from '~/src/helpers/logger'
 import { octokit } from '~/src/helpers/oktokit'
 
-async function createDeploymentPullRequest(imageName, version, cluster) {
+async function createInitialDeploymentPullRequest(imageName, version, cluster) {
   const logger = createLogger()
   const filePath = `snd/${cluster}_services.json`
   const fileRepository = appConfig.get('githubRepoDeployments')
@@ -23,9 +23,10 @@ async function createDeploymentPullRequest(imageName, version, cluster) {
 
   const idx = services.findIndex((d) => d.container_image === imageName)
   if (idx === -1) {
-    throw new Error(`service ${imageName} is not deployed in this cluster!`)
+    services.push(createNewDeployment(imageName, '0.1.0'))
   } else {
-    services[idx].container_version = version
+    logger.info(`service ${imageName} is already deployed in this cluster`)
+    return
   }
 
   // Raise the PR.
@@ -42,10 +43,23 @@ async function createDeploymentPullRequest(imageName, version, cluster) {
         files: {
           [filePath]: JSON.stringify(services, null, 2)
         },
-        commit: `🤖 Deploy ${imageName}:${version} to ${cluster} cluster`
+        commit: `🤖 Initial deploy ${imageName}:${version} to ${cluster} cluster`
       }
     ]
   })
 }
 
-export { createDeploymentPullRequest }
+function createNewDeployment(imageName, version) {
+  return {
+    container_image: imageName,
+    container_port: 3000,
+    container_version: version,
+    desired_count: 1,
+    healthcheck: `/${imageName}/health`, // TODO remove app name routing prefix once routing has been fixed in AWS
+    name: imageName,
+    task_cpu: 512,
+    task_memory: 2048
+  }
+}
+
+export { createInitialDeploymentPullRequest }
