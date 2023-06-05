@@ -2,8 +2,8 @@ import Joi from 'joi'
 
 import { createLogger } from '~/src/helpers/logger'
 
-function addGithubPermission({
-  repositories,
+function addRepoToPermissions({
+  permissions,
   fileRepository,
   filePath,
   org,
@@ -11,15 +11,15 @@ function addGithubPermission({
 }) {
   const logger = createLogger()
 
-  const parsedRepositories = JSON.parse(repositories)
-  const repositoriesSchema = Joi.array().items(
+  const parsedPermissions = JSON.parse(permissions)
+  const permissionsSchema = Joi.array().items(
     Joi.string().pattern(
       /^[a-zA-Z0-9][\w-]*[a-zA-Z0-9]\/[a-zA-Z0-9][\w-]*[a-zA-Z0-9]$/
     )
   )
 
-  const preAdditionValidationResult = repositoriesSchema.validate(
-    parsedRepositories,
+  const preAdditionValidationResult = permissionsSchema.validate(
+    parsedPermissions,
     {
       abortEarly: false
     }
@@ -27,21 +27,21 @@ function addGithubPermission({
 
   if (preAdditionValidationResult?.error) {
     logger.error(
-      `File '${filePath}' from '${fileRepository} failed schema validation`
+      `Permissions file '${filePath}' from '${fileRepository}' failed schema validation`
     )
 
-    throw new Error('File failed schema validation')
+    throw new Error('Permissions file failed schema validation')
   }
 
   const entry = `${org}/${repositoryName}`
 
   // TODO: should we throw an error if its already created or just go with it?
-  if (parsedRepositories.find((r) => r === entry) === undefined) {
-    parsedRepositories.push(entry)
+  if (parsedPermissions.find((r) => r === entry) === undefined) {
+    parsedPermissions.push(entry)
   }
 
-  const postAdditionValidationResult = repositoriesSchema.validate(
-    parsedRepositories,
+  const postAdditionValidationResult = permissionsSchema.validate(
+    parsedPermissions,
     {
       abortEarly: false
     }
@@ -49,15 +49,15 @@ function addGithubPermission({
 
   if (postAdditionValidationResult?.error) {
     logger.error(
-      `Addition of '${entry}' to '${filePath}' from '${fileRepository} failed schema validation`
+      `Permissions addition of '${entry}' to '${filePath}' from '${fileRepository} failed schema validation`
     )
 
     throw new Error(
-      'Post repository name addition, file failed schema validation'
+      'Post permissions name addition, file failed schema validation'
     )
   }
 
-  return JSON.stringify(parsedRepositories, null, 2)
+  return JSON.stringify(parsedPermissions, null, 2)
 }
 
-export { addGithubPermission }
+export { addRepoToPermissions }

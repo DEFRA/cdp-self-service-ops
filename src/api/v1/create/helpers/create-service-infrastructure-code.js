@@ -1,13 +1,12 @@
 import { octokit } from '~/src/helpers/oktokit'
 import { appConfig } from '~/src/config'
 import { addRepositoryName } from '~/src/api/v1/create/helpers/add-repository-name'
-import { addGithubPermission } from '~/src/api/v1/create/helpers/add-repo-to-permissions'
+import { addRepoToPermissions } from '~/src/api/v1/create/helpers/add-repo-to-permissions'
 
 async function createServiceInfrastructureCode(repositoryName) {
-  const ecrRepoNamesFilePath = 'snd/ecr_repo_names.json'
-  const githubPermissionsFilePath = 'snd/github_oidc_repositories.json'
   const fileRepository = appConfig.get('githubRepoServiceInfra')
 
+  const ecrRepoNamesFilePath = 'snd/ecr_repo_names.json'
   const ecrRepoNamesData = await octokit.rest.repos.getContent({
     mediaType: {
       format: 'raw'
@@ -25,20 +24,21 @@ async function createServiceInfrastructureCode(repositoryName) {
     repositoryName
   })
 
+  const githubPermissionsFilePath = 'snd/github_oidc_repositories.json'
   const githubPermissionsData = await octokit.rest.repos.getContent({
     mediaType: {
       format: 'raw'
     },
     owner: appConfig.get('gitHubOrg'),
     repo: fileRepository,
-    path: ecrRepoNamesFilePath,
+    path: githubPermissionsFilePath,
     ref: 'main'
   })
 
-  const githubPermissionsJson = addGithubPermission({
-    repositories: githubPermissionsData.data,
+  const githubPermissionsJson = addRepoToPermissions({
+    permissions: githubPermissionsData.data,
     fileRepository,
-    filePath: ecrRepoNamesFilePath,
+    filePath: githubPermissionsFilePath,
     repositoryName,
     org: appConfig.get('gitHubOrg')
   })

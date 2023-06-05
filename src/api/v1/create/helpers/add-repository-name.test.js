@@ -50,7 +50,7 @@ describe('#addRepository', () => {
     } catch (error) {
       expect(logger.error).toHaveBeenCalledTimes(1)
       expect(logger.error).toHaveBeenCalledWith(
-        "File 'mock-file-path' from 'mock-repo failed schema validation"
+        "ECR repos file 'mock-file-path' from 'mock-repo failed schema validation"
       )
       expect(error).toBeInstanceOf(Error)
       expect(error).toHaveProperty('message', 'File failed schema validation')
