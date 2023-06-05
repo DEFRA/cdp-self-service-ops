@@ -24,7 +24,7 @@ function addRepositoryName({
 
   if (preAdditionValidationResult?.error) {
     logger.error(
-      `File '${filePath}' from '${fileRepository} failed schema validation`
+      `ECR repos file '${filePath}' from '${fileRepository} failed schema validation`
     )
 
     throw new Error('File failed schema validation')

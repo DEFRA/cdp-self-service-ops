@@ -1,7 +1,7 @@
 import { octokit } from '~/src/helpers/oktokit'
 import { appConfig } from '~/src/config'
 import { addRepositoryName } from '~/src/api/v1/create/helpers/add-repository-name'
-import { addGithubPermission } from '~/src/api/v1/create/helpers/add-repo-to-permissions'
+import { addRepoToPermissions } from '~/src/api/v1/create/helpers/add-repo-to-permissions'
 
 async function createServiceInfrastructureCode(repositoryName) {
   const fileRepository = appConfig.get('githubRepoServiceInfra')
@@ -35,8 +35,8 @@ async function createServiceInfrastructureCode(repositoryName) {
     ref: 'main'
   })
 
-  const githubPermissionsJson = addGithubPermission({
-    repositories: githubPermissionsData.data,
+  const githubPermissionsJson = addRepoToPermissions({
+    permissions: githubPermissionsData.data,
     fileRepository,
     filePath: githubPermissionsFilePath,
     repositoryName,
