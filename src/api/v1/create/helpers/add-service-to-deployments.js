@@ -57,7 +57,7 @@ function createNewDeployment(imageName, version) {
     desired_count: 1,
     healthcheck: `/${imageName}/health`, // TODO remove app name routing prefix once routing has been fixed in AWS
     name: imageName,
-    task_cpu: 512,
+    task_cpu: 1024,
     task_memory: 2048
   }
 }
