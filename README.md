@@ -22,7 +22,9 @@ Core delivery platform Self-Service Ops Node.js Backend.
 
 ## Requirements
 
-A github PAT that allows the creation of pull requests against the various infra repos.
+For development a GitHub Private Key in the env `GITHUB_API_AUTH_APP_PRIVATE_KEY` that allows the creation of pull
+requests against the various Org infrastructure repositories. For further details see
+the [Wiki](https://dev.azure.com/defragovuk/DEFRA-CDP/_wiki/wikis/DEFRA-CORE-DELIVERY-PLATFORM/14473/GitHub-API-Authentication-App)
 
 ### Node.js
 

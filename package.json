@@ -30,6 +30,7 @@
   "dependencies": {
     "@babel/runtime": "7.21.5",
     "@hapi/hapi": "21.3.2",
+    "@octokit/auth-app": "4.0.13",
     "@octokit/core": "4.2.0",
     "@octokit/plugin-rest-endpoint-methods": "7.1.0",
     "babel-plugin-module-resolver": "5.0.0",
