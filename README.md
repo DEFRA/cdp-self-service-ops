@@ -1,4 +1,4 @@
-# CDP Teams and Repositories
+# CDP Self Service Ops
 
 Core delivery platform Self-Service Ops Node.js Backend.
 
