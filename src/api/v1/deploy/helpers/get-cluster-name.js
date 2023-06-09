@@ -1,5 +1,3 @@
-import Boom from '@hapi/boom'
-
 import { getClusterServiceNames } from '~/src/api/v1/deploy/helpers/get-cluster-service-names'
 
 async function getClusterName({ environment, imageName }) {
@@ -20,10 +18,7 @@ async function getClusterName({ environment, imageName }) {
     return 'backend'
   }
 
-  return Boom.boomify(
-    new Error(`Unable to determine which cluster ${imageName} belongs to.`),
-    { statusCode: 500 }
-  )
+  throw new Error(`Unable to determine which cluster ${imageName} belongs to.`)
 }
 
 export { getClusterName }

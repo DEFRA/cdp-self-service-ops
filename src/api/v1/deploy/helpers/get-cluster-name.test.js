@@ -41,14 +41,19 @@ describe('#getClusterName', () => {
   })
 
   test('Should return "Unable to identify" cluster from image error', async () => {
-    const result = await getClusterName({
-      environment: 'sandbox',
-      imageName: 'non-existent-service'
-    })
+    expect.assertions(2)
 
-    expect(result?.isBoom).toEqual(true)
-    expect(result?.message).toEqual(
-      'Unable to determine which cluster non-existent-service belongs to.'
-    )
+    try {
+      await getClusterName({
+        environment: 'sandbox',
+        imageName: 'non-existent-service'
+      })
+    } catch (error) {
+      expect(error).toBeInstanceOf(Error)
+      expect(error).toHaveProperty(
+        'message',
+        'Unable to determine which cluster non-existent-service belongs to.'
+      )
+    }
   })
 })
