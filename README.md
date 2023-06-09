@@ -1,8 +1,9 @@
-# CDP Teams and Repositories
+# CDP Self Service Ops
 
 Core delivery platform Self-Service Ops Node.js Backend.
 
 - [Requirements](#requirements)
+  - [Authentication](#authentication)
   - [Node.js](#nodejs)
 - [Local development](#local-development)
   - [Setup](#setup)
@@ -11,6 +12,8 @@ Core delivery platform Self-Service Ops Node.js Backend.
   - [Npm scripts](#npm-scripts)
   - [Config](#config)
   - [Usage](#usage)
+  - [Testing](#testing)
+    - [Run individual test](#run-individual-test)
 - [Versioning](#versioning)
   - [Auto minor versioning](#auto-minor-versioning)
   - [Major or Patch versioning](#major-or-patch-versioning)
@@ -22,7 +25,11 @@ Core delivery platform Self-Service Ops Node.js Backend.
 
 ## Requirements
 
-A github PAT that allows the creation of pull requests against the various infra repos.
+### Authentication
+
+For local development you need to provide a GitHub Private Key in the env `GITHUB_API_AUTH_APP_PRIVATE_KEY` that
+allows the creation of pull requests against the various Org infrastructure repositories. For further details see the
+[Wiki](https://dev.azure.com/defragovuk/DEFRA-CDP/_wiki/wikis/DEFRA-CORE-DELIVERY-PLATFORM/14473/GitHub-API-Authentication-App)
 
 ### Node.js
 
@@ -95,11 +102,21 @@ Create a service:
 curl -H "Content-type: application/json" -d '{"repositoryName": "foo-backend", "serviceType": "cdp-node-backend-template", "owningTeam": "fisheries"}' 'http://localhost:3009/cdp-self-service-ops/v1/create-service'
 ```
 
+## Testing
+
+### Run individual test
+
+To run one test in your cli:
+
+```bash
+$ npm test -t <test-path-and-filename>
+```
+
 ## Versioning
 
 ### Auto minor versioning
 
-The [deploy GitHub Actions workflow](./.github/workflows/deploy.yml) auto versions a Pull Requests code with a `minor`
+The [deploy GitHub Actions workflow](./.github/workflows/publish.yml) auto versions a Pull Requests code with a `minor`
 version once it has been merged into the `main` branch.
 All you have to do is commit your code and raise a Pull Request and the pipeline will auto version your code for you.
 

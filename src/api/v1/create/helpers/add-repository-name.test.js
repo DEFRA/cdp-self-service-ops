@@ -60,6 +60,8 @@ describe('#addRepository', () => {
   test('Should throw "Post Addition" error', () => {
     const repositoriesJson = JSON.stringify(ecrRepoNamesFixture)
 
+    expect.assertions(4)
+
     try {
       addRepositoryName({
         repositories: repositoriesJson,

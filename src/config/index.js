@@ -37,12 +37,22 @@ const appConfig = convict({
     default: '/cdp-self-service-ops',
     env: 'APP_PATH_PREFIX'
   },
-  gitHubToken: {
-    doc: 'GitHub Api Token',
+  gitHubAppId: {
+    doc: 'GitHub Api authentication App Id',
+    format: String,
+    default: '344866'
+  },
+  gitHubAppInstallationId: {
+    doc: 'GitHub Api authentication App Installation Id',
+    format: String,
+    default: '38398116'
+  },
+  gitHubAppPrivateKey: {
+    doc: 'GitHub Api authentication App Private Key',
     format: '*',
     default: '',
     sensitive: true,
-    env: 'GITHUB_API_TOKEN'
+    env: 'GITHUB_API_AUTH_APP_PRIVATE_KEY'
   },
   gitHubOrg: {
     doc: 'GitHub Organisation',
@@ -55,17 +65,15 @@ const appConfig = convict({
     format: String,
     default: '2022-11-28'
   },
-  githubRepoDeployments: {
-    doc: 'github repo to update the deployments file in',
+  githubRepoTfServiceInfra: {
+    doc: 'Terraform GitHub Service Infrastructure repository',
     format: String,
-    default: 'tf-svc',
-    env: 'GITHUB_REPO_DEPLOYMENTS'
+    default: 'tf-svc-infra'
   },
-  githubRepoServiceInfra: {
-    doc: 'github repo to update the service infrastructure in',
+  githubRepoTfService: {
+    doc: 'Terraform GitHub Service repository',
     format: String,
-    default: 'tf-svc-infra',
-    env: 'GITHUB_REPO_SERVICE_INFRA'
+    default: 'tf-svc'
   },
   githubRepoServicePermissions: {
     doc: 'github repo to update the service permissions in',

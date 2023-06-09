@@ -4,7 +4,7 @@ import { addRepositoryName } from '~/src/api/v1/create/helpers/add-repository-na
 import { addRepoToPermissions } from '~/src/api/v1/create/helpers/add-repo-to-permissions'
 
 async function createServiceInfrastructureCode(repositoryName) {
-  const fileRepository = appConfig.get('githubRepoServiceInfra')
+  const fileRepository = appConfig.get('githubRepoTfServiceInfra')
 
   const ecrRepoNamesFilePath = 'snd/ecr_repo_names.json'
   const ecrRepoNamesData = await octokit.rest.repos.getContent({
