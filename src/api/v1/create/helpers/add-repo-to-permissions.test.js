@@ -77,6 +77,8 @@ describe('#addRepoToPermissions', () => {
   })
 
   test('Should throw "Post Addition" error', () => {
+    expect.assertions(4)
+
     try {
       addRepoToPermissions({
         permissions: permissionsFixture,

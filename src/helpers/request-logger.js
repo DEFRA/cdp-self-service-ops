@@ -1,5 +1,6 @@
-import { appConfig } from '~/src/config'
 import hapiPino from 'hapi-pino'
+
+import { appConfig } from '~/src/config'
 
 const requestLogger = {
   plugin: hapiPino,

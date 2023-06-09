@@ -5,7 +5,7 @@ import { octokit } from '~/src/helpers/oktokit'
 async function createDeploymentPullRequest(imageName, version, cluster) {
   const logger = createLogger()
   const filePath = `snd/${cluster}_services.json`
-  const fileRepository = appConfig.get('githubRepoDeployments')
+  const fileRepository = appConfig.get('githubRepoTfService')
 
   // get the current deployment
   const { data } = await octokit.rest.repos.getContent({
@@ -28,8 +28,9 @@ async function createDeploymentPullRequest(imageName, version, cluster) {
     services[idx].container_version = version
   }
 
-  // Raise the PR.
-  logger.info(services)
+  logger.info(
+    `Raising PR for deployment of ${imageName}:${version} to the ${cluster} cluster`
+  )
 
   await octokit.createPullRequest({
     owner: appConfig.get('gitHubOrg'),

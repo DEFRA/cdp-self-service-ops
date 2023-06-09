@@ -5,7 +5,7 @@ import { octokit } from '~/src/helpers/oktokit'
 async function createInitialDeploymentPullRequest(imageName, version, cluster) {
   const logger = createLogger()
   const filePath = `snd/${cluster}_services.json`
-  const fileRepository = appConfig.get('githubRepoDeployments')
+  const fileRepository = appConfig.get('githubRepoTfService')
 
   // get the current deployment
   const { data } = await octokit.rest.repos.getContent({

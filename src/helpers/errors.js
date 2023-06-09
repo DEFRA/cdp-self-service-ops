@@ -5,6 +5,8 @@ const catchAll = function (request, h) {
     return h.continue
   }
 
+  request.logger.error(response?.stack)
+
   return h
     .response({
       message: response.output.payload.error
