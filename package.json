@@ -1,6 +1,6 @@
 {
   "name": "cdp-self-service-ops",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "description": "Automates create and deployment of services",
   "main": "src/index.js",
   "engines": {
