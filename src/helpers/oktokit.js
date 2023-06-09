@@ -11,7 +11,7 @@ const octokit = new OctokitExtra({
   authStrategy: createAppAuth,
   auth: {
     appId: appConfig.get('gitHubAppId'),
-    privateKey: appConfig.get('gitHubAppPrivateKey'),
+    privateKey: appConfig.get('gitHubAppPrivateKey').replace(/\\n/g, '\n'),
     installationId: appConfig.get('gitHubAppInstallationId')
   }
 })
