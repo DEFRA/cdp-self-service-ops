@@ -10,10 +10,12 @@ Core delivery platform Self-Service Ops Node.js Backend.
   - [Development](#development)
   - [Production](#production)
   - [Npm scripts](#npm-scripts)
-  - [Config](#config)
-  - [Usage](#usage)
-  - [Testing](#testing)
-    - [Run individual test](#run-individual-test)
+- [API endpoints](#api-endpoints)
+- [Calling API endpoints](#calling-api-endpoints)
+  - [Postman](#postman)
+  - [Curl](#curl)
+- [Testing](#testing)
+  - [Run individual test](#run-individual-test)
 - [Versioning](#versioning)
   - [Auto minor versioning](#auto-minor-versioning)
   - [Major or Patch versioning](#major-or-patch-versioning)
@@ -78,27 +80,35 @@ To view them in your command line run:
 $ npm run
 ```
 
-### Config
+## API endpoints
 
-Override the github default to point at a non-production github account and repo by setting some environment variables:
+| Endpoint                    | Description      |
+| :-------------------------- | :--------------- |
+| `GET: /health`              | Health           |
+| `POST: /v1/create-service`  | Create a service |
+| `POST: /v1/deploy-service/` | Deploy a service |
 
-```
-export GITHUB_API_TOKEN=xxxxxx
-export GITHUB_ORG=a-test-org
-export GITHUB_REPO_DEPLOYMENTS=a-test-repo
-```
+## Calling API endpoints
 
-### Usage
+### Postman
+
+A [Postman](https://www.postman.com/) collection and environment are available for making calls to the Self Service Ops
+API. Simple import the collection and environment into Postman.
+
+- [Self Service Ops Postman Collection](postman/self-service-ops.postman_collection.json)
+- [Self Service Ops Postman Environment](postman/self-service-ops.postman_environment.json)
+
+### Curl
 
 Deploy a service:
 
-```
+```bash
 curl -H "Content-type: application/json" -d '{"imageName": "foo-frontend", "version": "v0.1.0", "cluster": "frontend"}' 'http://localhost:3009/cdp-self-service-ops/v1/deploy-service'
 ```
 
 Create a service:
 
-```
+```bash
 curl -H "Content-type: application/json" -d '{"repositoryName": "foo-backend", "serviceType": "cdp-node-backend-template", "owningTeam": "fisheries"}' 'http://localhost:3009/cdp-self-service-ops/v1/create-service'
 ```
 

@@ -48,7 +48,7 @@ const appConfig = convict({
     default: '38398116'
   },
   gitHubAppPrivateKey: {
-    doc: 'GitHub Api authentication App Private Key',
+    doc: 'GitHub Api authentication App Private Key. This key is a base64 encoded secret',
     format: '*',
     default: '',
     sensitive: true,
