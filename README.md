@@ -93,7 +93,7 @@ $ npm run
 ### Postman
 
 A [Postman](https://www.postman.com/) collection and environment are available for making calls to the Self Service Ops
-API. Simple import the collection and environment into Postman.
+API. Simply import the collection and environment into Postman.
 
 - [Self Service Ops Postman Collection](postman/self-service-ops.postman_collection.json)
 - [Self Service Ops Postman Environment](postman/self-service-ops.postman_environment.json)
