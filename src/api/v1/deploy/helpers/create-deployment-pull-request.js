@@ -1,6 +1,7 @@
 import { appConfig } from '~/src/config'
 import { createLogger } from '~/src/helpers/logger'
 import { octokit } from '~/src/helpers/oktokit'
+import { enableAutoMerge } from '~/src/api/v1/deploy/graphql/enable-automerge.graphql'
 
 async function createDeploymentPullRequest(imageName, version, cluster) {
   const logger = createLogger()
@@ -32,7 +33,7 @@ async function createDeploymentPullRequest(imageName, version, cluster) {
     `Raising PR for deployment of ${imageName}:${version} to the ${cluster} cluster`
   )
 
-  await octokit.createPullRequest({
+  const response = await octokit.createPullRequest({
     owner: appConfig.get('gitHubOrg'),
     repo: fileRepository,
     title: `Deploy ${imageName}:${version} to ${cluster} cluster`,
@@ -46,6 +47,10 @@ async function createDeploymentPullRequest(imageName, version, cluster) {
         commit: `🤖 Deploy ${imageName}:${version} to ${cluster} cluster`
       }
     ]
+  })
+
+  return await octokit.graphql(enableAutoMerge, {
+    pullRequestId: response.data.node_id
   })
 }
 
