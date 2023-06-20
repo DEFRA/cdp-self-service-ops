@@ -103,7 +103,7 @@ API. Simply import the collection and environment into Postman.
 Deploy a service:
 
 ```bash
-curl -H "Content-type: application/json" -d '{"imageName": "foo-frontend", "version": "v0.1.0", "cluster": "frontend"}' 'http://localhost:3009/cdp-self-service-ops/v1/deploy-service'
+curl -H "Content-type: application/json" -d '{"imageName": "foo-frontend", "version": "v0.1.0", "environment": "sandbox"}' 'http://localhost:3009/cdp-self-service-ops/v1/deploy-service'
 ```
 
 Create a service:
