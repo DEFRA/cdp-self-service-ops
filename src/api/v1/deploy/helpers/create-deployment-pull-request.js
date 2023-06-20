@@ -48,8 +48,10 @@ async function createDeploymentPullRequest(imageName, version, cluster) {
       }
     ]
   })
- 
-  return await octokit.graphql(enableAutoMerge, {pullRequestId: response.data.node_id})
+
+  return await octokit.graphql(enableAutoMerge, {
+    pullRequestId: response.data.node_id
+  })
 }
 
 export { createDeploymentPullRequest }
