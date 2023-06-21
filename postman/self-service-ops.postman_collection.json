@@ -72,9 +72,9 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{root}}/health",
+					"raw": "{{root}}{{appPrefix}}/health",
 					"host": [
-						"{{root}}"
+						"{{root}}{{appPrefix}}"
 					],
 					"path": [
 						"health"
