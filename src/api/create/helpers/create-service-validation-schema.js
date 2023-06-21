@@ -1,5 +1,6 @@
 import Joi from 'joi'
-import { templates } from './service-templates'
+
+import { templates } from '~/src/api/create/helpers/service-templates'
 
 function createServiceValidationSchema() {
   // TODO get this from the Database (when it exists)

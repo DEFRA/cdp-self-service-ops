@@ -1,16 +1,24 @@
-import { deployServicePayloadSchema } from './deploy-service-payload-validation'
-import Joi from 'joi'
+import { deployServicePayloadSchema } from '~/src/api/deploy/helpers/deploy-service-payload-validation'
 
 describe('deploy-service-payload', () => {
   const schema = deployServicePayloadSchema()
 
-  test('payload only accepts valid looking versions', () => {
+  test('Schema should pass validation without errors', () => {
     const payload = { imageName: 'foo', version: 'v1.0.0' }
-    expect(Joi.assert(payload, schema)).toBeUndefined()
+
+    expect(schema.validate(payload)).toEqual({
+      value: {
+        imageName: 'foo',
+        version: 'v1.0.0'
+      }
+    })
   })
 
-  test('payload fails on invalid versions', () => {
+  test('Schema should fail validation with expected version error', () => {
     const payload = { imageName: 'foo', version: 'latest' }
-    expect(schema.validate(payload).error).not.toBeUndefined()
+
+    expect(schema.validate(payload).error.details.at(0).message).toContain(
+      '"version" with value "latest" fails to match the required pattern'
+    )
   })
 })

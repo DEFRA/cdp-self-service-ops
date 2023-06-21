@@ -2,7 +2,7 @@ import path from 'path'
 import hapi from '@hapi/hapi'
 import { appConfig } from '~/src/config'
 
-import { router } from './router'
+import { router } from '~/src/api/router'
 import { requestLogger } from '~/src/helpers/request-logger'
 import { catchAll } from '~/src/helpers/errors'
 import { failAction } from '~/src/helpers/fail-action'
