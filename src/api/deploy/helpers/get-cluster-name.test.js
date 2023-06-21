@@ -1,5 +1,5 @@
-import { getClusterName } from '~/src/api/v1/deploy/helpers/get-cluster-name'
-import { getClusterServiceNames } from '~/src/api/v1/deploy/helpers/get-cluster-service-names'
+import { getClusterName } from '~/src/api/deploy/helpers/get-cluster-name'
+import { getClusterServiceNames } from '~/src/api/deploy/helpers/get-cluster-service-names'
 
 jest.mock('../helpers/get-cluster-service-names', () => ({
   getClusterServiceNames: jest.fn()

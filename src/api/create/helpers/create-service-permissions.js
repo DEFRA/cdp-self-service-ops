@@ -1,6 +1,6 @@
 import { octokit } from '~/src/helpers/oktokit'
 import { appConfig } from '~/src/config'
-import { addRepoToPermissionList } from '~/src/api/v1/create/helpers/add-repo-to-permissions'
+import { addRepoToPermissionList } from '~/src/api/create/helpers/add-repo-to-permissions'
 
 async function createServicePermissions(repositoryName) {
   const filePath = 'snd/github_oidc.tf'

@@ -1,4 +1,4 @@
-import { addRepositoryName } from '~/src/api/v1/create/helpers/add-repository-name'
+import { addRepositoryName } from '~/src/api/create/helpers/add-repository-name'
 import ecrRepoNamesFixture from '~/src/__fixtures__/ecr_repo_names'
 import { createLogger } from '~/src/helpers/logger'
 

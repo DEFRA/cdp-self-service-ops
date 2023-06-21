@@ -3,7 +3,6 @@ import hapi from '@hapi/hapi'
 import { appConfig } from '~/src/config'
 
 import { router } from './router'
-import { routerV1 } from '~/src/api/v1/router'
 import { requestLogger } from '~/src/helpers/request-logger'
 import { catchAll } from '~/src/helpers/errors'
 import { failAction } from '~/src/helpers/fail-action'
@@ -29,10 +28,8 @@ async function createServer() {
 
   await server.register(requestLogger)
 
-  await server.register(router)
-
-  await server.register(routerV1, {
-    routes: { prefix: `${appConfig.get('appPathPrefix')}/v1` }
+  await server.register(router, {
+    routes: { prefix: `${appConfig.get('appPathPrefix')}` }
   })
 
   server.ext('onPreResponse', catchAll)

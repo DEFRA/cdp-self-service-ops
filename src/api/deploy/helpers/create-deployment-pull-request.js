@@ -1,7 +1,7 @@
 import { appConfig } from '~/src/config'
 import { createLogger } from '~/src/helpers/logger'
 import { octokit } from '~/src/helpers/oktokit'
-import { enableAutoMerge } from '~/src/api/v1/deploy/graphql/enable-automerge.graphql'
+import { enableAutoMerge } from '~/src/api/deploy/graphql/enable-automerge.graphql'
 
 async function createDeploymentPullRequest(imageName, version, cluster) {
   const logger = createLogger()

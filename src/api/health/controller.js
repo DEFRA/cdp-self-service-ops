@@ -1,6 +1,6 @@
 const healthController = {
   handler: (request, h) => {
-    return h.response({ message: 'healthy' }).code(200)
+    return h.response({ message: 'success' }).code(200)
   }
 }
 

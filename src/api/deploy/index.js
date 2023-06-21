@@ -1,4 +1,4 @@
-import { deployServiceController } from '~/src/api/v1/deploy/controller'
+import { deployServiceController } from '~/src/api/deploy/controller'
 
 const deploy = {
   plugin: {

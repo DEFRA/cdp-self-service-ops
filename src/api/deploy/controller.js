@@ -1,6 +1,6 @@
 import { deployServicePayloadSchema } from './helpers/deploy-service-payload-validation'
 import { createDeploymentPullRequest } from './helpers/create-deployment-pull-request'
-import { getClusterName } from '~/src/api/v1/deploy/helpers/get-cluster-name'
+import { getClusterName } from '~/src/api/deploy/helpers/get-cluster-name'
 
 const deployServiceController = {
   options: {

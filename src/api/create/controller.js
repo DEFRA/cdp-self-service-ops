@@ -1,6 +1,6 @@
 import { triggerCreateRepositoryWorkflow } from './helpers/trigger-create-repository-workflow'
 import { createServiceInfrastructureCode } from './helpers/create-service-infrastructure-code'
-import { createServiceValidationSchema } from '~/src/api/v1/create/helpers/create-service-validation-schema'
+import { createServiceValidationSchema } from '~/src/api/create/helpers/create-service-validation-schema'
 import { createInitialDeploymentPullRequest } from './helpers/add-service-to-deployments'
 import { templates } from './helpers/service-templates'
 
