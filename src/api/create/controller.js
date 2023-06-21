@@ -1,8 +1,10 @@
-import { triggerCreateRepositoryWorkflow } from './helpers/trigger-create-repository-workflow'
-import { createServiceInfrastructureCode } from './helpers/create-service-infrastructure-code'
-import { createServiceValidationSchema } from '~/src/api/v1/create/helpers/create-service-validation-schema'
-import { createInitialDeploymentPullRequest } from './helpers/add-service-to-deployments'
-import { templates } from './helpers/service-templates'
+import Boom from '@hapi/boom'
+
+import { templates } from '~/src/api/create/helpers/service-templates'
+import { triggerCreateRepositoryWorkflow } from '~/src/api/create/helpers/trigger-create-repository-workflow'
+import { createServiceInfrastructureCode } from '~/src/api/create/helpers/create-service-infrastructure-code'
+import { createServiceValidationSchema } from '~/src/api/create/helpers/create-service-validation-schema'
+import { createInitialDeploymentPullRequest } from '~/src/api/create/helpers/add-service-to-deployments'
 
 const createServiceController = {
   options: {
@@ -18,8 +20,11 @@ const createServiceController = {
   handler: async (request, h) => {
     try {
       const cluster = templates[request?.payload?.serviceType]
+
       if (cluster === null) {
-        throw new Error(`invalid template: '${request?.payload?.serviceType}'`)
+        return Boom.boomify(
+          Boom.badData(`invalid template: '${request?.payload?.serviceType}'`)
+        )
       }
 
       await triggerCreateRepositoryWorkflow(request?.payload)
@@ -29,15 +34,10 @@ const createServiceController = {
         '0.1.0',
         cluster
       )
+
       return h.response({ message: 'success' }).code(200)
     } catch (error) {
-      h.request.logger.error(error)
-
-      return h
-        .response({
-          message: error?.message
-        })
-        .code(error?.status)
+      return Boom.boomify(error)
     }
   }
 }

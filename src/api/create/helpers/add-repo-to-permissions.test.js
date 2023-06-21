@@ -1,4 +1,4 @@
-import { addRepoToPermissions } from './add-repo-to-permissions'
+import { addRepoToPermissions } from '~/src/api/create/helpers/add-repo-to-permissions'
 import { createLogger } from '~/src/helpers/logger'
 import githubOidcRepositoriesFixture from '~/src/__fixtures__/github_oidc_repositories'
 

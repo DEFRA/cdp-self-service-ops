@@ -1,4 +1,4 @@
-import { getClusterServiceNames } from '~/src/api/v1/deploy/helpers/get-cluster-service-names'
+import { getClusterServiceNames } from '~/src/api/deploy/helpers/get-cluster-service-names'
 
 async function getClusterName({ environment, imageName }) {
   const frontendClusterServiceNames = await getClusterServiceNames(

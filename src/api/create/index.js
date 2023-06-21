@@ -1,4 +1,4 @@
-import { createServiceController } from '~/src/api/v1/create/controller'
+import { createServiceController } from '~/src/api/create/controller'
 
 const create = {
   plugin: {
