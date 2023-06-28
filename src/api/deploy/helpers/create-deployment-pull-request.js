@@ -26,7 +26,17 @@ async function createDeploymentPullRequest(imageName, version, cluster) {
   if (idx === -1) {
     throw new Error(`service ${imageName} is not deployed in this cluster!`)
   } else {
-    services[idx].container_version = version
+    if (services[idx].container_version === version) {
+      // redeploy
+      if (services[idx].env_vars == null) {
+        services[idx].env_vars = {}
+      }
+      services[idx].env_vars.CDP_REDEPLOY = new Date().toISOString()
+    } else {
+      // deploy
+      services[idx].container_version = version
+      delete services[idx].env_vars?.CDP_REDEPLOY
+    }
   }
 
   logger.info(
