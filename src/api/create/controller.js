@@ -5,6 +5,7 @@ import { triggerCreateRepositoryWorkflow } from '~/src/api/create/helpers/trigge
 import { createServiceInfrastructureCode } from '~/src/api/create/helpers/create-service-infrastructure-code'
 import { createServiceValidationSchema } from '~/src/api/create/helpers/create-service-validation-schema'
 import { createInitialDeploymentPullRequest } from '~/src/api/create/helpers/add-service-to-deployments'
+import { createServiceConfig } from '~/src/api/create/helpers/create-service-config'
 
 const createServiceController = {
   options: {
@@ -28,6 +29,8 @@ const createServiceController = {
       }
 
       await triggerCreateRepositoryWorkflow(request?.payload)
+      // TODO: centralize the environment names somewhere
+      await createServiceConfig(request?.payload?.repositoryName, ['snd'])
       await createServiceInfrastructureCode(request?.payload?.repositoryName)
       await createInitialDeploymentPullRequest(
         request?.payload?.repositoryName,
