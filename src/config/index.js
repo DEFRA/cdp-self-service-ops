@@ -81,6 +81,12 @@ const appConfig = convict({
     default: 'tf-core',
     env: 'GITHUB_REPO_SERVICE_PERMISSIONS'
   },
+  githubRepoAppConfig: {
+    doc: 'github repo to create the application config in',
+    format: String,
+    default: 'cdp-app-config',
+    env: 'GITHUB_REPO_APP_CONFIG'
+  },
   isProduction: {
     doc: 'If this application running in the production environment',
     format: Boolean,
