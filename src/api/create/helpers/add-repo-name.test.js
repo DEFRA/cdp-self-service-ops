@@ -10,7 +10,7 @@ jest.mock('~/src/helpers/logger', () => ({
   })
 }))
 
-describe('#addRepository', () => {
+describe('#addRepoName', () => {
   const logger = createLogger()
 
   test('Should add new repository', () => {
