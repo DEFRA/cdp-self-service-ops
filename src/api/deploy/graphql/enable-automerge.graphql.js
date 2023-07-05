@@ -1,4 +1,4 @@
-const enableAutoMerge = `mutation($pullRequestId: ID!) {
+const enableAutoMergeGraphQl = `mutation($pullRequestId: ID!) {
   enablePullRequestAutoMerge(input: {
     pullRequestId: $pullRequestId,
     mergeMethod: REBASE
@@ -17,4 +17,4 @@ const enableAutoMerge = `mutation($pullRequestId: ID!) {
 }
 }`
 
-export { enableAutoMerge }
+export { enableAutoMergeGraphQl }

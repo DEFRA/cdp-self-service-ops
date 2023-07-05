@@ -2,7 +2,7 @@ import Joi from 'joi'
 
 import { createLogger } from '~/src/helpers/logger'
 
-function addRepositoryName({
+function addRepoName({
   repositories,
   fileRepository,
   filePath,
@@ -52,4 +52,4 @@ function addRepositoryName({
   return JSON.stringify(parsedRepositories, null, 2)
 }
 
-export { addRepositoryName }
+export { addRepoName }

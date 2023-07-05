@@ -1,61 +1,40 @@
 import { octokit } from '~/src/helpers/oktokit'
-import { appConfig } from '~/src/config'
-import { addRepositoryName } from '~/src/api/create/helpers/add-repository-name'
-import { addRepoToPermissions } from '~/src/api/create/helpers/add-repo-to-permissions'
+import { appConfig, environments } from '~/src/config'
+import { addRepoToGithubOidc } from '~/src/api/create/helpers/add-repo-to-github-oidc'
+import { addEcrAndPermissionsSndWork } from '~/src/api/create/helpers/add-ecr-and-permissions-snd-work'
+import { addRepoToEcrRepoNames } from '~/src/api/create/helpers/add-repo-to-ecr-repo-names'
+import { prepPullRequestFiles } from '~/src/api/create/helpers/prep-pull-request-files'
 
-async function createServiceInfrastructureCode(repositoryName) {
+const currentSetupEnvs = ['management', 'infra-dev'] // TODO remove once other envs have been set up
+
+async function createServiceInfrastructureCode(repoName) {
   const fileRepository = appConfig.get('githubRepoTfServiceInfra')
+  const pullRequestFiles = new Map()
 
-  const ecrRepoNamesFilePath = 'snd/ecr_repo_names.json'
-  const ecrRepoNamesData = await octokit.rest.repos.getContent({
-    mediaType: {
-      format: 'raw'
-    },
-    owner: appConfig.get('gitHubOrg'),
-    repo: fileRepository,
-    path: ecrRepoNamesFilePath,
-    ref: 'main'
-  })
+  Object.values(environments)
+    .filter((env) => currentSetupEnvs.includes(env)) // TODO remove once other envs have been set up
+    .map(async (env) => {
+      const [ecrFilePath, ecrJson] = await addRepoToEcrRepoNames(repoName, env)
+      pullRequestFiles.set(ecrFilePath, ecrJson)
 
-  const repositoryNamesJson = addRepositoryName({
-    repositories: ecrRepoNamesData.data,
-    fileRepository,
-    filePath: ecrRepoNamesFilePath,
-    repositoryName
-  })
+      const [oidcFilePath, oidcJson] = await addRepoToGithubOidc(repoName, env)
+      pullRequestFiles.set(oidcFilePath, oidcJson)
+    })
 
-  const githubPermissionsFilePath = 'snd/github_oidc_repositories.json'
-  const githubPermissionsData = await octokit.rest.repos.getContent({
-    mediaType: {
-      format: 'raw'
-    },
-    owner: appConfig.get('gitHubOrg'),
-    repo: fileRepository,
-    path: githubPermissionsFilePath,
-    ref: 'main'
-  })
-
-  const githubPermissionsJson = addRepoToPermissions({
-    permissions: githubPermissionsData.data,
-    fileRepository,
-    filePath: githubPermissionsFilePath,
-    repositoryName,
-    org: appConfig.get('gitHubOrg')
-  })
+  // TODO remove snd work once snd has been aligned with other envs. Snd is a different folder structure to other envs
+  const sndWork = await addEcrAndPermissionsSndWork(repoName)
+  sndWork.map(([key, value]) => pullRequestFiles.set(key, value))
 
   await octokit.createPullRequest({
     owner: appConfig.get('gitHubOrg'),
     repo: fileRepository,
-    title: `Add ${repositoryName} to ECR repositories list`,
-    body: `Auto generated Pull Request to add ${repositoryName} to the '${ecrRepoNamesFilePath}' list.`,
-    head: `add-${repositoryName}-to-ecr-repos-${new Date().getTime()}`,
+    title: `Add ${repoName} to ECR repositories list`,
+    body: `Auto generated Pull Request to add ${repoName} to ECR repos and GitHub OIDC lists.`,
+    head: `add-${repoName}-to-ecr-repos-${new Date().getTime()}`,
     changes: [
       {
-        files: {
-          [ecrRepoNamesFilePath]: repositoryNamesJson,
-          [githubPermissionsFilePath]: githubPermissionsJson
-        },
-        commit: `🤖 add ${repositoryName} to ecr repo names list`
+        files: prepPullRequestFiles(pullRequestFiles),
+        commit: `🤖 add ${repoName} to ecr repo names list`
       }
     ]
   })

@@ -1,11 +1,11 @@
 import Boom from '@hapi/boom'
 
-import { templates } from '~/src/api/create/helpers/service-templates'
+import { serviceTemplates } from '~/src/api/create/helpers/service-templates'
 import { triggerCreateRepositoryWorkflow } from '~/src/api/create/helpers/trigger-create-repository-workflow'
 import { createServiceInfrastructureCode } from '~/src/api/create/helpers/create-service-infrastructure-code'
 import { createServiceValidationSchema } from '~/src/api/create/helpers/create-service-validation-schema'
-import { createInitialDeploymentPullRequest } from '~/src/api/create/helpers/add-service-to-deployments'
 import { createServiceConfig } from '~/src/api/create/helpers/create-service-config'
+import { setupDeploymentConfig } from '~/src/api/create/helpers/setup-deployment-config'
 
 const createServiceController = {
   options: {
@@ -20,23 +20,21 @@ const createServiceController = {
   },
   handler: async (request, h) => {
     try {
-      const cluster = templates[request?.payload?.serviceType]
+      const serviceType = request?.payload?.serviceType
+      const repositoryName = request?.payload?.repositoryName
+
+      const cluster = serviceTemplates[serviceType] ?? null
 
       if (cluster === null) {
         return Boom.boomify(
-          Boom.badData(`invalid template: '${request?.payload?.serviceType}'`)
+          Boom.badData(`Invalid service template: '${serviceType}'`)
         )
       }
 
       await triggerCreateRepositoryWorkflow(request?.payload)
-      // TODO: centralize the environment names somewhere
-      await createServiceConfig(request?.payload?.repositoryName, ['snd'])
-      await createServiceInfrastructureCode(request?.payload?.repositoryName)
-      await createInitialDeploymentPullRequest(
-        request?.payload?.repositoryName,
-        '0.1.0',
-        cluster
-      )
+      await createServiceConfig(repositoryName)
+      await createServiceInfrastructureCode(repositoryName)
+      await setupDeploymentConfig(repositoryName, '0.1.0', cluster)
 
       return h.response({ message: 'success' }).code(200)
     } catch (error) {

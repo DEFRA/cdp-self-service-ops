@@ -1,14 +1,26 @@
 import { appConfig } from '~/src/config'
 import { createLogger } from '~/src/helpers/logger'
 import { octokit } from '~/src/helpers/oktokit'
-import { enableAutoMerge } from '~/src/api/deploy/graphql/enable-automerge.graphql'
+import { enableAutoMergeGraphQl } from '~/src/api/deploy/graphql/enable-automerge.graphql'
+import { updateServices } from '~/src/api/deploy/helpers/update-services'
 
-async function createDeploymentPullRequest(imageName, version, cluster) {
+async function createDeploymentPullRequest({
+  imageName,
+  version,
+  environment,
+  cluster
+}) {
   const logger = createLogger()
-  const filePath = `snd/${cluster}_services.json`
   const fileRepository = appConfig.get('githubRepoTfService')
+  let filePath
 
-  // get the current deployment
+  // TODO remove once snd has been aligned with other environments
+  if (environment === 'snd') {
+    filePath = `${environment}/${cluster}_services.json`
+  } else {
+    filePath = `environments/${environment}/services/${cluster}_services.json`
+  }
+
   const { data } = await octokit.rest.repos.getContent({
     mediaType: {
       format: 'raw'
@@ -19,31 +31,13 @@ async function createDeploymentPullRequest(imageName, version, cluster) {
     ref: 'main'
   })
 
-  // TODO: validate the content
-  const services = JSON.parse(data)
-
-  const idx = services.findIndex((d) => d.container_image === imageName)
-  if (idx === -1) {
-    throw new Error(`service ${imageName} is not deployed in this cluster!`)
-  } else {
-    if (services[idx].container_version === version) {
-      // redeploy
-      if (services[idx].env_vars == null) {
-        services[idx].env_vars = {}
-      }
-      services[idx].env_vars.CDP_REDEPLOY = new Date().toISOString()
-    } else {
-      // deploy
-      services[idx].container_version = version
-      delete services[idx].env_vars?.CDP_REDEPLOY
-    }
-  }
+  const servicesJson = updateServices(data, imageName, version)
 
   logger.info(
-    `Raising PR for deployment of ${imageName}:${version} to the ${cluster} cluster`
+    `Raising PR for deployment of ${imageName}:${version} to the ${environment} environment ${cluster} cluster`
   )
 
-  const response = await octokit.createPullRequest({
+  const createPullRequestResponse = await octokit.createPullRequest({
     owner: appConfig.get('gitHubOrg'),
     repo: fileRepository,
     title: `Deploy ${imageName}:${version} to ${cluster} cluster`,
@@ -52,15 +46,15 @@ async function createDeploymentPullRequest(imageName, version, cluster) {
     changes: [
       {
         files: {
-          [filePath]: JSON.stringify(services, null, 2)
+          [filePath]: servicesJson
         },
-        commit: `🤖 Deploy ${imageName}:${version} to ${cluster} cluster`
+        commit: `🤖 Deploy ${imageName}:${version} to the ${environment} environment ${cluster} cluster`
       }
     ]
   })
 
-  return await octokit.graphql(enableAutoMerge, {
-    pullRequestId: response.data.node_id
+  await octokit.graphql(enableAutoMergeGraphQl, {
+    pullRequestId: createPullRequestResponse?.data?.node_id
   })
 }
 
