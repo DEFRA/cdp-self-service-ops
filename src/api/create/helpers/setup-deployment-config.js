@@ -10,17 +10,19 @@ async function setupDeploymentConfig(imageName, version, cluster) {
   const fileRepository = appConfig.get('githubRepoTfService')
   const pullRequestFiles = new Map()
 
-  Object.values(environments)
-    .filter((env) => currentSetupEnvs.includes(env)) // TODO remove once other envs have been set up
-    .map(async (env) => {
-      const [filePath, servicesJson] = await createDeploymentConfig(
-        imageName,
-        cluster,
-        env
-      )
+  const environmentsToBuildFor = Object.values(environments).filter((env) =>
+    currentSetupEnvs.includes(env)
+  ) // TODO remove filter once other envs have been set up
 
-      pullRequestFiles.set(filePath, servicesJson)
-    })
+  for (const env of environmentsToBuildFor) {
+    const [filePath, servicesJson] = await createDeploymentConfig(
+      imageName,
+      cluster,
+      env
+    )
+
+    pullRequestFiles.set(filePath, servicesJson)
+  }
 
   // TODO remove snd work once snd has been aligned with other envs. Snd is a different folder structure to other envs
   const [sndFilePath, sndServicesJson] = await createDeploymentConfigSndWork(

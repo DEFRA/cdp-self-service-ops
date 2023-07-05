@@ -11,15 +11,17 @@ async function createServiceInfrastructureCode(repoName) {
   const fileRepository = appConfig.get('githubRepoTfServiceInfra')
   const pullRequestFiles = new Map()
 
-  Object.values(environments)
-    .filter((env) => currentSetupEnvs.includes(env)) // TODO remove once other envs have been set up
-    .map(async (env) => {
-      const [ecrFilePath, ecrJson] = await addRepoToEcrRepoNames(repoName, env)
-      pullRequestFiles.set(ecrFilePath, ecrJson)
+  const environmentsToBuildFor = Object.values(environments).filter((env) =>
+    currentSetupEnvs.includes(env)
+  ) // TODO remove filter once other envs have been set up
 
-      const [oidcFilePath, oidcJson] = await addRepoToGithubOidc(repoName, env)
-      pullRequestFiles.set(oidcFilePath, oidcJson)
-    })
+  for (const env of environmentsToBuildFor) {
+    const [ecrFilePath, ecrJson] = await addRepoToEcrRepoNames(repoName, env)
+    pullRequestFiles.set(ecrFilePath, ecrJson)
+
+    const [oidcFilePath, oidcJson] = await addRepoToGithubOidc(repoName, env)
+    pullRequestFiles.set(oidcFilePath, oidcJson)
+  }
 
   // TODO remove snd work once snd has been aligned with other envs. Snd is a different folder structure to other envs
   const sndWork = await addEcrAndPermissionsSndWork(repoName)
