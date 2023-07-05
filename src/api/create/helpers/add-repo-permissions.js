@@ -2,7 +2,7 @@ import Joi from 'joi'
 
 import { createLogger } from '~/src/helpers/logger'
 
-function addRepoToPermissions({
+function addRepoPermissions({
   permissions,
   fileRepository,
   filePath,
@@ -60,4 +60,4 @@ function addRepoToPermissions({
   return JSON.stringify(parsedPermissions, null, 2)
 }
 
-export { addRepoToPermissions }
+export { addRepoPermissions }

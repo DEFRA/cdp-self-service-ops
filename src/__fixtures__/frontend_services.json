@@ -1,0 +1,25 @@
+[
+  {
+    "container_image": "cdp-portal-frontend",
+    "container_port": 3000,
+    "container_version": "0.64.0",
+    "desired_count": 2,
+    "env_vars": {
+      "PORT": 3000,
+      "TEAMS_AND_REPOSITORIES_API_URL": "http://internal-alb-snd-cluster-backend-14162363.eu-west-2.elb.amazonaws.com/cdp-teams-and-repositories",
+      "SELF_SERVICE_OPS_API_URL": "http://internal-alb-snd-cluster-backend-14162363.eu-west-2.elb.amazonaws.com/cdp-self-service-ops",
+      "DEPLOYMENTS_API_URL": "http://internal-alb-snd-cluster-backend-14162363.eu-west-2.elb.amazonaws.com/cdp-deployments",
+      "DEPLOYABLES_API_URL": "http://internal-alb-snd-cluster-backend-14162363.eu-west-2.elb.amazonaws.com/cdp-portal-deployables-backend"
+    },
+    "healthcheck": "/cdp-portal-frontend/health",
+    "name": "cdp-portal-frontend",
+    "secrets": {
+      "SESSION_COOKIE_PASSWORD": "cdp/services/cdp-portal-frontend:SESSION_COOKIE_PASSWORD",
+      "BASIC_AUTH_USER": "cdp/services/cdp-portal-frontend:BASIC_AUTH_USER",
+      "BASIC_AUTH_PASSWORD": "cdp/services/cdp-portal-frontend:BASIC_AUTH_PASSWORD"
+    },
+    "task_cpu": 1024,
+    "task_memory": 2048,
+    "deploy_metrics": false
+  }
+]

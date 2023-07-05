@@ -1,5 +1,5 @@
-import { addRepoToPermissions } from '~/src/api/create/helpers/add-repo-to-permissions'
 import { createLogger } from '~/src/helpers/logger'
+import { addRepoPermissions } from '~/src/api/create/helpers/add-repo-permissions'
 import githubOidcRepositoriesFixture from '~/src/__fixtures__/github_oidc_repositories'
 
 jest.mock('~/src/helpers/logger', () => ({
@@ -10,7 +10,7 @@ jest.mock('~/src/helpers/logger', () => ({
   })
 }))
 
-describe('#addRepoToPermissions', () => {
+describe('#addRepoPermissions', () => {
   const logger = createLogger()
   const permissionsFixture = JSON.stringify(githubOidcRepositoriesFixture)
 
@@ -25,7 +25,7 @@ describe('#addRepoToPermissions', () => {
     )
 
     expect(
-      addRepoToPermissions({
+      addRepoPermissions({
         permissions: permissionsFixture,
         filePath: 'snd/github_oidc_repositories.json',
         fileRepository: 'tf-svc-infra',
@@ -37,7 +37,7 @@ describe('#addRepoToPermissions', () => {
 
   test('Should NOT insert into the list, if a repos permissions already exist', () => {
     expect(
-      addRepoToPermissions({
+      addRepoPermissions({
         permissions: permissionsFixture,
         filePath: 'snd/github_oidc_repositories.json',
         fileRepository: 'tf-svc-infra',
@@ -56,7 +56,7 @@ describe('#addRepoToPermissions', () => {
     expect.assertions(4)
 
     try {
-      addRepoToPermissions({
+      addRepoPermissions({
         permissions: permissionsWithError,
         filePath: 'snd/github_oidc_repositories.json',
         fileRepository: 'tf-svc-infra',
@@ -80,7 +80,7 @@ describe('#addRepoToPermissions', () => {
     expect.assertions(4)
 
     try {
-      addRepoToPermissions({
+      addRepoPermissions({
         permissions: permissionsFixture,
         filePath: 'snd/github_oidc_repositories.json',
         fileRepository: 'tf-svc-infra',

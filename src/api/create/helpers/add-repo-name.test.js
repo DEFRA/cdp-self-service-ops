@@ -1,6 +1,6 @@
-import { addRepositoryName } from '~/src/api/create/helpers/add-repository-name'
-import ecrRepoNamesFixture from '~/src/__fixtures__/ecr_repo_names'
+import { addRepoName } from '~/src/api/create/helpers/add-repo-name'
 import { createLogger } from '~/src/helpers/logger'
+import ecrRepoNamesFixture from '~/src/__fixtures__/ecr_repo_names'
 
 jest.mock('~/src/helpers/logger', () => ({
   createLogger: jest.fn().mockReturnValue({
@@ -22,7 +22,7 @@ describe('#addRepository', () => {
     )
 
     expect(
-      addRepositoryName({
+      addRepoName({
         repositories: repositoriesJson,
         fileRepository: 'mock-repo',
         filePath: 'mock-file-path',
@@ -41,7 +41,7 @@ describe('#addRepository', () => {
     expect.assertions(4)
 
     try {
-      addRepositoryName({
+      addRepoName({
         repositories: repositoriesWithError,
         fileRepository: 'mock-repo',
         filePath: 'mock-file-path',
@@ -63,7 +63,7 @@ describe('#addRepository', () => {
     expect.assertions(4)
 
     try {
-      addRepositoryName({
+      addRepoName({
         repositories: repositoriesJson,
         fileRepository: 'mock-repo',
         filePath: 'mock-file-path',

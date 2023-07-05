@@ -1,27 +1,32 @@
 import { octokit } from '~/src/helpers/oktokit'
-import { appConfig } from '~/src/config'
+import { appConfig, environments } from '~/src/config'
+import { prepPullRequestFiles } from '~/src/api/create/helpers/prep-pull-request-files'
 
-async function createServiceConfig(repositoryName, environments) {
-  const fileRepository = appConfig.get('githubRepoAppConfig')
+async function createServiceConfig(repositoryName) {
+  const configPlaceholderText = `# Config for ${repositoryName}, settings should be in KEY=value format`
+  const pullRequestFiles = new Map()
 
-  const placeholderConfig = `# Config for ${repositoryName}, settings should be in KEY=value format`
-  const files = {
-    [`services/${repositoryName}/defaults.env`]: placeholderConfig
-  }
+  pullRequestFiles.set(
+    `services/${repositoryName}/defaults.env`,
+    configPlaceholderText
+  )
 
-  environments.forEach((env) => {
-    files[`services/${repositoryName}/${env}/${repositoryName}.env`] =
-      placeholderConfig
-  })
+  Object.values(environments).forEach((environment) =>
+    pullRequestFiles.set(
+      `services/${repositoryName}/${environment}/${repositoryName}.env`,
+      configPlaceholderText
+    )
+  )
+
   await octokit.createPullRequest({
     owner: appConfig.get('gitHubOrg'),
-    repo: fileRepository,
+    repo: appConfig.get('githubRepoAppConfig'),
     title: `Add base config for ${repositoryName}`,
     body: `Auto generated Pull Request to add default config for ${repositoryName}`,
     head: `add-${repositoryName}-config-${new Date().getTime()}`,
     changes: [
       {
-        files,
+        files: prepPullRequestFiles(pullRequestFiles),
         commit: `🤖 add placeholder config for ${repositoryName}`
       }
     ]

@@ -1,21 +1,21 @@
 import { octokit } from '~/src/helpers/oktokit'
 import { appConfig } from '~/src/config'
 
-// TODO confirm other environment names when they are added to TF Infra
-const environmentMap = {
-  sandbox: 'snd',
-  development: 'dev',
-  test: 'test',
-  perfTest: 'perf',
-  production: 'prod'
-}
+async function getClusterServiceNames(environment, cluster) {
+  let filePath
 
-async function getClusterServiceNames(environment, clusterName) {
+  // TODO remove once snd has been aligned with other environments
+  if (environment === 'snd') {
+    filePath = `${environment}/${cluster}_services.json`
+  } else {
+    filePath = `environments/${environment}/services/${cluster}_services.json`
+  }
+
   const { data } = await octokit.rest.repos.getContent({
     mediaType: { format: 'raw' },
     owner: appConfig.get('gitHubOrg'),
     repo: appConfig.get('githubRepoTfService'),
-    path: `${environmentMap[environment]}/${clusterName}_services.json`,
+    path: filePath,
     ref: 'main'
   })
 

@@ -1,13 +1,6 @@
 import Joi from 'joi'
 
-// TODO get these from the API layer
-const environments = [
-  'sandbox',
-  'development',
-  'test',
-  'perfTest',
-  'production'
-]
+import { environments } from '~/src/config'
 
 function deployServicePayloadSchema() {
   return Joi.object({
@@ -15,7 +8,7 @@ function deployServicePayloadSchema() {
     version: Joi.string()
       .pattern(/^v?\d+\.\d+\.\d+$/)
       .required(),
-    environment: Joi.string().valid(...environments)
+    environment: Joi.string().valid(...Object.values(environments))
   })
 }
 

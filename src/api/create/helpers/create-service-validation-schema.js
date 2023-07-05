@@ -1,10 +1,10 @@
 import Joi from 'joi'
 
-import { templates } from '~/src/api/create/helpers/service-templates'
+import { serviceTemplates } from '~/src/api/create/helpers/service-templates'
 
 function createServiceValidationSchema() {
   // TODO get this from the Database (when it exists)
-  const serviceTypes = Object.keys(templates)
+  const serviceTypes = Object.keys(serviceTemplates)
 
   // TODO get this from the Database (when it exists)
   const owningTeams = [

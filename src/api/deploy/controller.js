@@ -19,11 +19,10 @@ const deployServiceController = {
     try {
       const cluster = await getClusterName(request.payload)
 
-      await createDeploymentPullRequest(
-        request.payload.imageName,
-        request.payload.version,
+      await createDeploymentPullRequest({
+        ...request.payload,
         cluster
-      )
+      })
 
       return h.response({ message: 'success' }).code(200)
     } catch (error) {

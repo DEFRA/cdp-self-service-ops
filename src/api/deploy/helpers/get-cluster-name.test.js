@@ -25,7 +25,7 @@ describe('#getClusterName', () => {
   test('Should identify frontend cluster image', async () => {
     expect(
       await getClusterName({
-        environment: 'sandbox',
+        environment: 'snd',
         imageName: 'cdp-portal-frontend'
       })
     ).toEqual('frontend')
@@ -34,7 +34,7 @@ describe('#getClusterName', () => {
   test('Should identify backend cluster image', async () => {
     expect(
       await getClusterName({
-        environment: 'sandbox',
+        environment: 'snd',
         imageName: 'cdp-self-service-ops'
       })
     ).toEqual('backend')
@@ -45,7 +45,7 @@ describe('#getClusterName', () => {
 
     try {
       await getClusterName({
-        environment: 'sandbox',
+        environment: 'snd',
         imageName: 'non-existent-service'
       })
     } catch (error) {
