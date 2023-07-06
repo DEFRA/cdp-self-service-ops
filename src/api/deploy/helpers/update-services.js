@@ -1,6 +1,4 @@
-function updateServices(data, imageName, version) {
-  const services = JSON.parse(data) // TODO: validate the content
-
+function updateServices(services, imageName, version, instances, cpu, memory) {
   const index = services.findIndex(
     (service) => service.container_image === imageName
   )
@@ -24,10 +22,9 @@ function updateServices(data, imageName, version) {
       }
     }
 
-    if (service.desired_count === 0) {
-      // TODO pass in desired count from the portal
-      service.desired_count = 1
-    }
+    service.desired_count = instances
+    service.task_cpu = cpu
+    service.task_memory = memory
   }
 
   return JSON.stringify(services, null, 2)

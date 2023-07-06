@@ -85,8 +85,8 @@ $ npm run
 | Endpoint                    | Description      |
 | :-------------------------- | :--------------- |
 | `GET: /health`              | Health           |
-| `POST: /v1/create-service`  | Create a service |
-| `POST: /v1/deploy-service/` | Deploy a service |
+| `POST: /create-service`     | Create a service |
+| `POST: /deploy-service`    | Deploy a service |
 
 ## Calling API endpoints
 
@@ -103,13 +103,13 @@ API. Simply import the collection and environment into Postman.
 Deploy a service:
 
 ```bash
-curl -H "Content-type: application/json" -d '{"imageName": "foo-frontend", "version": "v0.1.0", "environment": "sandbox"}' 'http://localhost:3009/cdp-self-service-ops/v1/deploy-service'
+curl -H "Content-type: application/json" -d '{"imageName": "foo-frontend", "version": "v0.1.0", "environment": "snd", "cpu": 1024, "memory": 2048, "instances": 1}' 'http://localhost:3009/cdp-self-service-ops/deploy-service'
 ```
 
 Create a service:
 
 ```bash
-curl -H "Content-type: application/json" -d '{"repositoryName": "foo-backend", "serviceType": "cdp-node-backend-template", "owningTeam": "fisheries"}' 'http://localhost:3009/cdp-self-service-ops/v1/create-service'
+curl -H "Content-type: application/json" -d '{"repositoryName": "foo-backend", "serviceType": "cdp-node-backend-template", "owningTeam": "fisheries"}' 'http://localhost:3009/cdp-self-service-ops/create-service'
 ```
 
 ## Testing

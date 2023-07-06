@@ -1,14 +1,11 @@
-import { getClusterServiceNames } from '~/src/api/deploy/helpers/get-cluster-service-names'
+function getClusterName(imageName, frontendServices, backendServices) {
+  const frontendClusterServiceNames = frontendServices
+    .map((service) => service?.container_image)
+    .filter(Boolean)
 
-async function getClusterName({ environment, imageName }) {
-  const frontendClusterServiceNames = await getClusterServiceNames(
-    environment,
-    'frontend'
-  )
-  const backendClusterServiceNames = await getClusterServiceNames(
-    environment,
-    'backend'
-  )
+  const backendClusterServiceNames = backendServices
+    .map((service) => service?.container_image)
+    .filter(Boolean)
 
   if (frontendClusterServiceNames.includes(imageName)) {
     return 'frontend'

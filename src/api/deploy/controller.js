@@ -2,7 +2,6 @@ import Boom from '@hapi/boom'
 
 import { deployServicePayloadSchema } from '~/src/api/deploy/helpers/deploy-service-payload-validation'
 import { createDeploymentPullRequest } from '~/src/api/deploy/helpers/create-deployment-pull-request'
-import { getClusterName } from '~/src/api/deploy/helpers/get-cluster-name'
 
 const deployServiceController = {
   options: {
@@ -17,11 +16,8 @@ const deployServiceController = {
   },
   handler: async (request, h) => {
     try {
-      const cluster = await getClusterName(request.payload)
-
       await createDeploymentPullRequest({
-        ...request.payload,
-        cluster
+        ...request.payload
       })
 
       return h.response({ message: 'success' }).code(200)

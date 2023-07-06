@@ -3,16 +3,29 @@ import { createLogger } from '~/src/helpers/logger'
 import { octokit } from '~/src/helpers/oktokit'
 import { enableAutoMergeGraphQl } from '~/src/api/deploy/graphql/enable-automerge.graphql'
 import { updateServices } from '~/src/api/deploy/helpers/update-services'
+import { getClusterServices } from '~/src/api/deploy/helpers/get-cluster-services'
+import { getClusterName } from '~/src/api/deploy/helpers/get-cluster-name'
 
 async function createDeploymentPullRequest({
   imageName,
   version,
   environment,
-  cluster
+  instances,
+  cpu,
+  memory
 }) {
   const logger = createLogger()
   const fileRepository = appConfig.get('githubRepoTfService')
   let filePath
+
+  const frontendServices = await getClusterServices(environment, 'frontend')
+  const backendServices = await getClusterServices(environment, 'backend')
+  const cluster = getClusterName(imageName, frontendServices, backendServices)
+
+  let serviceData = frontendServices
+  if (cluster === 'backend') {
+    serviceData = backendServices
+  }
 
   // TODO remove once snd has been aligned with other environments
   if (environment === 'snd') {
@@ -21,17 +34,14 @@ async function createDeploymentPullRequest({
     filePath = `environments/${environment}/services/${cluster}_services.json`
   }
 
-  const { data } = await octokit.rest.repos.getContent({
-    mediaType: {
-      format: 'raw'
-    },
-    owner: appConfig.get('gitHubOrg'),
-    repo: fileRepository,
-    path: filePath,
-    ref: 'main'
-  })
-
-  const servicesJson = updateServices(data, imageName, version)
+  const servicesJson = updateServices(
+    serviceData,
+    imageName,
+    version,
+    instances,
+    cpu,
+    memory
+  )
 
   logger.info(
     `Raising PR for deployment of ${imageName}:${version} to the ${environment} environment ${cluster} cluster`

@@ -1,53 +1,45 @@
 import { getClusterName } from '~/src/api/deploy/helpers/get-cluster-name'
-import { getClusterServiceNames } from '~/src/api/deploy/helpers/get-cluster-service-names'
 
-jest.mock('../helpers/get-cluster-service-names', () => ({
-  getClusterServiceNames: jest.fn()
-}))
-
-const mockFrontendClusterServiceNames = [
-  'cdp-basic-node-frontend',
-  'cdp-portal-frontend'
+const frontendClusterServices = [
+  { container_image: 'cdp-basic-node-frontend' },
+  { container_image: 'cdp-portal-frontend' }
 ]
 
-const mockBackendClusterServiceNames = [
-  'cdp-teams-and-repositories',
-  'cdp-self-service-ops'
+const backendClusterServices = [
+  { container_image: 'cdp-teams-and-repositories' },
+  { container_image: 'cdp-self-service-ops' }
 ]
 
 describe('#getClusterName', () => {
-  beforeEach(() => {
-    getClusterServiceNames
-      .mockReturnValueOnce(mockFrontendClusterServiceNames)
-      .mockReturnValueOnce(mockBackendClusterServiceNames)
-  })
-
-  test('Should identify frontend cluster image', async () => {
+  test('Should identify frontend cluster image', () => {
     expect(
-      await getClusterName({
-        environment: 'snd',
-        imageName: 'cdp-portal-frontend'
-      })
+      getClusterName(
+        'cdp-portal-frontend',
+        frontendClusterServices,
+        backendClusterServices
+      )
     ).toEqual('frontend')
   })
 
-  test('Should identify backend cluster image', async () => {
+  test('Should identify backend cluster image', () => {
     expect(
-      await getClusterName({
-        environment: 'snd',
-        imageName: 'cdp-self-service-ops'
-      })
+      getClusterName(
+        'cdp-self-service-ops',
+        frontendClusterServices,
+        backendClusterServices
+      )
     ).toEqual('backend')
   })
 
-  test('Should return "Unable to identify" cluster from image error', async () => {
+  test('Should return "Unable to identify" cluster from image error', () => {
     expect.assertions(2)
 
     try {
-      await getClusterName({
-        environment: 'snd',
-        imageName: 'non-existent-service'
-      })
+      getClusterName(
+        'non-existent-service',
+        frontendClusterServices,
+        backendClusterServices
+      )
     } catch (error) {
       expect(error).toBeInstanceOf(Error)
       expect(error).toHaveProperty(

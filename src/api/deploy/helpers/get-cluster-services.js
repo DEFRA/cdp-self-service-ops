@@ -1,7 +1,7 @@
 import { octokit } from '~/src/helpers/oktokit'
 import { appConfig } from '~/src/config'
 
-async function getClusterServiceNames(environment, cluster) {
+async function getClusterServices(environment, cluster) {
   let filePath
 
   // TODO remove once snd has been aligned with other environments
@@ -19,11 +19,7 @@ async function getClusterServiceNames(environment, cluster) {
     ref: 'main'
   })
 
-  const clusterServicesJson = JSON.parse(data)
-
-  return clusterServicesJson
-    .map((service) => service?.container_image)
-    .filter(Boolean)
+  return JSON.parse(data)
 }
 
-export { getClusterServiceNames }
+export { getClusterServices }
