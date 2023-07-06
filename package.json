@@ -4,7 +4,7 @@
   "description": "Automates create and deployment of services",
   "main": "src/index.js",
   "engines": {
-    "node": "18.11.0"
+    "node": "20.3.0"
   },
   "scripts": {
     "build": "npm run build:server",
