@@ -82,11 +82,11 @@ $ npm run
 
 ## API endpoints
 
-| Endpoint                    | Description      |
-| :-------------------------- | :--------------- |
-| `GET: /health`              | Health           |
-| `POST: /create-service`     | Create a service |
-| `POST: /deploy-service`    | Deploy a service |
+| Endpoint                | Description      |
+| :---------------------- | :--------------- |
+| `GET: /health`          | Health           |
+| `POST: /create-service` | Create a service |
+| `POST: /deploy-service` | Deploy a service |
 
 ## Calling API endpoints
 
