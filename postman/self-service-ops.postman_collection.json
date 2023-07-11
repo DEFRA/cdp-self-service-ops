@@ -24,12 +24,11 @@
 					}
 				},
 				"url": {
-					"raw": "{{root}}{{appPrefix}}/v1/create-service",
+					"raw": "{{root}}{{appPrefix}}/create-service",
 					"host": [
 						"{{root}}{{appPrefix}}"
 					],
 					"path": [
-						"v1",
 						"create-service"
 					]
 				}
@@ -46,7 +45,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"imageName\": \"cdp-portal-frontend\",\n    \"version\": \"0.1.0\",\n    \"environment\": \"sandbox\"\n}",
+					"raw": "{\n    \"imageName\": \"cdp-portal-frontend\",\n    \"version\": \"0.64.0\",\n    \"environment\": \"snd\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -54,12 +53,11 @@
 					}
 				},
 				"url": {
-					"raw": "{{root}}{{appPrefix}}/v1/deploy-service",
+					"raw": "{{root}}{{appPrefix}}/deploy-service",
 					"host": [
 						"{{root}}{{appPrefix}}"
 					],
 					"path": [
-						"v1",
 						"deploy-service"
 					]
 				}
