@@ -1,4 +1,4 @@
-// Human names as keys, actual names as values
+// TODO potentially get this in 1 place on an endpoint?
 const environments = {
   sandbox: 'snd',
   management: 'management',
