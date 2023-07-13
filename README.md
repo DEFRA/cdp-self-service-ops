@@ -112,6 +112,18 @@ Create a service:
 curl -H "Content-type: application/json" -d '{"repositoryName": "foo-backend", "serviceType": "cdp-node-backend-template", "owningTeam": "fisheries"}' 'http://localhost:3009/cdp-self-service-ops/create-service'
 ```
 
+Retrieve current deployment config for a service in an environment:
+
+```bash
+curl 'http://localhost:3009/cdp-self-service-ops/deployment-info/snd/service-name'
+```
+
+Retrieve the allowed cpu and memory configurations
+
+```bash
+curl 'http://localhost:3009/cdp-self-service-ops/deployment-options'
+```
+
 ## Testing
 
 ### Run individual test
