@@ -1,7 +1,9 @@
-import { deployServiceController } from '~/src/api/deploy/deploy-service-controller'
-import { deploymentInfoController } from '~/src/api/deploy/deployment-info-controller'
-import { deploymentInfoForServiceController } from '~/src/api/deploy/deployment-info-for-service-controller'
-import { validEcsCpuAndMemoryController } from '~/src/api/deploy/valid-ecs-cpu-and-memory-controller'
+import {
+  deployServiceController,
+  deploymentInfoController,
+  deploymentInfoForServiceController,
+  validEcsCpuAndMemoryController
+} from '~/src/api/deploy/controllers'
 
 const deploy = {
   plugin: {
