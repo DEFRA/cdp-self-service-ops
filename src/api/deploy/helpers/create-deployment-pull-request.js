@@ -10,7 +10,7 @@ async function createDeploymentPullRequest({
   imageName,
   version,
   environment,
-  instances,
+  instanceCount,
   cpu,
   memory
 }) {
@@ -38,7 +38,7 @@ async function createDeploymentPullRequest({
     serviceData,
     imageName,
     version,
-    instances,
+    instanceCount,
     cpu,
     memory
   )

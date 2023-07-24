@@ -1,11 +1,9 @@
 import { deployServiceController } from '~/src/api/deploy/controllers/deploy-service'
-import { deploymentInfoController } from '~/src/api/deploy/controllers/deployment-info'
-import { deploymentInfoForServiceController } from '~/src/api/deploy/controllers/deployment-info-for-service'
-import { validEcsCpuAndMemoryController } from '~/src/api/deploy/controllers/valid-ecs-cpu-and-memory'
+import { deployServiceOptionsController } from '~/src/api/deploy/controllers/deploy-service-options'
+import { existingServiceInfoController } from '~/src/api/deploy/controllers/existing-service-info'
 
 export {
   deployServiceController,
-  deploymentInfoController,
-  deploymentInfoForServiceController,
-  validEcsCpuAndMemoryController
+  existingServiceInfoController,
+  deployServiceOptionsController
 }

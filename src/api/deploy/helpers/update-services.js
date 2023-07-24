@@ -1,4 +1,11 @@
-function updateServices(services, imageName, version, instances, cpu, memory) {
+function updateServices(
+  services,
+  imageName,
+  version,
+  instanceCount,
+  cpu,
+  memory
+) {
   const index = services.findIndex(
     (service) => service.container_image === imageName
   )
@@ -22,7 +29,7 @@ function updateServices(services, imageName, version, instances, cpu, memory) {
       }
     }
 
-    service.desired_count = instances
+    service.desired_count = instanceCount
     service.task_cpu = cpu
     service.task_memory = memory
   }

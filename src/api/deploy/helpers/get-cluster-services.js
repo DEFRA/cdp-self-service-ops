@@ -11,6 +11,7 @@ async function getClusterServices(environment, cluster) {
     filePath = `environments/${environment}/services/${cluster}_services.json`
   }
 
+  // TODO cache all GitHub calls in Redis
   const { data } = await octokit.rest.repos.getContent({
     mediaType: { format: 'raw' },
     owner: appConfig.get('gitHubOrg'),

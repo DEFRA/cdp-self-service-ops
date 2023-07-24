@@ -1,8 +1,7 @@
 import {
+  deployServiceOptionsController,
   deployServiceController,
-  deploymentInfoController,
-  deploymentInfoForServiceController,
-  validEcsCpuAndMemoryController
+  existingServiceInfoController
 } from '~/src/api/deploy/controllers'
 
 const deploy = {
@@ -17,18 +16,13 @@ const deploy = {
         },
         {
           method: 'GET',
-          path: '/deployment-info/{env}',
-          ...deploymentInfoController
+          path: '/deploy-service/options',
+          ...deployServiceOptionsController
         },
         {
           method: 'GET',
-          path: '/deployment-info/{env}/{service}',
-          ...deploymentInfoForServiceController
-        },
-        {
-          method: 'GET',
-          path: '/deployment-options',
-          ...validEcsCpuAndMemoryController
+          path: '/deploy-service/info/{environment}/{imageName}',
+          ...existingServiceInfoController
         }
       ])
     }
