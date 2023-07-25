@@ -45,7 +45,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"imageName\": \"cdp-portal-frontend\",\n    \"version\": \"0.64.0\",\n    \"environment\": \"snd\"\n}",
+					"raw": "{\n    \"imageName\": \"cdp-self-service-ops\",\n    \"version\": \"0.24.0\",\n    \"environment\": \"management\",\n    \"instanceCount\": 1,\n    \"cpu\": 512,\n    \"memory\": 1024\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -76,6 +76,44 @@
 					],
 					"path": [
 						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Deploy service info of Service in Environment",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{root}}{{appPrefix}}/deploy-service/info/snd/cdp-portal-frontend",
+					"host": [
+						"{{root}}{{appPrefix}}"
+					],
+					"path": [
+						"deploy-service",
+						"info",
+						"snd",
+						"cdp-portal-frontend"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Deployment Options",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{root}}{{appPrefix}}/deploy-service/options",
+					"host": [
+						"{{root}}{{appPrefix}}"
+					],
+					"path": [
+						"deploy-service",
+						"options"
 					]
 				}
 			},
