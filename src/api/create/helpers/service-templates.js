@@ -1,8 +1,8 @@
 const serviceTemplates = {
-  'cdp-node-frontend-template': 'frontend',
-  'cdp-node-backend-template': 'backend',
-  'cdp-dotnet-backend-template': 'backend',
-  'cdp-java-backend-template': 'backend'
+  'cdp-node-frontend-template': 'public',
+  'cdp-node-backend-template': 'protected',
+  'cdp-dotnet-backend-template': 'protected',
+  'cdp-java-backend-template': 'protected'
 }
 
 export { serviceTemplates }

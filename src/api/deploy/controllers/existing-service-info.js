@@ -11,21 +11,24 @@ const existingServiceInfoController = {
     try {
       const clusters = {}
 
-      const frontendServices = await getClusterServices(environment, 'frontend')
-      clusters.frontendService = frontendServices.find(
+      const publicServices = await getClusterServices(environment, 'public')
+      clusters.publicService = publicServices.find(
         (service) => service.container_image === imageName
       )
 
-      if (!clusters.frontendService) {
-        const backendServices = await getClusterServices(environment, 'backend')
-        clusters.backendService = backendServices.find(
+      if (!clusters.publicService) {
+        const protectedServices = await getClusterServices(
+          environment,
+          'protected'
+        )
+        clusters.protectedService = protectedServices.find(
           (service) => service.container_image === imageName
         )
       }
 
       if (
-        isUndefined(clusters.frontendService) &&
-        isUndefined(clusters.backendService)
+        isUndefined(clusters.publicService) &&
+        isUndefined(clusters.protectedService)
       ) {
         throw Boom.boomify(Boom.notFound(`Service ${imageName} not found`))
       }
@@ -34,7 +37,7 @@ const existingServiceInfoController = {
         .response({
           message: 'success',
           existingServiceInfo:
-            clusters.frontendService ?? clusters.backendService
+            clusters.publicService ?? clusters.protectedService
         })
         .code(200)
     } catch (error) {

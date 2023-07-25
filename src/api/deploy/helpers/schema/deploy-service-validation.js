@@ -8,6 +8,8 @@ const validCpuValues = Object.keys(ecsCpuToMemoryOptionsMap).map((cpu) =>
   Number.parseInt(cpu)
 )
 
+const memoryValidation = buildMemoryValidation()
+
 function deployServiceValidation() {
   return Joi.object({
     imageName: Joi.string().min(1).required(),
@@ -19,7 +21,7 @@ function deployServiceValidation() {
     cpu: Joi.number()
       .valid(...validCpuValues)
       .required(),
-    memory: buildMemoryValidation().required()
+    memory: memoryValidation.required()
   })
 }
 

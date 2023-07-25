@@ -23,9 +23,9 @@ const createServiceController = {
       const serviceType = request?.payload?.serviceType
       const repositoryName = request?.payload?.repositoryName
 
-      const cluster = serviceTemplates[serviceType] ?? null
+      const clusterName = serviceTemplates[serviceType] ?? null
 
-      if (cluster === null) {
+      if (clusterName === null) {
         return Boom.boomify(
           Boom.badData(`Invalid service template: '${serviceType}'`)
         )
@@ -34,7 +34,7 @@ const createServiceController = {
       await triggerCreateRepositoryWorkflow(request?.payload)
       await createServiceConfig(repositoryName)
       await createServiceInfrastructureCode(repositoryName)
-      await setupDeploymentConfig(repositoryName, '0.1.0', cluster)
+      await setupDeploymentConfig(repositoryName, '0.1.0', clusterName)
 
       return h.response({ message: 'success' }).code(200)
     } catch (error) {
