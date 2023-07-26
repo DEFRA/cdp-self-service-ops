@@ -48,7 +48,7 @@ describe('#deployServiceValidation', () => {
 
     expect(
       deployServiceValidation().validate(payload).error.details.at(0).message
-    ).toContain('"cpu" must be one of [256, 512, 1024, 2048, 4096, 8192]')
+    ).toContain('"cpu" must be one of [512, 1024, 2048, 4096, 8192]')
   })
 
   test('Schema should provide expected error message when given an invalid memory value', () => {

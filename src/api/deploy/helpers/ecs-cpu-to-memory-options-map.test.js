@@ -54,22 +54,9 @@ describe('ecsCpuToMemoryMap', () => {
     ])
   })
 
-  test("Cpu of 256 shouldn't support 512 as its not enough with both sidecars", () => {
-    expect(ecsCpuToMemoryOptionsMap['256']).toEqual([
-      {
-        text: '1 GB',
-        value: 1024
-      },
-      {
-        text: '2 GB',
-        value: 2048
-      }
-    ])
-  })
-
   test('Cpu values should match those supported by ECS fargate', () => {
     expect(
       Object.keys(ecsCpuToMemoryOptionsMap).map((key) => parseInt(key))
-    ).toEqual([256, 512, 1024, 2048, 4096, 8192])
+    ).toEqual([512, 1024, 2048, 4096, 8192])
   })
 })
