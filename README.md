@@ -82,11 +82,13 @@ $ npm run
 
 ## API endpoints
 
-| Endpoint                    | Description      |
-| :-------------------------- | :--------------- |
-| `GET: /health`              | Health           |
-| `POST: /v1/create-service`  | Create a service |
-| `POST: /v1/deploy-service/` | Deploy a service |
+| Endpoint                                              | Description                             |
+| :---------------------------------------------------- | :-------------------------------------- |
+| `GET: /health`                                        | Health                                  |
+| `POST: /create-service`                               | Create a service                        |
+| `POST: /deploy-service`                               | Deploy a service                        |
+| `GET: /deploy-service/options`                        | Deploy a service memory and cpu options |
+| `GET: /deploy-service/info/{environment}/{imageName}` | Deploy a service exisiting service info |
 
 ## Calling API endpoints
 
@@ -103,13 +105,26 @@ API. Simply import the collection and environment into Postman.
 Deploy a service:
 
 ```bash
-curl -H "Content-type: application/json" -d '{"imageName": "foo-frontend", "version": "v0.1.0", "environment": "sandbox"}' 'http://localhost:3009/cdp-self-service-ops/v1/deploy-service'
+curl -H "Content-type: application/json" -d '{"imageName": "foo-frontend", "version": "v0.1.0", "environment": "snd",
+ "cpu": 1024, "memory": 2048, "instanceCount": 1}' 'http://localhost:3009/cdp-self-service-ops/deploy-service'
 ```
 
 Create a service:
 
 ```bash
-curl -H "Content-type: application/json" -d '{"repositoryName": "foo-backend", "serviceType": "cdp-node-backend-template", "owningTeam": "fisheries"}' 'http://localhost:3009/cdp-self-service-ops/v1/create-service'
+curl -H "Content-type: application/json" -d '{"repositoryName": "foo-backend", "serviceType": "cdp-node-backend-template", "owningTeam": "fisheries"}' 'http://localhost:3009/cdp-self-service-ops/create-service'
+```
+
+Retrieve current deployment config for a service in an environment:
+
+```bash
+curl 'http://localhost:3009/cdp-self-service-ops/deploy-service/info/snd/service-name'
+```
+
+Retrieve the allowed cpu and memory configurations
+
+```bash
+curl 'http://localhost:3009/cdp-self-service-ops/deploy-service/options'
 ```
 
 ## Testing

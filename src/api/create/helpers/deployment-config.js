@@ -1,4 +1,4 @@
-function deploymentConfig(imageName, version, cluster, environment) {
+function deploymentConfig(imageName, version, clusterName, environment) {
   return {
     container_image: imageName,
     container_port: 8085,
@@ -10,7 +10,7 @@ function deploymentConfig(imageName, version, cluster, environment) {
     task_memory: 2048,
     env_files: [
       {
-        value: `arn:aws:s3:::cdp-snd-service-configs/global/global_${cluster}_fixed.env`,
+        value: `arn:aws:s3:::cdp-snd-service-configs/global/global_${clusterName}_fixed.env`,
         type: 's3'
       },
       {

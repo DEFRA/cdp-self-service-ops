@@ -1,7 +1,7 @@
 import { createLogger } from '~/src/helpers/logger'
 import { deploymentConfig } from '~/src/api/create/helpers/deployment-config'
 
-function addDeploymentConfig(data, imageName, cluster, environment) {
+function addDeploymentConfig(data, imageName, clusterName, environment) {
   const logger = createLogger()
   const services = JSON.parse(data) // TODO: validate the content
 
@@ -10,7 +10,9 @@ function addDeploymentConfig(data, imageName, cluster, environment) {
   )
 
   if (index === -1) {
-    services.push(deploymentConfig(imageName, '0.1.0', cluster, environment))
+    services.push(
+      deploymentConfig(imageName, '0.1.0', clusterName, environment)
+    )
   } else {
     logger.info(`service ${imageName} is already deployed in this cluster`)
     return

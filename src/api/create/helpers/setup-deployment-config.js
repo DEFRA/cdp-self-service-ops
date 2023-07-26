@@ -6,7 +6,7 @@ import { prepPullRequestFiles } from '~/src/api/create/helpers/prep-pull-request
 
 const currentSetupEnvs = ['management'] // TODO remove once other envs have been set up
 
-async function setupDeploymentConfig(imageName, version, cluster) {
+async function setupDeploymentConfig(imageName, version, clusterName) {
   const fileRepository = appConfig.get('githubRepoTfService')
   const pullRequestFiles = new Map()
 
@@ -15,7 +15,7 @@ async function setupDeploymentConfig(imageName, version, cluster) {
     .map(async (env) => {
       const [filePath, servicesJson] = await createDeploymentConfig(
         imageName,
-        cluster,
+        clusterName,
         env
       )
 
@@ -27,7 +27,7 @@ async function setupDeploymentConfig(imageName, version, cluster) {
   // TODO remove snd work once snd has been aligned with other envs. Snd is a different folder structure to other envs
   const [sndFilePath, sndServicesJson] = await createDeploymentConfigSndWork(
     imageName,
-    cluster
+    clusterName
   )
 
   pullRequestFiles.set(sndFilePath, sndServicesJson)
@@ -35,13 +35,13 @@ async function setupDeploymentConfig(imageName, version, cluster) {
   await octokit.createPullRequest({
     owner: appConfig.get('gitHubOrg'),
     repo: fileRepository,
-    title: `Setup deployment config for ${imageName}:${version} to ${cluster} cluster`,
+    title: `Setup deployment config for ${imageName}:${version} to ${clusterName} cluster`,
     body: `Auto generated Pull Request to set ${imageName} to use version ${version} in all environments`,
     head: `deploy-${imageName}-${version}-${new Date().getTime()}`,
     changes: [
       {
         files: prepPullRequestFiles(pullRequestFiles),
-        commit: `🤖 Initial deploy ${imageName}:${version} to ${cluster} cluster`
+        commit: `🤖 Initial deploy ${imageName}:${version} to ${clusterName} cluster`
       }
     ]
   })

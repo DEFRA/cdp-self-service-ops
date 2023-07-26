@@ -23,18 +23,20 @@ const createServiceController = {
       const serviceType = request?.payload?.serviceType
       const repositoryName = request?.payload?.repositoryName
 
-      const cluster = serviceTemplates[serviceType] ?? null
+      const clusterName = serviceTemplates[serviceType] ?? null
 
-      if (cluster === null) {
+      if (clusterName === null) {
         return Boom.boomify(
           Boom.badData(`Invalid service template: '${serviceType}'`)
         )
       }
 
+      // TODO - once the snd and other environments have been aligned update the ECR repo code naming
+      //  across this endpoint. This is now known as tenant_services.json rather than ecr_repo_names.json
       await triggerCreateRepositoryWorkflow(request?.payload)
       await createServiceConfig(repositoryName)
       await createServiceInfrastructureCode(repositoryName)
-      await setupDeploymentConfig(repositoryName, '0.1.0', cluster)
+      await setupDeploymentConfig(repositoryName, '0.1.0', clusterName)
 
       return h.response({ message: 'success' }).code(200)
     } catch (error) {

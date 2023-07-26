@@ -24,7 +24,7 @@ describe('#addRepoToEcrRepoNames', () => {
     )
 
     expect(filePath).toEqual(
-      'environments/infra-dev/resources/ecr_repo_names.json'
+      'environments/infra-dev/resources/tenant_services.json'
     )
     expect(repositoryNamesJson).toEqual(
       JSON.stringify(

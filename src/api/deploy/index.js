@@ -1,4 +1,8 @@
-import { deployServiceController } from '~/src/api/deploy/controller'
+import {
+  deployServiceOptionsController,
+  deployServiceController,
+  existingServiceInfoController
+} from '~/src/api/deploy/controllers'
 
 const deploy = {
   plugin: {
@@ -9,6 +13,16 @@ const deploy = {
           method: 'POST',
           path: '/deploy-service',
           ...deployServiceController
+        },
+        {
+          method: 'GET',
+          path: '/deploy-service/options',
+          ...deployServiceOptionsController
+        },
+        {
+          method: 'GET',
+          path: '/deploy-service/info/{environment}/{imageName}',
+          ...existingServiceInfoController
         }
       ])
     }

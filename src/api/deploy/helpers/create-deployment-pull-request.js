@@ -3,44 +3,60 @@ import { createLogger } from '~/src/helpers/logger'
 import { octokit } from '~/src/helpers/oktokit'
 import { enableAutoMergeGraphQl } from '~/src/api/deploy/graphql/enable-automerge.graphql'
 import { updateServices } from '~/src/api/deploy/helpers/update-services'
+import { getClusterServices } from '~/src/api/deploy/helpers/get-cluster-services'
+import { getCluster } from '~/src/api/deploy/helpers/get-cluster'
+import { getSndClusterName } from '~/src/api/deploy/helpers/get-snd-cluster-name'
 
 async function createDeploymentPullRequest({
   imageName,
   version,
   environment,
-  cluster
+  instanceCount,
+  cpu,
+  memory
 }) {
   const logger = createLogger()
   const fileRepository = appConfig.get('githubRepoTfService')
+
   let filePath
+
+  const publicServices = await getClusterServices(environment, 'public')
+  const protectedServices = await getClusterServices(environment, 'protected')
+
+  const { clusterName, clusterServices } = getCluster(
+    imageName,
+    publicServices,
+    protectedServices
+  )
+
+  // TODO remove once snd has been aligned with other environments
+  const tempClusterName =
+    environment === 'snd' ? getSndClusterName(clusterName) : clusterName
 
   // TODO remove once snd has been aligned with other environments
   if (environment === 'snd') {
-    filePath = `${environment}/${cluster}_services.json`
+    filePath = `snd/${tempClusterName}_services.json`
   } else {
-    filePath = `environments/${environment}/services/${cluster}_services.json`
+    filePath = `environments/${environment}/services/${tempClusterName}_services.json`
   }
 
-  const { data } = await octokit.rest.repos.getContent({
-    mediaType: {
-      format: 'raw'
-    },
-    owner: appConfig.get('gitHubOrg'),
-    repo: fileRepository,
-    path: filePath,
-    ref: 'main'
-  })
-
-  const servicesJson = updateServices(data, imageName, version)
+  const servicesJson = updateServices(
+    clusterServices,
+    imageName,
+    version,
+    instanceCount,
+    cpu,
+    memory
+  )
 
   logger.info(
-    `Raising PR for deployment of ${imageName}:${version} to the ${environment} environment ${cluster} cluster`
+    `Raising PR for deployment of ${imageName}:${version} to the ${environment} environment ${tempClusterName} cluster`
   )
 
   const createPullRequestResponse = await octokit.createPullRequest({
     owner: appConfig.get('gitHubOrg'),
     repo: fileRepository,
-    title: `Deploy ${imageName}:${version} to ${cluster} cluster`,
+    title: `Deploy ${imageName}:${version} to ${tempClusterName} cluster`,
     body: `Auto generated Pull Request to set ${imageName} to use version ${version} in '${filePath}'`,
     head: `deploy-${imageName}-${version}-${new Date().getTime()}`,
     changes: [
@@ -48,7 +64,7 @@ async function createDeploymentPullRequest({
         files: {
           [filePath]: servicesJson
         },
-        commit: `🤖 Deploy ${imageName}:${version} to the ${environment} environment ${cluster} cluster`
+        commit: `🤖 Deploy ${imageName}:${version} to the ${environment} environment ${tempClusterName} cluster`
       }
     ]
   })

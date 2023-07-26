@@ -11,7 +11,8 @@ module.exports = {
   coveragePathIgnorePatterns: [
     '<rootDir>/node_modules/',
     '<rootDir>/.server',
-    '<rootDir>/src/__fixtures__'
+    '<rootDir>/src/__fixtures__',
+    'index.js'
   ],
   coverageDirectory: '<rootDir>/coverage'
 }
