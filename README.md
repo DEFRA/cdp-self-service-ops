@@ -105,7 +105,8 @@ API. Simply import the collection and environment into Postman.
 Deploy a service:
 
 ```bash
-curl -H "Content-type: application/json" -d '{"imageName": "foo-frontend", "version": "v0.1.0", "environment": "snd", "cpu": 1024, "memory": 2048, "instances": 1}' 'http://localhost:3009/cdp-self-service-ops/deploy-service'
+curl -H "Content-type: application/json" -d '{"imageName": "foo-frontend", "version": "v0.1.0", "environment": "snd",
+ "cpu": 1024, "memory": 2048, "instanceCount": 1}' 'http://localhost:3009/cdp-self-service-ops/deploy-service'
 ```
 
 Create a service:
@@ -117,13 +118,13 @@ curl -H "Content-type: application/json" -d '{"repositoryName": "foo-backend", "
 Retrieve current deployment config for a service in an environment:
 
 ```bash
-curl 'http://localhost:3009/cdp-self-service-ops/deployment-info/snd/service-name'
+curl 'http://localhost:3009/cdp-self-service-ops/deploy-service/info/snd/service-name'
 ```
 
 Retrieve the allowed cpu and memory configurations
 
 ```bash
-curl 'http://localhost:3009/cdp-self-service-ops/deployment-options'
+curl 'http://localhost:3009/cdp-self-service-ops/deploy-service/options'
 ```
 
 ## Testing
