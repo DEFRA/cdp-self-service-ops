@@ -6,7 +6,6 @@ const deployServiceOptionsController = {
       .response({
         message: 'success',
         cpuOptions: [
-          { value: 256, text: '256 (.25 vCPU)' },
           { value: 512, text: '512 (.5 vCPU)' },
           { value: 1024, text: '1024 (1 vCPU)' },
           { value: 2048, text: '2048 (2 vCPU)' },
