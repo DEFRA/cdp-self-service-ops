@@ -26,7 +26,7 @@ jobs:
         id: version
         uses: anothrNick/github-tag-action@1.64.0
         env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build all the stuff
         uses: defra-cdp-sandpit/cdp-build-action/build@main
