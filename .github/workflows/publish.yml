@@ -5,8 +5,32 @@ on:
     branches:
       - main
 
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
+
+env:
+  AWS_REGION: eu-west-2
+  AWS_ACCOUNT_ID: 163841473800
+
 jobs:
   cdp-workflows:
-    uses: defra-cdp-sandpit/cdp-workflows/.github/workflows/node-publish.yml@main
-    with:
-      imageName: 'cdp-self-service-ops'
+    name: builds image and pushes it
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Versions the new release
+        id: version
+        uses: phips28/gh-action-bump-version@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          default: minor
+
+      - name: Build all the stuff
+        uses: defra-cdp-sandpit/cdp-build-action/build@main
+        with:
+          version: ${{ steps.version.outputs.newTag }}
