@@ -24,13 +24,11 @@ jobs:
 
       - name: Versions the new release
         id: version
-        uses: phips28/gh-action-bump-version@master
+        uses: anothrNick/github-tag-action@1.64.0
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          default: minor
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build all the stuff
         uses: defra-cdp-sandpit/cdp-build-action/build@main
         with:
-          version: ${{ steps.version.outputs.newTag }}
+          version: ${{ steps.version.outputs.new_tag }}
