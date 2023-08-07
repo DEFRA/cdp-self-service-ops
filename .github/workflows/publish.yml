@@ -16,7 +16,7 @@ env:
 
 jobs:
   cdp-workflows:
-    name: builds image and pushes it
+    name: Build, version and publish
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
