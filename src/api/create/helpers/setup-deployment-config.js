@@ -4,7 +4,7 @@ import { createDeploymentConfigSndWork } from '~/src/api/create/helpers/create-d
 import { createDeploymentConfig } from '~/src/api/create/helpers/create-deployment-config'
 import { prepPullRequestFiles } from '~/src/api/create/helpers/prep-pull-request-files'
 
-const currentSetupEnvs = ['management'] // TODO remove once other envs have been set up
+const currentSetupEnvs = ['management', 'infra-dev'] // TODO remove once other envs have been set up
 
 async function setupDeploymentConfig(imageName, version, clusterName) {
   const fileRepository = appConfig.get('githubRepoTfService')
