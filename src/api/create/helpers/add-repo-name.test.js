@@ -1,6 +1,6 @@
 import { addRepoName } from '~/src/api/create/helpers/add-repo-name'
 import { createLogger } from '~/src/helpers/logger'
-import ecrRepoNamesFixture from '~/src/__fixtures__/ecr_repo_names'
+import tenantServicesFixture from '~/src/__fixtures__/tenant_services'
 
 jest.mock('~/src/helpers/logger', () => ({
   createLogger: jest.fn().mockReturnValue({
@@ -14,9 +14,9 @@ describe('#addRepoName', () => {
   const logger = createLogger()
 
   test('Should add new repository', () => {
-    const repositoriesJson = JSON.stringify(ecrRepoNamesFixture)
+    const repositoriesJson = JSON.stringify(tenantServicesFixture)
     const expectedJson = JSON.stringify(
-      [...ecrRepoNamesFixture, 'new-repository-name'],
+      [...tenantServicesFixture, 'new-repository-name'],
       null,
       2
     )
@@ -34,7 +34,7 @@ describe('#addRepoName', () => {
 
   test('Should throw "Pre Addition" error', () => {
     const repositoriesWithError = JSON.stringify([
-      ...ecrRepoNamesFixture,
+      ...tenantServicesFixture,
       'invalid-n$me'
     ])
 
@@ -50,7 +50,7 @@ describe('#addRepoName', () => {
     } catch (error) {
       expect(logger.error).toHaveBeenCalledTimes(1)
       expect(logger.error).toHaveBeenCalledWith(
-        "ECR repos file 'mock-file-path' from 'mock-repo failed schema validation"
+        "Tenant Services file 'mock-file-path' from 'mock-repo failed schema validation"
       )
       expect(error).toBeInstanceOf(Error)
       expect(error).toHaveProperty('message', 'File failed schema validation')
@@ -58,7 +58,7 @@ describe('#addRepoName', () => {
   })
 
   test('Should throw "Post Addition" error', () => {
-    const repositoriesJson = JSON.stringify(ecrRepoNamesFixture)
+    const repositoriesJson = JSON.stringify(tenantServicesFixture)
 
     expect.assertions(4)
 

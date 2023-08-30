@@ -1,6 +1,6 @@
 import { octokit } from '~/src/helpers/oktokit'
-import { addRepoToEcrRepoNames } from '~/src/api/create/helpers/add-repo-to-ecr-repo-names'
-import ecrRepoNamesFixture from '~/src/__fixtures__/ecr_repo_names'
+import { addRepoToTenantServices } from '~/src/api/create/helpers/add-repo-to-tenant-services'
+import tenantServicesFixture from '~/src/__fixtures__/tenant_services'
 
 jest.mock('~/src/helpers/oktokit', () => ({
   octokit: {
@@ -12,13 +12,13 @@ jest.mock('~/src/helpers/oktokit', () => ({
   }
 }))
 
-describe('#addRepoToEcrRepoNames', () => {
+describe('#addRepoToTenantServices', () => {
   test('Should return expected filePath and Json', async () => {
     octokit.rest.repos.getContent.mockImplementation(() => ({
-      data: JSON.stringify(ecrRepoNamesFixture)
+      data: JSON.stringify(tenantServicesFixture)
     }))
 
-    const [filePath, repositoryNamesJson] = await addRepoToEcrRepoNames(
+    const [filePath, repositoryNamesJson] = await addRepoToTenantServices(
       'mock-service-frontend',
       'infra-dev'
     )
