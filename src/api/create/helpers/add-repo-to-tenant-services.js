@@ -3,7 +3,7 @@ import { appConfig } from '~/src/config'
 import { addRepoName } from '~/src/api/create/helpers/add-repo-name'
 import { createLogger } from '~/src/helpers/logger'
 
-async function addRepoToEcrRepoNames(repositoryName, environment) {
+async function addRepoToTenantServices(repositoryName, environment) {
   const logger = createLogger()
   const fileRepository = appConfig.get('githubRepoTfServiceInfra')
   const filePath = `environments/${environment}/resources/tenant_services.json`
@@ -33,4 +33,4 @@ async function addRepoToEcrRepoNames(repositoryName, environment) {
   }
 }
 
-export { addRepoToEcrRepoNames }
+export { addRepoToTenantServices }

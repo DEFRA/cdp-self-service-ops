@@ -14,6 +14,7 @@ describe('#getCluster', () => {
   test('Should identify public cluster image', () => {
     expect(
       getCluster(
+        'infra-dev',
         'cdp-portal-frontend',
         publicClusterServices,
         protectedClusterServices
@@ -27,6 +28,7 @@ describe('#getCluster', () => {
   test('Should identify backend cluster image', () => {
     expect(
       getCluster(
+        'management',
         'cdp-self-service-ops',
         publicClusterServices,
         protectedClusterServices
@@ -42,6 +44,7 @@ describe('#getCluster', () => {
 
     try {
       getCluster(
+        'development',
         'non-existent-service',
         publicClusterServices,
         protectedClusterServices
@@ -50,7 +53,7 @@ describe('#getCluster', () => {
       expect(error).toBeInstanceOf(Error)
       expect(error).toHaveProperty(
         'message',
-        'non-existent-service does not belong to a cluster'
+        'non-existent-service does not belong to a cluster in the development environment'
       )
     }
   })

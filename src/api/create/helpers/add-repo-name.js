@@ -24,7 +24,7 @@ function addRepoName({
 
   if (preAdditionValidationResult?.error) {
     logger.error(
-      `ECR repos file '${filePath}' from '${fileRepository} failed schema validation`
+      `Tenant Services file '${filePath}' from '${fileRepository} failed schema validation`
     )
 
     throw new Error('File failed schema validation')

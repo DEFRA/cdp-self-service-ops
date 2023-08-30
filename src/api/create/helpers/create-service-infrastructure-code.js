@@ -1,21 +1,20 @@
 import { octokit } from '~/src/helpers/oktokit'
 import { appConfig, environments } from '~/src/config'
 import { addRepoToGithubOidc } from '~/src/api/create/helpers/add-repo-to-github-oidc'
-import { addEcrAndPermissionsSndWork } from '~/src/api/create/helpers/add-ecr-and-permissions-snd-work'
-import { addRepoToEcrRepoNames } from '~/src/api/create/helpers/add-repo-to-ecr-repo-names'
+import { addRepoToTenantServices } from '~/src/api/create/helpers/add-repo-to-tenant-services'
 import { prepPullRequestFiles } from '~/src/api/create/helpers/prep-pull-request-files'
-
-const currentSetupEnvs = ['management', 'infra-dev'] // TODO remove once other envs have been set up
+import { readyEnvironments } from '~/src/config/ready-environments'
 
 async function createServiceInfrastructureCode(repoName) {
   const fileRepository = appConfig.get('githubRepoTfServiceInfra')
   const pullRequestFiles = new Map()
 
   const infrastructurePromises = Object.values(environments)
-    .filter((env) => currentSetupEnvs.includes(env)) // TODO remove filter once other envs have been set up
+    .filter((env) => readyEnvironments.includes(env)) // TODO remove filter once other envs have been set up
     .map(async (env) => {
-      const [ecrFilePath, ecrJson] = await addRepoToEcrRepoNames(repoName, env)
-      pullRequestFiles.set(ecrFilePath, ecrJson)
+      const [tenantServicesFilePath, tenantServicesJson] =
+        await addRepoToTenantServices(repoName, env)
+      pullRequestFiles.set(tenantServicesFilePath, tenantServicesJson)
 
       const [oidcFilePath, oidcJson] = await addRepoToGithubOidc(repoName, env)
       pullRequestFiles.set(oidcFilePath, oidcJson)
@@ -23,20 +22,16 @@ async function createServiceInfrastructureCode(repoName) {
 
   await Promise.all(infrastructurePromises)
 
-  // TODO remove snd work once snd has been aligned with other envs. Snd is a different folder structure to other envs
-  const sndWork = await addEcrAndPermissionsSndWork(repoName)
-  sndWork.map(([key, value]) => pullRequestFiles.set(key, value))
-
   await octokit.createPullRequest({
     owner: appConfig.get('gitHubOrg'),
     repo: fileRepository,
-    title: `Add ${repoName} to ECR repositories list`,
-    body: `Auto generated Pull Request to add ${repoName} to ECR repos and GitHub OIDC lists.`,
-    head: `add-${repoName}-to-ecr-repos-${new Date().getTime()}`,
+    title: `Add ${repoName} to Tenant Services list`,
+    body: `Auto generated Pull Request to add ${repoName} to Tenant Services and GitHub OIDC lists.`,
+    head: `add-${repoName}-to-tenant-services-${new Date().getTime()}`,
     changes: [
       {
         files: prepPullRequestFiles(pullRequestFiles),
-        commit: `🤖 add ${repoName} to ecr repo names list`
+        commit: `🤖 add ${repoName} to Tenant Services and GitHub OIDC lists`
       }
     ]
   })

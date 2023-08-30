@@ -1,7 +1,7 @@
 import { ecsCpuToMemoryOptionsMap } from '~/src/api/deploy/helpers/ecs-cpu-to-memory-options-map'
 
 const deployServiceOptionsController = {
-  handler: async (request, h) => {
+  handler: (request, h) => {
     return h
       .response({
         message: 'success',

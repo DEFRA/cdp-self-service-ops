@@ -1,4 +1,6 @@
-function getCluster(imageName, publicServices, protectedServices) {
+import Boom from '@hapi/boom'
+
+function getCluster(environment, imageName, publicServices, protectedServices) {
   const publicClusterServiceNames = publicServices
     .map((service) => service?.container_image)
     .filter(Boolean)
@@ -21,7 +23,9 @@ function getCluster(imageName, publicServices, protectedServices) {
     }
   }
 
-  throw new Error(`${imageName} does not belong to a cluster`)
+  throw Boom.notFound(
+    `${imageName} does not belong to a cluster in the ${environment} environment`
+  )
 }
 
 export { getCluster }

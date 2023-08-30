@@ -1,6 +1,6 @@
 import { octokit } from '~/src/helpers/oktokit'
 import { createDeploymentConfig } from '~/src/api/create/helpers/create-deployment-config'
-import frontendServicesFixture from '~/src/__fixtures__/frontend_services.json'
+import publicServicesFixture from '~/src/__fixtures__/public_services'
 
 jest.mock('~/src/helpers/oktokit', () => ({
   octokit: {
@@ -15,7 +15,7 @@ jest.mock('~/src/helpers/oktokit', () => ({
 describe('#createDeploymentConfig', () => {
   test('Should add new service', async () => {
     octokit.rest.repos.getContent.mockImplementation(() => ({
-      data: JSON.stringify(frontendServicesFixture)
+      data: JSON.stringify(publicServicesFixture)
     }))
 
     const [filePath, servicesJson] = await createDeploymentConfig(
@@ -33,21 +33,13 @@ describe('#createDeploymentConfig', () => {
           {
             container_image: 'cdp-portal-frontend',
             container_port: 3000,
-            container_version: '0.64.0',
+            container_version: '0.85.0',
             desired_count: 2,
-            env_vars: {
-              PORT: 3000,
-              TEAMS_AND_REPOSITORIES_API_URL:
-                'http://internal-alb-snd-cluster-backend-14162363.eu-west-2.elb.amazonaws.com/cdp-teams-and-repositories',
-              SELF_SERVICE_OPS_API_URL:
-                'http://internal-alb-snd-cluster-backend-14162363.eu-west-2.elb.amazonaws.com/cdp-self-service-ops',
-              DEPLOYMENTS_API_URL:
-                'http://internal-alb-snd-cluster-backend-14162363.eu-west-2.elb.amazonaws.com/cdp-deployments',
-              DEPLOYABLES_API_URL:
-                'http://internal-alb-snd-cluster-backend-14162363.eu-west-2.elb.amazonaws.com/cdp-portal-deployables-backend'
-            },
             healthcheck: '/cdp-portal-frontend/health',
             name: 'cdp-portal-frontend',
+            env_vars: {
+              CDP_REDEPLOY: '2023-08-29T16:04:20.353Z'
+            },
             secrets: {
               SESSION_COOKIE_PASSWORD:
                 'cdp/services/cdp-portal-frontend:SESSION_COOKIE_PASSWORD',
@@ -58,7 +50,29 @@ describe('#createDeploymentConfig', () => {
             },
             task_cpu: 1024,
             task_memory: 2048,
-            deploy_metrics: false
+            deploy_metrics: false,
+            env_files: [
+              {
+                value:
+                  'arn:aws:s3:::cdp-infra-dev-service-configs/global/global_frontend_fixed.env',
+                type: 's3'
+              },
+              {
+                value:
+                  'arn:aws:s3:::cdp-infra-dev-service-configs/services/cdp-portal-frontend/infra-dev/cdp-portal-frontend.env',
+                type: 's3'
+              },
+              {
+                value:
+                  'arn:aws:s3:::cdp-infra-dev-service-configs/services/cdp-portal-frontend/defaults.env',
+                type: 's3'
+              },
+              {
+                value:
+                  'arn:aws:s3:::cdp-infra-dev-service-configs/environments/infra-dev/defaults.env',
+                type: 's3'
+              }
+            ]
           },
           {
             container_image: 'cdp-mock-frontend',
@@ -72,22 +86,22 @@ describe('#createDeploymentConfig', () => {
             env_files: [
               {
                 value:
-                  'arn:aws:s3:::cdp-snd-service-configs/global/global_frontend_fixed.env',
+                  'arn:aws:s3:::cdp-infra-dev-service-configs/global/global_frontend_fixed.env',
                 type: 's3'
               },
               {
                 value:
-                  'arn:aws:s3:::cdp-snd-service-configs/services/cdp-mock-frontend/infra-dev/cdp-mock-frontend.env',
+                  'arn:aws:s3:::cdp-infra-dev-service-configs/services/cdp-mock-frontend/infra-dev/cdp-mock-frontend.env',
                 type: 's3'
               },
               {
                 value:
-                  'arn:aws:s3:::cdp-snd-service-configs/services/cdp-mock-frontend/defaults.env',
+                  'arn:aws:s3:::cdp-infra-dev-service-configs/services/cdp-mock-frontend/defaults.env',
                 type: 's3'
               },
               {
                 value:
-                  'arn:aws:s3:::cdp-snd-service-configs/environments/infra-dev/defaults.env',
+                  'arn:aws:s3:::cdp-infra-dev-service-configs/environments/infra-dev/defaults.env',
                 type: 's3'
               }
             ]
@@ -101,7 +115,7 @@ describe('#createDeploymentConfig', () => {
 
   test('Should not add already existing service', async () => {
     octokit.rest.repos.getContent.mockImplementation(() => ({
-      data: JSON.stringify(frontendServicesFixture)
+      data: JSON.stringify(publicServicesFixture)
     }))
 
     const [filePath, servicesJson] = await createDeploymentConfig(
