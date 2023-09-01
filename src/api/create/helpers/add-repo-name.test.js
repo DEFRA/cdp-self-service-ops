@@ -16,7 +16,14 @@ describe('#addRepoName', () => {
   test('Should add new repository', () => {
     const repositoriesJson = JSON.stringify(tenantServicesFixture)
     const expectedJson = JSON.stringify(
-      [...tenantServicesFixture, 'new-repository-name'],
+      [
+        {
+          ...tenantServicesFixture[0],
+          ...{
+            'new-repository-name': { zone: 'public', mongo: false, redis: true }
+          }
+        }
+      ],
       null,
       2
     )
@@ -26,7 +33,8 @@ describe('#addRepoName', () => {
         repositories: repositoriesJson,
         fileRepository: 'mock-repo',
         filePath: 'mock-file-path',
-        repositoryName: 'new-repository-name'
+        repositoryName: 'new-repository-name',
+        zone: 'public'
       })
     ).toEqual(expectedJson)
     expect(logger.error).not.toHaveBeenCalled()

@@ -6,13 +6,21 @@ function addRepoName({
   repositories,
   fileRepository,
   filePath,
-  repositoryName
+  repositoryName,
+  zone
 }) {
   const logger = createLogger()
 
   const parsedRepositories = JSON.parse(repositories)
   const repositoriesSchema = Joi.array().items(
-    Joi.string().pattern(/^[a-zA-Z0-9][\w-]*[a-zA-Z0-9]$/)
+    Joi.object().pattern(
+      /^/,
+      Joi.object({
+        zone: Joi.string().valid('protected', 'public').required(),
+        mongo: Joi.bool().default(false),
+        redis: Joi.bool().default(false)
+      })
+    )
   )
 
   const preAdditionValidationResult = repositoriesSchema.validate(
@@ -30,7 +38,11 @@ function addRepoName({
     throw new Error('File failed schema validation')
   }
 
-  parsedRepositories.push(repositoryName)
+  parsedRepositories[0][repositoryName] = {
+    zone,
+    mongo: zone === 'protected',
+    redis: zone === 'public'
+  }
 
   const postAdditionValidationResult = repositoriesSchema.validate(
     parsedRepositories,

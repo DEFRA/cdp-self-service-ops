@@ -20,7 +20,8 @@ describe('#addRepoToTenantServices', () => {
 
     const [filePath, repositoryNamesJson] = await addRepoToTenantServices(
       'mock-service-frontend',
-      'infra-dev'
+      'infra-dev',
+      'public'
     )
 
     expect(filePath).toEqual(
@@ -29,9 +30,22 @@ describe('#addRepoToTenantServices', () => {
     expect(repositoryNamesJson).toEqual(
       JSON.stringify(
         [
-          'cdp-portal-frontend',
-          'cdp-node-frontend-template',
-          'mock-service-frontend'
+          {
+            'cdp-portal-frontend': {
+              zone: 'public',
+              mongo: false,
+              redis: true
+            },
+            'cdp-portal-backend': {
+              zone: 'protected',
+              mongo: true
+            },
+            'mock-service-frontend': {
+              zone: 'public',
+              mongo: false,
+              redis: true
+            }
+          }
         ],
         null,
         2

@@ -7,6 +7,8 @@ import { createServiceInfrastructureCode } from '~/src/api/create/helpers/create
 import { createServiceValidationSchema } from '~/src/api/create/helpers/create-service-validation-schema'
 import { createServiceConfig } from '~/src/api/create/helpers/create-service-config'
 import { setupDeploymentConfig } from '~/src/api/create/helpers/setup-deployment-config'
+import { createNginxConfig } from '~/src/api/create/helpers/create-nginxconfig'
+import { environments } from '~/src/config'
 
 const createServiceController = {
   options: {
@@ -24,16 +26,17 @@ const createServiceController = {
     const serviceType = payload?.serviceType
     const repositoryName = payload?.repositoryName
 
-    const clusterName = serviceTemplates[serviceType] ?? null
+    const zone = serviceTemplates[serviceType] ?? null
 
-    if (isNull(clusterName)) {
+    if (isNull(zone)) {
       throw Boom.badData(`Invalid service template: '${serviceType}'`)
     }
 
     await triggerCreateRepositoryWorkflow(payload)
     await createServiceConfig(repositoryName)
-    await createServiceInfrastructureCode(repositoryName)
-    await setupDeploymentConfig(repositoryName, '0.1.0', clusterName)
+    await createServiceInfrastructureCode(repositoryName, zone)
+    await createNginxConfig(repositoryName, environments, [])
+    await setupDeploymentConfig(repositoryName, '0.1.0', zone)
 
     return h.response({ message: 'success' }).code(200)
   }
