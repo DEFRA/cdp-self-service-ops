@@ -1,1 +1,13 @@
-["cdp-portal-frontend", "cdp-node-frontend-template"]
+[
+  {
+    "cdp-portal-frontend": {
+      "zone": "public",
+      "mongo": false,
+      "redis": true
+    },
+    "cdp-portal-backend": {
+      "zone": "protected",
+      "mongo": true
+    }
+  }
+]

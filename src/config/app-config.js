@@ -87,6 +87,12 @@ const appConfig = convict({
     default: 'cdp-app-config',
     env: 'GITHUB_REPO_APP_CONFIG'
   },
+  githubRepoNginx: {
+    doc: 'github repo to create the nginx config in',
+    format: String,
+    default: 'cdp-nginx-upstreams',
+    env: 'GITHUB_REPO_NGINX'
+  },
   isProduction: {
     doc: 'If this application running in the production environment',
     format: Boolean,

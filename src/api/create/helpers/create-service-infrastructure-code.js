@@ -5,7 +5,7 @@ import { addRepoToTenantServices } from '~/src/api/create/helpers/add-repo-to-te
 import { prepPullRequestFiles } from '~/src/api/create/helpers/prep-pull-request-files'
 import { readyEnvironments } from '~/src/config/ready-environments'
 
-async function createServiceInfrastructureCode(repoName) {
+async function createServiceInfrastructureCode(repoName, zone) {
   const fileRepository = appConfig.get('githubRepoTfServiceInfra')
   const pullRequestFiles = new Map()
 
@@ -13,7 +13,7 @@ async function createServiceInfrastructureCode(repoName) {
     .filter((env) => readyEnvironments.includes(env)) // TODO remove filter once other envs have been set up
     .map(async (env) => {
       const [tenantServicesFilePath, tenantServicesJson] =
-        await addRepoToTenantServices(repoName, env)
+        await addRepoToTenantServices(repoName, env, zone)
       pullRequestFiles.set(tenantServicesFilePath, tenantServicesJson)
 
       const [oidcFilePath, oidcJson] = await addRepoToGithubOidc(repoName, env)

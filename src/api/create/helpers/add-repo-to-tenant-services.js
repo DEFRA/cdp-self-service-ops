@@ -3,7 +3,7 @@ import { appConfig } from '~/src/config'
 import { addRepoName } from '~/src/api/create/helpers/add-repo-name'
 import { createLogger } from '~/src/helpers/logger'
 
-async function addRepoToTenantServices(repositoryName, environment) {
+async function addRepoToTenantServices(repositoryName, environment, zone) {
   const logger = createLogger()
   const fileRepository = appConfig.get('githubRepoTfServiceInfra')
   const filePath = `environments/${environment}/resources/tenant_services.json`
@@ -23,7 +23,8 @@ async function addRepoToTenantServices(repositoryName, environment) {
       repositories: data,
       fileRepository,
       filePath,
-      repositoryName
+      repositoryName,
+      zone
     })
 
     return [filePath, repositoryNamesJson]
