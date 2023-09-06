@@ -7,7 +7,6 @@ async function createNginxConfig(
   environments,
   additionPaths = []
 ) {
-
   const cfg = JSON.stringify({
     services: [
       {
