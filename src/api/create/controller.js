@@ -7,8 +7,9 @@ import { createServiceInfrastructureCode } from '~/src/api/create/helpers/create
 import { createServiceValidationSchema } from '~/src/api/create/helpers/create-service-validation-schema'
 import { createServiceConfig } from '~/src/api/create/helpers/create-service-config'
 import { setupDeploymentConfig } from '~/src/api/create/helpers/setup-deployment-config'
-import { createNginxConfig } from '~/src/api/create/helpers/create-nginxconfig'
+import { createNginxConfig } from '~/src/api/create/helpers/create-nginx-config'
 import { environments } from '~/src/config'
+import { createLogger } from '~/src/helpers/logger'
 
 const createServiceController = {
   options: {
@@ -22,6 +23,8 @@ const createServiceController = {
     }
   },
   handler: async (request, h) => {
+    const logger = createLogger()
+
     const payload = request?.payload
     const serviceType = payload?.serviceType
     const repositoryName = payload?.repositoryName
@@ -32,11 +35,39 @@ const createServiceController = {
       throw Boom.badData(`Invalid service template: '${serviceType}'`)
     }
 
+    logger.info(`creating service ${repositoryName}`)
+
     await triggerCreateRepositoryWorkflow(payload)
-    await createServiceConfig(repositoryName)
-    await createServiceInfrastructureCode(repositoryName, zone)
-    await createNginxConfig(repositoryName, environments, [])
-    await setupDeploymentConfig(repositoryName, '0.1.0', zone)
+    logger.info(`triggered create service workflow for ${repositoryName}`)
+
+    const createServiceConfigResult = await createServiceConfig(repositoryName)
+    logger.info(
+      `created service config PR for ${repositoryName}: ${createServiceConfigResult.url}`
+    )
+
+    const createServiceInfrastructureCodeResult =
+      await createServiceInfrastructureCode(repositoryName, zone)
+    logger.info(
+      `created service infra PR for ${repositoryName}: ${createServiceInfrastructureCodeResult.url}`
+    )
+
+    const createNginxConfigResult = await createNginxConfig(
+      repositoryName,
+      environments,
+      []
+    )
+    logger.info(
+      `created nginx PR for ${repositoryName}: ${createNginxConfigResult.url}`
+    )
+
+    const setupDeploymentConfigResult = await setupDeploymentConfig(
+      repositoryName,
+      '0.1.0',
+      zone
+    )
+    logger.info(
+      `created deployment PR for ${repositoryName}: ${setupDeploymentConfigResult.url}`
+    )
 
     return h.response({ message: 'success' }).code(200)
   }
