@@ -22,7 +22,7 @@ async function createServiceInfrastructureCode(repoName, zone) {
 
   await Promise.all(infrastructurePromises)
 
-  await octokit.createPullRequest({
+  return await octokit.createPullRequest({
     owner: appConfig.get('gitHubOrg'),
     repo: fileRepository,
     title: `Add ${repoName} to Tenant Services list`,

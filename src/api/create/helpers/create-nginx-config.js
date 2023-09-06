@@ -28,7 +28,7 @@ async function createNginxConfig(
     )
   )
 
-  await octokit.createPullRequest({
+  return await octokit.createPullRequest({
     owner: appConfig.get('gitHubOrg'),
     repo: appConfig.get('githubRepoNginx'),
     title: `Add config for ${repositoryName}`,

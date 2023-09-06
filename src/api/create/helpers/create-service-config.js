@@ -18,7 +18,7 @@ async function createServiceConfig(repositoryName) {
     )
   )
 
-  await octokit.createPullRequest({
+  return await octokit.createPullRequest({
     owner: appConfig.get('gitHubOrg'),
     repo: appConfig.get('githubRepoAppConfig'),
     title: `Add base config for ${repositoryName}`,

@@ -42,8 +42,7 @@ describe('#addRepoName', () => {
 
   test('Should throw "Pre Addition" error', () => {
     const repositoriesWithError = JSON.stringify([
-      ...tenantServicesFixture,
-      'invalid-n$me'
+      { ...tenantServicesFixture, ...{ '': [] } }
     ])
 
     expect.assertions(4)
@@ -75,12 +74,13 @@ describe('#addRepoName', () => {
         repositories: repositoriesJson,
         fileRepository: 'mock-repo',
         filePath: 'mock-file-path',
-        repositoryName: 'new-repo&*tory-name'
+        repositoryName: 'new-repo-name',
+        zone: 'wrong-cluster'
       })
     } catch (error) {
       expect(logger.error).toHaveBeenCalledTimes(1)
       expect(logger.error).toHaveBeenCalledWith(
-        "Addition of 'new-repo&*tory-name' to 'mock-file-path' from 'mock-repo failed schema validation"
+        "Addition of 'new-repo-name' to 'mock-file-path' from 'mock-repo failed schema validation"
       )
       expect(error).toBeInstanceOf(Error)
       expect(error).toHaveProperty(

@@ -2,6 +2,19 @@ import Joi from 'joi'
 
 import { createLogger } from '~/src/helpers/logger'
 
+const repositoriesSchema = Joi.array()
+  .items(
+    Joi.object().pattern(
+      Joi.string().pattern(/^[a-zA-Z0-9][\w-]*[a-zA-Z0-9]$/),
+      Joi.object({
+        zone: Joi.string().valid('protected', 'public').required(),
+        mongo: Joi.bool().default(false),
+        redis: Joi.bool().default(false)
+      })
+    )
+  )
+  .length(1)
+
 function addRepoName({
   repositories,
   fileRepository,
@@ -12,16 +25,6 @@ function addRepoName({
   const logger = createLogger()
 
   const parsedRepositories = JSON.parse(repositories)
-  const repositoriesSchema = Joi.array().items(
-    Joi.object().pattern(
-      /^/,
-      Joi.object({
-        zone: Joi.string().valid('protected', 'public').required(),
-        mongo: Joi.bool().default(false),
-        redis: Joi.bool().default(false)
-      })
-    )
-  )
 
   const preAdditionValidationResult = repositoriesSchema.validate(
     parsedRepositories,

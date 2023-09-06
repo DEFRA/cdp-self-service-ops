@@ -22,7 +22,7 @@ async function setupDeploymentConfig(imageName, version, clusterName) {
 
   await Promise.all(deploymentConfigPromises)
 
-  await octokit.createPullRequest({
+  return await octokit.createPullRequest({
     owner: appConfig.get('gitHubOrg'),
     repo: fileRepository,
     title: `Setup deployment config for ${imageName}:${version} to ${clusterName} cluster`,
