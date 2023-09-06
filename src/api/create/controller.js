@@ -50,6 +50,14 @@ const createServiceController = {
     logger.info(
       `created service infra PR for ${repositoryName}: ${createServiceInfrastructureCodeResult.data.html_url}`
     )
+    const setupDeploymentConfigResult = await setupDeploymentConfig(
+      repositoryName,
+      '0.1.0',
+      zone
+    )
+    logger.info(
+      `created deployment PR for ${repositoryName}: ${setupDeploymentConfigResult.data.html_url}`
+    )
 
     const createNginxConfigResult = await createNginxConfig(
       repositoryName,
@@ -59,15 +67,6 @@ const createServiceController = {
     )
     logger.info(
       `created nginx PR for ${repositoryName}: ${createNginxConfigResult.data.html_url}`
-    )
-
-    const setupDeploymentConfigResult = await setupDeploymentConfig(
-      repositoryName,
-      '0.1.0',
-      zone
-    )
-    logger.info(
-      `created deployment PR for ${repositoryName}: ${setupDeploymentConfigResult.data.html_url}`
     )
 
     return h.response({ message: 'success' }).code(200)
