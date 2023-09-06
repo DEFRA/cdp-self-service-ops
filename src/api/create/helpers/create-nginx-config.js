@@ -1,6 +1,5 @@
 import { appConfig } from '~/src/config'
 import { octokit } from '~/src/helpers/oktokit'
-import { prepPullRequestFiles } from '~/src/api/create/helpers/prep-pull-request-files'
 
 async function createNginxConfig(
   repositoryName,
@@ -8,14 +7,13 @@ async function createNginxConfig(
   environments,
   additionPaths = []
 ) {
-  // TODO: support custom paths
   const cfg = JSON.stringify({
     services: [
       {
         cdp_service_name: repositoryName,
         cdp_service_port: '8085',
         cdp_zone: zone,
-        addition_paths: []
+        addition_paths: additionPaths
       }
     ]
   })
@@ -36,7 +34,7 @@ async function createNginxConfig(
     head: `add-${repositoryName}-config-${new Date().getTime()}`,
     changes: [
       {
-        files: prepPullRequestFiles(pullRequestFiles),
+        files: pullRequestFiles,
         commit: `🤖 add nginx config for ${repositoryName}`
       }
     ]
