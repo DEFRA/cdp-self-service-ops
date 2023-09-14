@@ -7,7 +7,7 @@ const deployServiceController = {
     auth: {
       strategy: 'azure-oidc',
       access: {
-        scope: [appConfig.get('azureAdminGroupId'), '{params.teamId}']
+        scope: [appConfig.get('azureAdminGroupId')]
       }
     },
     validate: {
