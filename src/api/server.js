@@ -1,10 +1,12 @@
 import path from 'path'
 import hapi from '@hapi/hapi'
-import { appConfig } from '~/src/config'
+import jwt from '@hapi/jwt'
 
+import { appConfig } from '~/src/config'
 import { router } from '~/src/api/router'
 import { failAction } from '~/src/helpers/fail-action'
 import { requestLogger } from '~/src/helpers/request-logger'
+import { azureOidc } from '~/src/helpers/azure-oidc'
 
 async function createServer() {
   const server = hapi.server({
@@ -26,6 +28,10 @@ async function createServer() {
   })
 
   await server.register(requestLogger)
+
+  await server.register(jwt)
+
+  await server.register(azureOidc)
 
   await server.register(router, {
     routes: { prefix: `${appConfig.get('appPathPrefix')}` }

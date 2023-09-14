@@ -33,6 +33,7 @@
     "@babel/runtime": "7.22.11",
     "@hapi/boom": "10.0.1",
     "@hapi/hapi": "21.3.2",
+    "@hapi/jwt": "3.2.0",
     "@octokit/auth-app": "6.0.0",
     "@octokit/core": "5.0.0",
     "@octokit/plugin-rest-endpoint-methods": "9.0.0",

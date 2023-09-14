@@ -8,11 +8,17 @@ import { createServiceValidationSchema } from '~/src/api/create/helpers/create-s
 import { createServiceConfig } from '~/src/api/create/helpers/create-service-config'
 import { setupDeploymentConfig } from '~/src/api/create/helpers/setup-deployment-config'
 import { createNginxConfig } from '~/src/api/create/helpers/create-nginx-config'
-import { environments } from '~/src/config'
+import { appConfig, environments } from '~/src/config'
 import { createLogger } from '~/src/helpers/logger'
 
 const createServiceController = {
   options: {
+    auth: {
+      strategy: 'azure-oidc',
+      access: {
+        scope: [appConfig.get('azureAdminGroupId')]
+      }
+    },
     validate: {
       payload: createServiceValidationSchema()
     },
