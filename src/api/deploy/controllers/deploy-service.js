@@ -1,8 +1,15 @@
 import { deployServiceValidation } from '~/src/api/deploy/helpers/schema/deploy-service-validation'
 import { createDeploymentPullRequest } from '~/src/api/deploy/helpers/create-deployment-pull-request'
+import { appConfig } from '~/src/config'
 
 const deployServiceController = {
   options: {
+    auth: {
+      strategy: 'azure-oidc',
+      access: {
+        scope: [appConfig.get('azureAdminGroupId'), '{params.teamId}']
+      }
+    },
     validate: {
       payload: deployServiceValidation()
     },

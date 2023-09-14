@@ -37,6 +37,24 @@ const appConfig = convict({
     default: '/cdp-self-service-ops',
     env: 'APP_PATH_PREFIX'
   },
+  azureTenantId: {
+    doc: 'Azure Active Directory Tenant ID',
+    format: String,
+    env: 'AZURE_TENANT_ID',
+    default: '6f504113-6b64-43f2-ade9-242e05780007'
+  },
+  azureSSOClientId: {
+    doc: 'Azure App SSO Client ID',
+    format: String,
+    env: 'AZURE_SSO_CLIENT_ID',
+    default: '63983fc2-cfff-45bb-8ec2-959e21062b9a'
+  },
+  azureAdminGroupId: {
+    doc: 'Azure Active Directory Admin Group',
+    format: String,
+    env: 'AZURE_ADMIN_GROUP_ID',
+    default: 'aabe63e7-87ef-4beb-a596-c810631fc474'
+  },
   gitHubAppId: {
     doc: 'GitHub Api authentication App Id',
     format: String,
