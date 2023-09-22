@@ -7,6 +7,8 @@ import { router } from '~/src/api/router'
 import { failAction } from '~/src/helpers/fail-action'
 import { requestLogger } from '~/src/helpers/request-logger'
 import { azureOidc } from '~/src/helpers/azure-oidc'
+import { mongoPlugin } from '~/src/helpers/mongodb'
+import { githubEventsPlugin } from '~/src/listeners/github/github-events-plugin'
 
 async function createServer() {
   const server = hapi.server({
@@ -32,6 +34,10 @@ async function createServer() {
   await server.register(jwt)
 
   await server.register(azureOidc)
+
+  await server.register({ plugin: mongoPlugin, options: {} })
+
+  await server.register({ plugin: githubEventsPlugin, options: {} })
 
   await server.register(router, {
     routes: { prefix: `${appConfig.get('appPathPrefix')}` }

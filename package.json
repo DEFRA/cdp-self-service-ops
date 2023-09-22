@@ -30,6 +30,7 @@
   "author": "Defra DDTS",
   "license": "OGL-UK-3.0",
   "dependencies": {
+    "@aws-sdk/client-sqs": "3.413.0",
     "@babel/runtime": "7.22.11",
     "@hapi/boom": "10.0.1",
     "@hapi/hapi": "21.3.2",
@@ -42,6 +43,7 @@
     "hapi-pino": "12.1.0",
     "joi": "17.10.0",
     "lodash": "4.17.21",
+    "mongodb": "5.6.0",
     "node-fetch": "2.7.0",
     "octokit-plugin-create-pull-request": "5.1.0",
     "pino": "8.15.0"

@@ -1,7 +1,7 @@
 import { appConfig } from '~/src/config'
 import { createLogger } from '~/src/helpers/logger'
 import { octokit } from '~/src/helpers/oktokit'
-import { enableAutoMergeGraphQl } from '~/src/api/deploy/graphql/enable-automerge.graphql'
+import { enableAutoMergeGraphQl } from '~/src/helpers/graphql/enable-automerge.graphql'
 import { updateServices } from '~/src/api/deploy/helpers/update-services'
 import { getClusterServices } from '~/src/api/deploy/helpers/get-cluster-services'
 import { getCluster } from '~/src/api/deploy/helpers/get-cluster'

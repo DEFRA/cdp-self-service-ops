@@ -4,6 +4,7 @@ import { addRepoToGithubOidc } from '~/src/api/create/helpers/add-repo-to-github
 import { addRepoToTenantServices } from '~/src/api/create/helpers/add-repo-to-tenant-services'
 import { prepPullRequestFiles } from '~/src/api/create/helpers/prep-pull-request-files'
 import { readyEnvironments } from '~/src/config/ready-environments'
+import { enableAutoMergeGraphQl } from '~/src/helpers/graphql/enable-automerge.graphql'
 
 async function createServiceInfrastructureCode(repoName, zone) {
   const fileRepository = appConfig.get('githubRepoTfServiceInfra')
@@ -22,7 +23,7 @@ async function createServiceInfrastructureCode(repoName, zone) {
 
   await Promise.all(infrastructurePromises)
 
-  return await octokit.createPullRequest({
+  const pr = await octokit.createPullRequest({
     owner: appConfig.get('gitHubOrg'),
     repo: fileRepository,
     title: `Add ${repoName} to Tenant Services list`,
@@ -35,6 +36,12 @@ async function createServiceInfrastructureCode(repoName, zone) {
       }
     ]
   })
+
+  await octokit.graphql(enableAutoMergeGraphQl, {
+    pullRequestId: pr.data.node_id
+  })
+
+  return pr
 }
 
 export { createServiceInfrastructureCode }
