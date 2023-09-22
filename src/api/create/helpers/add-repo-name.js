@@ -14,6 +14,7 @@ const repositoriesSchema = Joi.array()
     )
   )
   .length(1)
+  .message('problem with outer array')
 
 function addRepoName({
   repositories,
@@ -37,7 +38,6 @@ function addRepoName({
     logger.error(
       `Tenant Services file '${filePath}' from '${fileRepository} failed schema validation`
     )
-
     throw new Error('File failed schema validation')
   }
 

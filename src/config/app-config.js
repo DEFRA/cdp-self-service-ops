@@ -131,6 +131,42 @@ const appConfig = convict({
     format: ['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent'],
     default: 'info',
     env: 'LOG_LEVEL'
+  },
+  mongoUri: {
+    doc: 'URI for mongodb',
+    format: '*',
+    default: 'mongodb://127.0.0.1:27017/',
+    env: 'MONGO_URI'
+  },
+  mongoDatabase: {
+    doc: 'database for mongodb',
+    format: '*',
+    default: 'cdp-self-service-ops',
+    env: 'MONGO_DATABASE'
+  },
+  sqsRegion: {
+    doc: 'AWS region of sqs queue',
+    format: String,
+    default: 'us-east-1',
+    env: 'SQS_REGION'
+  },
+  sqsEndpoint: {
+    doc: 'SQS endpoint',
+    format: String,
+    default: 'http://127.0.0.1:4566',
+    env: 'SQS_ENDPOINT'
+  },
+  sqsGithubQueue: {
+    doc: 'URL of sqs queue providing github events',
+    format: String,
+    default: 'http://127.0.0.1:4566/000000000000/github-events',
+    env: 'SQS_GITHUB_QUEUE'
+  },
+  sqsGithubEnabled: {
+    doc: 'Should the service listen for github webhook events?',
+    format: Boolean,
+    default: true,
+    env: 'SQS_GITHUB_ENABLED'
   }
 })
 
