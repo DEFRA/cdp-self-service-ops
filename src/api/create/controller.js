@@ -89,10 +89,18 @@ const createServiceController = {
       environments,
       [] // TODO: support user defined paths?
     )
+    await updateCreationStatus(
+      request.db,
+      repositoryName,
+      'cdp-nginx-upstreams',
+      {
+        status: 'raised',
+        pr: trimPr(setupDeploymentConfigResult?.data)
+      }
+    )
     logger.info(
       `created nginx PR for ${repositoryName}: ${createNginxConfigResult.data.html_url}`
     )
-
 
     return h.response({ message: 'success' }).code(200)
   }

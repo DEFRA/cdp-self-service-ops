@@ -45,6 +45,11 @@ const workflowRunHandler = async (db, message) => {
 
     await mergeOrAutomerge(owner, 'cdp-app-config', status['cdp-app-config'].pr)
     await mergeOrAutomerge(owner, 'tf-svc', status['tf-svc'].pr)
+    await mergeOrAutomerge(
+      owner,
+      'cdp-nginx-upstreams',
+      status['cdp-nginx-upstreams'].pr
+    )
   }
 
   // Record what happened
