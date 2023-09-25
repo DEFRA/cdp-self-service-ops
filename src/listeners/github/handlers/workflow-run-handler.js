@@ -36,7 +36,11 @@ const workflowRunHandler = async (db, message) => {
   // its unclear how to consistently identify the workflows, other than by path or name?
 
   // We only need to trigger more steps on tf-svc-infra since this gate-keeps the ECR repo etc
-  if (repo === 'tf-svc-infra' && message.action === 'completed') {
+  if (
+    repo === 'tf-svc-infra' &&
+    message.action === 'completed' &&
+    message.workflow_run?.conclusion === 'success'
+  ) {
     logger.info(
       `triggering next steps in the creation of ${status.repositoryName}`
     )
@@ -53,7 +57,7 @@ const workflowRunHandler = async (db, message) => {
   }
 
   // Record what happened
-  const workflowStatus = `workflow_${message.action}`
+  const workflowStatus = `workflow_${message.action}_${message.workflow_run?.conclusion}`
   logger.info(
     `updating status for creation job ${status.repositoryName} ${repo}:${workflowStatus}`
   )
