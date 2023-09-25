@@ -91,7 +91,7 @@ const createServiceController = {
       'cdp-nginx-upstreams',
       {
         status: 'raised',
-        pr: trimPr(setupDeploymentConfigResult?.data)
+        pr: trimPr(createNginxConfigResult?.data)
       }
     )
     logger.info(
