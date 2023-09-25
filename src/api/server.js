@@ -31,9 +31,11 @@ async function createServer() {
 
   await server.register(requestLogger)
 
-  await server.register(jwt)
+  if (appConfig.get('authEnabled')) {
+    await server.register(jwt)
 
-  await server.register(azureOidc)
+    await server.register(azureOidc)
+  }
 
   await server.register({ plugin: mongoPlugin, options: {} })
 
