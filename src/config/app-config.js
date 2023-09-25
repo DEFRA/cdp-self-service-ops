@@ -167,6 +167,12 @@ const appConfig = convict({
     format: Boolean,
     default: true,
     env: 'SQS_GITHUB_ENABLED'
+  },
+  authEnabled: {
+    doc: 'Temporary feature flag to disable authentication',
+    format: Boolean,
+    default: true,
+    env: 'AUTH_ENABLED'
   }
 })
 
