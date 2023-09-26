@@ -10,7 +10,7 @@ import { createLogger } from '~/src/helpers/logger'
 const logger = createLogger()
 
 const workflowRunHandler = async (db, message) => {
-  const owner = message.repository?.owner.login
+  const owner = message.repository?.owner?.login
   const repo = message.repository?.name
   const headBranch = message.workflow_run?.head_branch
   const headSHA = message.workflow_run?.head_sha
@@ -57,7 +57,7 @@ const workflowRunHandler = async (db, message) => {
   }
 
   // Record what happened
-  const workflowStatus = `workflow_${message.action}_${message.workflow_run?.conclusion}`
+  const workflowStatus = message.workflow_run?.conclusion ?? message.action
   logger.info(
     `updating status for creation job ${status.repositoryName} ${repo}:${workflowStatus}`
   )
