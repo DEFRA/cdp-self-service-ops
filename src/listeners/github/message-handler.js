@@ -3,7 +3,12 @@ import { pullRequestHandler } from '~/src/listeners/github/handlers/pull-request
 import { workflowRunHandler } from '~/src/listeners/github/handlers/workflow-run-handler'
 
 const logger = createLogger()
-const validRepos = new Set(['tf-svc', 'tf-svc-infra', 'cdp-app-config'])
+const validRepos = new Set([
+  'tf-svc',
+  'tf-svc-infra',
+  'cdp-app-config',
+  'cdp-nginx-upstreams'
+])
 const validActions = new Set(['workflow_run', 'pull_request'])
 
 const shouldProcess = (message) => {
