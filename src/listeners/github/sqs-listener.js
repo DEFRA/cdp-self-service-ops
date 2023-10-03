@@ -35,9 +35,8 @@ const listen = async (server) => {
       const msg = Messages[i]
 
       try {
-        const sha1 = crypto.createHash('sha1', msg.Body)
         const payload = JSON.parse(msg.Body)
-        logger.info(`received msg: ${msg.ReceiptHandle} sha1 of body: ${sha1}`)
+        logger.info(`received msg: ${msg.ReceiptHandle}`)
         await handle(server, payload)
       } catch (ex) {
         logger.error(ex)
