@@ -5,7 +5,6 @@ import { serviceTemplates } from '~/src/api/create/helpers/service-templates'
 import { createServiceInfrastructureCode } from '~/src/api/create/helpers/create-service-infrastructure-code'
 import { createServiceValidationSchema } from '~/src/api/create/helpers/create-service-validation-schema'
 import { createServiceConfig } from '~/src/api/create/helpers/create-service-config'
-import { setupDeploymentConfig } from '~/src/api/create/helpers/setup-deployment-config'
 import { createNginxConfig } from '~/src/api/create/helpers/create-nginx-config'
 import { environments } from '~/src/config'
 import { createLogger } from '~/src/helpers/logger'
@@ -14,6 +13,7 @@ import {
   updateCreationStatus
 } from '~/src/api/create/helpers/save-status'
 import { authStrategy } from '~/src/helpers/auth-stratergy'
+import { trimPr } from '~/src/api/create/helpers/trim-pr'
 
 const createServiceController = {
   options: {
@@ -40,13 +40,15 @@ const createServiceController = {
       throw Boom.badData(`Invalid service template: '${serviceType}'`)
     }
 
-    await initCreationStatus(request.db, repositoryName, payload)
+    await initCreationStatus(request.db, repositoryName, payload, zone)
 
     logger.info(`creating service ${repositoryName}`)
 
     // Create the infra entries (tenant-services.json) to provision things like the ECR repo and iam roles
     // This will be auto-merged assuming the checks pass, triggering the subsequent PR's to also be merged
     // and the github repo to be created (see ~/listners/github/message-handler.js)
+
+    // tf-svc-infra
     const createServiceInfrastructureCodeResult =
       await createServiceInfrastructureCode(repositoryName, zone)
     logger.info(
@@ -57,7 +59,9 @@ const createServiceController = {
       pr: trimPr(createServiceInfrastructureCodeResult?.data)
     })
 
+    // cdp-app-config
     const createServiceConfigResult = await createServiceConfig(repositoryName)
+
     await updateCreationStatus(request.db, repositoryName, 'cdp-app-config', {
       status: 'raised',
       pr: trimPr(createServiceConfigResult?.data)
@@ -66,19 +70,7 @@ const createServiceController = {
       `created service config PR for ${repositoryName}: ${createServiceConfigResult.data.html_url}`
     )
 
-    const setupDeploymentConfigResult = await setupDeploymentConfig(
-      repositoryName,
-      '0.1.0',
-      zone
-    )
-    await updateCreationStatus(request.db, repositoryName, 'tf-svc', {
-      status: 'raised',
-      pr: trimPr(setupDeploymentConfigResult?.data)
-    })
-    logger.info(
-      `created deployment PR for ${repositoryName}: ${setupDeploymentConfigResult.data.html_url}`
-    )
-
+    // cdp-nginx-upstreams
     const createNginxConfigResult = await createNginxConfig(
       repositoryName,
       zone,
@@ -99,17 +91,6 @@ const createServiceController = {
     )
 
     return h.response({ message: 'success' }).code(200)
-  }
-}
-
-// given a github create-PR response, extract the fields we're interested in
-function trimPr(pr) {
-  return {
-    number: pr?.number,
-    sha: pr?.head.sha,
-    ref: pr?.head.ref,
-    html_url: pr?.html_url,
-    node_id: pr?.node_id
   }
 }
 

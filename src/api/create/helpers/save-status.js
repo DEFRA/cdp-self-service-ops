@@ -1,7 +1,8 @@
-async function initCreationStatus(db, repositoryName, payload) {
+async function initCreationStatus(db, repositoryName, payload, zone) {
   const status = {
     repositoryName,
     started: new Date(),
+    zone,
     createRepository: { status: 'not-requested', payload },
     'tf-svc': {
       status: 'not-requested'
