@@ -12,10 +12,10 @@ and waiting for the workflow triggered by the commit to main to complete before 
   - adds repo the tenants.json for each environment, creating role, ECR repo, mongo/redis dbs etc
 - Enables auto-merge on `tf-svc-infra`
 - Raises (but does not auto-merge) pr for `cdp-app-config`
-- Raises (but does not auto-merge) pr for `tf-svc`
 - Raises (but does not auto-merge) pr for `cdp-nginx-upstreams`
 - Waits for message from github saying the PR for `tf-svc-infra` has been merged (recording the head commit SHA)
 - Waits for message from github saying the workflow for `tf-svc-infra` has run on main and completed (using the commit SHA from above to identify it)
+- Raises pr for `tf-svc`
 - Triggers auto-merge on:
   - `cdp-app-config`
   - `tf-svc`
