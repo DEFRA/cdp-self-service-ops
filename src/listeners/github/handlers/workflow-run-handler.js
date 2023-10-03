@@ -2,10 +2,15 @@ import {
   findByCommitHash,
   updateWorkflowStatus
 } from '~/src/listeners/github/status-repo'
-import { mergeOrAutomerge } from '~/src/listeners/github/helpers/automerge'
+import {
+  automerge,
+  mergeOrAutomerge
+} from '~/src/listeners/github/helpers/automerge'
 import { updateCreationStatus } from '~/src/api/create/helpers/save-status'
 import { triggerCreateRepositoryWorkflow } from '~/src/listeners/github/helpers/trigger-create-repository-workflow'
 import { createLogger } from '~/src/helpers/logger'
+import { setupDeploymentConfig } from '~/src/api/create/helpers/setup-deployment-config'
+import { trimPr } from '~/src/api/create/helpers/trim-pr'
 
 const logger = createLogger()
 
@@ -47,8 +52,23 @@ const workflowRunHandler = async (db, message) => {
     await triggerCreateRepositoryWorkflow(status.createRepository.payload)
     await updateCreationStatus(db, repo, 'createRepository', 'requested')
 
+    // tf-svc needs the tf-svc-infra change to have completed before running in the terraform else it will fail
+    const tfSvcResult = await setupDeploymentConfig(
+      status.repositoryName,
+      '0.1.0',
+      status.zone
+    )
+    await updateCreationStatus(db, status.repositoryName, 'tf-svc', {
+      status: 'raised',
+      pr: trimPr(tfSvcResult?.data)
+    })
+    logger.info(
+      `created deployment PR for ${status.repositoryName}: ${tfSvcResult.data.html_url}`
+    )
+    await automerge(tfSvcResult.data.pr.number)
+
     await mergeOrAutomerge(owner, 'cdp-app-config', status['cdp-app-config'].pr)
-    await mergeOrAutomerge(owner, 'tf-svc', status['tf-svc'].pr)
+
     await mergeOrAutomerge(
       owner,
       'cdp-nginx-upstreams',

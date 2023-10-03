@@ -1,6 +1,7 @@
 import { workflowRunHandler } from '~/src/listeners/github/handlers/workflow-run-handler'
 import { updateCreationStatus } from '~/src/api/create/helpers/save-status'
 import { octokit } from '~/src/helpers/oktokit'
+import { enableAutoMergeGraphQl } from '~/src/helpers/graphql/enable-automerge.graphql'
 
 jest.mock('~/src/api/create/helpers/save-status', () => ({
   updateCreationStatus: jest.fn(),
@@ -9,7 +10,9 @@ jest.mock('~/src/api/create/helpers/save-status', () => ({
 
 jest.mock('~/src/helpers/oktokit', () => ({
   octokit: {
+    createPullRequest: jest.fn(),
     request: jest.fn(),
+    graphql: jest.fn(),
     rest: {
       pulls: {
         merge: jest.fn()
@@ -105,6 +108,12 @@ describe('#workflow-run-handler', () => {
       })
     }
 
+    octokit.createPullRequest.mockReturnValue({
+      data: {
+        pr: { node_id: 'aabbccdd', number: 1 },
+        head: { sha: '05129eae0a11464d5c3a6bd3839b67a2e7f9c933' }
+      }
+    })
     octokit.request.mockImplementation(() => {})
     octokit.rest.pulls.merge.mockImplementation(() => {
       return { data: { merged: true } }
@@ -143,10 +152,8 @@ describe('#workflow-run-handler', () => {
       repo: 'cdp-app-config'
     })
 
-    expect(octokit.rest.pulls.merge).toHaveBeenCalledWith({
-      owner: 'test-org',
-      pull_number: 2,
-      repo: 'tf-svc'
+    expect(octokit.graphql).toHaveBeenCalledWith(enableAutoMergeGraphQl, {
+      pullRequestId: 1
     })
 
     expect(octokit.rest.pulls.merge).toHaveBeenCalledWith({
