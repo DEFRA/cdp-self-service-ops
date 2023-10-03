@@ -19,7 +19,7 @@ async function initCreationStatus(db, repositoryName, payload, zone) {
 }
 
 async function updateCreationStatus(db, repo, field, status) {
-  return db
+  return await db
     .collection('status')
     .updateOne({ repositoryName: repo }, { $set: { [field]: status } })
 }

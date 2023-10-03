@@ -5,24 +5,36 @@ import { createLogger } from '~/src/helpers/logger'
 const logger = createLogger()
 
 const automerge = async (pullId) => {
-  await octokit.graphql(enableAutoMergeGraphQl, {
+  logger.info(`automerging id ${pullId}`)
+  return await octokit.graphql(enableAutoMergeGraphQl, {
     pullRequestId: pullId
   })
 }
 
 const mergeOrAutomerge = async (owner, repo, pr) => {
-  logger.info(`attempting to merge ${owner}/${repo} ${pr.number}`)
+  logger.info(`attempting to merge ${owner}/${repo} ${pr.number} ${pr.node_id}`)
 
-  const canMerge = await octokit.rest.pulls.merge({
-    owner,
-    repo,
-    pull_number: pr.number
-  })
-  if (!canMerge.data.merged) {
+  let merged = false
+  try {
+    const canMerge = await octokit.rest.pulls.merge({
+      owner,
+      repo,
+      pull_number: pr.number
+    })
+    merged = canMerge.data.merged
+  } catch (e) {
+    logger.info(`Failed to auto-merge ${e}`)
+  }
+
+  if (!merged) {
     // attempt to enable auto-merge instead
-    logger.info('merge refused, trying to automerge')
-    await automerge(pr.node_id)
+    try {
+      logger.info('merge refused, trying to automerge')
+      const autoMergeResponse = await automerge(pr.node_id)
+      logger.info(autoMergeResponse)
+    } catch (e) {
+      logger.info(`failed to auto-merge: ${e}`)
+    }
   }
 }
-
 export { automerge, mergeOrAutomerge }
