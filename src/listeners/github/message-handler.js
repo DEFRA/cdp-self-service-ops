@@ -1,8 +1,6 @@
-import { createLogger } from '~/src/helpers/logger'
 import { pullRequestHandler } from '~/src/listeners/github/handlers/pull-request-handler'
 import { workflowRunHandler } from '~/src/listeners/github/handlers/workflow-run-handler'
 
-const logger = createLogger()
 const validRepos = new Set([
   'tf-svc',
   'tf-svc-infra',
@@ -18,9 +16,6 @@ const shouldProcess = (message) => {
 }
 
 const handle = async (server, message) => {
-  logger.info(
-    `processing ${message.github_event} for ${message.repository?.name}`
-  )
   if (!shouldProcess(message)) {
     return
   }
