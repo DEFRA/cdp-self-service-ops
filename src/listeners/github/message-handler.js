@@ -18,9 +18,6 @@ const shouldProcess = (message) => {
 }
 
 const handle = async (server, message) => {
-  logger.info(
-    `processing ${message.github_event} for ${message.repository?.name}`
-  )
   if (!shouldProcess(message)) {
     return
   }

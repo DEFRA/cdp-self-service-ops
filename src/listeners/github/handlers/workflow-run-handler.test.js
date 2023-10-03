@@ -95,9 +95,10 @@ describe('#workflow-run-handler', () => {
   test('Should trigger the next stages if tf-svc-infras workflow was successfully run', async () => {
     const findOne = jest.fn().mockReturnValue({
       repositoryName: 'test-repo',
-      createRepository: { payload: {} },
+      zone: 'protected',
+      createRepository: { status: 'not-requested', payload: {} },
       'cdp-app-config': { pr: { number: 1 } },
-      'tf-svc': { pr: { number: 2 } },
+      'tf-svc': { status: 'not-requested' },
       'cdp-nginx-upstreams': { pr: { number: 3 } }
     })
     const updateOne = jest.fn().mockReturnValue({})
@@ -110,7 +111,7 @@ describe('#workflow-run-handler', () => {
 
     octokit.createPullRequest.mockReturnValue({
       data: {
-        pr: { node_id: 'aabbccdd', number: 1 },
+        pr: { node_id: 'PR_aabbccdd', number: 2 },
         head: { sha: '05129eae0a11464d5c3a6bd3839b67a2e7f9c933' }
       }
     })
@@ -152,8 +153,10 @@ describe('#workflow-run-handler', () => {
       repo: 'cdp-app-config'
     })
 
-    expect(octokit.graphql).toHaveBeenCalledWith(enableAutoMergeGraphQl, {
-      pullRequestId: 1
+    expect(octokit.rest.pulls.merge).toHaveBeenCalledWith({
+      owner: 'test-org',
+      pull_number: 2,
+      repo: 'tf-svc'
     })
 
     expect(octokit.rest.pulls.merge).toHaveBeenCalledWith({
