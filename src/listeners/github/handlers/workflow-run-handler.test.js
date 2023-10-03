@@ -1,7 +1,6 @@
 import { workflowRunHandler } from '~/src/listeners/github/handlers/workflow-run-handler'
 import { updateCreationStatus } from '~/src/api/create/helpers/save-status'
 import { octokit } from '~/src/helpers/oktokit'
-import { enableAutoMergeGraphQl } from '~/src/helpers/graphql/enable-automerge.graphql'
 
 jest.mock('~/src/api/create/helpers/save-status', () => ({
   updateCreationStatus: jest.fn(),
