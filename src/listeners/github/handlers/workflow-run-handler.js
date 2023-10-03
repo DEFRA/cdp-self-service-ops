@@ -68,22 +68,28 @@ const workflowRunHandler = async (db, message) => {
 
       // tf-svc needs the tf-svc-infra change to have completed before running in the terraform else it will fail
       if (status['tf-svc'].status === 'not-requested') {
-        const tfSvcPR = await setupDeploymentConfig(
-          status.repositoryName,
-          '0.1.0',
-          status.zone
-        )
-        logger.info(
-          `created tf-svc deployment PR for ${status.repositoryName}: ${tfSvcPR.data.html_url}`
-        )
-        await updateCreationStatus(db, status.repositoryName, 'tf-svc', {
-          status: 'raised',
-          pr: trimPr(tfSvcPR?.data)
-        })
-        logger.info(
-          `auto-merging tf-svc PR for ${status.repositoryName}: ${tfSvcPR.data.html_url}`
-        )
-        await mergeOrAutomerge(owner, 'tf-svc', tfSvcPR?.data.pr)
+        try {
+          const tfSvcPR = await setupDeploymentConfig(
+            status.repositoryName,
+            '0.1.0',
+            status.zone
+          )
+          logger.info(
+            `created tf-svc deployment PR for ${status.repositoryName}: ${tfSvcPR.data.html_url}`
+          )
+          await updateCreationStatus(db, status.repositoryName, 'tf-svc', {
+            status: 'raised',
+            pr: trimPr(tfSvcPR?.data)
+          })
+          logger.info(
+            `auto-merging tf-svc PR for ${status.repositoryName}: ${tfSvcPR.data.html_url}`
+          )
+          logger.info(tfSvcPR)
+          await mergeOrAutomerge(owner, 'tf-svc', tfSvcPR?.data)
+        } catch (err) {
+          logger.info('Something when wrong raising the tf-svc pr!')
+          logger.info(err)
+        }
       }
 
       logger.info(`auto-merging `)

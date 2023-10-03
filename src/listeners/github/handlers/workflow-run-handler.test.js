@@ -110,7 +110,8 @@ describe('#workflow-run-handler', () => {
 
     octokit.createPullRequest.mockReturnValue({
       data: {
-        pr: { node_id: 'PR_aabbccdd', number: 2 },
+        node_id: 'PR_aabbccdd',
+        number: 2,
         head: { sha: '05129eae0a11464d5c3a6bd3839b67a2e7f9c933' }
       }
     })
