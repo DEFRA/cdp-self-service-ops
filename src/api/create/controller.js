@@ -5,7 +5,6 @@ import { serviceTemplates } from '~/src/api/create/helpers/service-templates'
 import { createServiceInfrastructureCode } from '~/src/api/create/helpers/create-service-infrastructure-code'
 import { createServiceValidationSchema } from '~/src/api/create/helpers/create-service-validation-schema'
 import { createServiceConfig } from '~/src/api/create/helpers/create-service-config'
-import { setupDeploymentConfig } from '~/src/api/create/helpers/setup-deployment-config'
 import { createNginxConfig } from '~/src/api/create/helpers/create-nginx-config'
 import { environments } from '~/src/config'
 import { createLogger } from '~/src/helpers/logger'
@@ -69,20 +68,6 @@ const createServiceController = {
     })
     logger.info(
       `created service config PR for ${repositoryName}: ${createServiceConfigResult.data.html_url}`
-    )
-
-    // tf-svc
-    const tfSvcSetupDeploymentConfigResult = await setupDeploymentConfig(
-      repositoryName,
-      '0.1.0',
-      zone
-    )
-    await updateCreationStatus(request.db, repositoryName, 'tf-svc', {
-      status: 'raised',
-      pr: trimPr(tfSvcSetupDeploymentConfigResult?.data)
-    })
-    logger.info(
-      `created deployment PR for ${repositoryName}: ${tfSvcSetupDeploymentConfigResult.data.html_url}`
     )
 
     // cdp-nginx-upstreams
