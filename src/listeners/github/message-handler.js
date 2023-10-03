@@ -21,11 +21,11 @@ const handle = async (server, message) => {
   }
 
   if (message.github_event === 'pull_request') {
-    await pullRequestHandler(server.db, message)
+    return await pullRequestHandler(server.db, message)
   }
 
   if (message.github_event === 'workflow_run') {
-    await workflowRunHandler(server.db, message)
+    return await workflowRunHandler(server.db, message)
   }
 }
 

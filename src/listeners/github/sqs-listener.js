@@ -25,7 +25,7 @@ const listen = async (server) => {
       MaxNumberOfMessages: 1,
       MessageAttributeNames: ['All'],
       QueueUrl: queueUrl,
-      VisibilityTimeout: 20,
+      VisibilityTimeout: 400,
       WaitTimeSeconds: 10
     }
 
@@ -35,7 +35,9 @@ const listen = async (server) => {
       const msg = Messages[i]
 
       try {
+        const sha1 = crypto.createHash('sha1', msg.Body)
         const payload = JSON.parse(msg.Body)
+        logger.info(`received msg: ${msg.ReceiptHandle} sha1 of body: ${sha1}`)
         await handle(server, payload)
       } catch (ex) {
         logger.error(ex)
