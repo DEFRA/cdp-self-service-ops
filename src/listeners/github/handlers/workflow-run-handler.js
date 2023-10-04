@@ -2,7 +2,10 @@ import {
   findByCommitHash,
   updateWorkflowStatus
 } from '~/src/listeners/github/status-repo'
-import { mergeOrAutomerge } from '~/src/listeners/github/helpers/automerge'
+import {
+  automerge,
+  mergeOrAutomerge
+} from '~/src/listeners/github/helpers/automerge'
 import { updateCreationStatus } from '~/src/api/create/helpers/save-status'
 import { triggerCreateRepositoryWorkflow } from '~/src/listeners/github/helpers/trigger-create-repository-workflow'
 import { createLogger } from '~/src/helpers/logger'
@@ -84,11 +87,19 @@ const workflowRunHandler = async (db, message) => {
           logger.info(
             `auto-merging tf-svc PR for ${status.repositoryName}: ${tfSvcPR.data.html_url}`
           )
-          logger.info(tfSvcPR)
-          await mergeOrAutomerge(owner, 'tf-svc', tfSvcPR?.data)
+          const autoMergeResult = await automerge(tfSvcPR?.data?.node_id)
+          logger.info(autoMergeResult)
         } catch (err) {
-          logger.info('Something when wrong raising the tf-svc pr!')
+          logger.info(
+            `Failed to raise/automerge tf-svc pull request for ${status.repositoryName}`
+          )
           logger.info(err)
+          await updateCreationStatus(
+            db,
+            status.repositoryName,
+            'tf-svc.status',
+            'failed'
+          )
         }
       }
 

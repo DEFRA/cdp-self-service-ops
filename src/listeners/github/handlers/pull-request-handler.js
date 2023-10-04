@@ -4,9 +4,8 @@ import {
 } from '~/src/listeners/github/status-repo'
 import { createLogger } from '~/src/helpers/logger'
 
-const logger = createLogger()
-
 const pullRequestHandler = async (db, message) => {
+  const logger = createLogger()
   try {
     const repo = message.repository?.name
     const prNumber = message.number
