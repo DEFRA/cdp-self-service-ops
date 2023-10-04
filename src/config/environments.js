@@ -4,7 +4,7 @@ const environments = {
   dev: 'dev',
   test: 'test',
   perfTest: 'perf-test',
-  production: 'production'
+  prod: 'prod'
 }
 
 export { environments }
