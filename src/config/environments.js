@@ -1,7 +1,7 @@
 const environments = {
   management: 'management',
   infraDev: 'infra-dev',
-  development: 'development',
+  dev: 'dev',
   test: 'test',
   perfTest: 'perf-test',
   production: 'production'
