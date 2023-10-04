@@ -1,6 +1,7 @@
 import { workflowRunHandler } from '~/src/listeners/github/handlers/workflow-run-handler'
 import { updateCreationStatus } from '~/src/api/create/helpers/save-status'
 import { octokit } from '~/src/helpers/oktokit'
+import { enableAutoMergeGraphQl } from '~/src/helpers/graphql/enable-automerge.graphql'
 
 jest.mock('~/src/api/create/helpers/save-status', () => ({
   updateCreationStatus: jest.fn(),
@@ -153,10 +154,8 @@ describe('#workflow-run-handler', () => {
       repo: 'cdp-app-config'
     })
 
-    expect(octokit.rest.pulls.merge).toHaveBeenCalledWith({
-      owner: 'test-org',
-      pull_number: 2,
-      repo: 'tf-svc'
+    expect(octokit.graphql).toHaveBeenCalledWith(enableAutoMergeGraphQl, {
+      pullRequestId: 'PR_aabbccdd'
     })
 
     expect(octokit.rest.pulls.merge).toHaveBeenCalledWith({

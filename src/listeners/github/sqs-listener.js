@@ -7,8 +7,6 @@ import { appConfig } from '~/src/config'
 import { createLogger } from '~/src/helpers/logger'
 import { handle } from '~/src/listeners/github/message-handler'
 
-const logger = createLogger()
-
 const sqsClient = new SQSClient({
   region: appConfig.get('sqsRegion'),
   endpoint: appConfig.get('sqsEndpoint')
@@ -17,6 +15,7 @@ const sqsClient = new SQSClient({
 const queueUrl = appConfig.get('sqsGithubQueue')
 
 const listen = async (server) => {
+  const logger = createLogger()
   logger.info(`Listening for github webhook events on ${queueUrl}`)
 
   while (appConfig.get('sqsGithubEnabled')) {
