@@ -12,7 +12,9 @@ function updateServices(
   const service = services[index]
 
   if (index === -1) {
-    throw new Error(`service ${imageName} is not deployed in this cluster!`)
+    throw new Error(
+      `Service ${imageName} has not been setup in this environment.`
+    )
   } else {
     if (service.container_version === version) {
       // Re-deploy
