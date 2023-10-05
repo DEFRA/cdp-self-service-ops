@@ -12,9 +12,8 @@ import { createLogger } from '~/src/helpers/logger'
 import { setupDeploymentConfig } from '~/src/api/create/helpers/setup-deployment-config'
 import { trimPr } from '~/src/api/create/helpers/trim-pr'
 
-const logger = createLogger()
-
 const workflowRunHandler = async (db, message) => {
+  const logger = createLogger()
   try {
     const owner = message.repository?.owner?.login
     const repo = message.repository?.name
