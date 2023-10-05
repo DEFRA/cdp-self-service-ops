@@ -35,7 +35,6 @@ const listen = async (server) => {
 
       try {
         const payload = JSON.parse(msg.Body)
-        logger.info(`received msg: ${msg.ReceiptHandle}`)
         await handle(server, payload)
       } catch (ex) {
         logger.error(ex)

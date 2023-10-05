@@ -2,12 +2,11 @@ import { MongoClient } from 'mongodb'
 import { appConfig } from '~/src/config'
 import { createLogger } from '~/src/helpers/logger'
 
-const logger = createLogger()
-
 const mongoPlugin = {
   name: 'mongodb',
   version: '1.0.0',
   register: async function (server) {
+    const logger = createLogger()
     const mongoOptions = {
       retryWrites: false,
       readPreference: 'secondary',

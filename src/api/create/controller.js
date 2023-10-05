@@ -90,7 +90,12 @@ const createServiceController = {
       `created nginx PR for ${repositoryName}: ${createNginxConfigResult.data.html_url}`
     )
 
-    return h.response({ message: 'success' }).code(200)
+    return h
+      .response({
+        message: 'success',
+        statusUrl: `/create-service/status/${repositoryName}`
+      })
+      .code(200)
   }
 }
 
