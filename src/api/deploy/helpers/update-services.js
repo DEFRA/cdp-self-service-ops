@@ -4,7 +4,8 @@ function updateServices(
   version,
   instanceCount,
   cpu,
-  memory
+  memory,
+  deployedBy
 ) {
   const index = services.findIndex(
     (service) => service.container_image === imageName
@@ -34,6 +35,7 @@ function updateServices(
     service.desired_count = instanceCount
     service.task_cpu = cpu
     service.task_memory = memory
+    service.deployed_by = deployedBy
   }
 
   return JSON.stringify(services, null, 2)
