@@ -17,9 +17,14 @@ const deployServiceController = {
   },
   handler: async (request, h) => {
     const logger = createLogger()
+
+    logger.info(`deploying ${JSON.stringify(request.payload)}`)
+    logger.info(`authed user ${request.auth}`)
+    const { profile } = request.auth.credentials
     const payload = request.payload
-    payload.user = request.auth.credentials?.profile?.displayName ?? 'unknown'
-    logger.info(request.auth)
+    payload.user = profile.displayName
+
+    logger.info(`payload with user ${payload}`)
     await createDeploymentPullRequest(payload)
 
     return h.response({ message: 'success' }).code(200)
