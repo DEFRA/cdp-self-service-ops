@@ -15,8 +15,10 @@ const deployServiceController = {
     }
   },
   handler: async (request, h) => {
+
     const payload = request.payload
-    payload.user = request.auth?.credentials?.id ?? 'unknown'
+    payload.user = request.auth.credentials?.profile?.displayName ?? 'unknown'
+
     await createDeploymentPullRequest(payload)
 
     return h.response({ message: 'success' }).code(200)
