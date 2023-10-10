@@ -173,6 +173,12 @@ const appConfig = convict({
     format: Boolean,
     default: true,
     env: 'AUTH_ENABLED'
+  },
+  userServiceApiUrl: {
+    doc: 'User Service Backend API url',
+    format: String,
+    default: 'http://localhost:3001/cdp-user-service-backend',
+    env: 'USER_SERVICE_API_URL'
   }
 })
 
