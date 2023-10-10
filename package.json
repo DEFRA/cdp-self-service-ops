@@ -48,7 +48,8 @@
     "mongodb": "5.9.0",
     "node-fetch": "2.7.0",
     "octokit-plugin-create-pull-request": "5.1.0",
-    "pino": "8.15.0"
+    "pino": "8.15.0",
+    "qs": "6.11.2"
   },
   "devDependencies": {
     "@babel/cli": "7.22.10",
