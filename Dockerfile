@@ -25,6 +25,9 @@ LABEL uk.gov.defra.ffc.parent-image=defradigital/node:${PARENT_VERSION}
 COPY --from=development /home/node/package*.json ./
 COPY --from=development /home/node/.server ./.server/
 
+COPY certificates/cdp-ca-certs.crt /usr/local/share/ca-certificates/cdp-ca-certs.crt
+ENV NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/cdp-ca-certs.crt
+
 RUN npm ci --omit=dev
 
 ARG PORT
