@@ -1,11 +1,11 @@
 import { octokit } from '~/src/helpers/oktokit'
-import { appConfig, environments } from '~/src/config'
+import { config, environments } from '~/src/config'
 import { createDeploymentConfig } from '~/src/api/create/helpers/create-deployment-config'
 import { prepPullRequestFiles } from '~/src/api/create/helpers/prep-pull-request-files'
 import { readyEnvironments } from '~/src/config/ready-environments'
 
 async function setupDeploymentConfig(imageName, version, clusterName) {
-  const fileRepository = appConfig.get('githubRepoTfService')
+  const fileRepository = config.get('githubRepoTfService')
   const pullRequestFiles = new Map()
 
   const deploymentConfigPromises = Object.values(environments)
@@ -23,7 +23,7 @@ async function setupDeploymentConfig(imageName, version, clusterName) {
   await Promise.all(deploymentConfigPromises)
 
   return await octokit.createPullRequest({
-    owner: appConfig.get('gitHubOrg'),
+    owner: config.get('gitHubOrg'),
     repo: fileRepository,
     title: `Setup deployment config for ${imageName}:${version} to ${clusterName} cluster`,
     body: `Auto generated Pull Request to set ${imageName} to use version ${version} in all environments`,

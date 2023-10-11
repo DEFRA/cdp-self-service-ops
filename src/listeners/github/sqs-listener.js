@@ -3,20 +3,20 @@ import {
   ReceiveMessageCommand,
   SQSClient
 } from '@aws-sdk/client-sqs'
-import { appConfig } from '~/src/config'
+import { config } from '~/src/config'
 import { handle } from '~/src/listeners/github/message-handler'
 
 const sqsClient = new SQSClient({
-  region: appConfig.get('sqsRegion'),
-  endpoint: appConfig.get('sqsEndpoint')
+  region: config.get('sqsRegion'),
+  endpoint: config.get('sqsEndpoint')
 })
 
-const queueUrl = appConfig.get('sqsGithubQueue')
+const queueUrl = config.get('sqsGithubQueue')
 
 const listen = async (server) => {
   server.logger.info(`Listening for github webhook events on ${queueUrl}`)
 
-  while (appConfig.get('sqsGithubEnabled')) {
+  while (config.get('sqsGithubEnabled')) {
     const params = {
       AttributeNames: ['SentTimestamp'],
       MaxNumberOfMessages: 1,

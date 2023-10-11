@@ -1,5 +1,5 @@
 import { octokit } from '~/src/helpers/oktokit'
-import { appConfig, environments } from '~/src/config'
+import { config, environments } from '~/src/config'
 import { prepPullRequestFiles } from '~/src/api/create/helpers/prep-pull-request-files'
 
 async function createServiceConfig(repositoryName) {
@@ -19,8 +19,8 @@ async function createServiceConfig(repositoryName) {
   )
 
   return await octokit.createPullRequest({
-    owner: appConfig.get('gitHubOrg'),
-    repo: appConfig.get('githubRepoAppConfig'),
+    owner: config.get('gitHubOrg'),
+    repo: config.get('githubRepoconfig'),
     title: `Add base config for ${repositoryName}`,
     body: `Auto generated Pull Request to add default config for ${repositoryName}`,
     head: `add-${repositoryName}-config-${new Date().getTime()}`,

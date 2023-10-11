@@ -1,4 +1,4 @@
-import { appConfig } from '~/src/config'
+import { config } from '~/src/config'
 import { createLogger } from '~/src/helpers/logging/logger'
 import { octokit } from '~/src/helpers/oktokit'
 import { enableAutoMergeGraphQl } from '~/src/helpers/graphql/enable-automerge.graphql'
@@ -16,7 +16,7 @@ async function createDeploymentPullRequest({
   user
 }) {
   const logger = createLogger()
-  const fileRepository = appConfig.get('githubRepoTfService')
+  const fileRepository = config.get('githubRepoTfService')
 
   const publicServices = await getClusterServices(environment, 'public')
   const protectedServices = await getClusterServices(environment, 'protected')
@@ -44,7 +44,7 @@ async function createDeploymentPullRequest({
   )
 
   const createPullRequestResponse = await octokit.createPullRequest({
-    owner: appConfig.get('gitHubOrg'),
+    owner: config.get('gitHubOrg'),
     repo: fileRepository,
     title: `Deploy ${imageName}:${version} to ${clusterName} cluster`,
     body: `Auto generated Pull Request to set ${imageName} to use version ${version} in '${filePath}'`,

@@ -1,15 +1,15 @@
 import ecsFormat from '@elastic/ecs-pino-format'
 
-import { appConfig } from '~/src/config'
+import { config } from '~/src/config'
 
 const loggerOptions = {
-  enabled: !appConfig.get('isTest'),
+  enabled: !config.get('isTest'),
   redact: {
     paths: ['req.headers.authorization', 'req.headers.cookie', 'res.headers'],
     remove: true
   },
-  level: appConfig.get('logLevel'),
-  ...(appConfig.get('isDevelopment')
+  level: config.get('logLevel'),
+  ...(config.get('isDevelopment')
     ? { transport: { target: 'pino-pretty' } }
     : ecsFormat())
 }

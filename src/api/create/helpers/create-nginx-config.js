@@ -1,4 +1,4 @@
-import { appConfig } from '~/src/config'
+import { config } from '~/src/config'
 import { octokit } from '~/src/helpers/oktokit'
 import { createLogger } from '~/src/helpers/logging/logger'
 
@@ -32,8 +32,8 @@ async function createNginxConfig(
   logger.info(`creating nginx config for ${pullRequestFiles.size} environments`)
 
   return await octokit.createPullRequest({
-    owner: appConfig.get('gitHubOrg'),
-    repo: appConfig.get('githubRepoNginx'),
+    owner: config.get('gitHubOrg'),
+    repo: config.get('githubRepoNginx'),
     title: `Add config for ${repositoryName}`,
     body: `Auto generated Pull Request to add nginx config for ${repositoryName}`,
     head: `add-${repositoryName}-config-${new Date().getTime()}`,
