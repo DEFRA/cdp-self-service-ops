@@ -12,8 +12,7 @@ async function createDeploymentPullRequest({
   environment,
   instanceCount,
   cpu,
-  memory,
-  user
+  memory
 }) {
   const logger = createLogger()
   const fileRepository = config.get('githubRepoTfService')
@@ -35,8 +34,7 @@ async function createDeploymentPullRequest({
     version,
     instanceCount,
     cpu,
-    memory,
-    user
+    memory
   )
 
   logger.info(
