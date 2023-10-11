@@ -14,8 +14,8 @@ async function startServer() {
   const server = await createServer()
   await server.start()
 
-  logger.info('Server started successfully')
-  logger.info(
+  server.logger.info('Server started successfully')
+  server.logger.info(
     `Access your backend on http://localhost:${appConfig.get(
       'port'
     )}${appConfig.get('appPathPrefix')}`

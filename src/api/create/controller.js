@@ -7,7 +7,6 @@ import { createServiceValidationSchema } from '~/src/api/create/helpers/create-s
 import { createServiceConfig } from '~/src/api/create/helpers/create-service-config'
 import { createNginxConfig } from '~/src/api/create/helpers/create-nginx-config'
 import { environments } from '~/src/config'
-import { createLogger } from '~/src/helpers/logging/logger'
 import {
   initCreationStatus,
   updateCreationStatus
@@ -28,8 +27,6 @@ const createServiceController = {
     }
   },
   handler: async (request, h) => {
-    const logger = createLogger()
-
     const payload = request?.payload
     const serviceType = payload?.serviceType
     const repositoryName = payload?.repositoryName
@@ -42,7 +39,7 @@ const createServiceController = {
 
     await initCreationStatus(request.db, repositoryName, payload, zone)
 
-    logger.info(`creating service ${repositoryName}`)
+    request.logger.info(`creating service ${repositoryName}`)
 
     // Create the infra entries (tenant-services.json) to provision things like the ECR repo and iam roles
     // This will be auto-merged assuming the checks pass, triggering the subsequent PR's to also be merged
@@ -51,7 +48,7 @@ const createServiceController = {
     // tf-svc-infra
     const createServiceInfrastructureCodeResult =
       await createServiceInfrastructureCode(repositoryName, zone)
-    logger.info(
+    request.logger.info(
       `created service infra PR for ${repositoryName}: ${createServiceInfrastructureCodeResult.data.html_url}`
     )
     await updateCreationStatus(request.db, repositoryName, 'tf-svc-infra', {
@@ -66,7 +63,7 @@ const createServiceController = {
       status: 'raised',
       pr: trimPr(createServiceConfigResult?.data)
     })
-    logger.info(
+    request.logger.info(
       `created service config PR for ${repositoryName}: ${createServiceConfigResult.data.html_url}`
     )
 
@@ -86,7 +83,7 @@ const createServiceController = {
         pr: trimPr(createNginxConfigResult?.data)
       }
     )
-    logger.info(
+    request.logger.info(
       `created nginx PR for ${repositoryName}: ${createNginxConfigResult.data.html_url}`
     )
 

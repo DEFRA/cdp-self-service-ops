@@ -4,7 +4,6 @@ import {
   SQSClient
 } from '@aws-sdk/client-sqs'
 import { appConfig } from '~/src/config'
-import { createLogger } from '~/src/helpers/logging/logger'
 import { handle } from '~/src/listeners/github/message-handler'
 
 const sqsClient = new SQSClient({
@@ -15,8 +14,7 @@ const sqsClient = new SQSClient({
 const queueUrl = appConfig.get('sqsGithubQueue')
 
 const listen = async (server) => {
-  const logger = createLogger()
-  logger.info(`Listening for github webhook events on ${queueUrl}`)
+  server.logger.info(`Listening for github webhook events on ${queueUrl}`)
 
   while (appConfig.get('sqsGithubEnabled')) {
     const params = {
@@ -37,7 +35,7 @@ const listen = async (server) => {
         const payload = JSON.parse(msg.Body)
         await handle(server, payload)
       } catch (ex) {
-        logger.error(ex)
+        server.logger.error(ex)
       } finally {
         const deleteParams = {
           QueueUrl: queueUrl,
