@@ -168,12 +168,6 @@ const appConfig = convict({
     default: true,
     env: 'SQS_GITHUB_ENABLED'
   },
-  authEnabled: {
-    doc: 'Temporary feature flag to disable authentication',
-    format: Boolean,
-    default: true,
-    env: 'AUTH_ENABLED'
-  },
   userServiceApiUrl: {
     doc: 'User Service Backend API url',
     format: String,
