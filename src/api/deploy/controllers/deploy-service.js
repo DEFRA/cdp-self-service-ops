@@ -1,7 +1,6 @@
 import { deployServiceValidation } from '~/src/api/deploy/helpers/schema/deploy-service-validation'
 import { createDeploymentPullRequest } from '~/src/api/deploy/helpers/create-deployment-pull-request'
 import { authStrategy } from '~/src/helpers/auth-stratergy'
-import { createLogger } from '~/src/helpers/logger'
 import { registerDeployment } from '~/src/api/deploy/helpers/register-deployment'
 
 const deployServiceController = {
@@ -17,13 +16,14 @@ const deployServiceController = {
     }
   },
   handler: async (request, h) => {
-    const logger = createLogger()
-
-    logger.info(`deploying ${JSON.stringify(request.payload)}`)
-    logger.info(`authed user ${request.auth}`)
+    request.logger.info(request.payload, 'Request payload is:')
+    // TODO once issue has been fixed remove logging exposing auth contents
+    request.logger.info(request.auth, 'Authed user is:')
 
     const payload = request.payload
     payload.user = request.auth?.credentials?.displayName ?? 'n/a'
+
+    request.logger.info(payload, 'Updated Payload is:')
 
     await registerDeployment(payload)
     await createDeploymentPullRequest(payload)
