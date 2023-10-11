@@ -2,6 +2,7 @@ import { deployServiceValidation } from '~/src/api/deploy/helpers/schema/deploy-
 import { createDeploymentPullRequest } from '~/src/api/deploy/helpers/create-deployment-pull-request'
 import { authStrategy } from '~/src/helpers/auth-stratergy'
 import { createLogger } from '~/src/helpers/logger'
+import { registerDeployment } from '~/src/api/deploy/helpers/register-deployment'
 
 const deployServiceController = {
   options: {
@@ -20,11 +21,11 @@ const deployServiceController = {
 
     logger.info(`deploying ${JSON.stringify(request.payload)}`)
     logger.info(`authed user ${request.auth}`)
-    const { profile } = request.auth.credentials
-    const payload = request.payload
-    payload.user = profile.displayName
 
-    logger.info(`payload with user ${payload}`)
+    const payload = request.payload
+    payload.user = request.auth?.credentials?.displayName ?? 'n/a'
+
+    await registerDeployment(payload)
     await createDeploymentPullRequest(payload)
 
     return h.response({ message: 'success' }).code(200)

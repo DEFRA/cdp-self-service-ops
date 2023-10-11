@@ -179,6 +179,12 @@ const appConfig = convict({
     format: String,
     default: 'http://localhost:3001/cdp-user-service-backend',
     env: 'USER_SERVICE_API_URL'
+  },
+  portalBackendApiUrl: {
+    doc: 'Portal backend for deployments and deployables root API url',
+    format: String,
+    default: 'http://localhost:5094/cdp-portal-backend',
+    env: 'PORTAL_BACKEND_API_URL'
   }
 })
 
