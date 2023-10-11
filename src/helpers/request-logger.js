@@ -1,7 +1,10 @@
 import hapiPino from 'hapi-pino'
+import ecsFormat from '@elastic/ecs-pino-format'
 
 import { appConfig } from '~/src/config'
-const ecsFormat = require('@elastic/ecs-pino-format')
+
+const isDevelopment = appConfig.get('isDevelopment')
+const isProduction = appConfig.get('isProduction')
 
 const requestLogger = {
   plugin: hapiPino,
@@ -12,9 +15,8 @@ const requestLogger = {
       remove: true
     },
     level: appConfig.get('logLevel'),
-    ...(appConfig.get('isDevelopment')
-      ? { transport: { target: 'pino-pretty' } }
-      : ecsFormat())
+    ...(isDevelopment && { transport: { target: 'pino-pretty' } }),
+    ...(isProduction && ecsFormat())
   }
 }
 

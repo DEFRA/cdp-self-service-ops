@@ -4,14 +4,14 @@ import ecsFormat from '@elastic/ecs-pino-format'
 import { appConfig } from '~/src/config'
 
 function createLogger() {
-  if (appConfig.get('isProduction')) {
-    return pino({ ...ecsFormat(), level: appConfig.get('logLevel') })
-  }
+  const isDevelopment = appConfig.get('isDevelopment')
+  const isProduction = appConfig.get('isProduction')
 
   return pino({
     enabled: !appConfig.get('isTest'),
     level: appConfig.get('logLevel'),
-    transport: { target: 'pino-pretty' }
+    ...(isDevelopment && { transport: { target: 'pino-pretty' } }),
+    ...(isProduction && ecsFormat())
   })
 }
 
