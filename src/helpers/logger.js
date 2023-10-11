@@ -5,7 +5,7 @@ import { appConfig } from '~/src/config'
 
 function createLogger() {
   if (appConfig.get('isProduction')) {
-    return pino(ecsFormat())
+    return pino({ ...ecsFormat(), level: appConfig.get('logLevel') })
   }
 
   return pino({
