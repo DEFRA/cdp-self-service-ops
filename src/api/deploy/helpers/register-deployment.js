@@ -1,7 +1,7 @@
-import { appConfig } from '~/src/config'
+import { config } from '~/src/config'
 
 async function registerDeployment({ imageName, version, environment, user }) {
-  const url = `${appConfig.get('portalBackendApiUrl')}/deployments`
+  const url = `${config.get('portalBackendApiUrl')}/deployments`
   await fetch(url, {
     method: 'post',
     headers: { 'Content-Type': 'application/json' },

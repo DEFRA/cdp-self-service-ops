@@ -1,6 +1,4 @@
-import { appConfig } from '~/src/config/app-config'
+import { config } from '~/src/config/config'
 import { environments } from '~/src/config/environments'
 
-export { appConfig, environments }
-
-export class config {}
+export { config, environments }

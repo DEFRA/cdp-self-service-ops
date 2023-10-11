@@ -1,5 +1,5 @@
 import { octokit } from '~/src/helpers/oktokit'
-import { appConfig } from '~/src/config'
+import { config } from '~/src/config'
 
 function triggerCreateRepositoryWorkflow({
   repositoryName,
@@ -9,7 +9,7 @@ function triggerCreateRepositoryWorkflow({
   return octokit.request(
     'POST /repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches',
     {
-      owner: appConfig.get('gitHubOrg'),
+      owner: config.get('gitHubOrg'),
       repo: 'cdp-boilerplate',
       workflow_id: 'create_repo.yml',
       ref: 'main',
@@ -19,7 +19,7 @@ function triggerCreateRepositoryWorkflow({
         owningTeam
       },
       headers: {
-        'X-GitHub-Api-Version': appConfig.get('gitHubApiVersion')
+        'X-GitHub-Api-Version': config.get('gitHubApiVersion')
       }
     }
   )

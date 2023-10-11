@@ -2,17 +2,17 @@ import path from 'path'
 import hapi from '@hapi/hapi'
 import jwt from '@hapi/jwt'
 
-import { appConfig } from '~/src/config'
+import { config } from '~/src/config'
 import { router } from '~/src/api/router'
 import { failAction } from '~/src/helpers/fail-action'
-import { requestLogger } from '~/src/helpers/request-logger'
+import { requestLogger } from '~/src/helpers/logging/request-logger'
 import { azureOidc } from '~/src/helpers/azure-oidc'
 import { mongoPlugin } from '~/src/helpers/mongodb'
 import { githubEventsPlugin } from '~/src/listeners/github/github-events-plugin'
 
 async function createServer() {
   const server = hapi.server({
-    port: appConfig.get('port'),
+    port: config.get('port'),
     routes: {
       validate: {
         options: {
@@ -21,7 +21,7 @@ async function createServer() {
         failAction
       },
       files: {
-        relativeTo: path.resolve(appConfig.get('root'), '.public')
+        relativeTo: path.resolve(config.get('root'), '.public')
       }
     },
     router: {
@@ -31,18 +31,16 @@ async function createServer() {
 
   await server.register(requestLogger)
 
-  if (appConfig.get('authEnabled')) {
-    await server.register(jwt)
+  await server.register(jwt)
 
-    await server.register(azureOidc)
-  }
+  await server.register(azureOidc)
 
   await server.register({ plugin: mongoPlugin, options: {} })
 
   await server.register({ plugin: githubEventsPlugin, options: {} })
 
   await server.register(router, {
-    routes: { prefix: `${appConfig.get('appPathPrefix')}` }
+    routes: { prefix: `${config.get('appPathPrefix')}` }
   })
 
   return server

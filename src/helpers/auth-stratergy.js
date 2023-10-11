@@ -1,14 +1,10 @@
-import { appConfig } from '~/src/config'
+import { config } from '~/src/config'
 
-let authStrategy = {
+const authStrategy = {
   strategy: 'azure-oidc',
   access: {
-    scope: [appConfig.get('azureAdminGroupId')]
+    scope: [config.get('azureAdminGroupId')]
   }
-}
-
-if (!appConfig.get('authEnabled')) {
-  authStrategy = null
 }
 
 export { authStrategy }

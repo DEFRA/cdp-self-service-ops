@@ -1,7 +1,7 @@
 import { octokit } from '~/src/helpers/oktokit'
 
-import { appConfig } from '~/src/config'
-import { createLogger } from '~/src/helpers/logger'
+import { config } from '~/src/config'
+import { createLogger } from '~/src/helpers/logging/logger'
 
 async function getClusterServices(environment, clusterName) {
   const logger = createLogger()
@@ -10,8 +10,8 @@ async function getClusterServices(environment, clusterName) {
   try {
     const { data } = await octokit.rest.repos.getContent({
       mediaType: { format: 'raw' },
-      owner: appConfig.get('gitHubOrg'),
-      repo: appConfig.get('githubRepoTfService'),
+      owner: config.get('gitHubOrg'),
+      repo: config.get('githubRepoTfService'),
       path: filePath,
       ref: 'main'
     })

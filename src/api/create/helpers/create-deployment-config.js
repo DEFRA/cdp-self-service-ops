@@ -1,7 +1,7 @@
 import { octokit } from '~/src/helpers/oktokit'
 
-import { appConfig } from '~/src/config'
-import { createLogger } from '~/src/helpers/logger'
+import { config } from '~/src/config'
+import { createLogger } from '~/src/helpers/logging/logger'
 import { addDeploymentConfig } from '~/src/api/create/helpers/add-deployment-config'
 
 async function createDeploymentConfig(imageName, clusterName, environment) {
@@ -13,8 +13,8 @@ async function createDeploymentConfig(imageName, clusterName, environment) {
       mediaType: {
         format: 'raw'
       },
-      owner: appConfig.get('gitHubOrg'),
-      repo: appConfig.get('githubRepoTfService'),
+      owner: config.get('gitHubOrg'),
+      repo: config.get('githubRepoTfService'),
       path: filePath,
       ref: 'main'
     })

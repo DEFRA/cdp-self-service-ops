@@ -1,8 +1,8 @@
-import { createLogger } from '~/src/helpers/logger'
+import { createLogger } from '~/src/helpers/logging/logger'
 import { addRepoPermissions } from '~/src/api/create/helpers/add-repo-permissions'
 import githubOidcRepositoriesFixture from '~/src/__fixtures__/github_oidc_repositories'
 
-jest.mock('~/src/helpers/logger', () => ({
+jest.mock('~/src/helpers/logging/logger', () => ({
   createLogger: jest.fn().mockReturnValue({
     error: jest.fn(),
     info: jest.fn(),

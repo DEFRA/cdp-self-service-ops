@@ -1,11 +1,11 @@
 import { octokit } from '~/src/helpers/oktokit'
-import { appConfig } from '~/src/config'
+import { config } from '~/src/config'
 import { addRepoName } from '~/src/api/create/helpers/add-repo-name'
-import { createLogger } from '~/src/helpers/logger'
+import { createLogger } from '~/src/helpers/logging/logger'
 
 async function addRepoToTenantServices(repositoryName, environment, zone) {
   const logger = createLogger()
-  const fileRepository = appConfig.get('githubRepoTfServiceInfra')
+  const fileRepository = config.get('githubRepoTfServiceInfra')
   const filePath = `environments/${environment}/resources/tenant_services.json`
 
   try {
@@ -13,7 +13,7 @@ async function addRepoToTenantServices(repositoryName, environment, zone) {
       mediaType: {
         format: 'raw'
       },
-      owner: appConfig.get('gitHubOrg'),
+      owner: config.get('gitHubOrg'),
       repo: fileRepository,
       path: filePath,
       ref: 'main'

@@ -1,4 +1,4 @@
-import { createLogger } from '~/src/helpers/logger'
+import { createLogger } from '~/src/helpers/logging/logger'
 import { deploymentConfig } from '~/src/api/create/helpers/deployment-config'
 
 function addDeploymentConfig(data, imageName, clusterName, environment) {

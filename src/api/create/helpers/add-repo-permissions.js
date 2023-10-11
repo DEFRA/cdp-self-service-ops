@@ -1,6 +1,6 @@
 import Joi from 'joi'
 
-import { createLogger } from '~/src/helpers/logger'
+import { createLogger } from '~/src/helpers/logging/logger'
 
 function addRepoPermissions({
   permissions,
