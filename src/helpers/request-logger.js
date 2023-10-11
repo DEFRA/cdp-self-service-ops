@@ -3,9 +3,6 @@ import ecsFormat from '@elastic/ecs-pino-format'
 
 import { appConfig } from '~/src/config'
 
-const isDevelopment = appConfig.get('isDevelopment')
-const isProduction = appConfig.get('isProduction')
-
 const requestLogger = {
   plugin: hapiPino,
   options: {
@@ -15,8 +12,9 @@ const requestLogger = {
       remove: true
     },
     level: appConfig.get('logLevel'),
-    ...(isDevelopment && { transport: { target: 'pino-pretty' } }),
-    ...(isProduction && ecsFormat())
+    ...(appConfig.get('isDevelopment')
+      ? { transport: { target: 'pino-pretty' } }
+      : ecsFormat())
   }
 }
 
