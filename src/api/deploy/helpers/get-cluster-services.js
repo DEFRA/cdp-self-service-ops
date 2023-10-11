@@ -1,7 +1,7 @@
 import { octokit } from '~/src/helpers/oktokit'
 
 import { appConfig } from '~/src/config'
-import { createLogger } from '~/src/helpers/logger'
+import { createLogger } from '~/src/helpers/logging/logger'
 
 async function getClusterServices(environment, clusterName) {
   const logger = createLogger()

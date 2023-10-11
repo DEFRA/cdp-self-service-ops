@@ -1,6 +1,6 @@
 import { octokit } from '~/src/helpers/oktokit'
 import { enableAutoMergeGraphQl } from '~/src/helpers/graphql/enable-automerge.graphql'
-import { createLogger } from '~/src/helpers/logger'
+import { createLogger } from '~/src/helpers/logging/logger'
 
 const automerge = async (pullId) => {
   const logger = createLogger()

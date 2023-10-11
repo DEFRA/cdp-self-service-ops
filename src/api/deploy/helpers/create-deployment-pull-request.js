@@ -1,5 +1,5 @@
 import { appConfig } from '~/src/config'
-import { createLogger } from '~/src/helpers/logger'
+import { createLogger } from '~/src/helpers/logging/logger'
 import { octokit } from '~/src/helpers/oktokit'
 import { enableAutoMergeGraphQl } from '~/src/helpers/graphql/enable-automerge.graphql'
 import { updateServices } from '~/src/api/deploy/helpers/update-services'

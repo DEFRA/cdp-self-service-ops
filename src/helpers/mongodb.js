@@ -1,6 +1,6 @@
 import { MongoClient } from 'mongodb'
 import { appConfig } from '~/src/config'
-import { createLogger } from '~/src/helpers/logger'
+import { createLogger } from '~/src/helpers/logging/logger'
 
 const mongoPlugin = {
   name: 'mongodb',

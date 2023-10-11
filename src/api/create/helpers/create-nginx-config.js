@@ -1,6 +1,6 @@
 import { appConfig } from '~/src/config'
 import { octokit } from '~/src/helpers/oktokit'
-import { createLogger } from '~/src/helpers/logger'
+import { createLogger } from '~/src/helpers/logging/logger'
 
 async function createNginxConfig(
   repositoryName,

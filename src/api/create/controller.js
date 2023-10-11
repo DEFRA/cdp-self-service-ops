@@ -7,7 +7,7 @@ import { createServiceValidationSchema } from '~/src/api/create/helpers/create-s
 import { createServiceConfig } from '~/src/api/create/helpers/create-service-config'
 import { createNginxConfig } from '~/src/api/create/helpers/create-nginx-config'
 import { environments } from '~/src/config'
-import { createLogger } from '~/src/helpers/logger'
+import { createLogger } from '~/src/helpers/logging/logger'
 import {
   initCreationStatus,
   updateCreationStatus

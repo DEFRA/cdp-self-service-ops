@@ -1,7 +1,7 @@
 import { octokit } from '~/src/helpers/oktokit'
 
 import { appConfig } from '~/src/config'
-import { createLogger } from '~/src/helpers/logger'
+import { createLogger } from '~/src/helpers/logging/logger'
 import { addDeploymentConfig } from '~/src/api/create/helpers/add-deployment-config'
 
 async function createDeploymentConfig(imageName, clusterName, environment) {

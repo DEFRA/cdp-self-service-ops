@@ -2,7 +2,7 @@ import {
   findByPrNumber,
   updatePrStatus
 } from '~/src/listeners/github/status-repo'
-import { createLogger } from '~/src/helpers/logger'
+import { createLogger } from '~/src/helpers/logging/logger'
 
 const pullRequestHandler = async (db, message) => {
   const logger = createLogger()

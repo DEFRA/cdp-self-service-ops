@@ -4,7 +4,7 @@ import {
   SQSClient
 } from '@aws-sdk/client-sqs'
 import { appConfig } from '~/src/config'
-import { createLogger } from '~/src/helpers/logger'
+import { createLogger } from '~/src/helpers/logging/logger'
 import { handle } from '~/src/listeners/github/message-handler'
 
 const sqsClient = new SQSClient({

@@ -1,7 +1,7 @@
 import { octokit } from '~/src/helpers/oktokit'
 import { appConfig } from '~/src/config'
 import { addRepoName } from '~/src/api/create/helpers/add-repo-name'
-import { createLogger } from '~/src/helpers/logger'
+import { createLogger } from '~/src/helpers/logging/logger'
 
 async function addRepoToTenantServices(repositoryName, environment, zone) {
   const logger = createLogger()

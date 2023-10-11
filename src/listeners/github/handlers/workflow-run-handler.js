@@ -8,7 +8,7 @@ import {
 } from '~/src/listeners/github/helpers/automerge'
 import { updateCreationStatus } from '~/src/api/create/helpers/save-status'
 import { triggerCreateRepositoryWorkflow } from '~/src/listeners/github/helpers/trigger-create-repository-workflow'
-import { createLogger } from '~/src/helpers/logger'
+import { createLogger } from '~/src/helpers/logging/logger'
 import { setupDeploymentConfig } from '~/src/api/create/helpers/setup-deployment-config'
 import { trimPr } from '~/src/api/create/helpers/trim-pr'
 
