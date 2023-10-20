@@ -34,7 +34,8 @@ describe('#addRepoToTenantServices', () => {
             'cdp-portal-frontend': {
               zone: 'public',
               mongo: false,
-              redis: true
+              redis: true,
+              queues: ['ecr-queue']
             },
             'cdp-portal-backend': {
               zone: 'protected',
