@@ -9,7 +9,8 @@ const repositoriesSchema = Joi.array()
       Joi.object({
         zone: Joi.string().valid('protected', 'public').required(),
         mongo: Joi.bool().default(false),
-        redis: Joi.bool().default(false)
+        redis: Joi.bool().default(false),
+        queues: Joi.array().items(Joi.string())
       })
     )
   )
