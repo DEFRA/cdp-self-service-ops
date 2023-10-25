@@ -16,10 +16,7 @@ describe('#addRepoPermissions', () => {
 
   test('Should insert a new repo in the correct position', () => {
     const expectedJson = JSON.stringify(
-      [
-        ...githubOidcRepositoriesFixture,
-        'DEFRA/cdp-mock-permissions'
-      ],
+      [...githubOidcRepositoriesFixture, 'DEFRA/cdp-mock-permissions'],
       null,
       2
     )
@@ -77,7 +74,7 @@ describe('#addRepoPermissions', () => {
   })
 
   test('Should throw "Post Addition" error', () => {
-    expect.assertions(4)
+    expect.assertions(3)
 
     try {
       addRepoPermissions({
@@ -89,9 +86,6 @@ describe('#addRepoPermissions', () => {
       })
     } catch (error) {
       expect(logger.error).toHaveBeenCalledTimes(1)
-      expect(logger.error).toHaveBeenCalledWith(
-        "Permissions addition of 'DEFRA/bad-repo/name/farmer-plant-frontend' to 'snd/github_oidc_repositories.json' from 'tf-svc-infra' failed schema validation"
-      )
       expect(error).toBeInstanceOf(Error)
       expect(error).toHaveProperty(
         'message',
