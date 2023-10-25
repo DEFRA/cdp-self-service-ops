@@ -1,7 +1,6 @@
 import { config } from '~/src/config'
 import { createServer } from '~/src/api/server'
 import { createLogger } from '~/src/helpers/logging/logger'
-import { createServiceFromTemplate } from '~/src/api/create/helpers/create-service-from-template'
 
 const logger = createLogger()
 
@@ -21,10 +20,6 @@ async function startServer() {
       'appPathPrefix'
     )}`
   )
-
-  createServiceFromTemplate().catch((error) => {
-    logger.error(error)
-  })
 }
 
 startServer().catch((error) => {

@@ -6,9 +6,9 @@ async function createServiceFromTemplate() {
 
   // TODO: put these as arguments
   const org = 'defra-cdp-sandpit'
-  const templateRepo = 'cdp-node-backend-template'
-  const templateName = 'CDP Node.js Backend Template'
-  const repoName = 'template-repo-test-node-backend'
+  const templateRepo = 'cdp-dotnet-backend-template'
+  const templateName = 'CDP C# ASP.NET Backend Template'
+  const repoName = 'template-repo-test-dotnet-backend'
   const teamName = 'cdp-platform'
 
   logger.info(
@@ -17,6 +17,7 @@ async function createServiceFromTemplate() {
   await createRepoUsingTemplate(org, templateRepo, repoName)
   await waitForRepo(org, repoName)
   await disableWorkflows(org, repoName)
+  await cancelWorkflows(org, repoName)
   await configureRepo(org, repoName, teamName)
   await dynamicTemplateRepo(org, repoName, templateRepo, templateName)
   await enableWorkflows(org, repoName)
@@ -43,8 +44,8 @@ async function createRepoUsingTemplate(org, templateRepo, repoName) {
 
 async function disableWorkflows(org, repoName) {
   const logger = createLogger()
-  const maxAttempts = 15
-  const delayMs = 1000
+  const maxAttempts = 10
+  const delayMs = 2000
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
       await octokit.rest.actions.disableWorkflow({
@@ -52,6 +53,29 @@ async function disableWorkflows(org, repoName) {
         repo: repoName,
         workflow_id: 'publish.yml'
       })
+      await octokit.rest.actions.disableWorkflow({
+        owner: org,
+        repo: repoName,
+        workflow_id: 'check-pull-request.yml'
+      })
+      return
+    } catch (error) {
+      logger.info(
+        `Workflows not ready, attempt ${attempt}/${maxAttempts}. Waiting ${
+          delayMs / 1000
+        } seconds...`
+      )
+      await new Promise((resolve) => setTimeout(resolve, delayMs))
+    }
+  }
+  throw new Error(`Failed while disabling actions for ${org}/${repoName}`)
+}
+
+async function cancelWorkflows(org, repoName) {
+  const maxAttempts = 10
+  const delayMs = 2000
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
       const runs = await octokit.rest.actions.listWorkflowRuns({
         owner: org,
         repo: repoName,
@@ -64,24 +88,9 @@ async function disableWorkflows(org, repoName) {
       })
       return
     } catch (error) {
-      if (error.status === 404 || error instanceof TypeError) {
-        logger.info(
-          `Workflows not ready, attempt ${attempt}/${maxAttempts}. Waiting ${
-            delayMs / 1000
-          } seconds...`
-        )
-        await new Promise((resolve) => setTimeout(resolve, delayMs))
-      } else {
-        const newError = new Error(
-          `Failed while disabling actions for ${org}/${repoName}`
-        )
-        newError.stack = error
-        logger.error(error)
-        throw newError
-      }
+      await new Promise((resolve) => setTimeout(resolve, delayMs))
     }
   }
-  throw new Error(`Failed while disabling actions for ${org}/${repoName}`)
 }
 
 async function enableWorkflows(org, repoName) {
@@ -90,6 +99,11 @@ async function enableWorkflows(org, repoName) {
       owner: org,
       repo: repoName,
       workflow_id: 'publish.yml'
+    })
+    await octokit.rest.actions.enableWorkflow({
+      owner: org,
+      repo: repoName,
+      workflow_id: 'check-pull-request.yml'
     })
   } catch (error) {
     const newError = new Error(
