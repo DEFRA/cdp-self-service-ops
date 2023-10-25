@@ -75,7 +75,7 @@ const config = convict({
   gitHubOrg: {
     doc: 'GitHub Organisation',
     format: String,
-    default: 'defra-cdp-sandpit',
+    default: 'DEFRA',
     env: 'GITHUB_ORG'
   },
   gitHubApiVersion: {

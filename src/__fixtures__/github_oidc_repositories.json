@@ -1,7 +1,7 @@
 [
-  "defra-cdp-sandpit/farm-plant-frontend",
-  "defra-cdp-sandpit/farmer-products-frontend",
-  "defra-cdp-sandpit/farmer-machines-frontend",
-  "defra-cdp-sandpit/farmer-machinery-frontend",
-  "defra-cdp-sandpit/farmer-plant-frontend"
+  "DEFRA/farm-plant-frontend",
+  "DEFRA/farmer-products-frontend",
+  "DEFRA/farmer-machines-frontend",
+  "DEFRA/farmer-machinery-frontend",
+  "DEFRA/farmer-plant-frontend"
 ]
