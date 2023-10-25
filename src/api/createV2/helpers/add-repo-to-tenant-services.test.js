@@ -1,5 +1,5 @@
 import { octokit } from '~/src/helpers/oktokit'
-import { addRepoToTenantServices } from '~/src/api/create/helpers/add-repo-to-tenant-services'
+import { addRepoToTenantServices } from '~/src/api/createV2/helpers/add-repo-to-tenant-services'
 import tenantServicesFixture from '~/src/__fixtures__/tenant_services'
 
 jest.mock('~/src/helpers/oktokit', () => ({

@@ -29,7 +29,7 @@ const mongoPlugin = {
 }
 
 const createIndexes = async (db) => {
-  await db.collection('status').createIndex({ repositoryName: 1 })
+  await db.collection('status').createIndex({ repositoryName: 1, status: 1 })
 }
 
 export { mongoPlugin }

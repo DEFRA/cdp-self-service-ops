@@ -99,7 +99,7 @@ const config = convict({
     default: 'tf-core',
     env: 'GITHUB_REPO_SERVICE_PERMISSIONS'
   },
-  githubRepoconfig: {
+  githubRepoConfig: {
     doc: 'github repo to create the application config in',
     format: String,
     default: 'cdp-app-config',

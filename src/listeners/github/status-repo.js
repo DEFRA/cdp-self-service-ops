@@ -20,9 +20,16 @@ async function updatePrStatus(db, repo, field, status, mergedSha) {
     )
 }
 
-async function updateWorkflowStatus(db, repo, field, status, workflowStatus) {
-  const statusField = `${field}.status`
-  const workflowField = `${field}.workflow`
+async function updateWorkflowStatus(
+  db,
+  repo,
+  workflow,
+  branch,
+  status,
+  workflowStatus
+) {
+  const statusField = `${workflow}.status`
+  const workflowField = `${workflow}.${branch}.workflow` // branch is either 'main' or 'pr'
   return db
     .collection('status')
     .updateOne(

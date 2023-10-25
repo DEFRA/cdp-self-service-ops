@@ -1,4 +1,4 @@
-import { workflowRunHandler } from '~/src/listeners/github/handlers/workflow-run-handler'
+import { workflowRunHandlerV1 } from '~/src/listeners/github/handlers/workflow-run-handler-v1'
 import { updateCreationStatus } from '~/src/api/create/helpers/save-status'
 import { octokit } from '~/src/helpers/oktokit'
 import { enableAutoMergeGraphQl } from '~/src/helpers/graphql/enable-automerge.graphql'
@@ -38,7 +38,7 @@ describe('#workflow-run-handler', () => {
       }
     }
 
-    await workflowRunHandler({}, msg)
+    await workflowRunHandlerV1({}, msg)
     expect(updateCreationStatus).toHaveBeenCalledTimes(0)
   })
 
@@ -56,6 +56,7 @@ describe('#workflow-run-handler', () => {
       github_event: 'workflow_run',
       action: 'in-progress',
       workflow_run: {
+        id: 1,
         name: 'wf-name',
         html_url: 'http://localhost',
         created_at: new Date(0),
@@ -71,7 +72,7 @@ describe('#workflow-run-handler', () => {
         }
       }
     }
-    await workflowRunHandler(mockDb, msg)
+    await workflowRunHandlerV1(mockDb, msg)
     expect(findOne).toHaveBeenCalledWith({
       'tf-svc.merged_sha': '6d96270004515a0486bb7f76196a72b40c55a47f'
     })
@@ -80,7 +81,8 @@ describe('#workflow-run-handler', () => {
       {
         $set: {
           'tf-svc.status': 'in-progress',
-          'tf-svc.workflow': {
+          'tf-svc.main.workflow': {
+            id: 1,
             name: 'wf-name',
             html_url: 'http://localhost',
             created_at: new Date(0),
@@ -141,7 +143,7 @@ describe('#workflow-run-handler', () => {
         }
       }
     }
-    await workflowRunHandler(mockDb, msg)
+    await workflowRunHandlerV1(mockDb, msg)
     expect(findOne).toHaveBeenCalledWith({
       'tf-svc-infra.merged_sha': '6d96270004515a0486bb7f76196a72b40c55a47f'
     })

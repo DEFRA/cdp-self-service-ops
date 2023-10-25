@@ -4,7 +4,9 @@
       "zone": "public",
       "mongo": false,
       "redis": true,
-      "queues": ["ecr-queue"]
+      "queues": ["ecr-queue"],
+      "ecr": ["*"],
+      "s3": []
     },
     "cdp-portal-backend": {
       "zone": "protected",
