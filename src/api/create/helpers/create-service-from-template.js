@@ -8,7 +8,7 @@ async function createServiceFromTemplate() {
   const org = 'defra-cdp-sandpit'
   const templateRepo = 'cdp-node-backend-template'
   const templateName = 'CDP Node.js Backend Template'
-  const repoName = 'template-repo-test'
+  const repoName = 'template-repo-test-node-backend'
   const teamName = 'cdp-platform'
 
   logger.info(
@@ -42,40 +42,55 @@ async function createRepoUsingTemplate(org, templateRepo, repoName) {
 }
 
 async function disableWorkflows(org, repoName) {
-  try {
-    const data = await octokit.rest.actions.listRepoWorkflows({
-      owner: org,
-      repo: repoName
-    })
-    for (const workflow in data.workflows) {
+  const logger = createLogger()
+  const maxAttempts = 15
+  const delayMs = 1000
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
       await octokit.rest.actions.disableWorkflow({
         owner: org,
         repo: repoName,
-        workflow_id: workflow.id
+        workflow_id: 'publish.yml'
       })
+      const runs = await octokit.rest.actions.listWorkflowRuns({
+        owner: org,
+        repo: repoName,
+        workflow_id: 'publish.yml'
+      })
+      await octokit.rest.actions.cancelWorkflowRun({
+        owner: org,
+        repo: repoName,
+        run_id: runs.data.workflow_runs[0].id
+      })
+      return
+    } catch (error) {
+      if (error.status === 404 || error instanceof TypeError) {
+        logger.info(
+          `Workflows not ready, attempt ${attempt}/${maxAttempts}. Waiting ${
+            delayMs / 1000
+          } seconds...`
+        )
+        await new Promise((resolve) => setTimeout(resolve, delayMs))
+      } else {
+        const newError = new Error(
+          `Failed while disabling actions for ${org}/${repoName}`
+        )
+        newError.stack = error
+        logger.error(error)
+        throw newError
+      }
     }
-  } catch (error) {
-    const newError = new Error(
-      `Failed while disabling actions for ${org}/${repoName}`
-    )
-    newError.stack = error
-    throw newError
   }
+  throw new Error(`Failed while disabling actions for ${org}/${repoName}`)
 }
 
 async function enableWorkflows(org, repoName) {
   try {
-    const data = await octokit.rest.actions.listRepoWorkflows({
+    await octokit.rest.actions.enableWorkflow({
       owner: org,
-      repo: repoName
+      repo: repoName,
+      workflow_id: 'publish.yml'
     })
-    for (const workflow in data.workflows) {
-      await octokit.rest.actions.enableWorkflow({
-        owner: org,
-        repo: repoName,
-        workflow_id: workflow.id
-      })
-    }
   } catch (error) {
     const newError = new Error(
       `Failed while enabling actions for ${org}/${repoName}`
@@ -177,6 +192,10 @@ async function dynamicTemplateRepo(org, repoName, templateRepo, templateName) {
       recursive: 'true'
     })
 
+    const repoNamePascalCase = kebabCaseToPascalCase(repoName)
+    const templateRepoPascalCase = kebabCaseToPascalCase(templateRepo)
+    const dotnetPrefix = 'Backend.Api'
+
     // search and replace
     for (const file of tree.tree) {
       if (file.type === 'blob') {
@@ -190,10 +209,20 @@ async function dynamicTemplateRepo(org, repoName, templateRepo, templateName) {
           'utf-8'
         )
 
-        const updatedFilePath = file.path.replaceAll(templateRepo, repoName)
-        const updatedContent = fileContent
+        let updatedFilePath = file.path.replaceAll(templateRepo, repoName)
+        let updatedContent = fileContent
           .replaceAll(templateRepo, repoName)
           .replaceAll(templateName, repoName)
+
+        if (templateRepo.toLowerCase().includes('dotnet')) {
+          updatedFilePath = updatedFilePath
+            .replaceAll(dotnetPrefix, repoNamePascalCase)
+            .replaceAll(templateRepoPascalCase, repoNamePascalCase)
+
+          updatedContent = updatedContent
+            .replaceAll(dotnetPrefix, repoNamePascalCase)
+            .replaceAll(templateRepoPascalCase, repoNamePascalCase)
+        }
 
         if (fileContent !== updatedContent || file.path !== updatedFilePath) {
           await octokit.rest.repos.createOrUpdateFileContents({
@@ -258,6 +287,13 @@ async function dynamicTemplateRepo(org, repoName, templateRepo, templateName) {
     newError.stack = error
     throw newError
   }
+}
+
+function kebabCaseToPascalCase(str) {
+  return str
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join('')
 }
 
 export { createServiceFromTemplate }
