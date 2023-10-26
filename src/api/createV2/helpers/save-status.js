@@ -1,3 +1,9 @@
+import { config } from '~/src/config'
+
+const tfSvcInfra = config.get('githubRepoTfServiceInfra')
+const cdpAppConfig = config.get('githubRepoConfig')
+const cdpNginxUpstream = config.get('githubRepoNginx')
+
 async function initCreationStatus(db, org, repositoryName, payload, zone) {
   const status = {
     org,
@@ -11,13 +17,13 @@ async function initCreationStatus(db, org, repositoryName, payload, zone) {
     createRepository: {
       status: 'not-requested'
     },
-    'tf-svc-infra': {
+    [tfSvcInfra]: {
       status: 'not-requested'
     },
-    'cdp-app-config': {
+    [cdpAppConfig]: {
       status: 'not-requested'
     },
-    'cdp-nginx-upstreams': {
+    [cdpNginxUpstream]: {
       status: 'not-requested'
     }
   }
@@ -33,9 +39,9 @@ async function updateCreationStatus(db, repo, field, status) {
 
 function calculateOverallStatus(status) {
   const repoStatus = status.createRepository?.status ?? ''
-  const tfSvcInfraStatus = status['tf-svc-infra']?.status ?? ''
-  const appConfigStatus = status['cdp-app-config']?.status ?? ''
-  const nginxStatus = status['cdp-nginx-upstreams']?.status ?? ''
+  const tfSvcInfraStatus = status[tfSvcInfra]?.status ?? ''
+  const appConfigStatus = status[cdpAppConfig]?.status ?? ''
+  const nginxStatus = status[cdpNginxUpstream]?.status ?? ''
 
   // return success if ALL sections are successful
   if (

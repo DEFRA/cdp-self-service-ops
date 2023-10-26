@@ -91,10 +91,11 @@ const doCreateRepo = async (request, repositoryName, payload) => {
 }
 
 const doUpdateTfSvcInfra = async (request, repositoryName, zone) => {
+  const tfSvcInfra = config.get('githubRepoTfServiceInfra')
   try {
     const createServiceInfrastructureCodeResult =
       await createServiceInfrastructureCode(repositoryName, zone)
-    await updateCreationStatus(request.db, repositoryName, 'tf-svc-infra', {
+    await updateCreationStatus(request.db, repositoryName, tfSvcInfra, {
       status: 'raised',
       pr: trimPr(createServiceInfrastructureCodeResult?.data)
     })
@@ -102,18 +103,21 @@ const doUpdateTfSvcInfra = async (request, repositoryName, zone) => {
       `created service infra PR for ${repositoryName}: ${createServiceInfrastructureCodeResult.data.html_url}`
     )
   } catch (e) {
-    await updateCreationStatus(request.db, repositoryName, 'tf-svc-infra', {
+    await updateCreationStatus(request.db, repositoryName, tfSvcInfra, {
       status: 'failed',
       result: e?.response ?? 'see cdp-self-service-ops logs'
     })
-    request.logger.error(`update tf-svc-infra ${repositoryName} failed ${e}`)
+    request.logger.error(
+      `update cdp-tf-svc-infra ${repositoryName} failed ${e}`
+    )
   }
 }
 
 const doUpdateCdpAppConfig = async (request, repositoryName) => {
+  const cdpAppConfig = config.get('githubRepoConfig')
   try {
     const createServiceConfigResult = await createServiceConfig(repositoryName)
-    await updateCreationStatus(request.db, repositoryName, 'cdp-app-config', {
+    await updateCreationStatus(request.db, repositoryName, cdpAppConfig, {
       status: 'raised',
       pr: trimPr(createServiceConfigResult?.data)
     })
@@ -121,7 +125,7 @@ const doUpdateCdpAppConfig = async (request, repositoryName) => {
       `created service config PR for ${repositoryName}: ${createServiceConfigResult.data.html_url}`
     )
   } catch (e) {
-    await updateCreationStatus(request.db, repositoryName, 'cdp-app-config', {
+    await updateCreationStatus(request.db, repositoryName, cdpAppConfig, {
       status: 'failed',
       result: e?.response ?? 'see cdp-self-service-ops logs'
     })
@@ -130,6 +134,7 @@ const doUpdateCdpAppConfig = async (request, repositoryName) => {
 }
 
 const doUpdateCdpNginxUpstream = async (request, repositoryName, zone) => {
+  const cdpNginxUpstream = config.get('githubRepoNginx')
   try {
     const createNginxConfigResult = await createNginxConfig(
       repositoryName,
@@ -137,28 +142,18 @@ const doUpdateCdpNginxUpstream = async (request, repositoryName, zone) => {
       environments,
       [] // TODO: support user defined paths?
     )
-    await updateCreationStatus(
-      request.db,
-      repositoryName,
-      'cdp-nginx-upstreams',
-      {
-        status: 'raised',
-        pr: trimPr(createNginxConfigResult?.data)
-      }
-    )
+    await updateCreationStatus(request.db, repositoryName, cdpNginxUpstream, {
+      status: 'raised',
+      pr: trimPr(createNginxConfigResult?.data)
+    })
     request.logger.info(
       `created nginx PR for ${repositoryName}: ${createNginxConfigResult.data.html_url}`
     )
   } catch (e) {
-    await updateCreationStatus(
-      request.db,
-      repositoryName,
-      'cdp-nginx-upstreams',
-      {
-        status: 'failed',
-        result: e?.response ?? 'see cdp-self-service-ops logs'
-      }
-    )
+    await updateCreationStatus(request.db, repositoryName, cdpNginxUpstream, {
+      status: 'failed',
+      result: e?.response ?? 'see cdp-self-service-ops logs'
+    })
     request.logger.error(
       `update cdp-nginx-upstreams ${repositoryName} failed ${e}`
     )

@@ -86,18 +86,12 @@ const config = convict({
   githubRepoTfServiceInfra: {
     doc: 'Terraform GitHub Service Infrastructure repository',
     format: String,
-    default: 'tf-svc-infra'
+    default: 'cdp-tf-svc-infra'
   },
   githubRepoTfService: {
     doc: 'Terraform GitHub Service repository',
     format: String,
-    default: 'tf-svc'
-  },
-  githubRepoServicePermissions: {
-    doc: 'github repo to update the service permissions in',
-    format: String,
-    default: 'tf-core',
-    env: 'GITHUB_REPO_SERVICE_PERMISSIONS'
+    default: 'cdp-tf-svc'
   },
   githubRepoConfig: {
     doc: 'github repo to create the application config in',

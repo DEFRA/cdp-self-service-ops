@@ -1,11 +1,12 @@
 import { pullRequestHandler } from '~/src/listeners/github/handlers/pull-request-handler'
 import { workflowRunHandler } from '~/src/listeners/github/handlers/workflow-run-handler'
+import { config } from '~/src/config'
 
 const validRepos = new Set([
-  'tf-svc',
-  'tf-svc-infra',
-  'cdp-app-config',
-  'cdp-nginx-upstreams'
+  config.get('githubRepoTfService'),
+  config.get('githubRepoTfServiceInfra'),
+  config.get('githubRepoConfig'),
+  config.get('githubRepoNginx')
 ])
 const validActions = new Set(['workflow_run', 'pull_request'])
 

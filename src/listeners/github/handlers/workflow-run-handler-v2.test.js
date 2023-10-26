@@ -112,7 +112,7 @@ describe('#workflow-run-handler-v2', () => {
       status: 'in-progress',
       createRepository: { status: 'success' },
       'cdp-app-config': { status: 'success' },
-      'tf-svc-infra': { status: 'failure' },
+      'tf-svc-infra': { status: 'in-progress' },
       'cdp-nginx-upstreams': { status: 'in-progress' }
     }
     const findOne = jest.fn().mockReturnValue(mockStatusRecord)
@@ -154,7 +154,7 @@ describe('#workflow-run-handler-v2', () => {
       { repositoryName: 'test-repo' },
       {
         $set: {
-          status: 'failure'
+          status: 'in-progress'
         }
       }
     )

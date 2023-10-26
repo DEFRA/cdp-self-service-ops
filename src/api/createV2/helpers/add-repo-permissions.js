@@ -49,7 +49,7 @@ function addRepoPermissions({
 
   if (postAdditionValidationResult?.error) {
     logger.error(
-      `Permissions addition of '${entry}' to '${filePath}' from '${fileRepository} failed schema validation`
+      `Permissions addition of '${entry}' to '${filePath}' from '${fileRepository}' failed schema validation`
     )
 
     throw new Error(

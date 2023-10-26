@@ -1,16 +1,22 @@
+import { config } from '~/src/config'
+
 async function initCreationStatus(db, repositoryName, payload, zone) {
+  const tfSvcInfra = config.get('githubRepoTfServiceInfra')
+  const cdpAppConfig = config.get('githubRepoConfig')
+  const cdpNginxUpstream = config.get('githubRepoNginx')
+
   const status = {
     repositoryName,
     started: new Date(),
     zone,
     createRepository: { status: 'not-requested', payload },
-    'tf-svc': {
+    [tfSvcInfra]: {
       status: 'not-requested'
     },
-    'tf-svc-infra': {
+    [cdpAppConfig]: {
       status: 'not-requested'
     },
-    'cdp-app-config': {
+    [cdpNginxUpstream]: {
       status: 'not-requested'
     }
   }
