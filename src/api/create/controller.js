@@ -6,7 +6,7 @@ import { createServiceInfrastructureCode } from '~/src/api/create/helpers/create
 import { createServiceValidationSchema } from '~/src/api/create/helpers/create-service-validation-schema'
 import { createServiceConfig } from '~/src/api/create/helpers/create-service-config'
 import { createNginxConfig } from '~/src/api/create/helpers/create-nginx-config'
-import { environments } from '~/src/config'
+import { config, environments } from '~/src/config'
 import {
   initCreationStatus,
   updateCreationStatus
@@ -45,24 +45,34 @@ const createServiceController = {
     // This will be auto-merged assuming the checks pass, triggering the subsequent PR's to also be merged
     // and the github repo to be created (see ~/listners/github/message-handler.js)
 
-    // tf-svc-infra
+    // cdp-tf-svc-infra
     const createServiceInfrastructureCodeResult =
       await createServiceInfrastructureCode(repositoryName, zone)
     request.logger.info(
       `created service infra PR for ${repositoryName}: ${createServiceInfrastructureCodeResult.data.html_url}`
     )
-    await updateCreationStatus(request.db, repositoryName, 'tf-svc-infra', {
-      status: 'raised',
-      pr: trimPr(createServiceInfrastructureCodeResult?.data)
-    })
+    await updateCreationStatus(
+      request.db,
+      repositoryName,
+      config.get('githubRepoTfServiceInfra'),
+      {
+        status: 'raised',
+        pr: trimPr(createServiceInfrastructureCodeResult?.data)
+      }
+    )
 
     // cdp-app-config
     const createServiceConfigResult = await createServiceConfig(repositoryName)
 
-    await updateCreationStatus(request.db, repositoryName, 'cdp-app-config', {
-      status: 'raised',
-      pr: trimPr(createServiceConfigResult?.data)
-    })
+    await updateCreationStatus(
+      request.db,
+      repositoryName,
+      config.get('githubRepoConfig'),
+      {
+        status: 'raised',
+        pr: trimPr(createServiceConfigResult?.data)
+      }
+    )
     request.logger.info(
       `created service config PR for ${repositoryName}: ${createServiceConfigResult.data.html_url}`
     )
@@ -77,7 +87,7 @@ const createServiceController = {
     await updateCreationStatus(
       request.db,
       repositoryName,
-      'cdp-nginx-upstreams',
+      config.get('githubRepoNginx'),
       {
         status: 'raised',
         pr: trimPr(createNginxConfigResult?.data)

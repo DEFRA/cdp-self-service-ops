@@ -1,6 +1,7 @@
 import { octokit } from '~/src/helpers/oktokit'
 import { config, environments } from '~/src/config'
-import { prepPullRequestFiles } from '~/src/api/create/helpers/prep-pull-request-files'
+import { prepPullRequestFiles } from '~/src/api/createV2/helpers/prep-pull-request-files'
+import { enableAutoMergeGraphQl } from '~/src/helpers/graphql/enable-automerge.graphql'
 
 async function createServiceConfig(repositoryName) {
   const configPlaceholderText = `# Config for ${repositoryName}, settings should be in KEY=value format`
@@ -18,7 +19,7 @@ async function createServiceConfig(repositoryName) {
     )
   )
 
-  return await octokit.createPullRequest({
+  const pr = await octokit.createPullRequest({
     owner: config.get('gitHubOrg'),
     repo: config.get('githubRepoConfig'),
     title: `Add base config for ${repositoryName}`,
@@ -31,6 +32,12 @@ async function createServiceConfig(repositoryName) {
       }
     ]
   })
+
+  await octokit.graphql(enableAutoMergeGraphQl, {
+    pullRequestId: pr.data.node_id
+  })
+
+  return pr
 }
 
 export { createServiceConfig }
