@@ -12,9 +12,9 @@ jest.mock('~/src/helpers/logging/logger', () => ({
 
 describe('#addRepoPermissions', () => {
   const logger = createLogger()
-  const permissionsFixture = JSON.stringify(githubOidcRepositoriesFixture)
 
   test('Should insert a new repo in the correct position', () => {
+    const permissionsFixture = JSON.stringify(githubOidcRepositoriesFixture)
     const expectedJson = JSON.stringify(
       [
         ...githubOidcRepositoriesFixture,
@@ -36,6 +36,7 @@ describe('#addRepoPermissions', () => {
   })
 
   test('Should NOT insert into the list, if a repos permissions already exist', () => {
+    const permissionsFixture = JSON.stringify(githubOidcRepositoriesFixture)
     expect(
       addRepoPermissions({
         permissions: permissionsFixture,
@@ -77,6 +78,7 @@ describe('#addRepoPermissions', () => {
   })
 
   test('Should throw "Post Addition" error', () => {
+    const permissionsFixture = JSON.stringify(githubOidcRepositoriesFixture)
     expect.assertions(4)
 
     try {
