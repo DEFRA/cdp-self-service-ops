@@ -2,7 +2,7 @@ import { createServiceV2Controller } from '~/src/api/createV2/controller'
 
 const createv2 = {
   plugin: {
-    name: 'create',
+    name: 'createv2',
     register: async (server) => {
       server.route([
         {
