@@ -2,6 +2,7 @@ import { workflowRunHandlerV1 } from '~/src/listeners/github/handlers/workflow-r
 import { updateCreationStatus } from '~/src/api/create/helpers/save-status'
 import { octokit } from '~/src/helpers/oktokit'
 import { enableAutoMergeGraphQl } from '~/src/helpers/graphql/enable-automerge.graphql'
+import { config } from '~/src/config'
 
 jest.mock('~/src/api/create/helpers/save-status', () => ({
   updateCreationStatus: jest.fn(),
@@ -21,6 +22,11 @@ jest.mock('~/src/helpers/oktokit', () => ({
   }
 }))
 
+const tfSvcInfra = config.get('githubRepoTfServiceInfra')
+const tfSvc = config.get('githubRepoTfService')
+const cdpAppConfig = config.get('githubRepoConfig')
+const cdpNginxUpstreams = config.get('githubRepoNginx')
+
 describe('#workflow-run-handler', () => {
   test('Should ignore workflow events that are not on the main branch', async () => {
     const msg = {
@@ -31,7 +37,7 @@ describe('#workflow-run-handler', () => {
         head_sha: '6d96270004515a0486bb7f76196a72b40c55a47f'
       },
       repository: {
-        name: 'tf-svc',
+        name: tfSvc,
         owner: {
           login: 'test-org'
         }
@@ -66,7 +72,7 @@ describe('#workflow-run-handler', () => {
         head_sha: '6d96270004515a0486bb7f76196a72b40c55a47f'
       },
       repository: {
-        name: 'tf-svc',
+        name: tfSvc,
         owner: {
           login: 'test-org'
         }
@@ -74,14 +80,14 @@ describe('#workflow-run-handler', () => {
     }
     await workflowRunHandlerV1(mockDb, msg)
     expect(findOne).toHaveBeenCalledWith({
-      'tf-svc.merged_sha': '6d96270004515a0486bb7f76196a72b40c55a47f'
+      [`${tfSvc}.merged_sha`]: '6d96270004515a0486bb7f76196a72b40c55a47f'
     })
     expect(updateOne).toHaveBeenCalledWith(
       { repositoryName: 'test-repo' },
       {
         $set: {
-          'tf-svc.status': 'in-progress',
-          'tf-svc.main.workflow': {
+          [`${tfSvc}.status`]: 'in-progress',
+          [`${tfSvc}.main.workflow`]: {
             id: 1,
             name: 'wf-name',
             html_url: 'http://localhost',
@@ -99,9 +105,9 @@ describe('#workflow-run-handler', () => {
       repositoryName: 'test-repo',
       zone: 'protected',
       createRepository: { status: 'not-requested', payload: {} },
-      'cdp-app-config': { pr: { number: 1 } },
-      'tf-svc': { status: 'not-requested' },
-      'cdp-nginx-upstreams': { pr: { number: 3 } }
+      [cdpAppConfig]: { pr: { number: 1 } },
+      [tfSvc]: { status: 'not-requested' },
+      [cdpNginxUpstreams]: { pr: { number: 3 } }
     })
     const updateOne = jest.fn().mockReturnValue({})
     const mockDb = {
@@ -137,7 +143,7 @@ describe('#workflow-run-handler', () => {
         conclusion: 'success'
       },
       repository: {
-        name: 'tf-svc-infra',
+        name: tfSvcInfra,
         owner: {
           login: 'test-org'
         }
@@ -145,7 +151,7 @@ describe('#workflow-run-handler', () => {
     }
     await workflowRunHandlerV1(mockDb, msg)
     expect(findOne).toHaveBeenCalledWith({
-      'tf-svc-infra.merged_sha': '6d96270004515a0486bb7f76196a72b40c55a47f'
+      [`${tfSvcInfra}.merged_sha`]: '6d96270004515a0486bb7f76196a72b40c55a47f'
     })
 
     expect(octokit.request).toHaveBeenCalledTimes(1)
@@ -153,7 +159,7 @@ describe('#workflow-run-handler', () => {
     expect(octokit.rest.pulls.merge).toHaveBeenCalledWith({
       owner: 'test-org',
       pull_number: 1,
-      repo: 'cdp-app-config'
+      repo: cdpAppConfig
     })
 
     expect(octokit.graphql).toHaveBeenCalledWith(enableAutoMergeGraphQl, {

@@ -4,6 +4,7 @@ import {
 } from '~/src/listeners/github/status-repo'
 import { createLogger } from '~/src/helpers/logging/logger'
 import { updateOverallStatus } from '~/src/api/createV2/helpers/save-status'
+import { config } from '~/src/config'
 
 const workflowRunHandlerV2 = async (db, message) => {
   const logger = createLogger()
@@ -26,7 +27,7 @@ const workflowRunHandlerV2 = async (db, message) => {
     const serviceRepo = status.repositoryName
 
     if (
-      workflowRepo === 'tf-svc-infra' &&
+      workflowRepo === config.get('githubRepoTfServiceInfra') &&
       message.action === 'completed' &&
       message.workflow_run?.conclusion === 'success'
     ) {
