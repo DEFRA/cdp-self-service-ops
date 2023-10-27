@@ -20,6 +20,8 @@ const pullRequestHandler = async (db, message) => {
 
     logger.info(`Processing pull request message for ${repo}:${prNumber}`)
 
+    // State of this Pull Request. message.pull_request.state Can be one of: open, closed
+    // https://docs.github.com/en/webhooks/webhook-events-and-payloads#pull_request
     let prState = `pr_${message.pull_request.state}`
     if (message.pull_request.merged) {
       logger.info(

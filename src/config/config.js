@@ -58,11 +58,13 @@ const config = convict({
   gitHubAppId: {
     doc: 'GitHub Api authentication App Id',
     format: String,
+    env: 'GITHUB_APP_ID',
     default: '407916'
   },
   gitHubAppInstallationId: {
     doc: 'GitHub Api authentication App Installation Id',
     format: String,
+    env: 'GITHUB_APP_INSTALLATION_ID',
     default: '43275761'
   },
   gitHubAppPrivateKey: {
