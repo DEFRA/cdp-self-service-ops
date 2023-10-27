@@ -14,7 +14,7 @@ import {
 } from '~/src/api/createV2/helpers/save-status'
 import { authStrategy } from '~/src/helpers/auth-stratergy'
 import { trimPr } from '~/src/api/createV2/helpers/trim-pr'
-import { createGithubRepo } from '~/src/api/createV2/helpers/create-github-repo'
+import { createServiceFromTemplate } from '~/src/api/createV2/helpers/create-service-from-template'
 
 const createServiceV2Controller = {
   options: {
@@ -34,7 +34,7 @@ const createServiceV2Controller = {
     const org = config.get('gitHubOrg')
     const repositoryName = payload?.repositoryName
 
-    const zone = serviceTemplates[serviceType] ?? null
+    const zone = serviceTemplates[serviceType]?.zone ?? null
 
     if (isNull(zone)) {
       throw Boom.badData(`Invalid service template: '${serviceType}'`)
@@ -71,7 +71,19 @@ const createServiceV2Controller = {
 
 const doCreateRepo = async (request, repositoryName, payload) => {
   try {
-    const repoCreationResult = await createGithubRepo(payload)
+    const org = config.get('gitHubOrg')
+    const repoName = payload.repositoryName
+    const teamName = payload.owningTeam
+    const templateRepo = payload?.serviceType
+    const templateName = serviceTemplates[templateRepo]?.templateName ?? null
+
+    const repoCreationResult = await createServiceFromTemplate(
+      org,
+      repoName,
+      teamName,
+      templateRepo,
+      templateName
+    )
     await updateCreationStatus(request.db, repositoryName, 'createRepository', {
       status: 'created',
       url: repoCreationResult.data.html_url,
