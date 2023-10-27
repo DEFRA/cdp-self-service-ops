@@ -11,6 +11,12 @@ import { triggerCreateRepositoryWorkflow } from '~/src/listeners/github/helpers/
 import { createLogger } from '~/src/helpers/logging/logger'
 import { setupDeploymentConfig } from '~/src/api/create/helpers/setup-deployment-config'
 import { trimPr } from '~/src/api/create/helpers/trim-pr'
+import { config } from '~/src/config'
+
+const tfSvcInfra = config.get('githubRepoTfServiceInfra')
+const tfSvc = config.get('githubRepoTfService')
+const cdpAppConfig = config.get('githubRepoConfig')
+const cdpNginxUpstreams = config.get('githubRepoNginx')
 
 const workflowRunHandlerV1 = async (db, message) => {
   const logger = createLogger()
@@ -43,7 +49,7 @@ const workflowRunHandlerV1 = async (db, message) => {
     // We only need to trigger more steps on tf-svc-infra since this gate-keeps the ECR repo etc
     // Old style orchestration, to be deleted when v2 is the norm
     if (
-      repo === 'tf-svc-infra' &&
+      repo === tfSvcInfra &&
       message.action === 'completed' &&
       message.workflow_run?.conclusion === 'success' &&
       status.portalVersion !== 2 // ignore the new create-a-service system
@@ -70,8 +76,8 @@ const workflowRunHandlerV1 = async (db, message) => {
         )
       }
 
-      // tf-svc needs the tf-svc-infra change to have completed before running in the terraform else it will fail
-      if (status['tf-svc'].status === 'not-requested') {
+      // cdp-tf-svc needs the cdp-tf-svc-infra change to have completed before running in the terraform else it will fail
+      if (status[tfSvc].status === 'not-requested') {
         try {
           const tfSvcPR = await setupDeploymentConfig(
             status.repositoryName,
@@ -79,42 +85,38 @@ const workflowRunHandlerV1 = async (db, message) => {
             status.zone
           )
           logger.info(
-            `created tf-svc deployment PR for ${status.repositoryName}: ${tfSvcPR.data.html_url}`
+            `created ${tfSvc} deployment PR for ${status.repositoryName}: ${tfSvcPR.data.html_url}`
           )
-          await updateCreationStatus(db, status.repositoryName, 'tf-svc', {
+          await updateCreationStatus(db, status.repositoryName, tfSvc, {
             status: 'raised',
             pr: trimPr(tfSvcPR?.data)
           })
           logger.info(
-            `auto-merging tf-svc PR for ${status.repositoryName}: ${tfSvcPR.data.html_url}`
+            `auto-merging ${tfSvc} PR for ${status.repositoryName}: ${tfSvcPR.data.html_url}`
           )
           const autoMergeResult = await automerge(tfSvcPR?.data?.node_id)
           logger.info(autoMergeResult)
         } catch (err) {
           logger.info(
-            `Failed to raise/automerge tf-svc pull request for ${status.repositoryName}`
+            `Failed to raise/automerge ${tfSvc} pull request for ${status.repositoryName}`
           )
           logger.info(err)
           await updateCreationStatus(
             db,
             status.repositoryName,
-            'tf-svc.status',
+            `${tfSvc}.status`,
             'failed'
           )
         }
       }
 
       logger.info(`auto-merging `)
-      await mergeOrAutomerge(
-        owner,
-        'cdp-app-config',
-        status['cdp-app-config'].pr
-      )
+      await mergeOrAutomerge(owner, cdpAppConfig, status[cdpAppConfig].pr)
 
       await mergeOrAutomerge(
         owner,
-        'cdp-nginx-upstreams',
-        status['cdp-nginx-upstreams'].pr
+        cdpNginxUpstreams,
+        status[cdpNginxUpstreams].pr
       )
     }
 
@@ -123,15 +125,11 @@ const workflowRunHandlerV1 = async (db, message) => {
     logger.info(
       `updating status for creation job ${status.repositoryName} ${repo}:${workflowStatus}`
     )
-    let branch = 'pr'
-    if (headBranch === 'main') {
-      branch = 'main'
-    }
     await updateWorkflowStatus(
       db,
       status.repositoryName,
       repo,
-      branch,
+      'main', // we're not processing PR workflows in the v1 handler
       workflowStatus,
       trimWorkflowRun(message.workflow_run)
     )
