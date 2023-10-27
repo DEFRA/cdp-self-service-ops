@@ -2,19 +2,13 @@ import {
   findByCommitHash,
   updateWorkflowStatus
 } from '~/src/listeners/github/status-repo'
-import {
-  automerge,
-  mergeOrAutomerge
-} from '~/src/listeners/github/helpers/automerge'
+import { mergeOrAutomerge } from '~/src/listeners/github/helpers/automerge'
 import { updateCreationStatus } from '~/src/api/create/helpers/save-status'
 import { triggerCreateRepositoryWorkflow } from '~/src/listeners/github/helpers/trigger-create-repository-workflow'
 import { createLogger } from '~/src/helpers/logging/logger'
-import { setupDeploymentConfig } from '~/src/api/create/helpers/setup-deployment-config'
-import { trimPr } from '~/src/api/create/helpers/trim-pr'
 import { config } from '~/src/config'
 
 const tfSvcInfra = config.get('githubRepoTfServiceInfra')
-const tfSvc = config.get('githubRepoTfService')
 const cdpAppConfig = config.get('githubRepoConfig')
 const cdpNginxUpstreams = config.get('githubRepoNginx')
 
@@ -69,48 +63,13 @@ const workflowRunHandlerV1 = async (db, message) => {
           status.repositoryName,
           'createRepository',
           {
-            status: 'raised',
+            status: 'success',
             payload: status.payload,
             job: createRepoResult
           }
         )
       }
 
-      // cdp-tf-svc needs the cdp-tf-svc-infra change to have completed before running in the terraform else it will fail
-      if (status[tfSvc].status === 'not-requested') {
-        try {
-          const tfSvcPR = await setupDeploymentConfig(
-            status.repositoryName,
-            '0.1.0',
-            status.zone
-          )
-          logger.info(
-            `created ${tfSvc} deployment PR for ${status.repositoryName}: ${tfSvcPR.data.html_url}`
-          )
-          await updateCreationStatus(db, status.repositoryName, tfSvc, {
-            status: 'raised',
-            pr: trimPr(tfSvcPR?.data)
-          })
-          logger.info(
-            `auto-merging ${tfSvc} PR for ${status.repositoryName}: ${tfSvcPR.data.html_url}`
-          )
-          const autoMergeResult = await automerge(tfSvcPR?.data?.node_id)
-          logger.info(autoMergeResult)
-        } catch (err) {
-          logger.info(
-            `Failed to raise/automerge ${tfSvc} pull request for ${status.repositoryName}`
-          )
-          logger.info(err)
-          await updateCreationStatus(
-            db,
-            status.repositoryName,
-            `${tfSvc}.status`,
-            'failed'
-          )
-        }
-      }
-
-      logger.info(`auto-merging `)
       await mergeOrAutomerge(owner, cdpAppConfig, status[cdpAppConfig].pr)
 
       await mergeOrAutomerge(

@@ -94,7 +94,7 @@ const doCreateRepo = async (request, repositoryName, payload) => {
     )
   } catch (e) {
     await updateCreationStatus(request.db, repositoryName, 'createRepository', {
-      status: 'failed',
+      status: 'failure',
       result: e
     })
     request.logger.error(`created repo ${repositoryName} failed ${e}`)
@@ -116,7 +116,7 @@ const doUpdateTfSvcInfra = async (request, repositoryName, zone) => {
     )
   } catch (e) {
     await updateCreationStatus(request.db, repositoryName, tfSvcInfra, {
-      status: 'failed',
+      status: 'failure',
       result: e?.response ?? 'see cdp-self-service-ops logs'
     })
     request.logger.error(
@@ -138,7 +138,7 @@ const doUpdateCdpAppConfig = async (request, repositoryName) => {
     )
   } catch (e) {
     await updateCreationStatus(request.db, repositoryName, cdpAppConfig, {
-      status: 'failed',
+      status: 'failure',
       result: e?.response ?? 'see cdp-self-service-ops logs'
     })
     request.logger.error(`update cdp-app-config ${repositoryName} failed ${e}`)
@@ -163,7 +163,7 @@ const doUpdateCdpNginxUpstream = async (request, repositoryName, zone) => {
     )
   } catch (e) {
     await updateCreationStatus(request.db, repositoryName, cdpNginxUpstream, {
-      status: 'failed',
+      status: 'failure',
       result: e?.response ?? 'see cdp-self-service-ops logs'
     })
     request.logger.error(
