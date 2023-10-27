@@ -1,6 +1,7 @@
-import { createServiceStatusController } from '~/src/api/status/createStatusController'
-import { inProgressController } from '~/src/api/status/inProgressController'
+import { createServiceStatusController } from '~/src/api/status/controllers/create-service-status'
+import { inProgressController } from '~/src/api/status/controllers/in-progress'
 
+// TODO are these in the right place? Maybe move when the codebase has settled a little
 const status = {
   plugin: {
     name: 'status',
@@ -8,12 +9,12 @@ const status = {
       server.route([
         {
           method: 'GET',
-          path: '/create-service/status/{repo}',
+          path: '/create-service/status/{repositoryName}',
           ...createServiceStatusController
         },
         {
           method: 'GET',
-          path: '/create-service',
+          path: '/create-service/status',
           ...inProgressController
         }
       ])
