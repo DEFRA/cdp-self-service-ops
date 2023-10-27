@@ -25,7 +25,7 @@ const pullRequestHandler = async (db, message) => {
     let prState = `pr_${message.pull_request.state}`
     if (message.pull_request.merged) {
       logger.info(
-        `Updating ${repo} head commit sha to ${message.pull_request.merge_commit_sha}`
+        `Updating ${status.repositoryName}/${repo} head commit sha to ${message.pull_request.merge_commit_sha}`
       )
       prState = 'merged'
     }
