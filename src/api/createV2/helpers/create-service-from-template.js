@@ -18,14 +18,22 @@ async function createServiceFromTemplate(
   logger.info(
     `Creating ${org}/${repoName} from template ${org}/${templateRepo}`
   )
-  await createRepoUsingTemplate(org, templateRepo, repoName)
+  const repoResult = await createRepoUsingTemplate(org, templateRepo, repoName)
+  logger.info(`createService ${repoName} - waiting on repo`)
   await waitForRepo(org, repoName)
+  logger.info(`createService ${repoName} - disabling workflows`)
   await disableWorkflows(org, repoName)
+  logger.info(`createService ${repoName} - canceling workflows`)
   await cancelWorkflows(org, repoName)
+  logger.info(`createService ${repoName} - configuring repo`)
   await configureRepo(org, repoName, teamName)
+  logger.info(`createService ${repoName} - dynamic templating`)
   await dynamicTemplateRepo(org, repoName, templateRepo, templateName)
+  logger.info(`createService ${repoName} - enabling workflows`)
   await enableWorkflows(org, repoName)
   logger.info(`Successfully created service ${org}/${repoName}`)
+
+  return repoResult
 }
 
 async function createRepoUsingTemplate(org, templateRepo, repoName) {
