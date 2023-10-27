@@ -62,7 +62,8 @@ const createServiceV2Controller = {
 
     return h
       .response({
-        message: 'success',
+        message: `${repositoryName} service creation has started`,
+        repositoryName,
         statusUrl: `/create-service/status/${repositoryName}`
       })
       .code(200)
