@@ -5,6 +5,7 @@ import {
 import { createLogger } from '~/src/helpers/logging/logger'
 import { updateOverallStatus } from '~/src/api/createV2/helpers/save-status'
 import { config } from '~/src/config'
+import { createPlaceholderArtifact } from '~/src/listeners/github/helpers/createPlaceholderArtifact'
 
 const workflowRunHandlerV2 = async (db, message) => {
   const logger = createLogger()
@@ -35,6 +36,11 @@ const workflowRunHandlerV2 = async (db, message) => {
         `triggering next steps in the creation of ${workflowRepo}`
         // TODO: enable anything we need to do once the repo is up
       )
+
+      await createPlaceholderArtifact({
+        service: status.repositoryName,
+        githubUrl: status?.createRepository?.url
+      })
     }
 
     // Record what happened
