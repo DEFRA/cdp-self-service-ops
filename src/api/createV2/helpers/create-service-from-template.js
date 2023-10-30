@@ -19,19 +19,21 @@ async function createServiceFromTemplate(
     `Creating ${org}/${repoName} from template ${org}/${templateRepo}`
   )
   const repoResult = await createRepoUsingTemplate(org, templateRepo, repoName)
-  logger.info(`createService ${repoName} - waiting on repo`)
-  await waitForRepo(org, repoName)
-  logger.info(`createService ${repoName} - disabling workflows`)
-  await disableWorkflows(org, repoName)
-  logger.info(`createService ${repoName} - canceling workflows`)
-  await cancelWorkflows(org, repoName)
+
+  // logger.info(`createService ${repoName} - waiting on repo`)
+  // await waitForRepo(org, repoName)
+  // logger.info(`createService ${repoName} - disabling workflows`)
+  // await disableWorkflows(org, repoName)
+  // logger.info(`createService ${repoName} - canceling workflows`)
+  // await cancelWorkflows(org, repoName)
+
   logger.info(`createService ${repoName} - configuring repo`)
   await configureRepo(org, repoName, teamName)
   logger.info(`createService ${repoName} - dynamic templating`)
   await dynamicTemplateRepo(org, repoName, templateRepo, templateName)
   logger.info(`createService ${repoName} - enabling workflows`)
-  await enableWorkflows(org, repoName)
-  logger.info(`Successfully created service ${org}/${repoName}`)
+  // await enableWorkflows(org, repoName)
+  // logger.info(`Successfully created service ${org}/${repoName}`)
 
   return repoResult
 }
@@ -54,6 +56,7 @@ async function createRepoUsingTemplate(org, templateRepo, repoName) {
   }
 }
 
+/*
 async function disableWorkflows(org, repoName) {
   const logger = createLogger()
   const maxAttempts = 10
@@ -126,6 +129,39 @@ async function enableWorkflows(org, repoName) {
   }
 }
 
+async function waitForRepo(owner, repo) {
+  const logger = createLogger()
+  const maxAttempts = 10
+  const delayMs = 1000
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      await octokit.rest.repos.getContent({ owner, repo, path: '' })
+      return
+    } catch (error) {
+      if (error.status === 404) {
+        logger.info(
+          `Repository ${owner}/${repo} not ready, attempt ${attempt}/${maxAttempts}. Waiting ${
+            delayMs / 1000
+          } seconds...`
+        )
+        await new Promise((resolve) => setTimeout(resolve, delayMs))
+      } else {
+        const newError = new Error(
+          `Timed-out while waiting for ${owner}/${repo} creation`
+        )
+        newError.stack = error
+        throw newError
+      }
+    }
+  }
+  throw new Error(
+    `Repository ${owner}/${repo} not accessible after ${maxAttempts} attempts.`
+  )
+}
+
+*/
+
 async function configureRepo(org, repoName, teamName) {
   try {
     // adding team permissions
@@ -160,37 +196,6 @@ async function configureRepo(org, repoName, teamName) {
     newError.stack = error
     throw newError
   }
-}
-
-async function waitForRepo(owner, repo) {
-  const logger = createLogger()
-  const maxAttempts = 10
-  const delayMs = 1000
-
-  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-    try {
-      await octokit.rest.repos.getContent({ owner, repo, path: '' })
-      return
-    } catch (error) {
-      if (error.status === 404) {
-        logger.info(
-          `Repository ${owner}/${repo} not ready, attempt ${attempt}/${maxAttempts}. Waiting ${
-            delayMs / 1000
-          } seconds...`
-        )
-        await new Promise((resolve) => setTimeout(resolve, delayMs))
-      } else {
-        const newError = new Error(
-          `Timed-out while waiting for ${owner}/${repo} creation`
-        )
-        newError.stack = error
-        throw newError
-      }
-    }
-  }
-  throw new Error(
-    `Repository ${owner}/${repo} not accessible after ${maxAttempts} attempts.`
-  )
 }
 
 async function dynamicTemplateRepo(org, repoName, templateRepo, templateName) {

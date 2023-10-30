@@ -7,6 +7,7 @@ import { updateCreationStatus } from '~/src/api/create/helpers/save-status'
 import { triggerCreateRepositoryWorkflow } from '~/src/listeners/github/helpers/trigger-create-repository-workflow'
 import { createLogger } from '~/src/helpers/logging/logger'
 import { config } from '~/src/config'
+import { createPlaceholderArtifact } from '~/src/listeners/github/helpers/createPlaceholderArtifact'
 
 const tfSvcInfra = config.get('githubRepoTfServiceInfra')
 const cdpAppConfig = config.get('githubRepoConfig')
@@ -68,6 +69,10 @@ const workflowRunHandlerV1 = async (db, message) => {
             job: createRepoResult
           }
         )
+        await createPlaceholderArtifact({
+          service: status.repositoryName,
+          githubUrl: `https://www.github.com/${owner}/${status.repositoryName}`
+        })
       }
 
       await mergeOrAutomerge(owner, cdpAppConfig, status[cdpAppConfig].pr)
