@@ -69,7 +69,6 @@ const workflowRunHandlerV1 = async (db, message) => {
             job: createRepoResult
           }
         )
-
         await createPlaceholderArtifact({
           service: status.repositoryName,
           githubUrl: `https://www.github.com/${owner}/${status.repositoryName}`

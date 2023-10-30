@@ -2,10 +2,15 @@ import { workflowRunHandlerV1 } from '~/src/listeners/github/handlers/workflow-r
 import { updateCreationStatus } from '~/src/api/create/helpers/save-status'
 import { octokit } from '~/src/helpers/oktokit'
 import { config } from '~/src/config'
+import { createPlaceholderArtifact } from '~/src/listeners/github/helpers/createPlaceholderArtifact'
 
 jest.mock('~/src/api/create/helpers/save-status', () => ({
   updateCreationStatus: jest.fn(),
   findByCommitHash: jest.fn()
+}))
+
+jest.mock('~/src/listeners/github/helpers/createPlaceholderArtifact', () => ({
+  createPlaceholderArtifact: jest.fn()
 }))
 
 jest.mock('~/src/helpers/oktokit', () => ({
@@ -149,6 +154,9 @@ describe('#workflow-run-handler', () => {
       }
     }
     await workflowRunHandlerV1(mockDb, msg)
+
+    expect(createPlaceholderArtifact).toHaveBeenCalledTimes(1)
+
     expect(findOne).toHaveBeenCalledWith({
       [`${tfSvcInfra}.merged_sha`]: '6d96270004515a0486bb7f76196a72b40c55a47f'
     })

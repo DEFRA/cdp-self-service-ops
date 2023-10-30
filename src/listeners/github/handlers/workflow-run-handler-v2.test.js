@@ -19,6 +19,10 @@ jest.mock('~/src/helpers/oktokit', () => ({
   }
 }))
 
+jest.mock('~/src/listeners/github/helpers/createPlaceholderArtifact', () => ({
+  createPlaceholderArtifact: jest.fn()
+}))
+
 describe('#workflow-run-handler-v2', () => {
   test('Should ignore workflow events that are not tracked', async () => {
     const msg = {
