@@ -14,7 +14,6 @@ import {
 } from '~/src/api/createV2/helpers/save-status'
 import { authStrategy } from '~/src/helpers/auth-stratergy'
 import { trimPr } from '~/src/api/createV2/helpers/trim-pr'
-import { createServiceFromTemplate } from '~/src/api/createV2/helpers/create-service-from-template'
 import { triggerCreateRepositoryWorkflow } from '~/src/api/createV2/helpers/trigger-create-repository-workflow'
 
 const createServiceV2Controller = {
