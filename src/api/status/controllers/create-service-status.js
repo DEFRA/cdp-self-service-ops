@@ -22,7 +22,7 @@ const createServiceStatusController = {
       return Boom.notFound(`Service ${repositoryName} not found`)
     }
 
-    return h.response({ message: 'Success', status: repositoryStatus })
+    return h.response({ message: 'success', status: repositoryStatus })
   }
 }
 
