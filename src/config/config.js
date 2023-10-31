@@ -175,6 +175,12 @@ const config = convict({
     format: String,
     default: 'http://localhost:5094/cdp-portal-backend',
     env: 'PORTAL_BACKEND_API_URL'
+  },
+  createServiceWorkflow: {
+    doc: 'Name of workflow to trigger when creating a service',
+    format: String,
+    default: 'create_repo.yml',
+    env: 'CREATE_SERVICE_WORKFLOW'
   }
 })
 
