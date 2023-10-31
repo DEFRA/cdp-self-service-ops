@@ -14,7 +14,7 @@ import {
 } from '~/src/api/createV2/helpers/save-status'
 import { authStrategy } from '~/src/helpers/auth-stratergy'
 import { trimPr } from '~/src/api/createV2/helpers/trim-pr'
-import { createServiceFromTemplate } from '~/src/api/createV2/helpers/create-service-from-template'
+import { triggerCreateRepositoryWorkflow } from '~/src/api/createV2/helpers/trigger-create-repository-workflow'
 
 const createServiceV2Controller = {
   options: {
@@ -73,26 +73,21 @@ const createServiceV2Controller = {
 const doCreateRepo = async (request, repositoryName, payload) => {
   try {
     const org = config.get('gitHubOrg')
-    const repoName = payload.repositoryName
-    const teamName = payload.owningTeam
-    const templateRepo = payload?.serviceType
-    const templateName = serviceTemplates[templateRepo]?.templateName ?? null
+    const repositoryName = payload.repositoryName
+    const owningTeam = payload.owningTeam
+    const serviceType = payload?.serviceType
 
-    const repoCreationResult = await createServiceFromTemplate(
-      org,
-      repoName,
-      teamName,
-      templateRepo,
-      templateName
-    )
+    const repoCreationResult = await triggerCreateRepositoryWorkflow({
+      repositoryName,
+      serviceType,
+      owningTeam
+    })
     await updateCreationStatus(request.db, repositoryName, 'createRepository', {
       status: 'created',
-      url: repoCreationResult.data.html_url,
+      url: `https://github.com/${org}/${repositoryName}`,
       result: repoCreationResult.data
     })
-    request.logger.info(
-      `created repo ${repositoryName} ${repoCreationResult.data.html_url}`
-    )
+    request.logger.info(`created repo ${repositoryName}`)
   } catch (e) {
     await updateCreationStatus(request.db, repositoryName, 'createRepository', {
       status: 'failure',
