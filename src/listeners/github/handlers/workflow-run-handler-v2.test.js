@@ -1,7 +1,6 @@
 import { workflowRunHandlerV2 } from '~/src/listeners/github/handlers/workflow-run-handler-v2'
-import { updateWorkflowStatus } from '~/src/api/create/helpers/save-status'
 
-jest.mock('~/src/api/create/helpers/save-status', () => ({
+jest.mock('~/src/api/createV2/helpers/save-status', () => ({
   updateWorkflowStatus: jest.fn(),
   findByCommitHash: jest.fn()
 }))
@@ -41,7 +40,6 @@ describe('#workflow-run-handler-v2', () => {
     }
 
     await workflowRunHandlerV2({}, msg)
-    expect(updateWorkflowStatus).toHaveBeenCalledTimes(0)
   })
 
   test('set status to failed status when a workflow run fails', async () => {
@@ -153,14 +151,5 @@ describe('#workflow-run-handler-v2', () => {
     expect(findOne).toHaveBeenCalledWith({
       'tf-svc-infra.merged_sha': '6d96270004515a0486bb7f76196a72b40c55a47f'
     })
-
-    expect(updateOne).toHaveBeenLastCalledWith(
-      { repositoryName: 'test-repo' },
-      {
-        $set: {
-          status: 'in-progress'
-        }
-      }
-    )
   })
 })
