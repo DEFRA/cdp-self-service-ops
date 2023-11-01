@@ -140,17 +140,29 @@ const config = convict({
     default: 'cdp-self-service-ops',
     env: 'MONGO_DATABASE'
   },
-  sqsRegion: {
-    doc: 'AWS region of sqs queue',
+  awsRegion: {
+    doc: 'AWS region',
     format: String,
     default: 'us-east-1',
-    env: 'SQS_REGION'
+    env: 'AWS_REGION'
+  },
+  snsDeployTopicArn: {
+    doc: 'SNS Deploy Topic ARN',
+    format: String,
+    default: 'arn:aws:sns:eu-west-2:000000000000:local-deploy.fifo',
+    env: 'SNS_DEPLOY_TOPIC_ARN'
   },
   sqsEndpoint: {
     doc: 'SQS endpoint',
     format: String,
     default: 'http://127.0.0.1:4566',
     env: 'SQS_ENDPOINT'
+  },
+  snsEndpoint: {
+    doc: 'SNS endpoint',
+    format: String,
+    default: 'http://127.0.0.1:4566',
+    env: 'SNS_ENDPOINT'
   },
   sqsGithubQueue: {
     doc: 'URL of sqs queue providing github events',

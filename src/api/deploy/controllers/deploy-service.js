@@ -1,7 +1,8 @@
 import { deployServiceValidation } from '~/src/api/deploy/helpers/schema/deploy-service-validation'
-import { createDeploymentPullRequest } from '~/src/api/deploy/helpers/create-deployment-pull-request'
 import { authStrategy } from '~/src/helpers/auth-stratergy'
 import { registerDeployment } from '~/src/api/deploy/helpers/register-deployment'
+import { generateDeployMessage } from '~/src/api/deploy/helpers/generate-deploy-message'
+import { sendSnsDeployMessage } from '~/src/api/deploy/helpers/send-sns-deploy-message'
 
 const deployServiceController = {
   options: {
@@ -21,7 +22,15 @@ const deployServiceController = {
     payload.userId = request.auth?.credentials?.id
 
     await registerDeployment(payload)
-    await createDeploymentPullRequest(payload)
+    const deployMessage = await generateDeployMessage(payload)
+    const snsResponse = await sendSnsDeployMessage(
+      request.snsClient,
+      deployMessage
+    )
+
+    request.logger.info(
+      `SNS Deploy response: ${JSON.stringify(snsResponse, null, 2)}`
+    )
 
     return h.response({ message: 'success' }).code(200)
   }

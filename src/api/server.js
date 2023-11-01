@@ -9,6 +9,7 @@ import { requestLogger } from '~/src/helpers/logging/request-logger'
 import { azureOidc } from '~/src/helpers/azure-oidc'
 import { mongoPlugin } from '~/src/helpers/mongodb'
 import { githubEventsPlugin } from '~/src/listeners/github/github-events-plugin'
+import { snsClientPlugin } from '~/src/helpers/sns-client'
 
 async function createServer() {
   const server = hapi.server({
@@ -38,6 +39,8 @@ async function createServer() {
   await server.register({ plugin: mongoPlugin, options: {} })
 
   await server.register({ plugin: githubEventsPlugin, options: {} })
+
+  await server.register({ plugin: snsClientPlugin, options: {} })
 
   await server.register(router, {
     routes: { prefix: `${config.get('appPathPrefix')}` }

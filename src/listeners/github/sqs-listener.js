@@ -7,7 +7,7 @@ import { config } from '~/src/config'
 import { handle } from '~/src/listeners/github/message-handler'
 
 const sqsClient = new SQSClient({
-  region: config.get('sqsRegion'),
+  region: config.get('awsRegion'),
   endpoint: config.get('sqsEndpoint')
 })
 
