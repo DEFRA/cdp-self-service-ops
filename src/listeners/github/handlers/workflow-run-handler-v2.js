@@ -95,7 +95,11 @@ const normalizeStatus = (action, conclusion) => {
       }
     case 'in_progress':
       return 'in-progress'
+    case 'in-progress':
+      return 'in-progress'
     case 'requested':
+      return 'requested'
+    default:
       return 'requested'
   }
 }

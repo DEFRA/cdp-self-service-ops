@@ -1,13 +1,13 @@
 import { createServiceV2Controller } from '~/src/api/createV2/controller'
 
-const createv2 = {
+const create = {
   plugin: {
-    name: 'createv2',
+    name: 'create',
     register: async (server) => {
       server.route([
         {
           method: 'POST',
-          path: '/create-service-v2',
+          path: '/create-service',
           ...createServiceV2Controller
         }
       ])
@@ -15,4 +15,4 @@ const createv2 = {
   }
 }
 
-export { createv2 }
+export { create }

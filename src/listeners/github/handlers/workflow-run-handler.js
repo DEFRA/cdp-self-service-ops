@@ -3,9 +3,6 @@ const {
   workflowRunHandlerV2
 } = require('~/src/listeners/github/handlers/workflow-run-handler-v2')
 const { createLogger } = require('~/src/helpers/logging/logger')
-const {
-  workflowRunHandlerV1
-} = require('~/src/listeners/github/handlers/workflow-run-handler-v1')
 
 const workflowRunHandler = async (db, message) => {
   const logger = createLogger()
@@ -26,11 +23,7 @@ const workflowRunHandler = async (db, message) => {
       return
     }
 
-    if (status.portalVersion === 2) {
-      return await workflowRunHandlerV2(db, message)
-    } else {
-      return await workflowRunHandlerV1(db, message)
-    }
+    return await workflowRunHandlerV2(db, message)
   } catch (e) {
     logger.error(e)
   }
