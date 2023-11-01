@@ -8,7 +8,7 @@ const inProgressController = {
       'failure'
     ])
 
-    return h.response({ message: 'Success', statuses: repositoriesStatus })
+    return h.response({ message: 'success', statuses: repositoriesStatus })
   }
 }
 
