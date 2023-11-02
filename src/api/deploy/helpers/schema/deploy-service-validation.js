@@ -16,7 +16,9 @@ function deployServiceValidation() {
     version: Joi.string()
       .pattern(/^\d+\.\d+\.\d+$/)
       .required(),
-    environment: Joi.string().valid(...Object.values(environments)),
+    environment: Joi.string()
+      .valid(...Object.values(environments))
+      .required(),
     instanceCount: Joi.number().min(0).max(10).required(),
     cpu: Joi.number()
       .valid(...validCpuValues)
