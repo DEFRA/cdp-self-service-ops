@@ -44,7 +44,10 @@ async function generateDeployMessage(payload) {
     deploy_metrics: true,
     environment: payload.environment,
     zone: tenantService.zone,
-    deployed_by: payload.user
+    deployed_by: {
+      user_id: payload.user.id,
+      display_name: payload.user.displayName
+    }
   }
 }
 

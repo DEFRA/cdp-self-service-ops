@@ -18,8 +18,10 @@ const deployServiceController = {
   },
   handler: async (request, h) => {
     const payload = request.payload
-    payload.user = request.auth?.credentials?.displayName
-    payload.userId = request.auth?.credentials?.id
+    payload.user = {
+      id: request.auth?.credentials?.id,
+      displayName: request.auth?.credentials?.displayName
+    }
 
     await registerDeployment(payload)
     const deployMessage = await generateDeployMessage(payload)
