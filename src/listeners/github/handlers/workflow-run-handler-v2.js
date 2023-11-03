@@ -5,7 +5,7 @@ import {
 import { createLogger } from '~/src/helpers/logging/logger'
 import { updateOverallStatus } from '~/src/api/createV2/helpers/save-status'
 import { config } from '~/src/config'
-import { createPlaceholderArtifact } from '~/src/listeners/github/helpers/createPlaceholderArtifact'
+import { createPlaceholderArtifact } from '~/src/listeners/github/helpers/create-placeholder-artifact'
 
 const workflowRunHandlerV2 = async (db, message) => {
   const logger = createLogger()

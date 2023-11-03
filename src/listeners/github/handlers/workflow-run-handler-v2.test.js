@@ -18,7 +18,7 @@ jest.mock('~/src/helpers/oktokit', () => ({
   }
 }))
 
-jest.mock('~/src/listeners/github/helpers/createPlaceholderArtifact', () => ({
+jest.mock('~/src/listeners/github/helpers/create-placeholder-artifact', () => ({
   createPlaceholderArtifact: jest.fn()
 }))
 
