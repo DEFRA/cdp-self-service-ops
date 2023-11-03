@@ -1,5 +1,5 @@
-import { lookupTenantService } from '~/src/api/deploy/helpers/lookupTenantService'
-import { serviceToSecretsMap } from '~/src/api/deploy/helpers/serviceToSecretsMap'
+import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service'
+import { serviceToSecretsMap } from '~/src/api/deploy/helpers/service-to-secrets-map'
 
 async function generateDeployMessage(payload) {
   const tenantService = await lookupTenantService(
