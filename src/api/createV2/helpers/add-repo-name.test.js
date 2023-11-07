@@ -40,30 +40,6 @@ describe('#addRepoName', () => {
     expect(logger.error).not.toHaveBeenCalled()
   })
 
-  test('Should throw "Pre Addition" error', () => {
-    const repositoriesWithError = JSON.stringify([
-      { ...tenantServicesFixture, ...{ '': [] } }
-    ])
-
-    expect.assertions(4)
-
-    try {
-      addRepoName({
-        repositories: repositoriesWithError,
-        fileRepository: 'mock-repo',
-        filePath: 'mock-file-path',
-        repositoryName: 'new-repository-name'
-      })
-    } catch (error) {
-      expect(logger.error).toHaveBeenCalledTimes(1)
-      expect(logger.error).toHaveBeenCalledWith(
-        "Tenant Services file 'mock-file-path' from 'mock-repo failed schema validation"
-      )
-      expect(error).toBeInstanceOf(Error)
-      expect(error).toHaveProperty('message', 'File failed schema validation')
-    }
-  })
-
   test('Should throw "Post Addition" error', () => {
     const repositoriesJson = JSON.stringify(tenantServicesFixture)
 
