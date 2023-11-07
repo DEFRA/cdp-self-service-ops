@@ -11,6 +11,7 @@ const repositoriesSchema = Joi.array()
         mongo: Joi.bool().default(false),
         redis: Joi.bool().default(false),
         queues: Joi.array().items(Joi.string()),
+        topics: Joi.array().items(Joi.string()),
         ecr: Joi.array().items(Joi.string()),
         s3: Joi.array().items(Joi.string())
       }).required()
@@ -33,7 +34,8 @@ function addRepoName({
   const preAdditionValidationResult = repositoriesSchema.validate(
     parsedRepositories,
     {
-      abortEarly: false
+      abortEarly: false,
+      allowUnknown: true
     }
   )
 
