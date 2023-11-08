@@ -70,7 +70,7 @@ const handleTfSvcInfra = async (db, message) => {
 const handleCdpBoilerplate = async (db, message) => {
   logger.info(`handling cdp-boilerplate message`)
   try {
-    const repoName = message.workflow_run?.display_title // we repurpose the display title to track name of repo its creating
+    const repoName = message.workflow_run?.name // we repurpose the name to track name of repo its creating
     const status = findByRepoName(db, repoName)
     if (status !== null) {
       const workflowStatus = normalizeStatus(
