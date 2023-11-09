@@ -65,6 +65,11 @@ const handleTfSvcInfra = async (db, message) => {
         trimWorkflowRun(message.workflow_run),
         status
       )
+    } else {
+      logger.info(
+        'handling tf-svc-infra workflow completed message from non-main'
+      )
+      await handleGenericWorkflow(db, message)
     }
   } catch (e) {
     logger.error(e)
