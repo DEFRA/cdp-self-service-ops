@@ -87,7 +87,7 @@ const doCreateRepo = async (request, repositoryName, payload) => {
       owningTeam
     })
     await updateCreationStatus(request.db, repositoryName, 'createRepository', {
-      status: 'success', // TODO: set this to in-progress until we get feedback from cdp-boilerplate
+      status: 'in-progress',
       url: `https://github.com/${org}/${repositoryName}`,
       result: repoCreationResult
     })

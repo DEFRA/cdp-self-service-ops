@@ -107,6 +107,12 @@ const config = convict({
     default: 'cdp-nginx-upstreams',
     env: 'GITHUB_REPO_NGINX'
   },
+  githubRepoCreateWorkflow: {
+    doc: 'github repo containing the create-repo workflow',
+    format: String,
+    default: 'cdp-boilerplate',
+    env: 'GITHUB_CREATE_WORKFLOW'
+  },
   isProduction: {
     doc: 'If this application running in the production environment',
     format: Boolean,

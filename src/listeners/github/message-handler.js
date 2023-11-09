@@ -1,12 +1,13 @@
 import { pullRequestHandler } from '~/src/listeners/github/handlers/pull-request-handler'
-import { workflowRunHandler } from '~/src/listeners/github/handlers/workflow-run-handler'
 import { config } from '~/src/config'
+import { workflowRunHandlerV2 } from '~/src/listeners/github/handlers/workflow-run-handler-v2'
 
 const validRepos = new Set([
   config.get('githubRepoTfService'),
   config.get('githubRepoTfServiceInfra'),
   config.get('githubRepoConfig'),
-  config.get('githubRepoNginx')
+  config.get('githubRepoNginx'),
+  config.get('githubRepoCreateWorkflow')
 ])
 const validActions = new Set(['workflow_run', 'pull_request'])
 
@@ -26,7 +27,7 @@ const handle = async (server, message) => {
   }
 
   if (message.github_event === 'workflow_run') {
-    return await workflowRunHandler(server.db, message)
+    return await workflowRunHandlerV2(server.db, message)
   }
 }
 

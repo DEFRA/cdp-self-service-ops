@@ -8,6 +8,10 @@ async function findByCommitHash(db, repo, sha) {
   return db.collection('status').findOne({ [searchOn]: sha })
 }
 
+async function findByRepoName(db, repoName) {
+  return db.collection('status').findOne({ repositoryName: repoName })
+}
+
 async function updatePrStatus(db, repo, field, status, mergedSha) {
   const statusField = `${field}.status`
   const mergedShaField = `${field}.merged_sha`
@@ -38,9 +42,32 @@ async function updateWorkflowStatus(
     )
 }
 
+async function updateStatus(db, repo, field, status) {
+  return await db
+    .collection('status')
+    .updateOne({ repositoryName: repo }, { $set: { [field]: status } })
+}
+
+async function findAllInProgressOrFailed(db) {
+  return await db
+    .collection('status')
+    .find(
+      {
+        'cdp-tf-svc-infra.status': { $in: ['in-progress', 'failure'] }
+      },
+      {
+        projection: { _id: 0, repositoryName: 1 }
+      }
+    )
+    .toArray()
+}
+
 export {
+  findAllInProgressOrFailed,
+  findByRepoName,
   updatePrStatus,
   updateWorkflowStatus,
   findByCommitHash,
-  findByPrNumber
+  findByPrNumber,
+  updateStatus
 }

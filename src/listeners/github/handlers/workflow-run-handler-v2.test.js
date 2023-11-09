@@ -22,6 +22,13 @@ jest.mock('~/src/listeners/github/helpers/create-placeholder-artifact', () => ({
   createPlaceholderArtifact: jest.fn()
 }))
 
+jest.mock(
+  '~/src/listeners/github/helpers/trigger-create-repository-workflow',
+  () => ({
+    triggerCreateRepositoryWorkflow: jest.fn()
+  })
+)
+
 describe('#workflow-run-handler-v2', () => {
   test('Should ignore workflow events that are not tracked', async () => {
     const msg = {

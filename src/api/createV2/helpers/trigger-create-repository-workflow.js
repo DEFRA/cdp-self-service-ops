@@ -10,7 +10,7 @@ function triggerCreateRepositoryWorkflow({
     'POST /repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches',
     {
       owner: config.get('gitHubOrg'),
-      repo: 'cdp-boilerplate',
+      repo: config.get('githubRepoCreateWorkflow'),
       workflow_id: config.get('createServiceWorkflow'),
       ref: 'main',
       inputs: {
