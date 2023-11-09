@@ -46,9 +46,13 @@ const trimWorkflowRun = (workflowRun) => {
 }
 
 const handleTfSvcInfra = async (db, message) => {
-  logger.info(`handling tf-svc-infra workflow message`)
   try {
-    if (message.action === 'completed') {
+    if (
+      message.action === 'completed' &&
+      message.workflow_run?.head_branch === 'main'
+    ) {
+      logger.info(`handling tf-svc-infra workflow completed message from main`)
+
       // Any time cdp-tf-svc-infra completes on main, regardless of which commit triggered it
       // assume all services in management tenant-services.json are successfully created.
       // (we use management as its responsible for the ECR)
