@@ -53,7 +53,7 @@ async function findAllInProgressOrFailed(db) {
     .collection('status')
     .find(
       {
-        'cdp-tf-svc-infra.status': { $in: ['in-progress', 'failure'] }
+        status: { $in: ['in-progress', 'failure'] }
       },
       {
         projection: { _id: 0, repositoryName: 1 }
