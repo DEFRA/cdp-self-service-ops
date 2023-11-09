@@ -12,13 +12,17 @@ import {
   updateCreationStatus,
   updateOverallStatus
 } from '~/src/api/createV2/helpers/save-status'
-import { authStrategy } from '~/src/helpers/auth-stratergy'
 import { trimPr } from '~/src/api/createV2/helpers/trim-pr'
 import { triggerCreateRepositoryWorkflow } from '~/src/api/createV2/helpers/trigger-create-repository-workflow'
 
 const createServiceV2Controller = {
   options: {
-    auth: authStrategy,
+    auth: {
+      strategy: 'azure-oidc',
+      access: {
+        scope: [config.get('azureAdminGroupId')]
+      }
+    },
     validate: {
       payload: createServiceValidationSchema()
     },

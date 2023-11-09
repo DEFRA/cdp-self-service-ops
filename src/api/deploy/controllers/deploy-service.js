@@ -1,12 +1,13 @@
 import { deployServiceValidation } from '~/src/api/deploy/helpers/schema/deploy-service-validation'
-import { authStrategy } from '~/src/helpers/auth-stratergy'
 import { registerDeployment } from '~/src/api/deploy/helpers/register-deployment'
 import { generateDeployMessage } from '~/src/api/deploy/helpers/generate-deploy-message'
 import { sendSnsDeployMessage } from '~/src/api/deploy/helpers/send-sns-deploy-message'
 
 const deployServiceController = {
   options: {
-    auth: authStrategy,
+    auth: {
+      strategy: 'azure-oidc'
+    },
     validate: {
       payload: deployServiceValidation()
     },
