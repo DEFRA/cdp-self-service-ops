@@ -77,6 +77,9 @@ const handleCdpBoilerplate = async (db, message) => {
         message.action,
         message.workflow_run?.conclusion
       )
+      logger.info(
+        `updating createRepository status fro ${repoName} to ${workflowStatus}`
+      )
       await updateStatus(
         db,
         repoName,
