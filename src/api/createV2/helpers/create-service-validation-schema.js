@@ -9,7 +9,7 @@ function createServiceValidationSchema() {
 
   return async (value, options) => {
     const { teams } = await fetchTeams(true)
-    const teamGithubHandles = teams.map((team) => team.github)
+    const teamIds = teams.map((team) => team.teamId)
 
     const validationResult = Joi.object({
       repositoryName: Joi.string()
@@ -35,7 +35,7 @@ function createServiceValidationSchema() {
           'any.only': 'Choose an entry'
         }),
       owningTeam: Joi.string()
-        .valid(...teamGithubHandles)
+        .valid(...teamIds)
         .required()
         .messages({
           'any.only': 'Choose an entry'
