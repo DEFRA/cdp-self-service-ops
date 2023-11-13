@@ -1,4 +1,4 @@
-import { isNull } from 'lodash'
+import { isNil, isNull } from 'lodash'
 import Boom from '@hapi/boom'
 
 import { serviceTemplates } from '~/src/api/createV2/helpers/service-templates'
@@ -20,7 +20,7 @@ const createServiceV2Controller = {
     auth: {
       strategy: 'azure-oidc',
       access: {
-        scope: [config.get('azureAdminGroupId'), '{payload.owningTeam}']
+        scope: [config.get('azureAdminGroupId'), '{payload.teamId}']
       }
     },
     validate: {
@@ -39,18 +39,31 @@ const createServiceV2Controller = {
     const repositoryName = payload?.repositoryName
 
     const zone = serviceTemplates[serviceType]?.zone ?? null
-
     if (isNull(zone)) {
       throw Boom.badData(`Invalid service template: '${serviceType}'`)
+    }
+
+    const { team } = await request.server.methods.fetchTeam(payload.teamId)
+    if (isNil(team.github)) {
+      throw Boom.badData(
+        `Team ${team.name} does not have a link to a Github team`
+      )
     }
 
     request.logger.info(`creating service v2 ${repositoryName}`)
 
     // Setup the initial DB record
-    await initCreationStatus(request.db, org, repositoryName, payload, zone)
+    await initCreationStatus(
+      request.db,
+      org,
+      repositoryName,
+      payload,
+      zone,
+      team
+    )
 
     // create the blank repo
-    await doCreateRepo(request, repositoryName, payload)
+    await doCreateRepo(request, repositoryName, payload, team)
 
     // tf-svc-infra
     await doUpdateTfSvcInfra(request, repositoryName, zone)
@@ -74,18 +87,17 @@ const createServiceV2Controller = {
   }
 }
 
-const doCreateRepo = async (request, repositoryName, payload) => {
+const doCreateRepo = async (request, repositoryName, payload, team) => {
   try {
     const org = config.get('gitHubOrg')
     const repositoryName = payload.repositoryName
-    const owningTeam = payload.owningTeam
     const serviceType = payload?.serviceType
 
-    const repoCreationResult = await triggerCreateRepositoryWorkflow({
+    const repoCreationResult = await triggerCreateRepositoryWorkflow(
       repositoryName,
       serviceType,
-      owningTeam
-    })
+      team.github
+    )
     await updateCreationStatus(request.db, repositoryName, 'createRepository', {
       status: 'in-progress',
       url: `https://github.com/${org}/${repositoryName}`,

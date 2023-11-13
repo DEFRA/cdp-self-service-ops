@@ -1,11 +1,11 @@
 import { octokit } from '~/src/helpers/oktokit'
 import { config } from '~/src/config'
 
-function triggerCreateRepositoryWorkflow({
+function triggerCreateRepositoryWorkflow(
   repositoryName,
   serviceType,
   owningTeam
-}) {
+) {
   return octokit.request(
     'POST /repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches',
     {
