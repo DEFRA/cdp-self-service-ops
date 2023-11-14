@@ -7,13 +7,27 @@ import { createPullRequest } from 'octokit-plugin-create-pull-request'
 
 const OctokitExtra = Octokit.plugin(restEndpointMethods, createPullRequest)
 
-const octokit = new OctokitExtra({
-  authStrategy: createAppAuth,
-  auth: {
-    appId: config.get('gitHubAppId'),
-    privateKey: Buffer.from(config.get('gitHubAppPrivateKey'), 'base64'),
-    installationId: config.get('gitHubAppInstallationId')
+const init = () => {
+  let cfg = {
+    authStrategy: createAppAuth,
+    auth: {
+      appId: config.get('gitHubAppId'),
+      privateKey: Buffer.from(config.get('gitHubAppPrivateKey'), 'base64'),
+      installationId: config.get('gitHubAppInstallationId')
+    }
   }
-})
+
+  // Test Mode, for use with cdp-portal-stubs
+  if (config.get('githubBaseUrl') != null) {
+    cfg = {
+      auth: 'test-value',
+      baseUrl: config.get('githubBaseUrl')
+    }
+  }
+
+  return new OctokitExtra(cfg)
+}
+
+const octokit = init()
 
 export { octokit }

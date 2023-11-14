@@ -199,6 +199,26 @@ const config = convict({
     format: String,
     default: 'create_repo.yml',
     env: 'CREATE_SERVICE_WORKFLOW'
+  },
+  oidcKeysUrl: {
+    doc: 'Url to the oidc JWT keys endpoint',
+    format: String,
+    default:
+      'https://login.microsoftonline.com/6f504113-6b64-43f2-ade9-242e05780007/discovery/v2.0/keys',
+    env: 'OIDC_KEYS_URL'
+  },
+  oicdIssuerBaseUrl: {
+    doc: 'Url to oidc issuer base url',
+    format: String,
+    default:
+      'https://login.microsoftonline.com/6f504113-6b64-43f2-ade9-242e05780007/v2.0',
+    env: 'OIDC_ISSUER_BASE_URL'
+  },
+  githubBaseUrl: {
+    doc: 'Override the github base url for local testing',
+    format: '*',
+    env: 'GITHUB_BASE_URL',
+    default: null
   }
 })
 

@@ -6,15 +6,11 @@ const azureOidc = {
     register: (server) => {
       server.auth.strategy('azure-oidc', 'jwt', {
         keys: {
-          uri: `https://login.microsoftonline.com/${config.get(
-            'azureTenantId'
-          )}/discovery/v2.0/keys`
+          uri: config.get('oidcKeysUrl')
         },
         verify: {
-          aud: `${config.get('azureSSOClientId')}`,
-          iss: `https://login.microsoftonline.com/${config.get(
-            'azureTenantId'
-          )}/v2.0`,
+          aud: config.get('azureSSOClientId'),
+          iss: config.get('oicdIssuerBaseUrl'),
           sub: false,
           nbf: true,
           exp: true,
