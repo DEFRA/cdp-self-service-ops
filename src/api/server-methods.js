@@ -1,19 +1,21 @@
-import qs from 'qs'
 import fetch from 'node-fetch'
 import Boom from '@hapi/boom'
 
 import { config } from '~/src/config'
 
-async function fetchTeams(hasGithub = null) {
-  const queryString = qs.stringify(
-    {
-      ...(hasGithub && { hasGithub })
-    },
-    { addQueryPrefix: true }
-  )
+function registerServerMethods(server) {
+  server.method('fetchTeam', fetchTeam, {
+    cache: {
+      expiresIn: 60 * 1000,
+      staleIn: 30 * 1000,
+      staleTimeout: 10 * 1000,
+      generateTimeout: 100
+    }
+  })
+}
 
-  const teamsEndpointUrl =
-    config.get('userServiceApiUrl') + `/teams${queryString}`
+async function fetchTeam(teamId) {
+  const teamsEndpointUrl = config.get('userServiceApiUrl') + `/teams/${teamId}`
 
   const response = await fetch(teamsEndpointUrl, {
     method: 'get',
@@ -28,4 +30,4 @@ async function fetchTeams(hasGithub = null) {
   throw Boom.boomify(new Error(json.message), { statusCode: response.status })
 }
 
-export { fetchTeams }
+export { registerServerMethods }

@@ -4,7 +4,14 @@ const tfSvcInfra = config.get('githubRepoTfServiceInfra')
 const cdpAppConfig = config.get('githubRepoConfig')
 const cdpNginxUpstream = config.get('githubRepoNginx')
 
-async function initCreationStatus(db, org, repositoryName, payload, zone) {
+async function initCreationStatus(
+  db,
+  org,
+  repositoryName,
+  payload,
+  zone,
+  team
+) {
   const status = {
     org,
     repositoryName,
@@ -12,7 +19,10 @@ async function initCreationStatus(db, org, repositoryName, payload, zone) {
     status: 'in-progress',
     started: new Date(),
     serviceType: payload.serviceType,
-    owningTeam: payload.owningTeam,
+    team: {
+      teamId: team.teamId,
+      name: team.name
+    },
     zone,
     createRepository: {
       status: 'not-requested'

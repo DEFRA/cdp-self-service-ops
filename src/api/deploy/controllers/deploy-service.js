@@ -1,7 +1,11 @@
+import Boom from '@hapi/boom'
+
+import { config } from '~/src/config'
 import { deployServiceValidation } from '~/src/api/deploy/helpers/schema/deploy-service-validation'
 import { registerDeployment } from '~/src/api/deploy/helpers/register-deployment'
 import { generateDeployMessage } from '~/src/api/deploy/helpers/generate-deploy-message'
 import { sendSnsDeployMessage } from '~/src/api/deploy/helpers/send-sns-deploy-message'
+import { getRepoTeams } from '~/src/api/deploy/helpers/get-repo-teams'
 
 const deployServiceController = {
   options: {
@@ -19,13 +23,36 @@ const deployServiceController = {
   },
   handler: async (request, h) => {
     const payload = request.payload
-    payload.user = {
+    const user = {
       id: request.auth?.credentials?.id,
       displayName: request.auth?.credentials?.displayName
     }
+    const scope = request.auth?.credentials?.scope
 
-    await registerDeployment(payload)
-    const deployMessage = await generateDeployMessage(payload)
+    const isAdmin = scope.includes(config.get('azureAdminGroupId'))
+    if (!isAdmin) {
+      const repoTeams = await getRepoTeams(payload.imageName)
+      const isTeamMember = repoTeams.some((team) => scope.includes(team.teamId))
+      if (!isTeamMember) {
+        throw Boom.forbidden('Insufficient scope')
+      }
+    }
+
+    await registerDeployment(
+      payload.imageName,
+      payload.version,
+      payload.environment,
+      user
+    )
+    const deployMessage = await generateDeployMessage(
+      payload.imageName,
+      payload.version,
+      payload.environment,
+      payload.instanceCount,
+      payload.cpu,
+      payload.memory,
+      user
+    )
     const snsResponse = await sendSnsDeployMessage(
       request.snsClient,
       deployMessage

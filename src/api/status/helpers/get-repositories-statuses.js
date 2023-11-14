@@ -1,15 +1,15 @@
 /**
  * Get create service status
  * @param db
- * @param statues ['in-progress', 'success', 'failure']
+ * @param statuses ['in-progress', 'success', 'failure']
  * @returns {Promise<*>}
  */
-async function getRepositoriesStatuses(db, statues) {
+async function getRepositoriesStatuses(db, statuses) {
   const stages = []
 
-  if (statues?.length) {
+  if (statuses?.length) {
     stages.push({
-      $match: { status: { $in: statues } }
+      $match: { status: { $in: statuses } }
     })
   }
 

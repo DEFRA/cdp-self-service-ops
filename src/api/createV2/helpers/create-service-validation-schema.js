@@ -2,15 +2,11 @@ import Joi from 'joi'
 import Boom from '@hapi/boom'
 
 import { serviceTemplates } from '~/src/api/createV2/helpers/service-templates'
-import { fetchTeams } from '~/src/api/createV2/helpers/fetch-teams'
 
 function createServiceValidationSchema() {
   const serviceTypes = Object.keys(serviceTemplates)
 
   return async (value, options) => {
-    const { teams } = await fetchTeams(true)
-    const teamGithubHandles = teams.map((team) => team.github)
-
     const validationResult = Joi.object({
       repositoryName: Joi.string()
         .pattern(/^[\w-]*$/)
@@ -34,12 +30,7 @@ function createServiceValidationSchema() {
         .messages({
           'any.only': 'Choose an entry'
         }),
-      owningTeam: Joi.string()
-        .valid(...teamGithubHandles)
-        .required()
-        .messages({
-          'any.only': 'Choose an entry'
-        })
+      teamId: Joi.string().required()
     }).validate(value, options)
 
     if (validationResult?.error) {
