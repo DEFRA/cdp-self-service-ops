@@ -4,7 +4,7 @@ const githubEventsPlugin = {
   name: 'githubEventsPlugin',
   version: '1.0.0',
   register: async function (server) {
-    listen(server)
+    await listen(server)
   }
 }
 

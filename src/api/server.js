@@ -10,6 +10,7 @@ import { azureOidc } from '~/src/helpers/azure-oidc'
 import { mongoPlugin } from '~/src/helpers/mongodb'
 import { githubEventsPlugin } from '~/src/listeners/github/github-events-plugin'
 import { snsClientPlugin } from '~/src/helpers/sns-client'
+import { registerServerMethods } from '~/src/api/server-methods'
 
 async function createServer() {
   const server = hapi.server({
@@ -45,6 +46,8 @@ async function createServer() {
   await server.register(router, {
     routes: { prefix: `${config.get('appPathPrefix')}` }
   })
+
+  registerServerMethods(server)
 
   return server
 }
