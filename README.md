@@ -165,22 +165,6 @@ Then:
 
 ## Docker
 
-### Development image
-
-Build:
-
-```bash
-$ docker build --target development --no-cache --tag cdp-self-service-ops:development .
-```
-
-Run:
-
-```bash
-$ docker run -p 3000:3000 cdp-self-service-ops:development
-```
-
-### Production image
-
 Build:
 
 ```bash
@@ -190,7 +174,7 @@ docker build --no-cache --tag cdp-self-service-ops .
 Run:
 
 ```bash
-$ docker run -p 3000:3000 cdp-self-service-ops
+$ docker run -p 3009:3009 cdp-self-service-ops
 ```
 
 ## Licence
