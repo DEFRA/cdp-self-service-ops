@@ -7,31 +7,17 @@ and waiting for the workflow triggered by the commit to main to complete before 
 # Order of execution
 
 - Validate create-a-service request
+- triggers create repository worklflow in cdp-boilerplate
+  - workflow will trigger the templating action on the newly created repository
 - Raise PR against `tf-svc-infra` which:
   - adds repo to github oidc list, allowing the repos build action to work
   - adds repo the tenants.json for each environment, creating role, ECR repo, mongo/redis dbs etc
 - Enables auto-merge on `tf-svc-infra`
-- Raises (but does not auto-merge) pr for `cdp-app-config`
-- Raises (but does not auto-merge) pr for `cdp-nginx-upstreams`
+- Raises/auto-merges pr for `cdp-app-config`
+- Raises/auto-merges pr for `cdp-nginx-upstreams`
 - Waits for message from github saying the PR for `tf-svc-infra` has been merged (recording the head commit SHA)
 - Waits for message from github saying the workflow for `tf-svc-infra` has run on main and completed (using the commit SHA from above to identify it)
-- Raises pr for `tf-svc`
-- Triggers auto-merge on:
-  - `cdp-app-config`
-  - `tf-svc`
-  - `cdp-nginx-upstream`
-- Triggers creation of the github repo and commits the template via `cdp-boilerplate` workflow
-- Newly created and templated repo triggers the first build
-- ECR event is sent to portal backend recording the presence of a new service
-
-## Why we need the ordering
-
-The ECR repo must exist before the new repo has its template applied, so the first build is able to publish
-
-The tf-svc pull request creates the service definition, but requires a role created in the `tf-svc-infra` stage.
-
-`cdp-app-config` and `cdp-nginx-upstream` Arent required for the initial creation, but are required for the first deployment.
-Also if the `tf-svc-infra` stage fails, there's no reason to commit these since they'd only have to be cleaned up etc.
+- Creates a 0.0.0 placeholder artifact in cdp-portal-backend
 
 ## How we track things
 
@@ -49,16 +35,6 @@ When a new repo is created, a record is inserted into the collection which has t
         repositoryName: 'ct-sso-test-2',
         serviceType: 'cdp-node-backend-template',
         owningTeam: 'fisheries'
-      }
-    },
-    'tf-svc': {
-      status: 'raised',
-      pr: {
-        number: 540,
-        sha: 'fb1cb158d305cca536352f9b8a5732eab51d50e9',
-        ref: 'deploy-ct-sso-test-2-0.1.0-1695303447036',
-        html_url: 'https://github.com/DEFRA/tf-svc/pull/540',
-        node_id: 'PR_kwDOI7fMPc5a5CD7'
       }
     },
     'tf-svc-infra': {
