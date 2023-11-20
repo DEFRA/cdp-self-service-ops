@@ -152,17 +152,23 @@ const config = convict({
     default: 'eu-west-2',
     env: 'AWS_REGION'
   },
-  awsEndpoint: {
-    doc: 'AWS endpoint',
+  snsEndpoint: {
+    doc: 'AWS SNS endpoint',
     format: String,
     default: 'http://127.0.0.1:4566',
-    env: 'AWS_ENDPOINT'
+    env: 'SNS_ENDPOINT'
   },
   snsDeployTopicArn: {
     doc: 'SNS Deploy Topic ARN',
     format: String,
     default: 'arn:aws:sns:eu-west-2:000000000000:local-deploy.fifo',
     env: 'SNS_DEPLOY_TOPIC_ARN'
+  },
+  sqsEndpoint: {
+    doc: 'AWS SQS endpoint',
+    format: String,
+    default: 'http://127.0.0.1:4566',
+    env: 'SQS_ENDPOINT'
   },
   sqsGithubQueue: {
     doc: 'URL of sqs queue providing github events',
