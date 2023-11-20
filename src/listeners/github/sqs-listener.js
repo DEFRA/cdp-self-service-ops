@@ -8,7 +8,7 @@ import { handle } from '~/src/listeners/github/message-handler'
 
 const sqsClient = new SQSClient({
   region: config.get('awsRegion'),
-  endpoint: config.get('sqsEndpoint')
+  endpoint: config.get('awsEndpoint')
 })
 
 const queueUrl = config.get('sqsGithubQueue')
