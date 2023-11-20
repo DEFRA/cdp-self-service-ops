@@ -10,7 +10,7 @@ const snsClientPlugin = {
 
     const snsClient = new SNSClient({
       region: config.get('awsRegion'),
-      endpoint: config.get('awsEndpoint')
+      endpoint: config.get('snsEndpoint')
     })
 
     server.logger.info('sns-client configured')
