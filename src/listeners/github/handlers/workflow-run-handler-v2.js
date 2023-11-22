@@ -109,31 +109,33 @@ const handleGenericWorkflow = async (db, message) => {
     const headSHA = message.workflow_run?.head_sha
 
     const status = await findByCommitHash(db, workflowRepo, headSHA)
-    const serviceRepo = status.repositoryName
+    const serviceRepo = status?.repositoryName
 
-    // Record what happened
-    const workflowStatus = normalizeStatus(
-      message.action,
-      message.workflow_run?.conclusion
-    )
-    logger.info(
-      `updating status for creation job ${serviceRepo} ${workflowRepo}:${workflowStatus}`
-    )
+    if (serviceRepo) {
+      // Record what happened
+      const workflowStatus = normalizeStatus(
+        message.action,
+        message.workflow_run?.conclusion
+      )
+      logger.info(
+        `updating status for creation job ${serviceRepo} ${workflowRepo}:${workflowStatus}`
+      )
 
-    let branch = 'pr'
-    if (headBranch === 'main') {
-      branch = 'main'
+      let branch = 'pr'
+      if (headBranch === 'main') {
+        branch = 'main'
+      }
+      await updateWorkflowStatus(
+        db,
+        serviceRepo,
+        workflowRepo,
+        branch,
+        workflowStatus,
+        trimWorkflowRun(message.workflow_run)
+      )
+
+      await updateOverallStatus(db, serviceRepo)
     }
-    await updateWorkflowStatus(
-      db,
-      serviceRepo,
-      workflowRepo,
-      branch,
-      workflowStatus,
-      trimWorkflowRun(message.workflow_run)
-    )
-
-    await updateOverallStatus(db, serviceRepo)
   } catch (e) {
     logger.error(e)
   }
