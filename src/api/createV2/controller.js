@@ -20,7 +20,7 @@ const createServiceV2Controller = {
     auth: {
       strategy: 'azure-oidc',
       access: {
-        scope: [config.get('azureAdminGroupId'), '{payload.teamId}']
+        scope: [config.get('oidcAdminGroupId'), '{payload.teamId}']
       }
     },
     validate: {

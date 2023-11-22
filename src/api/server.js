@@ -1,6 +1,5 @@
 import path from 'path'
 import hapi from '@hapi/hapi'
-import jwt from '@hapi/jwt'
 
 import { config } from '~/src/config'
 import { router } from '~/src/api/router'
@@ -32,8 +31,6 @@ async function createServer() {
   })
 
   await server.register(requestLogger)
-
-  await server.register(jwt)
 
   await server.register(azureOidc)
 

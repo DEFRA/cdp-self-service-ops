@@ -37,22 +37,23 @@ const config = convict({
     default: '/cdp-self-service-ops',
     env: 'APP_PATH_PREFIX'
   },
-  azureTenantId: {
-    doc: 'Azure Active Directory Tenant ID',
+  oidcWellKnownConfigurationUrl: {
+    doc: 'OIDC .well-known configuration URL',
     format: String,
-    env: 'AZURE_TENANT_ID',
-    default: '6f504113-6b64-43f2-ade9-242e05780007'
+    env: 'OIDC_WELL_KNOWN_CONFIGURATION_URL',
+    default:
+      'https://login.microsoftonline.com/6f504113-6b64-43f2-ade9-242e05780007/v2.0/.well-known/openid-configuration'
   },
-  azureSSOClientId: {
-    doc: 'Azure App SSO Client ID',
+  oidcAudience: {
+    doc: 'OIDC Audience for verification',
     format: String,
-    env: 'AZURE_SSO_CLIENT_ID',
+    env: 'OIDC_AUDIENCE',
     default: '63983fc2-cfff-45bb-8ec2-959e21062b9a'
   },
-  azureAdminGroupId: {
-    doc: 'Azure Active Directory Admin Group',
+  oidcAdminGroupId: {
+    doc: 'OIDC Admin Group ID',
     format: String,
-    env: 'AZURE_ADMIN_GROUP_ID',
+    env: 'OIDC_ADMIN_GROUP_ID',
     default: 'aabe63e7-87ef-4beb-a596-c810631fc474'
   },
   gitHubAppId: {
@@ -199,20 +200,6 @@ const config = convict({
     format: String,
     default: 'create_repo.yml',
     env: 'CREATE_SERVICE_WORKFLOW'
-  },
-  oidcKeysUrl: {
-    doc: 'Url to the oidc JWT keys endpoint',
-    format: String,
-    default:
-      'https://login.microsoftonline.com/6f504113-6b64-43f2-ade9-242e05780007/discovery/v2.0/keys',
-    env: 'OIDC_KEYS_URL'
-  },
-  oicdIssuerBaseUrl: {
-    doc: 'Url to oidc issuer base url',
-    format: String,
-    default:
-      'https://login.microsoftonline.com/6f504113-6b64-43f2-ade9-242e05780007/v2.0',
-    env: 'OIDC_ISSUER_BASE_URL'
   },
   githubBaseUrl: {
     doc: 'Override the github base url for local testing',
