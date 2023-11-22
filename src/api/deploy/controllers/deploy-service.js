@@ -29,7 +29,7 @@ const deployServiceController = {
     }
     const scope = request.auth?.credentials?.scope
 
-    const isAdmin = scope.includes(config.get('azureAdminGroupId'))
+    const isAdmin = scope.includes(config.get('oidcAdminGroupId'))
     if (!isAdmin) {
       const repoTeams = await getRepoTeams(payload.imageName)
       const isTeamMember = repoTeams.some((team) => scope.includes(team.teamId))
