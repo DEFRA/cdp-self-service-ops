@@ -1,50 +1,49 @@
-import {
-  DeleteMessageCommand,
-  ReceiveMessageCommand,
-  SQSClient
-} from '@aws-sdk/client-sqs'
+import { Consumer } from 'sqs-consumer'
+import { SQSClient } from '@aws-sdk/client-sqs'
+
 import { config } from '~/src/config'
 import { handle } from '~/src/listeners/github/message-handler'
 
-const sqsClient = new SQSClient({
-  region: config.get('awsRegion'),
-  endpoint: config.get('sqsEndpoint')
-})
+function sqsListener(server) {
+  const queueUrl = config.get('sqsGithubQueue')
 
-const queueUrl = config.get('sqsGithubQueue')
-
-const listen = async (server) => {
   server.logger.info(`Listening for github webhook events on ${queueUrl}`)
 
-  while (config.get('sqsGithubEnabled')) {
-    const params = {
-      AttributeNames: ['SentTimestamp'],
-      MaxNumberOfMessages: 1,
-      MessageAttributeNames: ['All'],
-      QueueUrl: queueUrl,
-      VisibilityTimeout: 400,
-      WaitTimeSeconds: 10
-    }
+  const sqs = new SQSClient({
+    region: config.get('awsRegion'),
+    endpoint: config.get('sqsEndpoint')
+  })
 
-    const { Messages } = await sqsClient.send(new ReceiveMessageCommand(params))
+  const listener = Consumer.create({
+    queueUrl,
+    attributeNames: ['SentTimestamp'],
+    messageAttributeNames: ['All'],
+    waitTimeSeconds: 10,
+    visibilityTimeout: 400,
+    handleMessage: async (message) => {
+      const payload = JSON.parse(message.Body)
+      await handle(server, payload)
 
-    for (const i in Messages) {
-      const msg = Messages[i]
+      return message
+    },
+    sqs
+  })
 
-      try {
-        const payload = JSON.parse(msg.Body)
-        await handle(server, payload)
-      } catch (ex) {
-        server.logger.error(ex)
-      } finally {
-        const deleteParams = {
-          QueueUrl: queueUrl,
-          ReceiptHandle: msg.ReceiptHandle
-        }
-        await sqsClient.send(new DeleteMessageCommand(deleteParams))
-      }
-    }
-  }
+  listener.on('error', (error) => {
+    server.logger.error(error.message)
+  })
+
+  listener.on('processing_error', (error) => {
+    server.logger.error(error.message)
+  })
+
+  listener.on('timeout_error', (error) => {
+    server.logger.error(error.message)
+  })
+
+  listener.start()
+
+  return listener
 }
 
-export { listen }
+export { sqsListener }

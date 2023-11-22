@@ -39,7 +39,9 @@ async function createServer() {
 
   await server.register({ plugin: mongoPlugin, options: {} })
 
-  await server.register({ plugin: githubEventsPlugin, options: {} })
+  if (config.get('sqsGithubEnabled')) {
+    await server.register(githubEventsPlugin)
+  }
 
   await server.register({ plugin: snsClientPlugin, options: {} })
 
