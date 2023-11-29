@@ -1,6 +1,12 @@
 import { config } from '~/src/config'
 
-async function registerDeployment(imageName, version, environment, user) {
+async function registerDeployment(
+  imageName,
+  version,
+  environment,
+  instanceCount,
+  user
+) {
   const url = `${config.get('portalBackendApiUrl')}/deployments`
   await fetch(url, {
     method: 'post',
@@ -9,6 +15,7 @@ async function registerDeployment(imageName, version, environment, user) {
       service: imageName,
       version,
       environment,
+      instanceCount,
       user
     })
   })
