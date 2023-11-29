@@ -36,14 +36,16 @@ const deployServiceController = {
       if (!isTeamMember) {
         throw Boom.forbidden('Insufficient scope')
       }
-      await registerDeployment(
-        payload.imageName,
-        payload.version,
-        payload.environment,
-        payload.instanceCount,
-        user
-      )
     }
+
+    await registerDeployment(
+      payload.imageName,
+      payload.version,
+      payload.environment,
+      payload.instanceCount,
+      user
+    )
+
     const deployMessage = await generateDeployMessage(
       payload.imageName,
       payload.version,
