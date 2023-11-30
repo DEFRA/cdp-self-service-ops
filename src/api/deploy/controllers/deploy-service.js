@@ -42,8 +42,10 @@ const deployServiceController = {
       payload.imageName,
       payload.version,
       payload.environment,
+      payload.instanceCount,
       user
     )
+
     const deployMessage = await generateDeployMessage(
       payload.imageName,
       payload.version,
