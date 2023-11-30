@@ -29,6 +29,9 @@ const mongoPlugin = {
 }
 
 const createIndexes = async (db) => {
+  await db
+    .collection('status')
+    .createIndex({ repositoryName: 1 }, { unique: true })
   await db.collection('status').createIndex({ repositoryName: 1, status: 1 })
 }
 

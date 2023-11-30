@@ -53,15 +53,21 @@ const createServiceV2Controller = {
     request.logger.info(`creating service v2 ${repositoryName}`)
 
     // Setup the initial DB record
-    await initCreationStatus(
-      request.db,
-      org,
-      repositoryName,
-      payload,
-      zone,
-      team
-    )
-
+    try {
+      await initCreationStatus(
+        request.db,
+        org,
+        repositoryName,
+        payload,
+        zone,
+        team
+      )
+    } catch (e) {
+      request.logger.error(e)
+      throw Boom.badData(
+        `repository ${repositoryName} has already been requested or is in progress`
+      )
+    }
     // create the blank repo
     await doCreateRepo(request, repositoryName, payload, team)
 

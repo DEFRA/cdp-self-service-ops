@@ -46,6 +46,13 @@ function addRepoName({
     throw new Error('File failed schema validation')
   }
 
+  if (parsedRepositories[0][repositoryName] !== undefined) {
+    logger.error(
+      `Tenant Services file '${filePath}' from '${fileRepository} already contains an entry for ${repositoryName}`
+    )
+    throw new Error('Repository already exists')
+  }
+
   parsedRepositories[0][repositoryName] = {
     zone,
     mongo: zone === 'protected',
