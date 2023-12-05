@@ -1,3 +1,4 @@
+import { statuses } from '~/src/constants/statuses'
 import { workflowRunHandlerV2 } from '~/src/listeners/github/handlers/workflow-run-handler-v2'
 
 jest.mock('~/src/api/createV2/helpers/save-status', () => ({
@@ -46,11 +47,11 @@ describe('#workflow-run-handler-v2', () => {
     const mockStatusRecord = {
       repositoryName: 'test-repo',
       zone: 'protected',
-      status: 'in-progress',
-      createRepository: { status: 'not-requested' },
-      'cdp-app-config': { status: 'success' },
-      'tf-svc-infra': { status: 'not-requested' },
-      'cdp-nginx-upstreams': { status: 'not-requested' }
+      status: statuses.inProgress,
+      createRepository: { status: statuses.notRequested },
+      'cdp-app-config': { status: statuses.success },
+      'tf-svc-infra': { status: statuses.notRequested },
+      'cdp-nginx-upstreams': { status: statuses.notRequested }
     }
     const findOne = jest.fn().mockReturnValue(mockStatusRecord)
     const updateOne = jest.fn().mockReturnValue({})
@@ -73,7 +74,7 @@ describe('#workflow-run-handler-v2', () => {
         path: '/test',
         head_branch: 'main',
         head_sha: '6d96270004515a0486bb7f76196a72b40c55a47f',
-        conclusion: 'failure'
+        conclusion: statuses.failure
       },
       repository: {
         name: 'tf-svc-infra',
@@ -101,7 +102,7 @@ describe('#workflow-run-handler-v2', () => {
             path: '/test'
           },
 
-          'tf-svc-infra.status': 'failure'
+          'tf-svc-infra.status': statuses.failure
         }
       }
     )
@@ -111,11 +112,11 @@ describe('#workflow-run-handler-v2', () => {
     const mockStatusRecord = {
       repositoryName: 'test-repo',
       zone: 'protected',
-      status: 'in-progress',
-      createRepository: { status: 'success' },
-      'cdp-app-config': { status: 'success' },
-      'tf-svc-infra': { status: 'in-progress' },
-      'cdp-nginx-upstreams': { status: 'in-progress' }
+      status: statuses.inProgress,
+      createRepository: { status: statuses.success },
+      'cdp-app-config': { status: statuses.success },
+      'tf-svc-infra': { status: statuses.inProgress },
+      'cdp-nginx-upstreams': { status: statuses.inProgress }
     }
     const findOne = jest.fn().mockReturnValue(mockStatusRecord)
     const updateOne = jest.fn().mockReturnValue({})
@@ -128,7 +129,7 @@ describe('#workflow-run-handler-v2', () => {
 
     const msg = {
       github_event: 'workflow_run',
-      action: 'in-progress',
+      action: statuses.inProgress,
       workflow_run: {
         id: 999,
         name: 'wf-name',
@@ -138,7 +139,7 @@ describe('#workflow-run-handler-v2', () => {
         path: '/test',
         head_branch: 'main',
         head_sha: '6d96270004515a0486bb7f76196a72b40c55a47f',
-        conclusion: 'failure'
+        conclusion: statuses.failure
       },
       repository: {
         name: 'tf-svc-infra',

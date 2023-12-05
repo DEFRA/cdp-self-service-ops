@@ -7,8 +7,8 @@ const create = {
       server.route([
         {
           method: 'POST',
-          path: '/create-service',
-          ...createServiceV2Controller
+          path: '/create-microservice',
+          ...createServiceV2Controller // TODO update/align name of this controller
         }
       ])
     }

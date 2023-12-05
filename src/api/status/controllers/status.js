@@ -3,7 +3,7 @@ import Boom from '@hapi/boom'
 
 import { getRepositoryStatus } from '~/src/api/status/helpers/get-repository-status'
 
-const createServiceStatusController = {
+const statusController = {
   options: {
     validate: {
       params: Joi.object({
@@ -19,11 +19,11 @@ const createServiceStatusController = {
     )
 
     if (!repositoryStatus) {
-      return Boom.notFound(`Service ${repositoryName} not found`)
+      return Boom.notFound(`Status for: ${repositoryName} not found`)
     }
 
     return h.response({ message: 'success', status: repositoryStatus })
   }
 }
 
-export { createServiceStatusController }
+export { statusController }

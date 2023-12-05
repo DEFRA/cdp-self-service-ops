@@ -108,11 +108,11 @@ const config = convict({
     default: 'cdp-nginx-upstreams',
     env: 'GITHUB_REPO_NGINX'
   },
-  githubRepoCreateWorkflow: {
-    doc: 'github repo containing the create-repo workflow',
+  githubRepoCreateWorkflows: {
+    doc: 'Github repository containing the create workflows',
     format: String,
-    default: 'cdp-boilerplate',
-    env: 'GITHUB_CREATE_WORKFLOW'
+    default: 'cdp-create-workflows',
+    env: 'GITHUB_REPO_CREATE_WORKFLOWS'
   },
   isProduction: {
     doc: 'If this application running in the production environment',
@@ -195,11 +195,17 @@ const config = convict({
     default: 'http://localhost:5094/cdp-portal-backend',
     env: 'PORTAL_BACKEND_API_URL'
   },
-  createServiceWorkflow: {
-    doc: 'Name of workflow to trigger when creating a service',
+  createMicroServiceWorkflow: {
+    doc: 'Name of workflow to trigger when creating a microservice',
     format: String,
-    default: 'create_repo.yml',
-    env: 'CREATE_SERVICE_WORKFLOW'
+    default: 'create_microservice.yml',
+    env: 'CREATE_MICROSERVICE_WORKFLOW'
+  },
+  createRepositoryWorkflow: {
+    doc: 'Name of workflow to trigger when creating a repository',
+    format: String,
+    default: 'create_repository.yml',
+    env: 'CREATE_REPOSITORY_WORKFLOW'
   },
   githubBaseUrl: {
     doc: 'Override the github base url for local testing',

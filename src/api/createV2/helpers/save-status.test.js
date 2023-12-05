@@ -1,36 +1,37 @@
 import { calculateOverallStatus } from '~/src/api/createV2/helpers/save-status'
+import { statuses } from '~/src/constants/statuses'
 
 describe('#calculateOverallStatus', () => {
   test('success status', () => {
     const result = calculateOverallStatus({
-      createRepository: { status: 'success' },
-      'cdp-tf-svc-infra': { status: 'success' },
-      'cdp-app-config': { status: 'success' },
-      'cdp-nginx-upstreams': { status: 'success' }
+      createRepository: { status: statuses.success },
+      'cdp-tf-svc-infra': { status: statuses.success },
+      'cdp-app-config': { status: statuses.success },
+      'cdp-nginx-upstreams': { status: statuses.success }
     })
 
-    expect(result).toBe('success')
+    expect(result).toBe(statuses.success)
   })
 
   test('failure status', () => {
     const result = calculateOverallStatus({
-      createRepository: { status: 'success' },
-      'cdp-tf-svc-infra': { status: 'success' },
-      'cdp-app-config': { status: 'failure' },
-      'cdp-nginx-upstreams': { status: 'success' }
+      createRepository: { status: statuses.success },
+      'cdp-tf-svc-infra': { status: statuses.success },
+      'cdp-app-config': { status: statuses.failure },
+      'cdp-nginx-upstreams': { status: statuses.success }
     })
 
-    expect(result).toBe('failure')
+    expect(result).toBe(statuses.failure)
   })
 
-  test('inprogress', () => {
+  test('Should provide status as "In Progress"', () => {
     const result = calculateOverallStatus({
-      createRepository: { status: 'success' },
-      'cdp-tf-svc-infra': { status: 'success' },
+      createRepository: { status: statuses.success },
+      'cdp-tf-svc-infra': { status: statuses.success },
       'cdp-app-config': { status: 'some-weird-setting' },
-      'cdp-nginx-upstreams': { status: 'in-progress' }
+      'cdp-nginx-upstreams': { status: statuses.inProgress }
     })
 
-    expect(result).toBe('in-progress')
+    expect(result).toBe(statuses.inProgress)
   })
 })

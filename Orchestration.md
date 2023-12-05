@@ -7,7 +7,7 @@ and waiting for the workflow triggered by the commit to main to complete before 
 # Order of execution
 
 - Validate create-a-service request
-- triggers create repository worklflow in cdp-boilerplate
+- triggers create repository workflow in cdp-create-workflows
   - workflow will trigger the templating action on the newly created repository
 - Raise PR against `tf-svc-infra` which:
   - adds repo to github oidc list, allowing the repos build action to work
@@ -16,13 +16,15 @@ and waiting for the workflow triggered by the commit to main to complete before 
 - Raises/auto-merges pr for `cdp-app-config`
 - Raises/auto-merges pr for `cdp-nginx-upstreams`
 - Waits for message from github saying the PR for `tf-svc-infra` has been merged (recording the head commit SHA)
-- Waits for message from github saying the workflow for `tf-svc-infra` has run on main and completed (using the commit SHA from above to identify it)
+- Waits for message from github saying the workflow for `tf-svc-infra` has run on main and completed (using the commit
+  SHA from above to identify it)
 - Creates a 0.0.0 placeholder artifact in cdp-portal-backend
 
 ## How we track things
 
 Internally we have a mongo collection called `status`.
-When a new repo is created, a record is inserted into the collection which has the repo name, and info on the pull requests raised (i.e. pr id, commit sha etc)
+When a new repo is created, a record is inserted into the collection which has the repo name, and info on the pull
+requests raised (i.e. pr id, commit sha etc)
 
 ```bson
   {
@@ -70,8 +72,10 @@ When a new repo is created, a record is inserted into the collection which has t
 
 ```
 
-We record the original commit id (the `sha` field in the `pr` section) to tie the actions back to the original pull request.
+We record the original commit id (the `sha` field in the `pr` section) to tie the actions back to the original pull
+request.
 However, when merging into main the head SHA gets changed, so we need to watch for the pull request merged event for the
 original PR id and record the new sha as `merged_sha`.
-This allows us to tie the workflow run (which runs off main, not the branch the PR was raised on) back to the original pull request
+This allows us to tie the workflow run (which runs off main, not the branch the PR was raised on) back to the original
+pull request
 and the new service that triggered it.

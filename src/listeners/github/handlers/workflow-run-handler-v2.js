@@ -1,7 +1,6 @@
 import {
   findByCommitHash,
   findByRepoName,
-  updateStatus,
   updateWorkflowStatus
 } from '~/src/listeners/github/status-repo'
 import { createLogger } from '~/src/helpers/logging/logger'
@@ -9,6 +8,7 @@ import { updateOverallStatus } from '~/src/api/createV2/helpers/save-status'
 import { config } from '~/src/config'
 import { bulkUpdateTfSvcInfra } from '~/src/listeners/github/helpers/bulk-update-tf-svc-infra'
 import { normalizeStatus } from '~/src/listeners/github/helpers/normalize-status'
+import { updateRepositoryStatus } from '~/src/api/create-repository/helpers/status/update-repository-status'
 
 const logger = createLogger()
 
@@ -25,8 +25,8 @@ const workflowRunHandlerV2 = async (db, message) => {
     case config.get('githubRepoTfServiceInfra'):
       await handleTfSvcInfra(db, message)
       break
-    case config.get('githubRepoCreateWorkflow'):
-      await handleCdpBoilerplate(db, message)
+    case config.get('githubRepoCreateWorkflows'):
+      await handleCdpCreateWorkflows(db, message)
       break
     default:
       await handleGenericWorkflow(db, message)
@@ -55,7 +55,7 @@ const handleTfSvcInfra = async (db, message) => {
 
       // Any time cdp-tf-svc-infra completes on main, regardless of which commit triggered it
       // assume all services in management tenant-services.json are successfully created.
-      // (we use management as its responsible for the ECR)
+      // (we use management as it is responsible for the ECR)
       const status = normalizeStatus(
         message.action,
         message.workflow_run?.conclusion
@@ -76,11 +76,14 @@ const handleTfSvcInfra = async (db, message) => {
   }
 }
 
-const handleCdpBoilerplate = async (db, message) => {
-  logger.info(`handling cdp-boilerplate message`)
+const handleCdpCreateWorkflows = async (db, message) => {
+  logger.info(`handling cdp-create-workflows message`)
+
   try {
     const repoName = message.workflow_run?.name // we repurpose the name to track name of repo its creating
+    const updateStatus = updateRepositoryStatus(db, repoName)
     const status = findByRepoName(db, repoName)
+
     if (status !== null) {
       const workflowStatus = normalizeStatus(
         message.action,
@@ -89,13 +92,11 @@ const handleCdpBoilerplate = async (db, message) => {
       logger.info(
         `updating createRepository status fro ${repoName} to ${workflowStatus}`
       )
-      await updateStatus(
-        db,
-        repoName,
-        'createRepository.status',
-        workflowStatus
-      )
-      await updateOverallStatus(db, repoName)
+
+      await updateStatus({
+        status: workflowStatus,
+        'createRepository.status': workflowStatus
+      })
     }
   } catch (e) {
     logger.error(e)

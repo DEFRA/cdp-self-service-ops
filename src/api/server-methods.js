@@ -14,6 +14,17 @@ function registerServerMethods(server) {
   })
 }
 
+/**
+ *
+ * @param teamId
+ *
+ * @typedef {Object} Team
+ * @property {string} Team.name
+ * @property {string} Team.teamId
+ * @property {string} [Team.github]
+ *
+ * @returns {Promise<Team|Error>}
+ */
 async function fetchTeam(teamId) {
   const teamsEndpointUrl = config.get('userServiceApiUrl') + `/teams/${teamId}`
 

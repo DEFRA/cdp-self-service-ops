@@ -1,4 +1,6 @@
 import { config } from '~/src/config'
+import { statuses } from '~/src/constants/statuses'
+import { creations } from '~/src/constants/creations'
 
 const tfSvcInfra = config.get('githubRepoTfServiceInfra')
 const cdpAppConfig = config.get('githubRepoConfig')
@@ -16,31 +18,33 @@ async function initCreationStatus(
     org,
     repositoryName,
     portalVersion: 2,
-    status: 'in-progress',
+    kind: creations.microservice,
+    status: statuses.inProgress,
     started: new Date(),
-    serviceType: payload.serviceType,
+    serviceTypeTemplate: payload.serviceTypeTemplate,
     team: {
       teamId: team.teamId,
       name: team.name
     },
     zone,
     createRepository: {
-      status: 'not-requested'
+      status: statuses.notRequested
     },
     [tfSvcInfra]: {
-      status: 'not-requested'
+      status: statuses.notRequested
     },
     [cdpAppConfig]: {
-      status: 'not-requested'
+      status: statuses.notRequested
     },
     [cdpNginxUpstream]: {
-      status: 'not-requested'
+      status: statuses.notRequested
     }
   }
   await db.collection('status').insertOne(status)
   return status
 }
 
+// TODO use new update-repository-status work
 async function updateCreationStatus(db, repo, field, status) {
   return await db
     .collection('status')
@@ -55,28 +59,29 @@ function calculateOverallStatus(status) {
 
   // return success if ALL sections are successful
   if (
-    repoStatus === 'success' &&
-    tfSvcInfraStatus === 'success' &&
-    appConfigStatus === 'success' &&
-    nginxStatus === 'success'
+    repoStatus === statuses.success &&
+    tfSvcInfraStatus === statuses.success &&
+    appConfigStatus === statuses.success &&
+    nginxStatus === statuses.success
   ) {
-    return 'success'
+    return statuses.success
   }
 
   // return failure if ANY sections have failed
   if (
-    repoStatus === 'failure' ||
-    tfSvcInfraStatus === 'failure' ||
-    appConfigStatus === 'failure' ||
-    nginxStatus === 'failure'
+    repoStatus === statuses.failure ||
+    tfSvcInfraStatus === statuses.failure ||
+    appConfigStatus === statuses.failure ||
+    nginxStatus === statuses.failure
   ) {
-    return 'failure'
+    return statuses.failure
   }
 
   // otherwise its probably in progress
-  return 'in-progress'
+  return statuses.inProgress
 }
 
+// TODO use new update-repository-status work
 async function updateOverallStatus(db, repo) {
   const statusRecord = await db
     .collection('status')
