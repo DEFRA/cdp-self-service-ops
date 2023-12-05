@@ -1,5 +1,5 @@
-import { isNil, isNull } from 'lodash'
 import Boom from '@hapi/boom'
+import { isNil, isNull } from 'lodash'
 
 import { serviceTemplates } from '~/src/api/createV2/helpers/service-templates'
 import { createServiceInfrastructureCode } from '~/src/api/createV2/helpers/create-service-infrastructure-code'
@@ -7,13 +7,14 @@ import { createServiceValidationSchema } from '~/src/api/createV2/helpers/create
 import { createServiceConfig } from '~/src/api/createV2/helpers/create-service-config'
 import { createNginxConfig } from '~/src/api/createV2/helpers/create-nginx-config'
 import { config, environments } from '~/src/config'
+import { trimPr } from '~/src/api/createV2/helpers/trim-pr'
+import { triggerWorkflow } from '~/src/api/helpers/workflow/trigger-workflow'
+import { statuses } from '~/src/constants/statuses'
 import {
   initCreationStatus,
   updateCreationStatus,
   updateOverallStatus
 } from '~/src/api/createV2/helpers/save-status'
-import { trimPr } from '~/src/api/createV2/helpers/trim-pr'
-import { triggerCreateRepositoryWorkflow } from '~/src/api/createV2/helpers/trigger-create-repository-workflow'
 
 const createServiceV2Controller = {
   options: {
@@ -24,23 +25,19 @@ const createServiceV2Controller = {
       }
     },
     validate: {
-      payload: createServiceValidationSchema()
-    },
-    payload: {
-      output: 'data',
-      parse: true,
-      allow: 'application/json'
+      payload: createServiceValidationSchema(),
+      failAction: () => Boom.boomify(Boom.badRequest())
     }
   },
   handler: async (request, h) => {
     const payload = request?.payload
-    const serviceType = payload?.serviceType
+    const serviceTypeTemplate = payload?.serviceTypeTemplate
     const org = config.get('gitHubOrg')
     const repositoryName = payload?.repositoryName
 
-    const zone = serviceTemplates[serviceType]?.zone ?? null
+    const zone = serviceTemplates[serviceTypeTemplate]?.zone ?? null
     if (isNull(zone)) {
-      throw Boom.badData(`Invalid service template: '${serviceType}'`)
+      throw Boom.badData(`Invalid service template: '${serviceTypeTemplate}'`)
     }
 
     const { team } = await request.server.methods.fetchTeam(payload.teamId)
@@ -52,7 +49,7 @@ const createServiceV2Controller = {
 
     request.logger.info(`creating service v2 ${repositoryName}`)
 
-    // Setup the initial DB record
+    // Set up the initial DB record
     try {
       await initCreationStatus(
         request.db,
@@ -87,7 +84,7 @@ const createServiceV2Controller = {
       .response({
         message: 'Service creation has started',
         repositoryName,
-        statusUrl: `/create-service/status/${repositoryName}`
+        statusUrl: `/status/${repositoryName}`
       })
       .code(200)
   }
@@ -96,23 +93,26 @@ const createServiceV2Controller = {
 const doCreateRepo = async (request, repositoryName, payload, team) => {
   try {
     const org = config.get('gitHubOrg')
-    const repositoryName = payload.repositoryName
-    const serviceType = payload?.serviceType
+    const serviceTypeTemplate = payload?.serviceTypeTemplate
 
-    const repoCreationResult = await triggerCreateRepositoryWorkflow(
-      repositoryName,
-      serviceType,
-      team.github
+    const result = await triggerWorkflow(
+      {
+        repositoryName,
+        serviceTypeTemplate,
+        team: team.github
+      },
+      config.get('createMicroServiceWorkflow')
     )
+
     await updateCreationStatus(request.db, repositoryName, 'createRepository', {
-      status: 'in-progress',
+      status: statuses.inProgress,
       url: `https://github.com/${org}/${repositoryName}`,
-      result: repoCreationResult
+      result
     })
     request.logger.info(`created repo ${repositoryName}`)
   } catch (e) {
     await updateCreationStatus(request.db, repositoryName, 'createRepository', {
-      status: 'failure',
+      status: statuses.failure,
       result: e
     })
     request.logger.error(`created repo ${repositoryName} failed ${e}`)
@@ -126,7 +126,7 @@ const doUpdateTfSvcInfra = async (request, repositoryName, zone) => {
     const createServiceInfrastructureCodeResult =
       await createServiceInfrastructureCode(repositoryName, zone)
     await updateCreationStatus(request.db, repositoryName, tfSvcInfra, {
-      status: 'raised',
+      status: statuses.raised,
       pr: trimPr(createServiceInfrastructureCodeResult?.data)
     })
     request.logger.info(
@@ -134,7 +134,7 @@ const doUpdateTfSvcInfra = async (request, repositoryName, zone) => {
     )
   } catch (e) {
     await updateCreationStatus(request.db, repositoryName, tfSvcInfra, {
-      status: 'failure',
+      status: statuses.failure,
       result: e?.response ?? 'see cdp-self-service-ops logs'
     })
     request.logger.error(
@@ -148,7 +148,7 @@ const doUpdateCdpAppConfig = async (request, repositoryName) => {
   try {
     const createServiceConfigResult = await createServiceConfig(repositoryName)
     await updateCreationStatus(request.db, repositoryName, cdpAppConfig, {
-      status: 'raised',
+      status: statuses.raised,
       pr: trimPr(createServiceConfigResult?.data)
     })
     request.logger.info(
@@ -156,7 +156,7 @@ const doUpdateCdpAppConfig = async (request, repositoryName) => {
     )
   } catch (e) {
     await updateCreationStatus(request.db, repositoryName, cdpAppConfig, {
-      status: 'failure',
+      status: statuses.failure,
       result: e?.response ?? 'see cdp-self-service-ops logs'
     })
     request.logger.error(`update cdp-app-config ${repositoryName} failed ${e}`)
@@ -173,7 +173,7 @@ const doUpdateCdpNginxUpstream = async (request, repositoryName, zone) => {
       [] // TODO: support user defined paths?
     )
     await updateCreationStatus(request.db, repositoryName, cdpNginxUpstream, {
-      status: 'raised',
+      status: statuses.raised,
       pr: trimPr(createNginxConfigResult?.data)
     })
     request.logger.info(
@@ -181,7 +181,7 @@ const doUpdateCdpNginxUpstream = async (request, repositoryName, zone) => {
     )
   } catch (e) {
     await updateCreationStatus(request.db, repositoryName, cdpNginxUpstream, {
-      status: 'failure',
+      status: statuses.failure,
       result: e?.response ?? 'see cdp-self-service-ops logs'
     })
     request.logger.error(

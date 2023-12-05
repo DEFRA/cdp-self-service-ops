@@ -4,7 +4,7 @@ import Boom from '@hapi/boom'
 import { serviceTemplates } from '~/src/api/createV2/helpers/service-templates'
 
 function createServiceValidationSchema() {
-  const serviceTypes = Object.keys(serviceTemplates)
+  const serviceTypeTemplates = Object.keys(serviceTemplates)
 
   return async (value, options) => {
     const validationResult = Joi.object({
@@ -17,18 +17,18 @@ function createServiceValidationSchema() {
         .max(96)
         .required()
         .messages({
-          'string.empty': 'Enter a value',
+          'string.empty': 'Enter a service name',
           'string.pattern.base':
             'Letters and numbers with hyphen or underscore separators',
           'string.pattern.name': 'Start and end with a character',
           'string.min': '1 character or more',
           'string.max': '96 characters or less'
         }),
-      serviceType: Joi.string()
-        .valid(...serviceTypes)
+      serviceTypeTemplate: Joi.string()
+        .valid(...serviceTypeTemplates)
         .required()
         .messages({
-          'any.only': 'Choose an entry'
+          'any.only': 'Choose a service type'
         }),
       teamId: Joi.string().required()
     }).validate(value, options)
