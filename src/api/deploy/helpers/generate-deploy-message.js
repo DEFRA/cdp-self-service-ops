@@ -8,7 +8,8 @@ async function generateDeployMessage(
   instanceCount,
   cpu,
   memory,
-  user
+  user,
+  deploymentId
 ) {
   const tenantService = await lookupTenantService(environment, imageName)
 
@@ -49,6 +50,7 @@ async function generateDeployMessage(
     environment,
     zone: tenantService.zone,
     deployed_by: {
+      deployment_id: deploymentId,
       user_id: user.id,
       display_name: user.displayName
     }
