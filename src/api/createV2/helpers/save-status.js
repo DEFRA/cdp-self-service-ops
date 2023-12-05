@@ -6,6 +6,47 @@ const tfSvcInfra = config.get('githubRepoTfServiceInfra')
 const cdpAppConfig = config.get('githubRepoConfig')
 const cdpNginxUpstream = config.get('githubRepoNginx')
 
+function getStatusKeys(statusRecord) {
+  const statusKeys = []
+
+  if (statusRecord?.kind === creations.repository) {
+    statusKeys.push('createRepository')
+  }
+
+  if (statusRecord?.kind === creations.microservice) {
+    statusKeys.push(
+      'createRepository',
+      cdpNginxUpstream,
+      cdpAppConfig,
+      tfSvcInfra
+    )
+  }
+
+  return statusKeys
+}
+
+function calculateOverallStatus(
+  statusRecord,
+  statusKeys = getStatusKeys(statusRecord)
+) {
+  const allSuccess = statusKeys.every(
+    (key) => statusRecord[key]?.status === statuses.success
+  )
+  const anyFailed = statusKeys.some(
+    (key) => statusRecord[key]?.status === statuses.failure
+  )
+
+  if (allSuccess) {
+    return statuses.success
+  }
+
+  if (anyFailed) {
+    return statuses.failure
+  }
+
+  return statuses.inProgress
+}
+
 async function initCreationStatus(
   db,
   org,
@@ -51,48 +92,16 @@ async function updateCreationStatus(db, repo, field, status) {
     .updateOne({ repositoryName: repo }, { $set: { [field]: status } })
 }
 
-function calculateOverallStatus(status) {
-  const repoStatus = status.createRepository?.status ?? ''
-  const tfSvcInfraStatus = status[tfSvcInfra]?.status ?? ''
-  const appConfigStatus = status[cdpAppConfig]?.status ?? ''
-  const nginxStatus = status[cdpNginxUpstream]?.status ?? ''
-
-  // return success if ALL sections are successful
-  if (
-    repoStatus === statuses.success &&
-    tfSvcInfraStatus === statuses.success &&
-    appConfigStatus === statuses.success &&
-    nginxStatus === statuses.success
-  ) {
-    return statuses.success
-  }
-
-  // return failure if ANY sections have failed
-  if (
-    repoStatus === statuses.failure ||
-    tfSvcInfraStatus === statuses.failure ||
-    appConfigStatus === statuses.failure ||
-    nginxStatus === statuses.failure
-  ) {
-    return statuses.failure
-  }
-
-  // otherwise its probably in progress
-  return statuses.inProgress
-}
-
 // TODO combine this and new update-repository-status work
-async function updateOverallStatus(db, repo) {
-  const statusRecord = await db
-    .collection('status')
-    .findOne({ repositoryName: repo })
+async function updateOverallStatus(db, repositoryName) {
+  const statusRecord = await db.collection('status').findOne({ repositoryName })
 
   if (statusRecord) {
-    const newStatus = calculateOverallStatus(statusRecord)
+    const overallStatus = calculateOverallStatus(statusRecord)
 
     await db
       .collection('status')
-      .updateOne({ repositoryName: repo }, { $set: { status: newStatus } })
+      .updateOne({ repositoryName }, { $set: { status: overallStatus } })
   }
 }
 
