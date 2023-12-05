@@ -38,12 +38,15 @@ const deployServiceController = {
       }
     }
 
+    const deploymentId = crypto.randomUUID()
+
     await registerDeployment(
       payload.imageName,
       payload.version,
       payload.environment,
       payload.instanceCount,
-      user
+      user,
+      deploymentId
     )
 
     const deployMessage = await generateDeployMessage(
@@ -53,7 +56,8 @@ const deployServiceController = {
       payload.instanceCount,
       payload.cpu,
       payload.memory,
-      user
+      user,
+      deploymentId
     )
     const snsResponse = await sendSnsDeployMessage(
       request.snsClient,

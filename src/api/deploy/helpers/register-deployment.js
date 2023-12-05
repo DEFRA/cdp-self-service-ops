@@ -5,7 +5,8 @@ async function registerDeployment(
   version,
   environment,
   instanceCount,
-  user
+  user,
+  deploymentId
 ) {
   const url = `${config.get('portalBackendApiUrl')}/deployments`
   await fetch(url, {
@@ -16,7 +17,8 @@ async function registerDeployment(
       version,
       environment,
       instanceCount,
-      user
+      user,
+      deploymentId
     })
   })
 }
