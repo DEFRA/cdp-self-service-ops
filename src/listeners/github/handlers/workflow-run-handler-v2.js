@@ -97,6 +97,9 @@ const handleCdpCreateWorkflows = async (db, message) => {
         status: workflowStatus,
         'createRepository.status': workflowStatus
       })
+
+      // TODO this is currently for create microservice only. When the create repository status comes in - update
+      await updateOverallStatus(db, repoName)
     }
   } catch (e) {
     logger.error(e)
