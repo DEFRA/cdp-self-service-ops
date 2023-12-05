@@ -1,3 +1,5 @@
+import { statuses } from '~/src/constants/statuses'
+
 async function findByPrNumber(db, repo, prNumber) {
   const searchOn = `${repo}.pr.number`
   return db.collection('status').findOne({ [searchOn]: prNumber })
@@ -53,7 +55,7 @@ async function findAllInProgressOrFailed(db) {
     .collection('status')
     .find(
       {
-        status: { $in: ['in-progress', 'failure'] }
+        status: { $in: [statuses.inProgress, statuses.failure] }
       },
       {
         projection: { _id: 0, repositoryName: 1 }
