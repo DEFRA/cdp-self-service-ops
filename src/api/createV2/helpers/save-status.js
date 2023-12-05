@@ -44,7 +44,7 @@ async function initCreationStatus(
   return status
 }
 
-// TODO use new update-repository-status work
+// TODO combine this and new update-repository-status work
 async function updateCreationStatus(db, repo, field, status) {
   return await db
     .collection('status')
@@ -81,7 +81,7 @@ function calculateOverallStatus(status) {
   return statuses.inProgress
 }
 
-// TODO use new update-repository-status work
+// TODO combine this and new update-repository-status work
 async function updateOverallStatus(db, repo) {
   const statusRecord = await db
     .collection('status')
