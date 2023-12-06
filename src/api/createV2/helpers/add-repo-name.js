@@ -46,17 +46,18 @@ function addRepoName({
     throw new Error('File failed schema validation')
   }
 
-  if (parsedRepositories[0][repositoryName] !== undefined) {
-    logger.error(
-      `Tenant Services file '${filePath}' from '${fileRepository} already contains an entry for ${repositoryName}`
+  // This guard probably isn't needed, but on the off-chance we get here, dont overwrite
+  // existing entries in the tenant_services.json file.
+  if (parsedRepositories[0][repositoryName] === undefined) {
+    parsedRepositories[0][repositoryName] = {
+      zone,
+      mongo: zone === 'protected',
+      redis: zone === 'public'
+    }
+  } else {
+    logger.warn(
+      `There's already and entry for '${repositoryName} in cdp-tf-svc-infra! We wont overwrite it.`
     )
-    throw new Error('Repository already exists')
-  }
-
-  parsedRepositories[0][repositoryName] = {
-    zone,
-    mongo: zone === 'protected',
-    redis: zone === 'public'
   }
 
   const postAdditionValidationResult = repositoriesSchema.validate(
