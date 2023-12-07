@@ -6,6 +6,13 @@ FROM defradigital/node-development:${PARENT_VERSION} AS development
 ARG PARENT_VERSION
 LABEL uk.gov.defra.ffc.parent-image=defradigital/node-development:${PARENT_VERSION}
 
+# Add curl to template.
+# CDP PLATFORM HEALTHCHECK REQUIREMENT
+USER root
+RUN apk update && \
+    apk add curl
+USER node
+
 ARG PORT
 ARG PORT_DEBUG
 ENV PORT ${PORT}
