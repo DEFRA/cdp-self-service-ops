@@ -1,11 +1,8 @@
 import { lookupTenantServicesForCommit } from '~/src/listeners/github/helpers/lookup-tenant-service-for-commit'
 import { config, environments } from '~/src/config'
-import {
-  findAllInProgressOrFailed,
-  updateWorkflowStatus
-} from '~/src/listeners/github/status-repo'
-import { updateOverallStatus } from '~/src/api/createV2/helpers/save-status'
+import { findAllInProgressOrFailed } from '~/src/helpers/db/status/find-all-in-progress-or-failed'
 import { createPlaceholderArtifact } from '~/src/listeners/github/helpers/create-placeholder-artifact'
+import { updateSubStatus } from '~/src/helpers/db/status/update-sub-status'
 
 const { createLogger } = require('~/src/helpers/logging/logger')
 
@@ -41,21 +38,25 @@ const bulkUpdateTfSvcInfra = async (db, trimmedWorkflow, status) => {
 
   for (let i = 0; i < servicesToUpdate.length; i++) {
     const serviceName = servicesToUpdate[i]
-    logger.info(`updating ${serviceName} ${tfSvcInfra} status to success`)
-
-    await updateWorkflowStatus(
-      db,
-      serviceName,
-      tfSvcInfra,
-      'main',
-      status,
-      trimmedWorkflow
+    logger.info(
+      `bulk-tf-svc-infra-update to ${serviceName} ${tfSvcInfra} status to success`
     )
-    await updateOverallStatus(db, serviceName)
-    await createPlaceholderArtifact({
-      service: serviceName,
-      githubUrl: `https://github.com/${org}/${serviceName}`
-    })
+
+    try {
+      await updateSubStatus(db, serviceName, tfSvcInfra, status, {
+        'main.workflow': trimmedWorkflow
+      })
+
+      await createPlaceholderArtifact({
+        service: serviceName,
+        githubUrl: `https://github.com/${org}/${serviceName}`
+      })
+    } catch (e) {
+      logger.error(
+        `Failed to update update ${tfSvcInfra} workflow for ${serviceName}`
+      )
+      logger.error(e)
+    }
   }
 }
 

@@ -1,15 +1,14 @@
 import { config } from '~/src/config'
 import { statuses } from '~/src/constants/statuses'
-import { updateRepositoryStatus } from '~/src/api/create-repository/helpers/status/update-repository-status'
 import { triggerWorkflow } from '~/src/api/helpers/workflow/trigger-workflow'
+import { updateSubStatus } from '~/src/helpers/db/status/update-sub-status'
 
 async function createRepository(request, repositoryName, payload, team) {
   const gitHubOrg = config.get('gitHubOrg')
-  const updateStatus = updateRepositoryStatus(request.db, repositoryName)
 
   try {
     const repositoryVisibility = payload.repositoryVisibility
-    const result = await triggerWorkflow(
+    const workflowResult = await triggerWorkflow(
       {
         repositoryName,
         repositoryVisibility,
@@ -22,25 +21,30 @@ async function createRepository(request, repositoryName, payload, team) {
       `Create repository: ${repositoryName} workflow triggered successfully`
     )
 
-    await updateStatus({
-      status: statuses.inProgress,
-      createRepository: {
-        status: statuses.inProgress,
+    await updateSubStatus(
+      request.db,
+      repositoryName,
+      'createRepository',
+      statuses.inProgress,
+      {
         url: `https://github.com/${gitHubOrg}/${repositoryName}`,
-        result
+        result: workflowResult
       }
-    })
+    )
   } catch (error) {
     request.logger.error(`Create repository: ${repositoryName} failed`)
     request.logger.error(error)
 
-    await updateStatus({
-      status: statuses.inProgress,
-      createRepository: {
-        status: statuses.failure,
+    await updateSubStatus(
+      request.db,
+      repositoryName,
+      'createRepository',
+      statuses.failure,
+      {
+        url: `https://github.com/${gitHubOrg}/${repositoryName}`,
         result: error
       }
-    })
+    )
   }
 }
 

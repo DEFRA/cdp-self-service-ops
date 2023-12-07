@@ -4,7 +4,7 @@ import { isNil } from 'lodash'
 import { config } from '~/src/config'
 import { createRepository } from '~/src/api/create-repository/helpers/workflow/create-repository'
 import { repositoryValidation } from '~/src/api/create-repository/helpers/schema/repository-validation'
-import { createRepositoryStatus } from '~/src/api/create-repository/helpers/status/create-repository-status'
+import { createRepositoryStatus } from '~/src/helpers/db/status/create-repository-status'
 
 const createRepositoryController = {
   options: {

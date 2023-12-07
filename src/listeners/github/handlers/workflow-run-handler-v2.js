@@ -1,14 +1,10 @@
-import {
-  findByCommitHash,
-  findByRepoName,
-  updateWorkflowStatus
-} from '~/src/listeners/github/status-repo'
 import { createLogger } from '~/src/helpers/logging/logger'
-import { updateOverallStatus } from '~/src/api/createV2/helpers/save-status'
 import { config } from '~/src/config'
 import { bulkUpdateTfSvcInfra } from '~/src/listeners/github/helpers/bulk-update-tf-svc-infra'
 import { normalizeStatus } from '~/src/listeners/github/helpers/normalize-status'
-import { updateRepositoryStatus } from '~/src/api/create-repository/helpers/status/update-repository-status'
+import { updateSubStatus } from '~/src/helpers/db/status/update-sub-status'
+import { findByRepoName } from '~/src/helpers/db/status/find-by-repo-name'
+import { findByCommitHash } from '~/src/helpers/db/status/find-by-commit-hash'
 
 const logger = createLogger()
 
@@ -60,11 +56,8 @@ const handleTfSvcInfra = async (db, message) => {
         message.action,
         message.workflow_run?.conclusion
       )
-      await bulkUpdateTfSvcInfra(
-        db,
-        trimWorkflowRun(message.workflow_run),
-        status
-      )
+      const trimmedWorkflow = trimWorkflowRun(message.workflow_run)
+      await bulkUpdateTfSvcInfra(db, trimmedWorkflow, status)
     } else {
       logger.info(
         'handling tf-svc-infra workflow completed message from non-main'
@@ -81,7 +74,6 @@ const handleCdpCreateWorkflows = async (db, message) => {
 
   try {
     const repoName = message.workflow_run?.name // we repurpose the name to track name of repo its creating
-    const updateStatus = updateRepositoryStatus(db, repoName)
     const status = findByRepoName(db, repoName)
 
     if (status !== null) {
@@ -93,13 +85,7 @@ const handleCdpCreateWorkflows = async (db, message) => {
         `updating createRepository status fro ${repoName} to ${workflowStatus}`
       )
 
-      await updateStatus({
-        status: workflowStatus,
-        'createRepository.status': workflowStatus
-      })
-
-      // TODO combine this and new update-repository-status work
-      await updateOverallStatus(db, repoName)
+      await updateSubStatus(db, repoName, 'createRepository', workflowStatus)
     }
   } catch (e) {
     logger.error(e)
@@ -129,16 +115,10 @@ const handleGenericWorkflow = async (db, message) => {
       if (headBranch === 'main') {
         branch = 'main'
       }
-      await updateWorkflowStatus(
-        db,
-        serviceRepo,
-        workflowRepo,
-        branch,
-        workflowStatus,
-        trimWorkflowRun(message.workflow_run)
-      )
-
-      await updateOverallStatus(db, serviceRepo)
+      const trimmedWorkflow = trimWorkflowRun(message.workflow_run)
+      await updateSubStatus(db, serviceRepo, workflowRepo, workflowStatus, {
+        [`${branch}.workflow`]: trimmedWorkflow
+      })
     }
   } catch (e) {
     logger.error(e)

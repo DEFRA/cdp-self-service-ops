@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import Boom from '@hapi/boom'
 
-import { getRepositoryStatus } from '~/src/api/status/helpers/get-repository-status'
+import { findStatusForRepository } from '~/src/helpers/db/status/find-status-for-repository'
 
 const statusController = {
   options: {
@@ -13,7 +13,7 @@ const statusController = {
   },
   handler: async (request, h) => {
     const repositoryName = request.params.repositoryName
-    const repositoryStatus = await getRepositoryStatus(
+    const repositoryStatus = await findStatusForRepository(
       request.db,
       repositoryName
     )

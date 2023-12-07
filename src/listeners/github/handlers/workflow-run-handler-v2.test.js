@@ -1,9 +1,14 @@
 import { statuses } from '~/src/constants/statuses'
 import { workflowRunHandlerV2 } from '~/src/listeners/github/handlers/workflow-run-handler-v2'
+import { findByCommitHash } from '~/src/helpers/db/status/find-by-commit-hash'
+import { updateSubStatus } from '~/src/helpers/db/status/update-sub-status'
 
-jest.mock('~/src/api/createV2/helpers/save-status', () => ({
-  updateWorkflowStatus: jest.fn(),
+jest.mock('~/src/helpers/db/status/find-by-commit-hash', () => ({
   findByCommitHash: jest.fn()
+}))
+
+jest.mock('~/src/helpers/db/status/update-sub-status', () => ({
+  updateSubStatus: jest.fn()
 }))
 
 jest.mock('~/src/helpers/oktokit', () => ({
@@ -50,9 +55,10 @@ describe('#workflow-run-handler-v2', () => {
       status: statuses.inProgress,
       createRepository: { status: statuses.notRequested },
       'cdp-app-config': { status: statuses.success },
-      'tf-svc-infra': { status: statuses.notRequested },
+      'cdp-tf-svc-infra': { status: statuses.notRequested },
       'cdp-nginx-upstreams': { status: statuses.notRequested }
     }
+
     const findOne = jest.fn().mockReturnValue(mockStatusRecord)
     const updateOne = jest.fn().mockReturnValue({})
     const mockDb = {
@@ -61,6 +67,8 @@ describe('#workflow-run-handler-v2', () => {
         updateOne
       })
     }
+
+    findByCommitHash.mockReturnValue(mockStatusRecord)
 
     const msg = {
       github_event: 'workflow_run',
@@ -77,32 +85,33 @@ describe('#workflow-run-handler-v2', () => {
         conclusion: statuses.failure
       },
       repository: {
-        name: 'tf-svc-infra',
+        name: 'cdp-app-config',
         owner: {
           login: 'test-org'
         }
       }
     }
+
     await workflowRunHandlerV2(mockDb, msg)
-    expect(findOne).toHaveBeenCalledWith({
-      'tf-svc-infra.merged_sha': '6d96270004515a0486bb7f76196a72b40c55a47f'
-    })
+    expect(findByCommitHash).toHaveBeenCalledWith(
+      mockDb,
+      'cdp-app-config',
+      '6d96270004515a0486bb7f76196a72b40c55a47f'
+    )
 
-    expect(updateOne).toHaveBeenNthCalledWith(
-      1,
-      { repositoryName: 'test-repo' },
+    expect(updateSubStatus).toHaveBeenCalledWith(
+      mockDb,
+      'test-repo',
+      'cdp-app-config',
+      statuses.failure,
       {
-        $set: {
-          'tf-svc-infra.main.workflow': {
-            id: 999,
-            name: 'wf-name',
-            html_url: 'http://localhost',
-            created_at: new Date(0),
-            updated_at: new Date(0),
-            path: '/test'
-          },
-
-          'tf-svc-infra.status': statuses.failure
+        'main.workflow': {
+          created_at: new Date(0),
+          html_url: 'http://localhost',
+          id: 999,
+          name: 'wf-name',
+          path: '/test',
+          updated_at: new Date(0)
         }
       }
     )
@@ -149,8 +158,10 @@ describe('#workflow-run-handler-v2', () => {
       }
     }
     await workflowRunHandlerV2(mockDb, msg)
-    expect(findOne).toHaveBeenCalledWith({
-      'tf-svc-infra.merged_sha': '6d96270004515a0486bb7f76196a72b40c55a47f'
-    })
+    expect(findByCommitHash).toHaveBeenCalledWith(
+      mockDb,
+      'tf-svc-infra',
+      '6d96270004515a0486bb7f76196a72b40c55a47f'
+    )
   })
 })

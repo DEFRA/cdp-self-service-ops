@@ -1,6 +1,6 @@
 import { statuses } from '~/src/constants/statuses'
 import { creations } from '~/src/constants/creations'
-import { calculateOverallStatus } from '~/src/api/createV2/helpers/save-status'
+import { calculateOverallStatus } from '~/src/helpers/db/status/update-overall-status'
 
 describe('#calculateOverallStatus', () => {
   describe('When calculating a microservice status', () => {

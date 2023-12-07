@@ -1,10 +1,10 @@
 import { statuses } from '~/src/constants/statuses'
-import { getRepositoriesStatuses } from '~/src/api/status/helpers/get-repositories-statuses'
+import { findRepositoriesByStatus } from '~/src/helpers/db/status/find-repositories-by-status'
 
 const inProgressController = {
   options: {},
   handler: async (request, h) => {
-    const repositoriesStatus = await getRepositoriesStatuses(request.db, [
+    const repositoriesStatus = await findRepositoriesByStatus(request.db, [
       statuses.inProgress,
       statuses.failure
     ])
