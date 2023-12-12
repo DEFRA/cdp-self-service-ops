@@ -2,6 +2,10 @@
 
 Core delivery platform Self-Service Ops Node.js Backend.
 
+[![Integration Tests](https://github.com/DEFRA/cdp-portal-tests/actions/workflows/run-tests.yaml/badge.svg)](https://github.com/DEFRA/cdp-self-service-ops/actions/workflows/integration-tests.yml)
+
+[![Publish](https://github.com/DEFRA/cdp-self-service-ops/actions/workflows/publish.yml/badge.svg)](https://github.com/DEFRA/cdp-self-service-ops/actions/workflows/publish.yml)
+
 - [Requirements](#requirements)
   - [Authentication](#authentication)
   - [Node.js](#nodejs)
