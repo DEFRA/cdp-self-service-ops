@@ -1,4 +1,4 @@
-name: IT Tests
+name: Integration Tests
 
 on:
   workflow_dispatch:

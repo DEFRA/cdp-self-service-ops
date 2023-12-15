@@ -162,7 +162,7 @@ const config = convict({
   snsDeployTopicArn: {
     doc: 'SNS Deploy Topic ARN',
     format: String,
-    default: 'arn:aws:sns:eu-west-2:000000000000:local-deploy.fifo',
+    default: 'arn:aws:sns:eu-west-2:000000000000:deploy-topic',
     env: 'SNS_DEPLOY_TOPIC_ARN'
   },
   sqsEndpoint: {
