@@ -72,7 +72,7 @@ const createServiceV2Controller = {
     await doUpdateTfSvcInfra(request, repositoryName, zone)
 
     // cdp-app-config
-    await doUpdateCdpAppConfig(request, repositoryName)
+    await doUpdateCdpAppConfig(request, repositoryName, team)
 
     // cdp-nginx-upstreams
     await doUpdateCdpNginxUpstream(request, repositoryName, zone)
@@ -143,10 +143,13 @@ const doUpdateTfSvcInfra = async (request, repositoryName, zone) => {
   }
 }
 
-const doUpdateCdpAppConfig = async (request, repositoryName) => {
+const doUpdateCdpAppConfig = async (request, repositoryName, team) => {
   const cdpAppConfig = config.get('githubRepoConfig')
   try {
-    const createServiceConfigResult = await createServiceConfig(repositoryName)
+    const createServiceConfigResult = await createServiceConfig(
+      repositoryName,
+      team
+    )
     await updateCreationStatus(request.db, repositoryName, cdpAppConfig, {
       status: statuses.raised,
       pr: trimPr(createServiceConfigResult?.data)
