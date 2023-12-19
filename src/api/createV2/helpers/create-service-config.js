@@ -26,8 +26,8 @@ async function createServiceConfig(repositoryName, team) {
 
   // update code owners
   try {
-    const updatedCodeOwners = updateCodeOwners(repositoryName, team.github)
-    pullRequestFiles.set('.github/CODEOWNERS', updatedCodeOwners)
+    const codeOwners = await updateCodeOwners(repositoryName, team.github)
+    pullRequestFiles.set('.github/CODEOWNERS', codeOwners)
   } catch (e) {
     logger.error(e)
   }
@@ -53,7 +53,7 @@ async function createServiceConfig(repositoryName, team) {
   return pr
 }
 
-const updateCodeOwners = async (repositoryName, teamGithubName) => {
+async function updateCodeOwners(repositoryName, teamGithubName) {
   const { data } = await octokit.rest.repos.getContent({
     mediaType: {
       format: 'raw'
