@@ -5,8 +5,6 @@ async function registerDeployment(
   version,
   environment,
   instanceCount,
-  cpu,
-  memory,
   user,
   deploymentId
 ) {
@@ -19,8 +17,6 @@ async function registerDeployment(
       version,
       environment,
       instanceCount,
-      cpu,
-      memory,
       user,
       deploymentId
     })
