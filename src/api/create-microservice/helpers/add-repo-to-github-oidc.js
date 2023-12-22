@@ -1,6 +1,6 @@
 import { octokit } from '~/src/helpers/oktokit'
 import { config } from '~/src/config'
-import { addRepoPermissions } from '~/src/api/createV2/helpers/add-repo-permissions'
+import { addRepoPermissions } from '~/src/api/create-microservice/helpers/add-repo-permissions'
 
 async function addRepoToGithubOidc(repositoryName, env) {
   const fileRepository = config.get('githubRepoTfServiceInfra')

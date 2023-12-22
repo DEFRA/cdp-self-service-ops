@@ -1,7 +1,7 @@
 import { statuses } from '~/src/constants/statuses'
 import { workflowRunHandlerV2 } from '~/src/listeners/github/handlers/workflow-run-handler-v2'
 
-jest.mock('~/src/api/createV2/helpers/save-status', () => ({
+jest.mock('~/src/api/create-microservice/helpers/save-status', () => ({
   updateWorkflowStatus: jest.fn(),
   findByCommitHash: jest.fn()
 }))

@@ -61,6 +61,7 @@ async function initCreationStatus(
     portalVersion: 2,
     kind: creations.microservice,
     status: statuses.inProgress,
+    userHasFinished: false,
     started: new Date(),
     serviceTypeTemplate: payload.serviceTypeTemplate,
     team: {
@@ -85,14 +86,12 @@ async function initCreationStatus(
   return status
 }
 
-// TODO combine this and new update-repository-status work
 async function updateCreationStatus(db, repo, field, status) {
   return await db
     .collection('status')
     .updateOne({ repositoryName: repo }, { $set: { [field]: status } })
 }
 
-// TODO combine this and new update-repository-status work
 async function updateOverallStatus(db, repositoryName) {
   const statusRecord = await db.collection('status').findOne({ repositoryName })
 

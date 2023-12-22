@@ -1,7 +1,10 @@
-async function getRepositoryStatus(db, repositoryName) {
+async function getRepositoryStatus(db, repositoryName, statuses) {
   return await db
     .collection('status')
-    .findOne({ repositoryName }, { projection: { _id: 0 } })
+    .findOne(
+      { repositoryName, status: { $in: statuses } },
+      { projection: { _id: 0 } }
+    )
 }
 
 export { getRepositoryStatus }

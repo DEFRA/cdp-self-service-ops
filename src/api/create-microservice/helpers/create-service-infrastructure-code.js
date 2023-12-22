@@ -1,8 +1,8 @@
 import { octokit } from '~/src/helpers/oktokit'
 import { config, environments } from '~/src/config'
-import { addRepoToGithubOidc } from '~/src/api/createV2/helpers/add-repo-to-github-oidc'
-import { addRepoToTenantServices } from '~/src/api/createV2/helpers/add-repo-to-tenant-services'
-import { prepPullRequestFiles } from '~/src/api/createV2/helpers/prep-pull-request-files'
+import { addRepoToGithubOidc } from '~/src/api/create-microservice/helpers/add-repo-to-github-oidc'
+import { addRepoToTenantServices } from '~/src/api/create-microservice/helpers/add-repo-to-tenant-services'
+import { prepPullRequestFiles } from '~/src/api/create-microservice/helpers/prep-pull-request-files'
 import { readyEnvironments } from '~/src/config/ready-environments'
 import { enableAutoMergeGraphQl } from '~/src/helpers/graphql/enable-automerge.graphql'
 

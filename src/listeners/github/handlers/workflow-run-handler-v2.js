@@ -4,7 +4,7 @@ import {
   updateWorkflowStatus
 } from '~/src/listeners/github/status-repo'
 import { createLogger } from '~/src/helpers/logging/logger'
-import { updateOverallStatus } from '~/src/api/createV2/helpers/save-status'
+import { updateOverallStatus } from '~/src/api/create-microservice/helpers/save-status'
 import { config } from '~/src/config'
 import { bulkUpdateTfSvcInfra } from '~/src/listeners/github/helpers/bulk-update-tf-svc-infra'
 import { normalizeStatus } from '~/src/listeners/github/helpers/normalize-status'
