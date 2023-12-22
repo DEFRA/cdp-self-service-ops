@@ -1,5 +1,5 @@
 import { createLogger } from '~/src/helpers/logging/logger'
-import { addRepoPermissions } from '~/src/api/createV2/helpers/add-repo-permissions'
+import { addRepoPermissions } from '~/src/api/create-microservice/helpers/add-repo-permissions'
 import githubOidcRepositoriesFixture from '~/src/__fixtures__/github_oidc_repositories'
 
 jest.mock('~/src/helpers/logging/logger', () => ({

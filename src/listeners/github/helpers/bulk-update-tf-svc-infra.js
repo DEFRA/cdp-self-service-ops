@@ -4,7 +4,7 @@ import {
   findAllInProgressOrFailed,
   updateWorkflowStatus
 } from '~/src/listeners/github/status-repo'
-import { updateOverallStatus } from '~/src/api/createV2/helpers/save-status'
+import { updateOverallStatus } from '~/src/api/create-microservice/helpers/save-status'
 import { createPlaceholderArtifact } from '~/src/listeners/github/helpers/create-placeholder-artifact'
 
 const { createLogger } = require('~/src/helpers/logging/logger')

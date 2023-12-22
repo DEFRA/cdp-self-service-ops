@@ -1,4 +1,4 @@
-import { addRepoName } from '~/src/api/createV2/helpers/add-repo-name'
+import { addRepoName } from '~/src/api/create-microservice/helpers/add-repo-name'
 import { createLogger } from '~/src/helpers/logging/logger'
 import tenantServicesFixture from '~/src/__fixtures__/tenant_services'
 

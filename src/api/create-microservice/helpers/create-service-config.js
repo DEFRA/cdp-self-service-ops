@@ -1,6 +1,6 @@
 import { octokit } from '~/src/helpers/oktokit'
 import { config, environments } from '~/src/config'
-import { prepPullRequestFiles } from '~/src/api/createV2/helpers/prep-pull-request-files'
+import { prepPullRequestFiles } from '~/src/api/create-microservice/helpers/prep-pull-request-files'
 import { enableAutoMergeGraphQl } from '~/src/helpers/graphql/enable-automerge.graphql'
 import { createLogger } from '~/src/helpers/logging/logger'
 

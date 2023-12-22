@@ -1,4 +1,4 @@
-import { prepPullRequestFiles } from '~/src/api/createV2/helpers/prep-pull-request-files'
+import { prepPullRequestFiles } from '~/src/api/create-microservice/helpers/prep-pull-request-files'
 
 describe('#prepPullRequestFiles', () => {
   test('Should provide expected object', () => {

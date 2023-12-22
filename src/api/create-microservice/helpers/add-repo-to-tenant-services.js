@@ -1,6 +1,6 @@
 import { octokit } from '~/src/helpers/oktokit'
 import { config } from '~/src/config'
-import { addRepoName } from '~/src/api/createV2/helpers/add-repo-name'
+import { addRepoName } from '~/src/api/create-microservice/helpers/add-repo-name'
 import { createLogger } from '~/src/helpers/logging/logger'
 
 async function addRepoToTenantServices(repositoryName, environment, zone) {

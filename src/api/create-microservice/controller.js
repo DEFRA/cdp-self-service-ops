@@ -1,22 +1,22 @@
 import Boom from '@hapi/boom'
 import { isNil, isNull } from 'lodash'
 
-import { serviceTemplates } from '~/src/api/createV2/helpers/service-templates'
-import { createServiceInfrastructureCode } from '~/src/api/createV2/helpers/create-service-infrastructure-code'
-import { createServiceValidationSchema } from '~/src/api/createV2/helpers/create-service-validation-schema'
-import { createServiceConfig } from '~/src/api/createV2/helpers/create-service-config'
-import { createNginxConfig } from '~/src/api/createV2/helpers/create-nginx-config'
+import { serviceTemplates } from '~/src/api/create-microservice/helpers/service-templates'
+import { createServiceInfrastructureCode } from '~/src/api/create-microservice/helpers/create-service-infrastructure-code'
+import { createServiceValidationSchema } from '~/src/api/create-microservice/helpers/create-service-validation-schema'
+import { createServiceConfig } from '~/src/api/create-microservice/helpers/create-service-config'
+import { createNginxConfig } from '~/src/api/create-microservice/helpers/create-nginx-config'
 import { config, environments } from '~/src/config'
-import { trimPr } from '~/src/api/createV2/helpers/trim-pr'
+import { trimPr } from '~/src/api/create-microservice/helpers/trim-pr'
 import { triggerWorkflow } from '~/src/api/helpers/workflow/trigger-workflow'
 import { statuses } from '~/src/constants/statuses'
 import {
   initCreationStatus,
   updateCreationStatus,
   updateOverallStatus
-} from '~/src/api/createV2/helpers/save-status'
+} from '~/src/api/create-microservice/helpers/save-status'
 
-const createServiceV2Controller = {
+const createMicroserviceController = {
   options: {
     auth: {
       strategy: 'azure-oidc',
@@ -193,4 +193,4 @@ const doUpdateCdpNginxUpstream = async (request, repositoryName, zone) => {
   }
 }
 
-export { createServiceV2Controller }
+export { createMicroserviceController }
