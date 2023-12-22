@@ -4,7 +4,7 @@
  * @param statuses ['in-progress', 'success', 'failure']
  * @returns {Promise<*>}
  */
-async function getRepositoriesStatuses(db, statuses) {
+async function getStatus(db, statuses) {
   const stages = []
 
   if (statuses?.length) {
@@ -18,4 +18,4 @@ async function getRepositoriesStatuses(db, statuses) {
   return await db.collection('status').aggregate(stages).toArray()
 }
 
-export { getRepositoriesStatuses }
+export { getStatus }

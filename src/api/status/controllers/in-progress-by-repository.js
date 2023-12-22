@@ -1,9 +1,11 @@
 import Joi from 'joi'
 import Boom from '@hapi/boom'
+import { isNull } from 'lodash'
 
+import { statuses } from '~/src/constants/statuses'
 import { getRepositoryStatus } from '~/src/api/status/helpers/get-repository-status'
 
-const statusController = {
+const inProgressByRepositoryController = {
   options: {
     validate: {
       params: Joi.object({
@@ -15,15 +17,16 @@ const statusController = {
     const repositoryName = request.params.repositoryName
     const repositoryStatus = await getRepositoryStatus(
       request.db,
-      repositoryName
+      repositoryName,
+      [statuses.inProgress, statuses.failure]
     )
 
-    if (!repositoryStatus) {
-      return Boom.notFound(`Status for: ${repositoryName} not found`)
+    if (isNull(repositoryStatus)) {
+      return Boom.notFound()
     }
 
-    return h.response({ message: 'success', status: repositoryStatus })
+    return h.response({ message: 'success', inProgress: repositoryStatus })
   }
 }
 
-export { statusController }
+export { inProgressByRepositoryController }

@@ -1,5 +1,10 @@
-import { statusController } from '~/src/api/status/controllers/status'
-import { inProgressController } from '~/src/api/status/controllers/in-progress'
+import {
+  inProgressController,
+  unfinishedController,
+  inProgressByRepositoryController,
+  unfinishedRepositoryController,
+  finishByRepositoryController
+} from '~/src/api/status/controllers'
 
 const status = {
   plugin: {
@@ -8,13 +13,28 @@ const status = {
       server.route([
         {
           method: 'GET',
-          path: '/status/{repositoryName}',
-          ...statusController
+          path: '/status/in-progress',
+          ...inProgressController
         },
         {
           method: 'GET',
-          path: '/status',
-          ...inProgressController
+          path: '/status/in-progress/{repositoryName}',
+          ...inProgressByRepositoryController
+        },
+        {
+          method: 'GET',
+          path: '/status/unfinished',
+          ...unfinishedController
+        },
+        {
+          method: 'GET',
+          path: '/status/unfinished/{repositoryName}',
+          ...unfinishedRepositoryController
+        },
+        {
+          method: 'GET',
+          path: '/status/finish/{repositoryName}',
+          ...finishByRepositoryController
         }
       ])
     }

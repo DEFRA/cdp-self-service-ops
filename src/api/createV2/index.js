@@ -8,7 +8,7 @@ const create = {
         {
           method: 'POST',
           path: '/create-microservice',
-          ...createServiceV2Controller // TODO update/align name of this controller
+          ...createServiceV2Controller
         }
       ])
     }
