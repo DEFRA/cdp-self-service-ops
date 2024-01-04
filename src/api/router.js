@@ -3,6 +3,7 @@ import { deploy } from '~/src/api/deploy'
 import { status } from '~/src/api/status'
 import { createMicroservice } from '~/src/api/create-microservice'
 import { createRepository } from '~/src/api/create-repository'
+import { createTestSuite } from '~/src/api/create-test-suite'
 
 const router = {
   plugin: {
@@ -12,6 +13,7 @@ const router = {
         health,
         createMicroservice,
         createRepository,
+        createTestSuite,
         deploy,
         status
       ])
