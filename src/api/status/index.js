@@ -1,9 +1,6 @@
 import {
   inProgressController,
-  unfinishedController,
-  inProgressByRepositoryController,
-  unfinishedRepositoryController,
-  finishByRepositoryController
+  repositoryStatusController
 } from '~/src/api/status/controllers'
 
 const status = {
@@ -18,23 +15,8 @@ const status = {
         },
         {
           method: 'GET',
-          path: '/status/in-progress/{repositoryName}',
-          ...inProgressByRepositoryController
-        },
-        {
-          method: 'GET',
-          path: '/status/unfinished',
-          ...unfinishedController
-        },
-        {
-          method: 'GET',
-          path: '/status/unfinished/{repositoryName}',
-          ...unfinishedRepositoryController
-        },
-        {
-          method: 'GET',
-          path: '/status/finish/{repositoryName}',
-          ...finishByRepositoryController
+          path: '/status/{repositoryName}',
+          ...repositoryStatusController
         }
       ])
     }

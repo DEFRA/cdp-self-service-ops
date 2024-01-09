@@ -47,7 +47,7 @@ const createMicroserviceController = {
       )
     }
 
-    request.logger.info(`creating service v2 ${repositoryName}`)
+    request.logger.info(`creating service ${repositoryName}`)
 
     // Set up the initial DB record
     try {

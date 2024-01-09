@@ -61,7 +61,6 @@ async function initCreationStatus(
     portalVersion: 2,
     kind: creations.microservice,
     status: statuses.inProgress,
-    userHasFinished: false,
     started: new Date(),
     serviceTypeTemplate: payload.serviceTypeTemplate,
     team: {
