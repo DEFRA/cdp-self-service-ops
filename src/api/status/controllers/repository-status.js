@@ -5,7 +5,7 @@ import { isNull } from 'lodash'
 import { statuses } from '~/src/constants/statuses'
 import { getRepositoryStatus } from '~/src/api/status/helpers/get-repository-status'
 
-const inProgressByRepositoryController = {
+const repositoryStatusController = {
   options: {
     validate: {
       params: Joi.object({
@@ -18,15 +18,15 @@ const inProgressByRepositoryController = {
     const repositoryStatus = await getRepositoryStatus(
       request.db,
       repositoryName,
-      [statuses.inProgress, statuses.failure]
+      [statuses.inProgress, statuses.success, statuses.failure]
     )
 
     if (isNull(repositoryStatus)) {
       return Boom.notFound()
     }
 
-    return h.response({ message: 'success', inProgress: repositoryStatus })
+    return h.response({ message: 'success', repositoryStatus })
   }
 }
 
-export { inProgressByRepositoryController }
+export { repositoryStatusController }
