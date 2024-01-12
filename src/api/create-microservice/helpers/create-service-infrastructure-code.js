@@ -3,23 +3,22 @@ import { config, environments } from '~/src/config'
 import { addRepoToGithubOidc } from '~/src/api/create-microservice/helpers/add-repo-to-github-oidc'
 import { addRepoToTenantServices } from '~/src/api/create-microservice/helpers/add-repo-to-tenant-services'
 import { prepPullRequestFiles } from '~/src/api/create-microservice/helpers/prep-pull-request-files'
-import { readyEnvironments } from '~/src/config/ready-environments'
 import { enableAutoMergeGraphQl } from '~/src/helpers/graphql/enable-automerge.graphql'
 
 async function createServiceInfrastructureCode(repoName, zone) {
   const fileRepository = config.get('githubRepoTfServiceInfra')
   const pullRequestFiles = new Map()
 
-  const infrastructurePromises = Object.values(environments)
-    .filter((env) => readyEnvironments.includes(env)) // TODO remove filter once other envs have been set up
-    .map(async (env) => {
+  const infrastructurePromises = Object.values(environments).map(
+    async (env) => {
       const [tenantServicesFilePath, tenantServicesJson] =
         await addRepoToTenantServices(repoName, env, zone)
       pullRequestFiles.set(tenantServicesFilePath, tenantServicesJson)
 
       const [oidcFilePath, oidcJson] = await addRepoToGithubOidc(repoName, env)
       pullRequestFiles.set(oidcFilePath, oidcJson)
-    })
+    }
+  )
 
   await Promise.all(infrastructurePromises)
 
