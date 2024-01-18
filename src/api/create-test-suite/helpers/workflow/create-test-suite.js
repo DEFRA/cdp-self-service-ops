@@ -11,7 +11,6 @@ async function createTestSuite(request, repositoryName, payload, team) {
     const result = await triggerWorkflow(
       {
         repositoryName,
-        repositoryVisibility: 'public',
         team: team.github
       },
       config.get('createJourneyTestWorkflow')
@@ -30,8 +29,9 @@ async function createTestSuite(request, repositoryName, payload, team) {
       }
     })
   } catch (error) {
-    request.logger.error(`Create test suite: ${repositoryName} failed`)
-    request.logger.error(error)
+    request.logger.error(
+      `Create test suite: ${repositoryName} failed: ${error}`
+    )
 
     await updateStatus({
       status: statuses.inProgress,
