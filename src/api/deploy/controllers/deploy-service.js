@@ -45,6 +45,8 @@ const deployServiceController = {
       payload.version,
       payload.environment,
       payload.instanceCount,
+      payload.cpu,
+      payload.memory,
       user,
       deploymentId
     )
@@ -68,7 +70,7 @@ const deployServiceController = {
       `SNS Deploy response: ${JSON.stringify(snsResponse, null, 2)}`
     )
 
-    return h.response({ message: 'success' }).code(200)
+    return h.response({ message: 'success', deploymentId }).code(200)
   }
 }
 
