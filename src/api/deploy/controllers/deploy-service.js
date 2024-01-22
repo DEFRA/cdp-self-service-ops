@@ -45,6 +45,8 @@ const deployServiceController = {
       payload.version,
       payload.environment,
       payload.instanceCount,
+      payload.cpu,
+      payload.memory,
       user,
       deploymentId
     )

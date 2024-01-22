@@ -5,6 +5,8 @@ async function registerDeployment(
   version,
   environment,
   instanceCount,
+  cpu,
+  memory,
   user,
   deploymentId
 ) {
@@ -17,6 +19,8 @@ async function registerDeployment(
       version,
       environment,
       instanceCount,
+      cpu: cpu.toString(),
+      memory: memory.toString(),
       user,
       deploymentId
     })
