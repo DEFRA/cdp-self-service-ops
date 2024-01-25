@@ -213,6 +213,12 @@ const config = convict({
     default: 'create_journey_tests.yml',
     env: 'CREATE_JOURNEY_TESTS_WORKFLOW'
   },
+  createEnvTestSuiteWorkflow: {
+    doc: 'Name of workflow to trigger when creating a repository',
+    format: String,
+    default: 'create_env_test_suite.yml',
+    env: 'CREATE_ENV_TEST_SUITE_WORKFLOW'
+  },
   githubBaseUrl: {
     doc: 'Override the github base url for local testing',
     format: '*',
