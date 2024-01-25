@@ -1,17 +1,11 @@
 import Boom from '@hapi/boom'
 import { isNil } from 'lodash'
-
 import { config } from '~/src/config'
 import { envTestSuiteValidation } from '~/src/api/create-env-test-suite/helpers/schema/env-test-suite-validation'
 import { createEnvTestSuiteStatus } from '~/src/api/create-env-test-suite/helpers/status/create-env-test-suite-status'
 import { createEnvTestSuite } from '~/src/api/create-env-test-suite/helpers/workflow/create-env-test-suite'
-import { createServiceInfrastructureCode } from '~/src/api/create-microservice/helpers/create-service-infrastructure-code'
-import {
-  updateCreationStatus,
-  updateOverallStatus
-} from '~/src/api/create-microservice/helpers/save-status'
-import { trimPr } from '~/src/api/create-microservice/helpers/trim-pr'
-import { statuses } from '~/src/constants/statuses'
+import { updateOverallStatus } from '~/src/api/create-microservice/helpers/save-status'
+import { doUpdateTfSvcInfra } from '~/src/api/create-microservice/helpers/update-tfsvcinfra'
 
 const createEnvTestSuiteController = {
   options: {
@@ -73,26 +67,3 @@ const createEnvTestSuiteController = {
 }
 
 export { createEnvTestSuiteController }
-
-const doUpdateTfSvcInfra = async (request, repositoryName, zone) => {
-  const tfSvcInfra = config.get('githubRepoTfServiceInfra')
-  try {
-    const createServiceInfrastructureCodeResult =
-      await createServiceInfrastructureCode(repositoryName, zone)
-    await updateCreationStatus(request.db, repositoryName, tfSvcInfra, {
-      status: statuses.raised,
-      pr: trimPr(createServiceInfrastructureCodeResult?.data)
-    })
-    request.logger.info(
-      `created service infra PR for ${repositoryName}: ${createServiceInfrastructureCodeResult.data.html_url}`
-    )
-  } catch (e) {
-    await updateCreationStatus(request.db, repositoryName, tfSvcInfra, {
-      status: statuses.failure,
-      result: e?.response ?? 'see cdp-self-service-ops logs'
-    })
-    request.logger.error(
-      `update cdp-tf-svc-infra ${repositoryName} failed ${e}`
-    )
-  }
-}

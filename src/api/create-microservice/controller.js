@@ -2,10 +2,10 @@ import Boom from '@hapi/boom'
 import { isNil, isNull } from 'lodash'
 
 import { serviceTemplates } from '~/src/api/create-microservice/helpers/service-templates'
-import { createServiceInfrastructureCode } from '~/src/api/create-microservice/helpers/create-service-infrastructure-code'
 import { createServiceValidationSchema } from '~/src/api/create-microservice/helpers/create-service-validation-schema'
 import { createServiceConfig } from '~/src/api/create-microservice/helpers/create-service-config'
 import { createNginxConfig } from '~/src/api/create-microservice/helpers/create-nginx-config'
+import { doUpdateTfSvcInfra } from '~/src/api/create-microservice/helpers/update-tfsvcinfra'
 import { config, environments } from '~/src/config'
 import { trimPr } from '~/src/api/create-microservice/helpers/trim-pr'
 import { triggerWorkflow } from '~/src/api/helpers/workflow/trigger-workflow'
@@ -117,29 +117,6 @@ const doCreateRepo = async (request, repositoryName, payload, team) => {
     })
     request.logger.error(`created repo ${repositoryName} failed ${e}`)
     request.logger.error(e)
-  }
-}
-
-const doUpdateTfSvcInfra = async (request, repositoryName, zone) => {
-  const tfSvcInfra = config.get('githubRepoTfServiceInfra')
-  try {
-    const createServiceInfrastructureCodeResult =
-      await createServiceInfrastructureCode(repositoryName, zone)
-    await updateCreationStatus(request.db, repositoryName, tfSvcInfra, {
-      status: statuses.raised,
-      pr: trimPr(createServiceInfrastructureCodeResult?.data)
-    })
-    request.logger.info(
-      `created service infra PR for ${repositoryName}: ${createServiceInfrastructureCodeResult.data.html_url}`
-    )
-  } catch (e) {
-    await updateCreationStatus(request.db, repositoryName, tfSvcInfra, {
-      status: statuses.failure,
-      result: e?.response ?? 'see cdp-self-service-ops logs'
-    })
-    request.logger.error(
-      `update cdp-tf-svc-infra ${repositoryName} failed ${e}`
-    )
   }
 }
 
