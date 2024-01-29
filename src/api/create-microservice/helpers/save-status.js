@@ -13,7 +13,7 @@ function getStatusKeys(statusRecord) {
     statusKeys.push('createRepository')
   }
 
-  if (statusRecord?.kind === creations.envtestsuite) {
+  if (statusRecord?.kind === creations.envTestsuite) {
     statusKeys.push('createRepository', tfSvcInfra)
   }
 
