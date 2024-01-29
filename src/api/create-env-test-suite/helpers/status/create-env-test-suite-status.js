@@ -12,7 +12,10 @@ async function createEnvTestSuiteStatus(db, org, repositoryName, zone, team) {
     status: statuses.inProgress,
     org,
     repositoryName,
-    team,
+    team: {
+      teamId: team.teamId,
+      name: team.name
+    },
     zone,
     createRepository: {
       status: statuses.notRequested
