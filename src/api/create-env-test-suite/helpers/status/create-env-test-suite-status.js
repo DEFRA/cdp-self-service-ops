@@ -17,6 +17,7 @@ async function createEnvTestSuiteStatus(db, org, repositoryName, zone, team) {
       name: team.name
     },
     zone,
+    serviceTypeTemplate: 'cdp-node-env-test-suite-template',
     createRepository: {
       status: statuses.notRequested
     },
