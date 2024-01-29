@@ -2,7 +2,7 @@ const creations = {
   microservice: 'microservice',
   repository: 'repository',
   testsuite: 'testsuite',
-  envtestsuite: 'envtestsuite'
+  envTestsuite: 'env-testsuite'
 }
 
 export { creations }

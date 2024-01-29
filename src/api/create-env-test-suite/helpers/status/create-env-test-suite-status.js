@@ -6,7 +6,7 @@ const tfSvcInfra = config.get('githubRepoTfServiceInfra')
 
 async function createEnvTestSuiteStatus(db, org, repositoryName, zone, team) {
   const statusDocument = {
-    kind: creations.envtestsuite,
+    kind: creations.envTestsuite,
     portalVersion: 2,
     started: new Date(),
     status: statuses.inProgress,
