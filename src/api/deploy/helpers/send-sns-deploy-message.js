@@ -1,12 +1,10 @@
 import { PublishCommand } from '@aws-sdk/client-sns'
 
-import { config } from '~/src/config'
 import * as crypto from 'crypto'
 
-async function sendSnsDeployMessage(snsClient, msg) {
-  const topic = config.get('snsDeployTopicArn')
+async function sendSnsDeployMessage(snsClient, topic, msg) {
   const input = {
-    TopicArn: config.get('snsDeployTopicArn'),
+    TopicArn: topic,
     Message: JSON.stringify(msg, null, 2),
     MessageAttributes: {
       environment: {

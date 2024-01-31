@@ -5,6 +5,7 @@ import { createMicroservice } from '~/src/api/create-microservice'
 import { createRepository } from '~/src/api/create-repository'
 import { createTestSuite } from '~/src/api/create-test-suite'
 import { createEnvTestSuite } from '~/src/api/create-env-test-suite'
+import { deployTestSuite } from '~/src/api/deploy-test-suite'
 
 const router = {
   plugin: {
@@ -17,6 +18,7 @@ const router = {
         createTestSuite,
         createEnvTestSuite,
         deploy,
+        deployTestSuite,
         status
       ])
     }
