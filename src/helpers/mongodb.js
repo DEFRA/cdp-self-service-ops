@@ -5,11 +5,11 @@ const mongoPlugin = {
   name: 'mongodb',
   version: '1.0.0',
   register: async function (server) {
+    const isProduction = config.get('isProduction')
     const mongoOptions = {
       retryWrites: false,
       readPreference: 'secondary',
-      tlsAllowInvalidCertificates: true, // TODO: use the trust store
-      tlsAllowInvalidHostnames: true
+      ...(isProduction && { secureContext: server.getSecureContext() })
     }
 
     const mongoUrl = new URL(config.get('mongoUri'))
