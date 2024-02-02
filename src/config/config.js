@@ -237,11 +237,12 @@ const config = convict({
     default: '',
     env: 'CDP_HTTPS_PROXY'
   },
-  truststoreCdpRootCa: {
-    doc: 'CDP Root CA',
-    format: String,
-    env: 'TRUSTSTORE_CDP_ROOT_CA',
-    default: ''
+  trustStore: {
+    doc: 'CA Certificates',
+    format: Array,
+    default: Object.entries(process.env)
+      ?.map(([key, value]) => (key.startsWith('TRUSTSTORE_') ? value : null))
+      .filter(Boolean)
   }
 })
 
