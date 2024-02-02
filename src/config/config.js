@@ -236,6 +236,12 @@ const config = convict({
     format: String,
     default: '',
     env: 'CDP_HTTPS_PROXY'
+  },
+  truststoreCdpRootCa: {
+    doc: 'CDP Root CA',
+    format: String,
+    env: 'TRUSTSTORE_CDP_ROOT_CA',
+    default: ''
   }
 })
 
