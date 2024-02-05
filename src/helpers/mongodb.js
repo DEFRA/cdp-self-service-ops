@@ -1,23 +1,24 @@
 import { MongoClient } from 'mongodb'
+
 import { config } from '~/src/config'
 
 const mongoPlugin = {
   name: 'mongodb',
   version: '1.0.0',
   register: async function (server) {
+    const isProduction = config.get('isProduction')
     const mongoOptions = {
       retryWrites: false,
       readPreference: 'secondary',
-      tlsAllowInvalidCertificates: true, // TODO: use the trust store
-      tlsAllowInvalidHostnames: true
+      ...(isProduction && { secureContext: server.secureContext })
     }
 
-    const mongoUrl = new URL(config.get('mongoUri'))
+    const mongoUrl = config.get('mongoUri')
     const databaseName = config.get('mongoDatabase')
 
     server.logger.info('Setting up mongodb')
 
-    const client = await MongoClient.connect(mongoUrl.toString(), mongoOptions)
+    const client = await MongoClient.connect(mongoUrl, mongoOptions)
     const db = client.db(databaseName)
     await createIndexes(db)
 
