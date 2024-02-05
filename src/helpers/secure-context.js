@@ -8,7 +8,7 @@ const secureContext = {
     register: async (server) => {
       const originalCreateSecureContext = tls.createSecureContext
 
-      tls.createSecureContext = (options) => {
+      const secureContext = (tls.createSecureContext = (options) => {
         const trustStore = config
           .get('trustStore')
           .map((item) => Buffer.from(item, 'base64').toString())
@@ -23,12 +23,9 @@ const secureContext = {
         })
 
         return context
-      }
-
-      server.decorate('server', 'getSecureContext', () => {
-        const secureContext = tls.SecureContext()
-        return secureContext?.context ?? {}
       })
+
+      server.decorate('server', 'secureContext', secureContext)
     }
   }
 }
