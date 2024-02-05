@@ -25,11 +25,7 @@ const secureContext = {
         return context
       }
 
-      server.decorate(
-        'server',
-        'secureContext',
-        tls.createSecureContext().context
-      )
+      server.decorate('server', 'secureContext', tls.createSecureContext())
     }
   }
 }
