@@ -1,6 +1,7 @@
 import convict from 'convict'
 import path from 'path'
 
+import { getTrustStoreCerts } from '~/src/config/helpers/get-trust-store-certs'
 import { version } from '~/package.json'
 
 const config = convict({
@@ -240,9 +241,7 @@ const config = convict({
   trustStore: {
     doc: 'CA Certificates',
     format: Array,
-    default: Object.entries(process.env)
-      ?.map(([key, value]) => (key.startsWith('TRUSTSTORE_') ? value : null))
-      .filter(Boolean)
+    default: getTrustStoreCerts(process.env)
   }
 })
 
