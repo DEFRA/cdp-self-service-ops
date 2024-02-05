@@ -1,4 +1,5 @@
 import { MongoClient } from 'mongodb'
+
 import { config } from '~/src/config'
 
 const mongoPlugin = {
@@ -12,12 +13,12 @@ const mongoPlugin = {
       ...(isProduction && { secureContext: server.getSecureContext() })
     }
 
-    const mongoUrl = new URL(config.get('mongoUri'))
+    const mongoUrl = config.get('mongoUri')
     const databaseName = config.get('mongoDatabase')
 
     server.logger.info('Setting up mongodb')
 
-    const client = await MongoClient.connect(mongoUrl.toString(), mongoOptions)
+    const client = await MongoClient.connect(mongoUrl, mongoOptions)
     const db = client.db(databaseName)
     await createIndexes(db)
 
