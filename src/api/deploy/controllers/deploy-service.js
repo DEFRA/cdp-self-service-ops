@@ -61,8 +61,10 @@ const deployServiceController = {
       user,
       deploymentId
     )
+    const topic = config.get('snsDeployTopicArn')
     const snsResponse = await sendSnsDeployMessage(
       request.snsClient,
+      topic,
       deployMessage
     )
 
