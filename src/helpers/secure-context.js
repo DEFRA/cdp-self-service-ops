@@ -14,7 +14,7 @@ const secureContext = {
           .map((item) => Buffer.from(item, 'base64').toString())
 
         if (!trustStore.length) {
-          throw new Error(`Could not find any TRUSTSTORE_ certificates`)
+          throw new Error('Could not find any TRUSTSTORE_ certificates')
         }
 
         const context = originalCreateSecureContext(options)
