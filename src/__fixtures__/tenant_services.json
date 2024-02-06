@@ -11,6 +11,26 @@
     "cdp-portal-backend": {
       "zone": "protected",
       "mongo": true
+    },
+    "cdp-portal-smoke-tests": {
+      "zone": "public",
+      "redis": false,
+      "test_suite": "cdp-portal-smoke-tests"
+    },
+    "forms-runner": {
+      "zone": "public",
+      "mongo": false,
+      "redis": true,
+      "buckets": ["cdp-management-forms-runner-*"]
+    },
+    "cdp-service": {
+      "zone": "public",
+      "mongo": false,
+      "redis": true,
+      "buckets": ["cdp-management-forms-runner-*"],
+      "other": "other-value",
+      "unknown": ["cat", "dog", "monkey"],
+      "random_prop": true
     }
   }
 ]

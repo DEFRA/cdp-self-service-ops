@@ -40,6 +40,33 @@ describe('#addRepoName', () => {
     expect(logger.error).not.toHaveBeenCalled()
   })
 
+  test('Should allow unknown properties', () => {
+    const repositoriesJson = JSON.stringify(tenantServicesFixture)
+    const expectedJson = JSON.stringify(
+      [
+        {
+          ...tenantServicesFixture[0],
+          ...{
+            'new-repository-name': { zone: 'public', mongo: false, redis: true }
+          }
+        }
+      ],
+      null,
+      2
+    )
+
+    expect(
+      addRepoName({
+        repositories: repositoriesJson,
+        fileRepository: 'mock-repo',
+        filePath: 'mock-file-path',
+        repositoryName: 'new-repository-name',
+        zone: 'public'
+      })
+    ).toEqual(expectedJson)
+    expect(logger.error).not.toHaveBeenCalled()
+  })
+
   test('Should throw "Post Addition" error', () => {
     const repositoriesJson = JSON.stringify(tenantServicesFixture)
 
@@ -56,7 +83,7 @@ describe('#addRepoName', () => {
     } catch (error) {
       expect(logger.error).toHaveBeenCalledTimes(1)
       expect(logger.error).toHaveBeenCalledWith(
-        "Addition of 'new-repo-name' to 'mock-file-path' from 'mock-repo failed schema validation"
+        "Addition of 'new-repo-name' to 'mock-file-path' from 'mock-repo' failed schema validation"
       )
       expect(error).toBeInstanceOf(Error)
       expect(error).toHaveProperty(
