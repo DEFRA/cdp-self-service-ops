@@ -137,13 +137,13 @@ const config = convict({
   },
   mongoUri: {
     doc: 'URI for mongodb',
-    format: '*',
+    format: String,
     default: 'mongodb://127.0.0.1:27017/',
     env: 'MONGO_URI'
   },
   mongoDatabase: {
     doc: 'database for mongodb',
-    format: '*',
+    format: String,
     default: 'cdp-self-service-ops',
     env: 'MONGO_DATABASE'
   },
@@ -230,6 +230,18 @@ const config = convict({
     format: '*',
     env: 'GITHUB_BASE_URL',
     default: null
+  },
+  httpProxy: {
+    doc: 'HTTP Proxy',
+    format: String,
+    default: '',
+    env: 'CDP_HTTP_PROXY'
+  },
+  httpsProxy: {
+    doc: 'HTTPS Proxy',
+    format: String,
+    default: '',
+    env: 'CDP_HTTPS_PROXY'
   }
 })
 

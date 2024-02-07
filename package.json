@@ -51,7 +51,8 @@
     "octokit-plugin-create-pull-request": "5.1.0",
     "pino": "8.15.0",
     "qs": "6.11.2",
-    "sqs-consumer": "7.4.0"
+    "sqs-consumer": "7.4.0",
+    "undici": "6.6.0"
   },
   "devDependencies": {
     "@babel/cli": "7.22.10",

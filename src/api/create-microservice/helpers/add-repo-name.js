@@ -6,15 +6,20 @@ const repositoriesSchema = Joi.array()
   .items(
     Joi.object().pattern(
       Joi.string().pattern(/^[a-zA-Z0-9][\w-]*[a-zA-Z0-9]$/),
-      Joi.object({
-        zone: Joi.string().valid('protected', 'public').required(),
-        mongo: Joi.bool().default(false),
-        redis: Joi.bool().default(false),
-        queues: Joi.array().items(Joi.string()),
-        topics: Joi.array().items(Joi.string()),
-        ecr: Joi.array().items(Joi.string()),
-        s3: Joi.array().items(Joi.string())
-      }).required()
+      Joi.object()
+        .keys({
+          zone: Joi.string().valid('protected', 'public').required(),
+          mongo: Joi.bool().default(false),
+          redis: Joi.bool().default(false),
+          queues: Joi.array().items(Joi.string()),
+          topics: Joi.array().items(Joi.string()),
+          ecr: Joi.array().items(Joi.string()),
+          s3: Joi.array().items(Joi.string()),
+          buckets: Joi.array().items(Joi.string()),
+          test_suite: Joi.string()
+        })
+        .unknown(true)
+        .required()
     )
   )
   .length(1)
@@ -69,7 +74,7 @@ function addRepoName({
 
   if (postAdditionValidationResult?.error) {
     logger.error(
-      `Addition of '${repositoryName}' to '${filePath}' from '${fileRepository} failed schema validation`
+      `Addition of '${repositoryName}' to '${filePath}' from '${fileRepository}' failed schema validation`
     )
 
     throw new Error(

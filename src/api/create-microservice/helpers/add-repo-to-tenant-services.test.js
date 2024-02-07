@@ -24,35 +24,26 @@ describe('#addRepoToTenantServices', () => {
       'public'
     )
 
-    expect(filePath).toEqual(
-      'environments/infra-dev/resources/tenant_services.json'
-    )
-    expect(repositoryNamesJson).toEqual(
-      JSON.stringify(
-        [
-          {
-            'cdp-portal-frontend': {
-              zone: 'public',
-              mongo: false,
-              redis: true,
-              queues: ['ecr-queue'],
-              ecr: ['*'],
-              s3: []
-            },
-            'cdp-portal-backend': {
-              zone: 'protected',
-              mongo: true
-            },
+    const expectedJson = JSON.stringify(
+      [
+        {
+          ...tenantServicesFixture[0],
+          ...{
             'mock-service-frontend': {
               zone: 'public',
               mongo: false,
               redis: true
             }
           }
-        ],
-        null,
-        2
-      )
+        }
+      ],
+      null,
+      2
     )
+
+    expect(filePath).toEqual(
+      'environments/infra-dev/resources/tenant_services.json'
+    )
+    expect(repositoryNamesJson).toEqual(expectedJson)
   })
 })
