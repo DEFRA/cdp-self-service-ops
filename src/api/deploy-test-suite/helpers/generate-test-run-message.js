@@ -1,4 +1,4 @@
-const generateTestRunMessage = (imageName, environment, runId) => {
+const generateTestRunMessage = (imageName, environment, runId, user) => {
   return {
     environment,
     runId,
@@ -15,14 +15,11 @@ const generateTestRunMessage = (imageName, environment, runId) => {
       browser: 'chrome',
       version: 'latest'
     },
-    deployed_by: "portal",
+    deployed_by: user,
     environment_variables: {
-      BASE_URL: `https://${imageName}.${environment}.cdp-int.defra.cloud`,
+      BASE_URL: `https://${environment}.cdp-int.defra.cloud/`,
       ENVIRONMENT: environment
     }
-  }
-
-
   }
 }
 
