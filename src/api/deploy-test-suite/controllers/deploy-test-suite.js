@@ -46,7 +46,8 @@ const deployTestSuiteController = {
     const runMessage = generateTestRunMessage(
       payload.imageName,
       payload.environment,
-      runId
+      runId,
+      user
     )
 
     const topic = config.get('snsRunTestTopicArn')

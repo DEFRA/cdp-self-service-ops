@@ -5,7 +5,7 @@ import { envTestSuiteValidation } from '~/src/api/create-env-test-suite/helpers/
 import { createEnvTestSuiteStatus } from '~/src/api/create-env-test-suite/helpers/status/create-env-test-suite-status'
 import { createEnvTestSuite } from '~/src/api/create-env-test-suite/helpers/workflow/create-env-test-suite'
 import { updateOverallStatus } from '~/src/api/create-microservice/helpers/save-status'
-import { doUpdateTfSvcInfra } from '~/src/api/create-microservice/helpers/update-tfsvcinfra'
+import { raiseInfraPullRequest } from '~/src/api/create-env-test-suite/helpers/raise-infra-pull-request'
 
 const createEnvTestSuiteController = {
   options: {
@@ -51,7 +51,7 @@ const createEnvTestSuiteController = {
 
     await createEnvTestSuite(request, repositoryName, payload, team)
 
-    await doUpdateTfSvcInfra(request, repositoryName, zone)
+    await raiseInfraPullRequest(request, repositoryName, zone)
 
     // calculate and set the overall status
     await updateOverallStatus(request.db, repositoryName)

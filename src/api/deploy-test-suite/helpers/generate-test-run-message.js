@@ -1,7 +1,7 @@
-const generateTestRunMessage = (imageName, environment, runId) => {
+const generateTestRunMessage = (imageName, environment, runId, user) => {
   return {
     environment,
-    run_id: runId,
+    runId,
     zone: 'public',
     desired_count: 1,
     cluster_name: 'ecs-public',
@@ -10,7 +10,16 @@ const generateTestRunMessage = (imageName, environment, runId) => {
     image_version: 'latest',
     port: 80,
     task_cpu: 1024,
-    task_memory: 2048
+    task_memory: 2048,
+    webdriver_sidecar: {
+      browser: 'chrome',
+      version: 'latest'
+    },
+    deployed_by: user,
+    environment_variables: {
+      BASE_URL: `https://${environment}.cdp-int.defra.cloud/`,
+      ENVIRONMENT: environment
+    }
   }
 }
 
