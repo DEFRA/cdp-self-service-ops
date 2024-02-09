@@ -16,31 +16,37 @@ const bulkUpdateTfSvcInfra = async (db, trimmedWorkflow, status) => {
   const org = config.get('gitHubOrg')
   const tfSvcInfra = config.get('githubRepoTfServiceInfra')
 
-  const tenantServices = await lookupTenantServicesForCommit(
-    environments.management
-  )
+  const tenants = await lookupTenantServicesForCommit(environments.management)
 
-  logger.info(tenantServices)
+  logger.info(tenants)
 
-  if (tenantServices === undefined) {
+  if (tenants === undefined) {
     // TODO: handle error
     logger.error('failed to lookup tenant services')
   }
-  const createdServices = new Set(Object.keys(tenantServices))
+  const tenantNames = new Set(Object.keys(tenants))
   const inProgressOrFailed = await findAllInProgressOrFailed(db)
 
   // anything that's in-progress/failed and now exists in tenant-services
   // exists, so should be updated
   const servicesToUpdate = inProgressOrFailed
-    .filter((s) => createdServices.has(s.repositoryName))
-    .map((s) => s.repositoryName)
+    .filter((s) => tenantNames.has(s.repositoryName))
+    .map((s) => {
+      return { name: s.repositoryName, tenantConfig: tenants[s.repositoryName] }
+    })
 
   logger.info(
     `Updating ${servicesToUpdate.length} ${tfSvcInfra} statuses to success`
   )
 
   for (let i = 0; i < servicesToUpdate.length; i++) {
-    const serviceName = servicesToUpdate[i]
+    const serviceName = servicesToUpdate[i].name
+
+    let runMode = 'Service'
+    if (servicesToUpdate[i].tenantConfig.testSuite !== undefined) {
+      runMode = 'Job'
+    }
+
     logger.info(`updating ${serviceName} ${tfSvcInfra} status to success`)
 
     await updateWorkflowStatus(
@@ -52,9 +58,15 @@ const bulkUpdateTfSvcInfra = async (db, trimmedWorkflow, status) => {
       trimmedWorkflow
     )
     await updateOverallStatus(db, serviceName)
+
+    logger.info(
+      `creating ${runMode} placeholder artifact for ${servicesToUpdate}`
+    )
+
     await createPlaceholderArtifact({
       service: serviceName,
-      githubUrl: `https://github.com/${org}/${serviceName}`
+      githubUrl: `https://github.com/${org}/${serviceName}`,
+      runMode
     })
   }
 }

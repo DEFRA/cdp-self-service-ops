@@ -2,13 +2,14 @@ import { config } from '~/src/config'
 import qs from 'qs'
 import { createLogger } from '~/src/helpers/logging/logger'
 
-async function createPlaceholderArtifact({ service, githubUrl }) {
+async function createPlaceholderArtifact({ service, githubUrl, runMode }) {
   const logger = createLogger()
 
   const queryString = qs.stringify(
     {
       service,
-      githubUrl
+      githubUrl,
+      runMode
     },
     { addQueryPrefix: true }
   )
@@ -17,7 +18,9 @@ async function createPlaceholderArtifact({ service, githubUrl }) {
     'portalBackendApiUrl'
   )}/artifacts/placeholder${queryString}`
 
-  logger.info(`calling create placeholder with ${service} ${githubUrl}`)
+  logger.info(
+    `calling create ${runMode} placeholder with ${service} ${githubUrl}`
+  )
   return await fetch(url, {
     method: 'post'
   })
