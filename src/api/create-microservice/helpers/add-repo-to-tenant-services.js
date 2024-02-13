@@ -1,6 +1,5 @@
 import { octokit } from '~/src/helpers/oktokit'
 import { config } from '~/src/config'
-import { addRepoName } from '~/src/api/create-microservice/helpers/add-repo-name'
 import { createLogger } from '~/src/helpers/logging/logger'
 
 async function addRepoToTenantServices(repositoryName, environment, zone) {
@@ -19,13 +18,21 @@ async function addRepoToTenantServices(repositoryName, environment, zone) {
       ref: 'main'
     })
 
-    const repositoryNamesJson = addRepoName({
-      repositories: data,
-      fileRepository,
-      filePath,
-      repositoryName,
-      zone
-    })
+    const parsedRepositories = JSON.parse(data)
+
+    if (parsedRepositories[0][repositoryName] === undefined) {
+      parsedRepositories[0][repositoryName] = {
+        zone,
+        mongo: zone === 'protected',
+        redis: zone === 'public'
+      }
+    } else {
+      logger.warn(
+        `There's already and entry for '${repositoryName} in cdp-tf-svc-infra! We wont overwrite it.`
+      )
+    }
+
+    const repositoryNamesJson = JSON.stringify(parsedRepositories, null, 2)
 
     return [filePath, repositoryNamesJson]
   } catch (error) {
