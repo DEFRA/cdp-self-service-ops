@@ -5,7 +5,7 @@ import { addRepoToTenantServices } from '~/src/api/create-microservice/helpers/a
 import { prepPullRequestFiles } from '~/src/api/create-microservice/helpers/prep-pull-request-files'
 import { enableAutoMergeGraphQl } from '~/src/helpers/graphql/enable-automerge.graphql'
 
-async function createServiceInfrastructureCode(repoName, zone) {
+async function createServiceInfrastructurePr(repoName, zone) {
   const fileRepository = config.get('githubRepoTfServiceInfra')
   const pullRequestFiles = new Map()
 
@@ -43,4 +43,4 @@ async function createServiceInfrastructureCode(repoName, zone) {
   return pr
 }
 
-export { createServiceInfrastructureCode }
+export { createServiceInfrastructurePr }

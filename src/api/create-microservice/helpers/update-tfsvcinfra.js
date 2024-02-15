@@ -1,20 +1,22 @@
 import { config } from '~/src/config'
 import { statuses } from '~/src/constants/statuses'
-import { createServiceInfrastructureCode } from '~/src/api/create-microservice/helpers/create-service-infrastructure-code'
+import { createServiceInfrastructurePr } from '~/src/api/create-microservice/helpers/create-service-infrastructure-pr'
 import { updateCreationStatus } from '~/src/api/create-microservice/helpers/save-status'
 import { trimPr } from '~/src/api/create-microservice/helpers/trim-pr'
 
 const doUpdateTfSvcInfra = async (request, repositoryName, zone) => {
   const tfSvcInfra = config.get('githubRepoTfServiceInfra')
   try {
-    const createServiceInfrastructureCodeResult =
-      await createServiceInfrastructureCode(repositoryName, zone)
+    const pullRequest = await createServiceInfrastructurePr(
+      repositoryName,
+      zone
+    )
     await updateCreationStatus(request.db, repositoryName, tfSvcInfra, {
       status: statuses.raised,
-      pr: trimPr(createServiceInfrastructureCodeResult?.data)
+      pr: trimPr(pullRequest?.data)
     })
     request.logger.info(
-      `created service infra PR for ${repositoryName}: ${createServiceInfrastructureCodeResult.data.html_url}`
+      `created service infra PR for ${repositoryName}: ${pullRequest.data.html_url}`
     )
   } catch (e) {
     await updateCreationStatus(request.db, repositoryName, tfSvcInfra, {
