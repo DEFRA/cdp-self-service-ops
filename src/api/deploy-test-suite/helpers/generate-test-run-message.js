@@ -6,7 +6,7 @@ const generateTestRunMessage = (imageName, environment, runId, user) => {
     desired_count: 1,
     cluster_name: 'ecs-public',
     name: imageName,
-    image: `${imageName}/${imageName}`,
+    image: imageName,
     image_version: 'latest',
     port: 80,
     task_cpu: 1024,
