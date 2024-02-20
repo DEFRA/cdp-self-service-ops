@@ -64,6 +64,25 @@ const serviceToSecretsMap = {
       DEFRA_ID_CLIENT_SECRET:
         'cdp/services/cdp-defra-id-demo:DEFRA_ID_CLIENT_SECRET'
     }
+  },
+  'forms-designer': {
+    dev: {
+      SESSION_COOKIE_PASSWORD:
+        'cdp/services/forms-designer:SESSION_COOKIE_PASSWORD',
+      REDIS_PASSWORD: 'cdp/services/forms-designer:REDIS_PASSWORD',
+      SQUID_PASSWORD: 'cdp/services/forms-designer:SQUID_PASSWORD'
+    },
+    test: {
+      REDIS_PASSWORD: 'cdp/services/forms-designer:REDIS_PASSWORD'
+    },
+    'perf-test': {
+      REDIS_PASSWORD: 'cdp/services/forms-designer:REDIS_PASSWORD',
+      SQUID_PASSWORD: 'cdp/services/forms-designer:SQUID_PASSWORD'
+    },
+    prod: {
+      REDIS_PASSWORD: 'cdp/services/forms-designer:REDIS_PASSWORD',
+      SQUID_PASSWORD: 'cdp/services/forms-designer:SQUID_PASSWORD'
+    }
   }
 }
 
