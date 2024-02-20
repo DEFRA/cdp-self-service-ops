@@ -66,20 +66,20 @@ const serviceToSecretsMap = {
     }
   },
   'forms-designer': {
-    'dev': {
+    dev: {
       SESSION_COOKIE_PASSWORD:
         'cdp/services/forms-designer:SESSION_COOKIE_PASSWORD',
       REDIS_PASSWORD: 'cdp/services/forms-designer:REDIS_PASSWORD',
       SQUID_PASSWORD: 'cdp/services/forms-designer:SQUID_PASSWORD'
     },
-    'test': {
+    test: {
       REDIS_PASSWORD: 'cdp/services/forms-designer:REDIS_PASSWORD'
     },
     'perf-test': {
       REDIS_PASSWORD: 'cdp/services/forms-designer:REDIS_PASSWORD',
       SQUID_PASSWORD: 'cdp/services/forms-designer:SQUID_PASSWORD'
     },
-    'prod': {
+    prod: {
       REDIS_PASSWORD: 'cdp/services/forms-designer:REDIS_PASSWORD',
       SQUID_PASSWORD: 'cdp/services/forms-designer:SQUID_PASSWORD'
     }
