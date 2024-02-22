@@ -75,8 +75,7 @@ const serviceToSecretsMap = {
     },
     test: {
       REDIS_USERNAME: 'cdp/services/forms-designer:REDIS_USERNAME',
-      REDIS_PASSWORD: 'cdp/services/forms-designer:REDIS_PASSWORD',
-      SQUID_PASSWORD: 'cdp/services/forms-designer:SQUID_PASSWORD'
+      REDIS_PASSWORD: 'cdp/services/forms-designer:REDIS_PASSWORD'
     },
     'perf-test': {
       REDIS_USERNAME: 'cdp/services/forms-designer:REDIS_USERNAME',
@@ -97,8 +96,7 @@ const serviceToSecretsMap = {
     },
     test: {
       REDIS_USERNAME: 'cdp/services/cdp-example-node-frontend:REDIS_USERNAME',
-      REDIS_PASSWORD: 'cdp/services/cdp-example-node-frontend:REDIS_PASSWORD',
-      SQUID_PASSWORD: 'cdp/services/cdp-example-node-frontend:SQUID_PASSWORD'
+      REDIS_PASSWORD: 'cdp/services/cdp-example-node-frontend:REDIS_PASSWORD'
     },
     'perf-test': {
       REDIS_USERNAME: 'cdp/services/cdp-example-node-frontend:REDIS_USERNAME',
