@@ -69,19 +69,51 @@ const serviceToSecretsMap = {
     dev: {
       SESSION_COOKIE_PASSWORD:
         'cdp/services/forms-designer:SESSION_COOKIE_PASSWORD',
+      REDIS_USERNAME: 'cdp/services/forms-designer:REDIS_USERNAME',
       REDIS_PASSWORD: 'cdp/services/forms-designer:REDIS_PASSWORD',
       SQUID_PASSWORD: 'cdp/services/forms-designer:SQUID_PASSWORD'
     },
     test: {
-      REDIS_PASSWORD: 'cdp/services/forms-designer:REDIS_PASSWORD'
+      REDIS_USERNAME: 'cdp/services/forms-designer:REDIS_USERNAME',
+      REDIS_PASSWORD: 'cdp/services/forms-designer:REDIS_PASSWORD',
+      SQUID_PASSWORD: 'cdp/services/forms-designer:SQUID_PASSWORD'
     },
     'perf-test': {
+      REDIS_USERNAME: 'cdp/services/forms-designer:REDIS_USERNAME',
       REDIS_PASSWORD: 'cdp/services/forms-designer:REDIS_PASSWORD',
       SQUID_PASSWORD: 'cdp/services/forms-designer:SQUID_PASSWORD'
     },
     prod: {
+      REDIS_USERNAME: 'cdp/services/forms-designer:REDIS_USERNAME',
       REDIS_PASSWORD: 'cdp/services/forms-designer:REDIS_PASSWORD',
       SQUID_PASSWORD: 'cdp/services/forms-designer:SQUID_PASSWORD'
+    }
+  },
+  'cdp-example-node-frontend': {
+    dev: {
+      REDIS_USERNAME: 'cdp/services/cdp-example-node-frontend:REDIS_USERNAME',
+      REDIS_PASSWORD: 'cdp/services/cdp-example-node-frontend:REDIS_PASSWORD',
+      SQUID_PASSWORD: 'cdp/services/cdp-example-node-frontend:SQUID_PASSWORD'
+    },
+    test: {
+      REDIS_USERNAME: 'cdp/services/cdp-example-node-frontend:REDIS_USERNAME',
+      REDIS_PASSWORD: 'cdp/services/cdp-example-node-frontend:REDIS_PASSWORD',
+      SQUID_PASSWORD: 'cdp/services/cdp-example-node-frontend:SQUID_PASSWORD'
+    },
+    'perf-test': {
+      REDIS_USERNAME: 'cdp/services/cdp-example-node-frontend:REDIS_USERNAME',
+      REDIS_PASSWORD: 'cdp/services/cdp-example-node-frontend:REDIS_PASSWORD',
+      SQUID_PASSWORD: 'cdp/services/cdp-example-node-frontend:SQUID_PASSWORD'
+    },
+    prod: {
+      REDIS_USERNAME: 'cdp/services/cdp-example-node-frontend:REDIS_USERNAME',
+      REDIS_PASSWORD: 'cdp/services/cdp-example-node-frontend:REDIS_PASSWORD',
+      SQUID_PASSWORD: 'cdp/services/cdp-example-node-frontend:SQUID_PASSWORD'
+    },
+    'infra-dev': {
+      REDIS_USERNAME: 'cdp/services/cdp-example-node-frontend:REDIS_USERNAME',
+      REDIS_PASSWORD: 'cdp/services/cdp-example-node-frontend:REDIS_PASSWORD',
+      SQUID_PASSWORD: 'cdp/services/cdp-example-node-frontend:SQUID_PASSWORD'
     }
   }
 }
