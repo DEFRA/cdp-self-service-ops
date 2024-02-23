@@ -71,16 +71,22 @@ const serviceToSecretsMap = {
         'cdp/services/forms-designer:SESSION_COOKIE_PASSWORD',
       REDIS_USERNAME: 'cdp/services/forms-designer:REDIS_USERNAME',
       REDIS_PASSWORD: 'cdp/services/forms-designer:REDIS_PASSWORD',
-      SQUID_PASSWORD: 'cdp/services/forms-designer:SQUID_PASSWORD'
+      SQUID_PASSWORD: 'cdp/services/forms-designer:SQUID_PASSWORD',
+      AZURE_CLIENT_ID: 'cdp/services/forms-designer:AZURE_CLIENT_ID',
+      AZURE_CLIENT_SECRET: 'cdp/services/forms-designer:AZURE_CLIENT_SECRET'
     },
     test: {
       REDIS_USERNAME: 'cdp/services/forms-designer:REDIS_USERNAME',
-      REDIS_PASSWORD: 'cdp/services/forms-designer:REDIS_PASSWORD'
+      REDIS_PASSWORD: 'cdp/services/forms-designer:REDIS_PASSWORD',
+      AZURE_CLIENT_ID: 'cdp/services/forms-designer:AZURE_CLIENT_ID',
+      AZURE_CLIENT_SECRET: 'cdp/services/forms-designer:AZURE_CLIENT_SECRET'
     },
     'perf-test': {
       REDIS_USERNAME: 'cdp/services/forms-designer:REDIS_USERNAME',
       REDIS_PASSWORD: 'cdp/services/forms-designer:REDIS_PASSWORD',
-      SQUID_PASSWORD: 'cdp/services/forms-designer:SQUID_PASSWORD'
+      SQUID_PASSWORD: 'cdp/services/forms-designer:SQUID_PASSWORD',
+      AZURE_CLIENT_ID: 'cdp/services/forms-designer:AZURE_CLIENT_ID',
+      AZURE_CLIENT_SECRET: 'cdp/services/forms-designer:AZURE_CLIENT_SECRET'
     },
     prod: {
       REDIS_USERNAME: 'cdp/services/forms-designer:REDIS_USERNAME',
