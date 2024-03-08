@@ -192,13 +192,13 @@ const config = convict({
   userServiceApiUrl: {
     doc: 'User Service Backend API url',
     format: String,
-    default: 'http://localhost:3001/cdp-user-service-backend',
+    default: 'http://localhost:3001',
     env: 'USER_SERVICE_API_URL'
   },
   portalBackendApiUrl: {
     doc: 'Portal backend for deployments and deployables root API url',
     format: String,
-    default: 'http://localhost:5094/cdp-portal-backend',
+    default: 'http://localhost:5094',
     env: 'PORTAL_BACKEND_API_URL'
   },
   createMicroServiceWorkflow: {
