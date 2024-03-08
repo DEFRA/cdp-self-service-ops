@@ -34,7 +34,7 @@ const config = convict({
   appPathPrefix: {
     doc: 'Application url path prefix this is needed only until we have host based routing',
     format: String,
-    default: '/cdp-self-service-ops',
+    default: '',
     env: 'APP_PATH_PREFIX'
   },
   oidcWellKnownConfigurationUrl: {
