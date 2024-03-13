@@ -13,7 +13,6 @@ import { registerServerMethods } from '~/src/api/server-methods'
 import { secureContext } from '~/src/helpers/secure-context'
 
 const isProduction = config.get('isProduction')
-const appPathPrefix = config.get('appPathPrefix')
 
 async function createServer() {
   const server = hapi.server({
@@ -60,13 +59,7 @@ async function createServer() {
 
   await server.register({ plugin: snsClientPlugin, options: {} })
 
-  if (!appPathPrefix || appPathPrefix === '/') {
-    await server.register(router)
-  } else {
-    await server.register(router, {
-      routes: { prefix: appPathPrefix }
-    })
-  }
+  await server.register(router)
 
   registerServerMethods(server)
 

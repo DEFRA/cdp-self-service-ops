@@ -31,12 +31,6 @@ const config = convict({
     format: String,
     default: path.normalize(path.join(__dirname, '..', '..'))
   },
-  appPathPrefix: {
-    doc: 'Application url path prefix this is needed only until we have host based routing',
-    format: String,
-    default: '',
-    env: 'APP_PATH_PREFIX'
-  },
   oidcWellKnownConfigurationUrl: {
     doc: 'OIDC .well-known configuration URL',
     format: String,
