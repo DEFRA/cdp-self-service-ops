@@ -119,6 +119,24 @@ const serviceToSecretsMap = {
       REDIS_PASSWORD: 'cdp/services/cdp-example-node-frontend:REDIS_PASSWORD',
       SQUID_PASSWORD: 'cdp/services/cdp-example-node-frontend:SQUID_PASSWORD'
     }
+  },
+  'marine-licensing-backend-demo': {
+    dev: {
+      ENTRA_CLIENT_SECRET:
+        'cdp/services/marine-licensing-backend-demo:ENTRA_CLIENT_SECRET'
+    },
+    test: {
+      ENTRA_CLIENT_SECRET:
+        'cdp/services/marine-licensing-backend-demo:ENTRA_CLIENT_SECRET'
+    },
+    'perf-test': {
+      ENTRA_CLIENT_SECRET:
+        'cdp/services/marine-licensing-backend-demo:ENTRA_CLIENT_SECRET'
+    },
+    prod: {
+      ENTRA_CLIENT_SECRET:
+        'cdp/services/marine-licensing-backend-demo:ENTRA_CLIENT_SECRET'
+    }
   }
 }
 
