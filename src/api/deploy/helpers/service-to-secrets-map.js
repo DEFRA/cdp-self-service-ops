@@ -122,16 +122,20 @@ const serviceToSecretsMap = {
   },
   'marine-licensing-backend-demo': {
     dev: {
-      ENTRA_CLIENT_SECRET: 'cdp/services/marine-licensing-backend-demo:ENTRA_CLIENT_SECRET'
+      ENTRA_CLIENT_SECRET:
+        'cdp/services/marine-licensing-backend-demo:ENTRA_CLIENT_SECRET'
     },
     test: {
-      ENTRA_CLIENT_SECRET: 'cdp/services/marine-licensing-backend-demo:ENTRA_CLIENT_SECRET'
+      ENTRA_CLIENT_SECRET:
+        'cdp/services/marine-licensing-backend-demo:ENTRA_CLIENT_SECRET'
     },
     'perf-test': {
-      ENTRA_CLIENT_SECRET: 'cdp/services/marine-licensing-backend-demo:ENTRA_CLIENT_SECRET'
+      ENTRA_CLIENT_SECRET:
+        'cdp/services/marine-licensing-backend-demo:ENTRA_CLIENT_SECRET'
     },
     prod: {
-      ENTRA_CLIENT_SECRET: 'cdp/services/marine-licensing-backend-demo:ENTRA_CLIENT_SECRET'
+      ENTRA_CLIENT_SECRET:
+        'cdp/services/marine-licensing-backend-demo:ENTRA_CLIENT_SECRET'
     }
   }
 }
