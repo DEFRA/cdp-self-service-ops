@@ -7,7 +7,9 @@ async function createNginxConfig(
   repositoryName,
   zone,
   environments,
-  additionPaths = []
+  additionalLocations = [],
+  nginxServerOptions = [],
+  vanityUrls = []
 ) {
   const logger = createLogger()
 
@@ -17,7 +19,9 @@ async function createNginxConfig(
         cdp_service_name: repositoryName,
         cdp_service_port: '8085',
         cdp_zone: zone,
-        addition_paths: additionPaths
+        additional_locations: additionalLocations,
+        nginx_server_options: nginxServerOptions,
+        vanity_urls: vanityUrls
       }
     ]
   })
