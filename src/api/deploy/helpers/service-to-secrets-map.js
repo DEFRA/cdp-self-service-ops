@@ -137,6 +137,28 @@ const serviceToSecretsMap = {
       ENTRA_CLIENT_SECRET:
         'cdp/services/marine-licensing-backend-demo:ENTRA_CLIENT_SECRET'
     }
+  },
+  'cdp-uploader': {
+    dev: {
+      REDIS_USERNAME: 'cdp/services/cdp-uploader:REDIS_USERNAME',
+      REDIS_PASSWORD: 'cdp/services/cdp-uploader:REDIS_PASSWORD'
+    },
+    test: {
+      REDIS_USERNAME: 'cdp/services/cdp-uploader:REDIS_USERNAME',
+      REDIS_PASSWORD: 'cdp/services/cdp-uploader:REDIS_PASSWORD'
+    },
+    'perf-test': {
+      REDIS_USERNAME: 'cdp/services/cdp-uploader:REDIS_USERNAME',
+      REDIS_PASSWORD: 'cdp/services/cdp-uploader:REDIS_PASSWORD'
+    },
+    prod: {
+      REDIS_USERNAME: 'cdp/services/cdp-uploader:REDIS_USERNAME',
+      REDIS_PASSWORD: 'cdp/services/cdp-uploader:REDIS_PASSWORD'
+    },
+    'infra-dev': {
+      REDIS_USERNAME: 'cdp/services/cdp-uploader:REDIS_USERNAME',
+      REDIS_PASSWORD: 'cdp/services/cdp-uploader:REDIS_PASSWORD'
+    }
   }
 }
 
