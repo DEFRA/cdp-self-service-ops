@@ -17,7 +17,7 @@ jobs:
       contents: write
     steps:
       - name: Check out code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Build and Publish
         uses: DEFRA/cdp-build-action/build@main
