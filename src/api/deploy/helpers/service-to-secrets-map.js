@@ -159,6 +159,20 @@ const serviceToSecretsMap = {
       REDIS_USERNAME: 'cdp/services/cdp-uploader:REDIS_USERNAME',
       REDIS_PASSWORD: 'cdp/services/cdp-uploader:REDIS_PASSWORD'
     }
+  },
+  'aqie-front-end': {
+    dev: {
+      OS_PLACES_API_KEY: 'cdp/services/aqie-front-end:OS_PLACES_API_KEY',
+      DAQIE_PASSWORD: 'cdp/services/aqie-front-end:DAQIE_PASSWORD'
+    },
+    test: {
+      OS_PLACES_API_KEY: 'cdp/services/aqie-front-end:OS_PLACES_API_KEY',
+      DAQIE_PASSWORD: 'cdp/services/aqie-front-end:DAQIE_PASSWORD'
+    },
+    prod: {
+      OS_PLACES_API_KEY: 'cdp/services/aqie-front-end:OS_PLACES_API_KEY',
+      DAQIE_PASSWORD: 'cdp/services/aqie-front-end:DAQIE_PASSWORD'
+    }
   }
 }
 
