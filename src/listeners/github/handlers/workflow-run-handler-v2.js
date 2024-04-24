@@ -8,7 +8,6 @@ import { updateOverallStatus } from '~/src/api/create-microservice/helpers/save-
 import { config } from '~/src/config'
 import { bulkUpdateTfSvcInfra } from '~/src/listeners/github/helpers/bulk-update-tf-svc-infra'
 import { normalizeStatus } from '~/src/listeners/github/helpers/normalize-status'
-import { updateRepositoryStatus } from '~/src/api/create-repository/helpers/status/update-repository-status'
 import { statuses } from '~/src/constants/statuses'
 
 const logger = createLogger()
@@ -82,7 +81,6 @@ const handleCdpCreateWorkflows = async (db, message) => {
 
   try {
     const repoName = message.workflow_run?.name // we repurpose the name to track name of repo its creating
-    const updateStatus = updateRepositoryStatus(db, repoName)
     const status = findByRepoName(db, repoName)
 
     if (status === null) {
