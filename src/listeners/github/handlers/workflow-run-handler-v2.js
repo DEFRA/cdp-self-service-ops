@@ -9,6 +9,7 @@ import { config } from '~/src/config'
 import { bulkUpdateTfSvcInfra } from '~/src/listeners/github/helpers/bulk-update-tf-svc-infra'
 import { normalizeStatus } from '~/src/listeners/github/helpers/normalize-status'
 import { updateRepositoryStatus } from '~/src/api/create-repository/helpers/status/update-repository-status'
+import { statuses } from '~/src/constants/statuses'
 
 const logger = createLogger()
 
@@ -84,23 +85,63 @@ const handleCdpCreateWorkflows = async (db, message) => {
     const updateStatus = updateRepositoryStatus(db, repoName)
     const status = findByRepoName(db, repoName)
 
-    if (status !== null) {
-      const workflowStatus = normalizeStatus(
-        message.action,
-        message.workflow_run?.conclusion
-      )
-      logger.info(
-        `updating createRepository status fro ${repoName} to ${workflowStatus}`
-      )
-
-      await updateStatus({
-        status: workflowStatus,
-        'createRepository.status': workflowStatus
-      })
-
-      // TODO combine this and new update-repository-status work
-      await updateOverallStatus(db, repoName)
+    if (status === null) {
+      return
     }
+
+    const workflowStatus = normalizeStatus(
+      message.action,
+      message.workflow_run?.conclusion
+    )
+
+    logger.info(
+      `attempting to update createRepository status for ${repoName} to ${workflowStatus}`
+    )
+
+    // make sure statuses can only be progressed forward, not back (request -> in-progress -> success/failure)
+    // this can happen if the github events arrives in the wrong order
+    let dontOverwrite = []
+    switch (workflowStatus) {
+      case statuses.requested:
+        dontOverwrite = [
+          statuses.success,
+          statuses.failure,
+          statuses.inProgress
+        ]
+        break
+      case statuses.inProgress:
+        dontOverwrite = [statuses.success, statuses.failure]
+        break
+      case statuses.success:
+      case statuses.failure:
+        dontOverwrite = []
+    }
+
+    const updateResult = await db.collection('status').updateOne(
+      {
+        repositoryName: repoName,
+        'createRepository.status': { $nin: dontOverwrite }
+      },
+      {
+        $set: {
+          status: workflowStatus,
+          'createRepository.status': workflowStatus
+        }
+      }
+    )
+
+    if (updateResult.matchedCount > 0) {
+      logger.info(
+        `set ${repoName} createRepository status to ${workflowStatus}`
+      )
+    } else {
+      logger.warn(
+        `did NOT set ${repoName} createRepository to ${workflowStatus}`
+      )
+    }
+
+    // TODO combine this and new update-repository-status work
+    await updateOverallStatus(db, repoName)
   } catch (e) {
     logger.error(e)
   }
