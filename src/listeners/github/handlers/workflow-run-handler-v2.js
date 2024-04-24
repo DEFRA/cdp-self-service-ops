@@ -8,7 +8,7 @@ import { updateOverallStatus } from '~/src/api/create-microservice/helpers/save-
 import { config } from '~/src/config'
 import { bulkUpdateTfSvcInfra } from '~/src/listeners/github/helpers/bulk-update-tf-svc-infra'
 import { normalizeStatus } from '~/src/listeners/github/helpers/normalize-status'
-import { statuses } from '~/src/constants/statuses'
+import { dontOverwriteStatus } from '~/src/listeners/github/helpers/dont-overwrite-status'
 
 const logger = createLogger()
 
@@ -96,29 +96,13 @@ const handleCdpCreateWorkflows = async (db, message) => {
       `attempting to update createRepository status for ${repoName} to ${workflowStatus}`
     )
 
-    // make sure statuses can only be progressed forward, not back (request -> in-progress -> success/failure)
-    // this can happen if the github events arrives in the wrong order
-    let dontOverwrite = []
-    switch (workflowStatus) {
-      case statuses.requested:
-        dontOverwrite = [
-          statuses.success,
-          statuses.failure,
-          statuses.inProgress
-        ]
-        break
-      case statuses.inProgress:
-        dontOverwrite = [statuses.success, statuses.failure]
-        break
-      case statuses.success:
-      case statuses.failure:
-        dontOverwrite = []
-    }
-
+    // Make sure statuses can only be progressed forward, not back (request -> in-progress -> success/failure)
+    // This can happen if the github events arrives in the wrong order or at the same time
+    const dontOverwrite = dontOverwriteStatus(workflowStatus)
     const updateResult = await db.collection('status').updateOne(
       {
         repositoryName: repoName,
-        'createRepository.status': { $nin: dontOverwrite }
+        'createRepository.status': { $nin: dontOverwrite } // only update record if status is Not In ($nin) the dont overwrite list
       },
       {
         $set: {
@@ -134,7 +118,7 @@ const handleCdpCreateWorkflows = async (db, message) => {
       )
     } else {
       logger.warn(
-        `did NOT set ${repoName} createRepository to ${workflowStatus}`
+        `NOT setting status on ${repoName} createRepository. Status ${workflowStatus} cant replace ${dontOverwrite.toString()}. Its possible the update message arrived out of order`
       )
     }
 
