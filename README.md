@@ -12,6 +12,7 @@ Core delivery platform Self-Service Ops Node.js Backend.
 - [Local development](#local-development)
   - [Setup](#setup)
   - [Development](#development)
+    - [Updating dependencies](#updating-dependencies)
   - [Production](#production)
   - [Npm scripts](#npm-scripts)
 - [API endpoints](#api-endpoints)
@@ -65,6 +66,16 @@ To run the application in `development` mode run:
 
 ```bash
 $ npm run dev
+```
+
+#### Updating dependencies
+
+To update dependencies globally install https://www.npmjs.com/package/npm-check-updates
+
+> Run the script below, run tests, test teh application and commit the altered package.json and package-lock.json files
+
+```bash
+ncu -i
 ```
 
 ### Production
