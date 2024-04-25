@@ -90,7 +90,7 @@ describe('#workflow-run-handler-v2', () => {
 
     expect(updateOne).toHaveBeenNthCalledWith(
       1,
-      { repositoryName: 'test-repo' },
+      { repositoryName: 'test-repo', 'tf-svc-infra.status': { $nin: [] } },
       {
         $set: {
           'tf-svc-infra.main.workflow': {
@@ -152,5 +152,73 @@ describe('#workflow-run-handler-v2', () => {
     expect(findOne).toHaveBeenCalledWith({
       'tf-svc-infra.merged_sha': '6d96270004515a0486bb7f76196a72b40c55a47f'
     })
+  })
+
+  test('completed status is not overwritten by out of order in-progress message', async () => {
+    const mockStatusRecord = {
+      repositoryName: 'test-repo',
+      zone: 'protected',
+      status: statuses.completed,
+      createRepository: { status: statuses.notRequested },
+      'cdp-app-config': { status: statuses.success },
+      'tf-svc-infra': { status: statuses.notRequested },
+      'cdp-nginx-upstreams': { status: statuses.notRequested }
+    }
+    const findOne = jest.fn().mockReturnValue(mockStatusRecord)
+    const updateOne = jest.fn().mockReturnValue({})
+    const mockDb = {
+      collection: jest.fn().mockReturnValue({
+        findOne,
+        updateOne
+      })
+    }
+
+    const msg = {
+      github_event: 'workflow_run',
+      action: 'in_progress',
+      workflow_run: {
+        id: 999,
+        name: 'wf-name',
+        html_url: 'http://localhost',
+        created_at: new Date(0),
+        updated_at: new Date(0),
+        path: '/test',
+        head_branch: 'main',
+        head_sha: '6d96270004515a0486bb7f76196a72b40c55a47f',
+        conclusion: statuses.inProgress
+      },
+      repository: {
+        name: 'tf-svc-infra',
+        owner: {
+          login: 'test-org'
+        }
+      }
+    }
+    await workflowRunHandlerV2(mockDb, msg)
+    expect(findOne).toHaveBeenCalledWith({
+      'tf-svc-infra.merged_sha': '6d96270004515a0486bb7f76196a72b40c55a47f'
+    })
+
+    expect(updateOne).toHaveBeenNthCalledWith(
+      1,
+      {
+        repositoryName: 'test-repo',
+        'tf-svc-infra.status': { $nin: [statuses.success, statuses.failure] }
+      },
+      {
+        $set: {
+          'tf-svc-infra.main.workflow': {
+            id: 999,
+            name: 'wf-name',
+            html_url: 'http://localhost',
+            created_at: new Date(0),
+            updated_at: new Date(0),
+            path: '/test'
+          },
+
+          'tf-svc-infra.status': statuses.inProgress
+        }
+      }
+    )
   })
 })

@@ -5,7 +5,7 @@ const normalizeStatus = (action, conclusion) => {
     case statuses.completed:
       switch (conclusion) {
         case statuses.success:
-        case statuses.skipped:
+        case 'skipped':
           return statuses.success
         default:
           return statuses.failure
