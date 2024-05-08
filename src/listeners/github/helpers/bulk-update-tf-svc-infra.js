@@ -60,7 +60,8 @@ const bulkUpdateTfSvcInfra = async (db, trimmedWorkflow, status) => {
     await updateOverallStatus(db, serviceName)
 
     logger.info(
-      `creating ${runMode} placeholder artifact for ${servicesToUpdate}`
+      { servicesToUpdate },
+      `creating ${runMode} placeholder artifact for ${serviceName}`
     )
 
     await createPlaceholderArtifact({
