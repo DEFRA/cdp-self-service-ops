@@ -166,6 +166,7 @@ const serviceToSecretsMap = {
       DAQIE_PASSWORD: 'cdp/services/aqie-front-end:DAQIE_PASSWORD',
       REDIS_USERNAME: 'cdp/services/aqie-front-end:REDIS_USERNAME',
       REDIS_PASSWORD: 'cdp/services/aqie-front-end:REDIS_PASSWORD',
+      SQUID_USERNAME: 'cdp/services/aqie-front-end:SQUID_USERNAME',
       SQUID_PASSWORD: 'cdp/services/aqie-front-end:SQUID_PASSWORD'
     },
     test: {
@@ -173,6 +174,7 @@ const serviceToSecretsMap = {
       DAQIE_PASSWORD: 'cdp/services/aqie-front-end:DAQIE_PASSWORD',
       REDIS_USERNAME: 'cdp/services/aqie-front-end:REDIS_USERNAME',
       REDIS_PASSWORD: 'cdp/services/aqie-front-end:REDIS_PASSWORD',
+      SQUID_USERNAME: 'cdp/services/aqie-front-end:SQUID_USERNAME',
       SQUID_PASSWORD: 'cdp/services/aqie-front-end:SQUID_PASSWORD'
     },
     'pref-test': {
@@ -180,6 +182,7 @@ const serviceToSecretsMap = {
       DAQIE_PASSWORD: 'cdp/services/aqie-front-end:DAQIE_PASSWORD',
       REDIS_USERNAME: 'cdp/services/aqie-front-end:REDIS_USERNAME',
       REDIS_PASSWORD: 'cdp/services/aqie-front-end:REDIS_PASSWORD',
+      SQUID_USERNAME: 'cdp/services/aqie-front-end:SQUID_USERNAME',
       SQUID_PASSWORD: 'cdp/services/aqie-front-end:SQUID_PASSWORD'
     },
     prod: {
@@ -187,20 +190,25 @@ const serviceToSecretsMap = {
       DAQIE_PASSWORD: 'cdp/services/aqie-front-end:DAQIE_PASSWORD',
       REDIS_USERNAME: 'cdp/services/aqie-front-end:REDIS_USERNAME',
       REDIS_PASSWORD: 'cdp/services/aqie-front-end:REDIS_PASSWORD',
+      SQUID_USERNAME: 'cdp/services/aqie-front-end:SQUID_USERNAME',
       SQUID_PASSWORD: 'cdp/services/aqie-front-end:SQUID_PASSWORD'
     }
   },
   'aqie-back-end': {
     dev: {
+      SQUID_USERNAME: 'cdp/services/aqie-back-end:SQUID_USERNAME',
       SQUID_PASSWORD: 'cdp/services/aqie-back-end:SQUID_PASSWORD'
     },
     test: {
+      SQUID_USERNAME: 'cdp/services/aqie-back-end:SQUID_USERNAME',
       SQUID_PASSWORD: 'cdp/services/aqie-back-end:SQUID_PASSWORD'
     },
     'pref-test': {
+      SQUID_USERNAME: 'cdp/services/aqie-back-end:SQUID_USERNAME',
       SQUID_PASSWORD: 'cdp/services/aqie-back-end:SQUID_PASSWORD'
     },
     prod: {
+      SQUID_USERNAME: 'cdp/services/aqie-back-end:SQUID_USERNAME',
       SQUID_PASSWORD: 'cdp/services/aqie-back-end:SQUID_PASSWORD'
     }
   }
