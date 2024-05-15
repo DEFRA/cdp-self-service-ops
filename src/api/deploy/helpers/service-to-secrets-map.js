@@ -76,6 +76,8 @@ const serviceToSecretsMap = {
       AZURE_CLIENT_SECRET: 'cdp/services/forms-designer:AZURE_CLIENT_SECRET'
     },
     test: {
+      SESSION_COOKIE_PASSWORD:
+        'cdp/services/forms-designer:SESSION_COOKIE_PASSWORD',
       REDIS_USERNAME: 'cdp/services/forms-designer:REDIS_USERNAME',
       REDIS_PASSWORD: 'cdp/services/forms-designer:REDIS_PASSWORD',
       AZURE_CLIENT_ID: 'cdp/services/forms-designer:AZURE_CLIENT_ID',
