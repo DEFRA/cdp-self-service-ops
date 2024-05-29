@@ -1,4 +1,4 @@
-import { config, environments } from '~/src/config'
+import { config } from '~/src/config'
 import { statuses } from '~/src/constants/statuses'
 import { updateCreationStatus } from '~/src/api/create-microservice/helpers/save-status'
 import { trimPr } from '~/src/api/create-microservice/helpers/trim-pr'
@@ -7,6 +7,7 @@ import { enableAutoMergeGraphQl } from '~/src/helpers/graphql/enable-automerge.g
 import { createLogger } from '~/src/helpers/logging/logger'
 import { prepPullRequestFiles } from '~/src/api/create-microservice/helpers/prep-pull-request-files'
 import { addRepoToGithubOidc } from '~/src/api/create-microservice/helpers/add-repo-to-github-oidc'
+import { testRunnerEnvironments } from '~/src/config/test-runner-environments'
 
 const raiseInfraPullRequest = async (request, name, zone) => {
   const tfSvcInfra = config.get('githubRepoTfServiceInfra')
@@ -33,17 +34,16 @@ async function createTestSuiteInfrastructureCode(repoName, zone) {
   const fileRepository = config.get('githubRepoTfServiceInfra')
   const pullRequestFiles = new Map()
 
-  // TODO: do we want to restrict this to just perf-test (and management for ECR to work) environment?
-  const infrastructurePromises = Object.values(environments).map(
-    async (env) => {
-      const [tenantServicesFilePath, tenantServicesJson] =
-        await addTestToTenantServices(repoName, env, zone)
-      pullRequestFiles.set(tenantServicesFilePath, tenantServicesJson)
+  const infrastructurePromises = Object.values(
+    testRunnerEnvironments.performance
+  ).map(async (env) => {
+    const [tenantServicesFilePath, tenantServicesJson] =
+      await addTestToTenantServices(repoName, env, zone)
+    pullRequestFiles.set(tenantServicesFilePath, tenantServicesJson)
 
-      const [oidcFilePath, oidcJson] = await addRepoToGithubOidc(repoName, env)
-      pullRequestFiles.set(oidcFilePath, oidcJson)
-    }
-  )
+    const [oidcFilePath, oidcJson] = await addRepoToGithubOidc(repoName, env)
+    pullRequestFiles.set(oidcFilePath, oidcJson)
+  })
 
   await Promise.all(infrastructurePromises)
 

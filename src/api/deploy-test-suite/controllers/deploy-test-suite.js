@@ -3,7 +3,7 @@ import { generateTestRunMessage } from '~/src/api/deploy-test-suite/helpers/gene
 import { sendSnsDeployMessage } from '~/src/api/deploy/helpers/send-sns-deploy-message'
 
 import * as crypto from 'crypto'
-import { config } from '~/src/config'
+import { config, environments } from '~/src/config'
 import { createRecordTestRun } from '~/src/api/deploy-test-suite/helpers/record-test-run'
 import { Boom } from '@hapi/boom'
 import { getRepoTeams } from '~/src/api/deploy/helpers/get-repo-teams'
@@ -36,6 +36,16 @@ const deployTestSuiteController = {
       const isTeamMember = repoTeams.some((team) => scope.includes(team.teamId))
       if (!isTeamMember) {
         throw Boom.forbidden('Insufficient scope')
+      }
+
+      // Only admins can run test suites in the admin environments
+      if (
+        payload.environment === environments.infraDev ||
+        payload.environment === environments.management
+      ) {
+        throw Boom.forbidden(
+          'Insufficient scope to run suite in this environment'
+        )
       }
     }
 
