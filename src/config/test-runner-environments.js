@@ -1,7 +1,14 @@
 import { environments } from '~/src/config/environments'
 
 const testRunnerEnvironments = {
-  smoke: environments,
+  smoke: [
+    environments.prod,
+    environments.perfTest,
+    environments.test,
+    environments.dev,
+    environments.management,
+    environments.infraDev
+  ],
   performance: [
     environments.perfTest,
     environments.management,

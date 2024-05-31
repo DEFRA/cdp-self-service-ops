@@ -1,15 +1,15 @@
 import Boom from '@hapi/boom'
 import { isNil } from 'lodash'
 import { config } from '~/src/config'
+import { createSmokeTestSuite } from '~/src/api/create-smoke-test-suite/helpers/workflow/create-smoke-test-suite'
 import { updateOverallStatus } from '~/src/api/create-microservice/helpers/save-status'
-import { perfTestSuiteValidation } from '~/src/api/create-perf-test-suite/helpers/schema/perf-test-suite-validation'
 import { raiseInfraPullRequest } from '~/src/api/helpers/create/raise-infra-pull-request'
 import { testRunnerEnvironments } from '~/src/config/test-runner-environments'
-import { creations } from '~/src/constants/creations'
 import { createTestSuiteStatus } from '~/src/api/helpers/create/create-test-suite-status'
-import { createPerfTestSuite } from '~/src/api/create-perf-test-suite/helpers/workflow/create-perf-test-suite'
+import { creations } from '~/src/constants/creations'
+import { smokeTestSuiteValidation } from '~/src/api/create-smoke-test-suite/helpers/schema/smoke-test-suite-validation'
 
-const createPerfTestSuiteController = {
+const createSmokeTestSuiteController = {
   options: {
     auth: {
       strategy: 'azure-oidc',
@@ -18,7 +18,7 @@ const createPerfTestSuiteController = {
       }
     },
     validate: {
-      payload: perfTestSuiteValidation,
+      payload: smokeTestSuiteValidation,
       failAction: () => Boom.boomify(Boom.badRequest())
     }
   },
@@ -34,7 +34,7 @@ const createPerfTestSuiteController = {
       throw Boom.badData(`Team ${team.name} does not have a linked Github team`)
     }
 
-    request.logger.info(`Creating env test suite: ${repositoryName}`)
+    request.logger.info(`Creating smoke test suite: ${repositoryName}`)
 
     try {
       await createTestSuiteStatus(
@@ -43,8 +43,8 @@ const createPerfTestSuiteController = {
         repositoryName,
         zone,
         team,
-        creations.perfTestsuite,
-        config.get('createPerfTestSuiteWorkflow')
+        creations.smokeTestSuite,
+        'cdp-node-smoke-test-suite-template'
       )
     } catch (e) {
       request.logger.error(e)
@@ -53,13 +53,13 @@ const createPerfTestSuiteController = {
       )
     }
 
-    await createPerfTestSuite(request, repositoryName, payload, team)
+    await createSmokeTestSuite(request, repositoryName, payload, team)
 
     await raiseInfraPullRequest(
       request,
       repositoryName,
       zone,
-      testRunnerEnvironments.performance
+      testRunnerEnvironments.environment
     )
 
     // calculate and set the overall status
@@ -67,7 +67,7 @@ const createPerfTestSuiteController = {
 
     return h
       .response({
-        message: 'Perf test suite creation has started',
+        message: 'Smoke test suite creation has started',
         repositoryName,
         statusUrl: `/status/${repositoryName}`
       })
@@ -75,4 +75,4 @@ const createPerfTestSuiteController = {
   }
 }
 
-export { createPerfTestSuiteController }
+export { createSmokeTestSuiteController }

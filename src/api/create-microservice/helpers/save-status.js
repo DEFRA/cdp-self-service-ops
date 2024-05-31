@@ -13,7 +13,13 @@ function getStatusKeys(statusRecord) {
     statusKeys.push('createRepository')
   }
 
-  if (statusRecord?.kind === creations.envTestsuite) {
+  if (
+    [
+      creations.envTestsuite,
+      creations.smokeTestSuite,
+      creations.perfTestsuite
+    ].includes(statusRecord?.kind)
+  ) {
     statusKeys.push('createRepository', tfSvcInfra)
   }
 

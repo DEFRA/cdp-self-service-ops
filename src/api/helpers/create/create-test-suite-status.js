@@ -1,12 +1,19 @@
 import { config } from '~/src/config'
-import { creations } from '~/src/constants/creations'
 import { statuses } from '~/src/constants/statuses'
 
 const tfSvcInfra = config.get('githubRepoTfServiceInfra')
 
-async function createEnvTestSuiteStatus(db, org, repositoryName, zone, team) {
+async function createTestSuiteStatus(
+  db,
+  org,
+  repositoryName,
+  zone,
+  team,
+  kind,
+  serviceTypeTemplate
+) {
   const statusDocument = {
-    kind: creations.envTestsuite,
+    kind,
     portalVersion: 2,
     started: new Date(),
     status: statuses.inProgress,
@@ -17,7 +24,7 @@ async function createEnvTestSuiteStatus(db, org, repositoryName, zone, team) {
       name: team.name
     },
     zone,
-    serviceTypeTemplate: 'cdp-node-env-test-suite-template',
+    serviceTypeTemplate,
     createRepository: {
       status: statuses.notRequested
     },
@@ -29,4 +36,4 @@ async function createEnvTestSuiteStatus(db, org, repositoryName, zone, team) {
   return await db.collection('status').insertOne(statusDocument)
 }
 
-export { createEnvTestSuiteStatus }
+export { createTestSuiteStatus }

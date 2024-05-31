@@ -7,12 +7,23 @@ import { enableAutoMergeGraphQl } from '~/src/helpers/graphql/enable-automerge.g
 import { createLogger } from '~/src/helpers/logging/logger'
 import { prepPullRequestFiles } from '~/src/api/create-microservice/helpers/prep-pull-request-files'
 import { addRepoToGithubOidc } from '~/src/api/create-microservice/helpers/add-repo-to-github-oidc'
-import { testRunnerEnvironments } from '~/src/config/test-runner-environments'
 
-const raiseInfraPullRequest = async (request, name, zone) => {
+/**
+ *
+ * @param  request {Request}
+ * @param name {string}
+ * @param zone {string}
+ * @param environments {[string]}
+ * @returns {Promise<void>}
+ */
+const raiseInfraPullRequest = async (request, name, zone, environments) => {
   const tfSvcInfra = config.get('githubRepoTfServiceInfra')
   try {
-    const tfSvcInfraPr = await createTestSuiteInfrastructureCode(name, zone)
+    const tfSvcInfraPr = await createTestSuiteInfrastructureCode(
+      name,
+      zone,
+      environments
+    )
 
     await updateCreationStatus(request.db, name, tfSvcInfra, {
       status: statuses.raised,
@@ -30,13 +41,11 @@ const raiseInfraPullRequest = async (request, name, zone) => {
   }
 }
 
-async function createTestSuiteInfrastructureCode(repoName, zone) {
+async function createTestSuiteInfrastructureCode(repoName, zone, environments) {
   const fileRepository = config.get('githubRepoTfServiceInfra')
   const pullRequestFiles = new Map()
 
-  const infrastructurePromises = Object.values(
-    testRunnerEnvironments.performance
-  ).map(async (env) => {
+  const infrastructurePromises = environments.map(async (env) => {
     const [tenantServicesFilePath, tenantServicesJson] =
       await addTestToTenantServices(repoName, env, zone)
     pullRequestFiles.set(tenantServicesFilePath, tenantServicesJson)

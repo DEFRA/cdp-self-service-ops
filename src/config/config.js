@@ -225,6 +225,12 @@ const config = convict({
     default: 'create_perf_test_suite.yml',
     env: 'CREATE_PERF_TEST_SUITE_WORKFLOW'
   },
+  createSmokeTestSuiteWorkflow: {
+    doc: 'Name of workflow to trigger when creating a perf test repository',
+    format: String,
+    default: 'create_smoke_test_suite.yml',
+    env: 'CREATE_SMOKE_TEST_SUITE_WORKFLOW'
+  },
   githubBaseUrl: {
     doc: 'Override the github base url for local testing',
     format: '*',
