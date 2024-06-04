@@ -44,7 +44,7 @@ const createSmokeTestSuiteController = {
         zone,
         team,
         creations.smokeTestSuite,
-        'cdp-node-smoke-test-suite-template'
+        'cdp-node-env-test-suite-template' // for now env and smoke share the same template
       )
     } catch (e) {
       request.logger.error(e)
@@ -59,7 +59,7 @@ const createSmokeTestSuiteController = {
       request,
       repositoryName,
       zone,
-      testRunnerEnvironments.environment
+      testRunnerEnvironments.smoke
     )
 
     // calculate and set the overall status
