@@ -93,6 +93,7 @@ const serviceToSecretsMap = {
       SESSION_COOKIE_PASSWORD:
         'cdp/services/forms-designer:SESSION_COOKIE_PASSWORD',
       ...redisSecrets('forms-designer'),
+      ...squidSecrets('forms-designer'),
       AZURE_CLIENT_ID: 'cdp/services/forms-designer:AZURE_CLIENT_ID',
       AZURE_CLIENT_SECRET: 'cdp/services/forms-designer:AZURE_CLIENT_SECRET'
     },
@@ -105,6 +106,38 @@ const serviceToSecretsMap = {
     prod: {
       ...redisSecrets('forms-designer'),
       ...squidSecrets('forms-designer')
+    }
+  },
+  'forms-runner': {
+    dev: {
+      ...redisSecrets('forms-runner'),
+      ...squidSecrets('forms-runner')
+    },
+    test: {
+      ...redisSecrets('forms-runner'),
+      ...squidSecrets('forms-runner')
+    },
+    'perf-test': {
+      ...redisSecrets('forms-runner'),
+      ...squidSecrets('forms-runner')
+    },
+    prod: {
+      ...redisSecrets('forms-runner'),
+      ...squidSecrets('forms-runner')
+    }
+  },
+  'forms-manager': {
+    dev: {
+      ...squidSecrets('forms-manager')
+    },
+    test: {
+      ...squidSecrets('forms-manager')
+    },
+    'perf-test': {
+      ...squidSecrets('forms-manager')
+    },
+    prod: {
+      ...squidSecrets('forms-manager')
     }
   },
   'cdp-example-node-frontend': {
