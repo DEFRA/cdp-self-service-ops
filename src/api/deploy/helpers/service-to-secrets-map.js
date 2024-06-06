@@ -110,20 +110,20 @@ const serviceToSecretsMap = {
   },
   'forms-runner': {
     dev: {
-      ...redisSecrets('forms-runner'),
-      ...squidSecrets('forms-runner')
+      ...redisSecrets('forms-designer-hqC5dr'),
+      ...squidSecrets('forms-designer-hqC5dr')
     },
     test: {
-      ...redisSecrets('forms-runner'),
-      ...squidSecrets('forms-runner')
+      ...redisSecrets('forms-designer-GZ5VZ9'),
+      ...squidSecrets('forms-designer-GZ5VZ9')
     },
     'perf-test': {
-      ...redisSecrets('forms-runner'),
-      ...squidSecrets('forms-runner')
+      ...redisSecrets('forms-designer-Wi9V7R'),
+      ...squidSecrets('forms-designer-Wi9V7R')
     },
     prod: {
-      ...redisSecrets('forms-runner'),
-      ...squidSecrets('forms-runner')
+      ...redisSecrets('forms-designer-CNY3z9'),
+      ...squidSecrets('forms-designer-CNY3z9')
     }
   },
   'forms-manager': {
