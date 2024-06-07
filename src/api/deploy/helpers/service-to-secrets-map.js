@@ -98,30 +98,42 @@ const serviceToSecretsMap = {
       AZURE_CLIENT_SECRET: 'cdp/services/forms-designer:AZURE_CLIENT_SECRET'
     },
     'perf-test': {
+      SESSION_COOKIE_PASSWORD:
+        'cdp/services/forms-designer:SESSION_COOKIE_PASSWORD',
       ...redisSecrets('forms-designer'),
       ...squidSecrets('forms-designer'),
       AZURE_CLIENT_ID: 'cdp/services/forms-designer:AZURE_CLIENT_ID',
       AZURE_CLIENT_SECRET: 'cdp/services/forms-designer:AZURE_CLIENT_SECRET'
     },
     prod: {
+      SESSION_COOKIE_PASSWORD:
+        'cdp/services/forms-designer:SESSION_COOKIE_PASSWORD',
       ...redisSecrets('forms-designer'),
       ...squidSecrets('forms-designer')
     }
   },
   'forms-runner': {
     dev: {
+      SESSION_COOKIE_PASSWORD:
+        'cdp/services/forms-runner-hqC5dr:SESSION_COOKIE_PASSWORD',
       ...redisSecrets('forms-runner-hqC5dr'),
       ...squidSecrets('forms-runner-hqC5dr')
     },
     test: {
+      SESSION_COOKIE_PASSWORD:
+        'cdp/services/forms-runner-GZ5VZ9:SESSION_COOKIE_PASSWORD',
       ...redisSecrets('forms-runner-GZ5VZ9'),
       ...squidSecrets('forms-runner-GZ5VZ9')
     },
     'perf-test': {
+      SESSION_COOKIE_PASSWORD:
+        'cdp/services/forms-runner-Wi9V7R:SESSION_COOKIE_PASSWORD',
       ...redisSecrets('forms-runner-Wi9V7R'),
       ...squidSecrets('forms-runner-Wi9V7R')
     },
     prod: {
+      SESSION_COOKIE_PASSWORD:
+        'cdp/services/forms-runner-CNY3z9:SESSION_COOKIE_PASSWORD',
       ...redisSecrets('forms-runner-CNY3z9'),
       ...squidSecrets('forms-runner-CNY3z9')
     }
