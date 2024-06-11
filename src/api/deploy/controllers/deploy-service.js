@@ -6,6 +6,7 @@ import { registerDeployment } from '~/src/api/deploy/helpers/register-deployment
 import { generateDeployMessage } from '~/src/api/deploy/helpers/generate-deploy-message'
 import { sendSnsDeployMessage } from '~/src/api/deploy/helpers/send-sns-deploy-message'
 import { getRepoTeams } from '~/src/api/deploy/helpers/get-repo-teams'
+import { octokit } from '~/src/helpers/oktokit'
 
 const deployServiceController = {
   options: {
@@ -39,6 +40,7 @@ const deployServiceController = {
     }
 
     const deploymentId = crypto.randomUUID()
+    const latestCommitSha = await getLatestCommitSha()
 
     await registerDeployment(
       payload.imageName,
@@ -59,7 +61,8 @@ const deployServiceController = {
       payload.cpu,
       payload.memory,
       user,
-      deploymentId
+      deploymentId,
+      latestCommitSha
     )
     const topic = config.get('snsDeployTopicArn')
     const snsResponse = await sendSnsDeployMessage(
@@ -74,6 +77,18 @@ const deployServiceController = {
 
     return h.response({ message: 'success', deploymentId }).code(200)
   }
+}
+
+async function getLatestCommitSha() {
+  const { data } = await octokit.rest.git.getRef({
+    mediaType: {
+      format: 'raw'
+    },
+    owner: config.get('gitHubOrg'),
+    repo: 'cdp-app-config',
+    ref: 'heads/main'
+  })
+  return data?.object?.sha
 }
 
 export { deployServiceController }
