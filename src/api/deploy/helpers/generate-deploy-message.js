@@ -9,13 +9,18 @@ async function generateDeployMessage(
   cpu,
   memory,
   user,
-  deploymentId
+  deploymentId,
+  commitSha
 ) {
   const tenantService = await lookupTenantService(environment, imageName)
 
   if (tenantService === undefined) {
     throw new Error(`Unable to lookup ${imageName} in tenant services`)
   }
+
+  const basePath = commitSha
+    ? `arn:aws:s3:::cdp-${environment}-service-configs/${commitSha}`
+    : `arn:aws:s3:::cdp-${environment}-service-configs`
 
   return {
     container_image: imageName,
@@ -24,19 +29,19 @@ async function generateDeployMessage(
     desired_count: instanceCount,
     env_files: [
       {
-        value: `arn:aws:s3:::cdp-${environment}-service-configs/global/global_protected_fixed.env`,
+        value: `${basePath}/global/global_protected_fixed.env`,
         type: 's3'
       },
       {
-        value: `arn:aws:s3:::cdp-${environment}-service-configs/services/${imageName}/${environment}/${imageName}.env`,
+        value: `${basePath}/services/${imageName}/${environment}/${imageName}.env`,
         type: 's3'
       },
       {
-        value: `arn:aws:s3:::cdp-${environment}-service-configs/services/${imageName}/defaults.env`,
+        value: `${basePath}/services/${imageName}/defaults.env`,
         type: 's3'
       },
       {
-        value: `arn:aws:s3:::cdp-${environment}-service-configs/environments/${environment}/defaults.env`,
+        value: `${basePath}/environments/${environment}/defaults.env`,
         type: 's3'
       }
     ],
