@@ -114,24 +114,28 @@ const serviceToSecretsMap = {
   },
   'forms-runner': {
     dev: {
+      NOTIFY_API_KEY: 'cdp/services/forms-runner-hqC5dr:NOTIFY_API_KEY',
       SESSION_COOKIE_PASSWORD:
         'cdp/services/forms-runner-hqC5dr:SESSION_COOKIE_PASSWORD',
       ...redisSecrets('forms-runner-hqC5dr'),
       ...squidSecrets('forms-runner-hqC5dr')
     },
     test: {
+      NOTIFY_API_KEY: 'cdp/services/forms-runner-GZ5VZ9:NOTIFY_API_KEY',
       SESSION_COOKIE_PASSWORD:
         'cdp/services/forms-runner-GZ5VZ9:SESSION_COOKIE_PASSWORD',
       ...redisSecrets('forms-runner-GZ5VZ9'),
       ...squidSecrets('forms-runner-GZ5VZ9')
     },
     'perf-test': {
+      NOTIFY_API_KEY: 'cdp/services/forms-runner-Wi9V7R:NOTIFY_API_KEY',
       SESSION_COOKIE_PASSWORD:
         'cdp/services/forms-runner-Wi9V7R:SESSION_COOKIE_PASSWORD',
       ...redisSecrets('forms-runner-Wi9V7R'),
       ...squidSecrets('forms-runner-Wi9V7R')
     },
     prod: {
+      NOTIFY_API_KEY: 'cdp/services/forms-runner-CNY3z9:NOTIFY_API_KEY',
       SESSION_COOKIE_PASSWORD:
         'cdp/services/forms-runner-CNY3z9:SESSION_COOKIE_PASSWORD',
       ...redisSecrets('forms-runner-CNY3z9'),
