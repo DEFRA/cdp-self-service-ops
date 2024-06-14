@@ -19,4 +19,12 @@ describe('#dont-overwrite-status', () => {
       statuses.inProgress
     )
   })
+
+  test('merge cannot be overwritten by pr raised', () => {
+    expect(dontOverwriteStatus(statuses.raised)).toContain(statuses.merged)
+  })
+
+  test('merge cannot be overwritten by pr closed', () => {
+    expect(dontOverwriteStatus(statuses.closed)).toContain(statuses.merged)
+  })
 })
