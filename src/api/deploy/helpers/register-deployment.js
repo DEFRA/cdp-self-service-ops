@@ -10,7 +10,7 @@ async function registerDeployment(
   user,
   deploymentId
 ) {
-  const url = `${config.get('portalBackendApiUrl')}/deployments`
+  const url = `${config.get('portalBackendApiUrl')}/v2/deployments`
   await fetch(url, {
     method: 'post',
     headers: { 'Content-Type': 'application/json' },
