@@ -10,25 +10,38 @@ const pullRequestHandler = async (db, message) => {
     const repo = message.repository?.name
     const prNumber = message.number
 
+    logger.info(
+      `received pr webhook ${repo}:${prNumber}, ${message.action} ${message.pull_request.state} ${message.pull_request.merged}`
+    )
+
+    // Ignore PR events that are not opened or closed.
+    if (message.action !== 'opened' && message.action !== 'closed') {
+      logger.info(
+        `Ignoring pull request action ${message.action} for ${repo} ${prNumber}`
+      )
+      return
+    }
+
     const status = await findByPrNumber(db, repo, prNumber)
     if (status === null) {
-      logger.debug(
+      logger.info(
         `Skipping pull request message, not a tracked repo ${repo} ${prNumber}`
       )
       return
     }
 
-    logger.info(`Processing pull request message for ${repo}:${prNumber}`)
-
-    // State of this Pull Request. message.pull_request.state Can be one of: open, closed
-    // https://docs.github.com/en/webhooks/webhook-events-and-payloads#pull_request
+    // Note: we append `pr_` to the front of the status (i.e. pr_closed).
     let prState = `pr_${message.pull_request.state}`
+
+    // Merged pull requests have a state of closed and a merged flag
     if (message.pull_request.merged) {
-      logger.info(
-        `Updating ${status.repositoryName}/${repo} head commit sha to ${message.pull_request.merge_commit_sha}`
-      )
       prState = 'merged'
     }
+
+    logger.info(
+      `Updating ${repo}/${prNumber} status to ${prState} head commit sha to ${message.pull_request.merge_commit_sha}`
+    )
+
     await updatePrStatus(
       db,
       status.repositoryName,
