@@ -252,6 +252,24 @@ const serviceToSecretsMap = {
     prod: {
       ...squidSecrets('aqie-back-end')
     }
+  },
+  'nms-backend-alpha': {
+    dev: {
+      AZ_TENANT_ID: 'cdp/services/nms-backend-alpha:AZ_TENANT_ID',
+      AZ_CLIENT_ID: 'cdp/services/nms-backend-alpha:AZ_CLIENT_ID',
+      AZ_CLIENT_SECRET: 'cdp/services/nms-backend-alpha:AZ_CLIENT_ID',
+      DATAVERSE_URI: 'cdp/services/nms-backend-alpha:DATAVERSE_URI',
+      ...squidSecrets('nms-backend-alpha')
+    },
+    test: {
+      ...squidSecrets('nms-backend-alpha')
+    },
+    'pref-test': {
+      ...squidSecrets('nms-backend-alpha')
+    },
+    prod: {
+      ...squidSecrets('nms-backend-alpha')
+    }
   }
 }
 
