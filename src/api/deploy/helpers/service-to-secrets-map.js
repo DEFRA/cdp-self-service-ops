@@ -109,7 +109,9 @@ const serviceToSecretsMap = {
       SESSION_COOKIE_PASSWORD:
         'cdp/services/forms-designer:SESSION_COOKIE_PASSWORD',
       ...redisSecrets('forms-designer'),
-      ...squidSecrets('forms-designer')
+      ...squidSecrets('forms-designer'),
+      AZURE_CLIENT_ID: 'cdp/services/forms-designer:AZURE_CLIENT_ID',
+      AZURE_CLIENT_SECRET: 'cdp/services/forms-designer:AZURE_CLIENT_SECRET'
     }
   },
   'forms-runner': {
