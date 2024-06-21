@@ -258,25 +258,29 @@ const serviceToSecretsMap = {
       AZ_TENANT_ID: 'cdp/services/nms-backend-alpha:AZ_TENANT_ID',
       AZ_CLIENT_ID: 'cdp/services/nms-backend-alpha:AZ_CLIENT_ID',
       AZ_CLIENT_SECRET: 'cdp/services/nms-backend-alpha:AZ_CLIENT_SECRET',
-      ...squidSecrets('nms-backend-alpha')
+      ...squidSecrets('nms-backend-alpha'),
+      ...redisSecrets('nms-backend-alpha')
     },
     test: {
       AZ_TENANT_ID: 'cdp/services/nms-backend-alpha:AZ_TENANT_ID',
       AZ_CLIENT_ID: 'cdp/services/nms-backend-alpha:AZ_CLIENT_ID',
       AZ_CLIENT_SECRET: 'cdp/services/nms-backend-alpha:AZ_CLIENT_SECRET',
-      ...squidSecrets('nms-backend-alpha')
+      ...squidSecrets('nms-backend-alpha'),
+      ...redisSecrets('nms-backend-alpha')
     },
     'pref-test': {
       AZ_TENANT_ID: 'cdp/services/nms-backend-alpha:AZ_TENANT_ID',
       AZ_CLIENT_ID: 'cdp/services/nms-backend-alpha:AZ_CLIENT_ID',
       AZ_CLIENT_SECRET: 'cdp/services/nms-backend-alpha:AZ_CLIENT_SECRET',
-      ...squidSecrets('nms-backend-alpha')
+      ...squidSecrets('nms-backend-alpha'),
+      ...redisSecrets('nms-backend-alpha')
     },
     prod: {
       AZ_TENANT_ID: 'cdp/services/nms-backend-alpha:AZ_TENANT_ID',
       AZ_CLIENT_ID: 'cdp/services/nms-backend-alpha:AZ_CLIENT_ID',
       AZ_CLIENT_SECRET: 'cdp/services/nms-backend-alpha:AZ_CLIENT_SECRET',
-      ...squidSecrets('nms-backend-alpha')
+      ...squidSecrets('nms-backend-alpha'),
+      ...redisSecrets('nms-backend-alpha')
     }
   }
 }
