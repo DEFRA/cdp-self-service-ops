@@ -1,21 +1,15 @@
-import { octokit } from '~/src/helpers/oktokit'
-
 import { config } from '~/src/config'
 import { createLogger } from '~/src/helpers/logging/logger'
+import { getContent } from '~/src/helpers/gitHub/get-content'
 
 async function getClusterServices(environment, clusterName) {
   const logger = createLogger()
   const filePath = `environments/${environment}/services/${clusterName}_services.json`
 
   try {
-    const { data } = await octokit.rest.repos.getContent({
-      mediaType: { format: 'raw' },
-      owner: config.get('gitHubOrg'),
-      repo: config.get('githubRepoTfService'),
-      path: filePath,
-      ref: 'main'
-    })
-
+    const owner = config.get('gitHubOrg')
+    const repo = config.get('githubRepoTfService')
+    const data = await getContent(owner, repo, filePath)
     return JSON.parse(data)
   } catch (error) {
     logger.error(error)

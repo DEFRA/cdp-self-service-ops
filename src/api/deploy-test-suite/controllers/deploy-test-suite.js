@@ -1,11 +1,11 @@
+import Boom from '@hapi/boom'
+
 import { deployTestSuiteValidation } from '~/src/api/deploy-test-suite/helpers/deploy-test-suite-validation'
 import { generateTestRunMessage } from '~/src/api/deploy-test-suite/helpers/generate-test-run-message'
-import { sendSnsDeployMessage } from '~/src/api/deploy/helpers/send-sns-deploy-message'
-
+import { sendSnsMessage } from '~/src/api/deploy/helpers/sns/send-sns-message'
 import * as crypto from 'crypto'
 import { config, environments } from '~/src/config'
 import { createRecordTestRun } from '~/src/api/deploy-test-suite/helpers/record-test-run'
-import { Boom } from '@hapi/boom'
 import { getRepoTeams } from '~/src/api/deploy/helpers/get-repo-teams'
 
 const deployTestSuiteController = {
@@ -61,7 +61,7 @@ const deployTestSuiteController = {
     )
 
     const topic = config.get('snsRunTestTopicArn')
-    const snsResponse = await sendSnsDeployMessage(
+    const snsResponse = await sendSnsMessage(
       request.snsClient,
       topic,
       runMessage

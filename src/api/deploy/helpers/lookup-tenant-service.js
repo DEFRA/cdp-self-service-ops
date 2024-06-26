@@ -1,23 +1,16 @@
 import { createLogger } from '~/src/helpers/logging/logger'
-
-const { octokit } = require('~/src/helpers/oktokit')
-const { config } = require('~/src/config')
+import { getContent } from '~/src/helpers/gitHub/get-content'
+import { config } from '~/src/config'
 
 async function lookupTenantService(environment, service) {
   const logger = createLogger()
   const filePath = `environments/${environment}/resources/tenant_services.json`
+  const owner = config.get('gitHubOrg')
+  const repo = config.get('githubRepoTfServiceInfra')
 
   try {
-    const { data } = await octokit.rest.repos.getContent({
-      mediaType: { format: 'raw' },
-      owner: config.get('gitHubOrg'),
-      repo: config.get('githubRepoTfServiceInfra'),
-      path: filePath,
-      ref: 'main'
-    })
-
+    const data = await getContent(owner, repo, filePath)
     const services = JSON.parse(data)
-
     return services[0][service]
   } catch (error) {
     logger.error(error)

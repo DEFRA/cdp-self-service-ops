@@ -7,6 +7,7 @@ import { enableAutoMergeGraphQl } from '~/src/helpers/graphql/enable-automerge.g
 import { createLogger } from '~/src/helpers/logging/logger'
 import { prepPullRequestFiles } from '~/src/api/create-microservice/helpers/prep-pull-request-files'
 import { addRepoToGithubOidc } from '~/src/api/create-microservice/helpers/add-repo-to-github-oidc'
+import { getContent } from '~/src/helpers/gitHub/get-content'
 
 /**
  *
@@ -81,18 +82,10 @@ async function addTestToTenantServices(repositoryName, environment, zone) {
   const logger = createLogger()
   const fileRepository = config.get('githubRepoTfServiceInfra')
   const filePath = `environments/${environment}/resources/tenant_services.json`
+  const owner = config.get('gitHubOrg')
 
   try {
-    const { data } = await octokit.rest.repos.getContent({
-      mediaType: {
-        format: 'raw'
-      },
-      owner: config.get('gitHubOrg'),
-      repo: fileRepository,
-      path: filePath,
-      ref: 'main'
-    })
-
+    const data = await getContent(owner, fileRepository, filePath)
     const parsedRepositories = JSON.parse(data)
 
     if (parsedRepositories[0][repositoryName] === undefined) {
