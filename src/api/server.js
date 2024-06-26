@@ -11,10 +11,14 @@ import { githubEventsPlugin } from '~/src/listeners/github/github-events-plugin'
 import { snsClientPlugin } from '~/src/helpers/sns-client'
 import { registerServerMethods } from '~/src/api/server-methods'
 import { secureContext } from '~/src/helpers/secure-context'
+import { setupWreckAgents } from '~/src/helpers/proxy/setup-wreck-agents'
+import { proxyAgent } from '~/src/helpers/proxy/proxy-agent'
 
 const isProduction = config.get('isProduction')
 
 async function createServer() {
+  setupWreckAgents(proxyAgent())
+
   const server = hapi.server({
     port: config.get('port'),
     routes: {
