@@ -68,11 +68,10 @@ const deployServiceController = {
       payload.environment,
       payload.imageName
     )
-
     if (!service) {
-      throw new Error(
-        `Unable to lookup ${payload.imageName} in tenant services`
-      )
+      const message =
+        'Error encountered whilst attempting to find deployment zone information'
+      return h.response({ message }).code(500)
     }
 
     await sendSnsDeploymentMessage(
