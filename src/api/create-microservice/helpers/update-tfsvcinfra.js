@@ -5,7 +5,7 @@ import { updateCreationStatus } from '~/src/api/create-microservice/helpers/save
 import { trimPr } from '~/src/api/create-microservice/helpers/trim-pr'
 
 const doUpdateTfSvcInfra = async (request, repositoryName, zone) => {
-  const tfSvcInfra = config.get('githubRepoTfServiceInfra')
+  const tfSvcInfra = config.get('gitHubRepoTfServiceInfra')
   try {
     const pullRequest = await createServiceInfrastructurePr(
       repositoryName,

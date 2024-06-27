@@ -1,11 +1,11 @@
 import { config } from '~/src/config'
 import { createLogger } from '~/src/helpers/logging/logger'
-import { getContent } from '~/src/helpers/gitHub/get-content'
+import { getContent } from '~/src/helpers/github/get-content'
 
 async function addRepoToTenantServices(repositoryName, environment, zone) {
   const logger = createLogger()
   const owner = config.get('gitHubOrg')
-  const fileRepository = config.get('githubRepoTfServiceInfra')
+  const fileRepository = config.get('gitHubRepoTfServiceInfra')
   const filePath = `environments/${environment}/resources/tenant_services.json`
 
   try {

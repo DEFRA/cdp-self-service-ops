@@ -1,12 +1,12 @@
 import { createLogger } from '~/src/helpers/logging/logger'
-import { getContent } from '~/src/helpers/gitHub/get-content'
+import { getContent } from '~/src/helpers/github/get-content'
 import { config } from '~/src/config'
 
 async function lookupTenantServicesForCommit(environment, sha) {
   const logger = createLogger()
   const filePath = `environments/${environment}/resources/tenant_services.json`
   const owner = config.get('gitHubOrg')
-  const repo = config.get('githubRepoTfServiceInfra')
+  const repo = config.get('gitHubRepoTfServiceInfra')
 
   try {
     const data = await getContent(owner, repo, filePath, sha)

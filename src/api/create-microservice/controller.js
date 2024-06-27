@@ -121,7 +121,7 @@ const doCreateRepo = async (request, repositoryName, payload, team) => {
 }
 
 const doUpdateCdpAppConfig = async (request, repositoryName, team) => {
-  const cdpAppConfig = config.get('githubRepoConfig')
+  const cdpAppConfig = config.get('gitHubRepoConfig')
   try {
     const createServiceConfigResult = await createServiceConfig(
       repositoryName,
@@ -144,7 +144,7 @@ const doUpdateCdpAppConfig = async (request, repositoryName, team) => {
 }
 
 const doUpdateCdpNginxUpstream = async (request, repositoryName, zone) => {
-  const cdpNginxUpstream = config.get('githubRepoNginx')
+  const cdpNginxUpstream = config.get('gitHubRepoNginx')
   try {
     const createNginxConfigResult = await createNginxConfig(
       repositoryName,

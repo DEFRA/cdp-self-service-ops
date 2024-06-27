@@ -1,4 +1,4 @@
-const githubEventsOpenedPullRequestFixture = {
+const gitHubEventsOpenedPullRequestFixture = {
   github_event: 'pull_request',
   action: 'opened',
   number: 241,
@@ -12,4 +12,4 @@ const githubEventsOpenedPullRequestFixture = {
   }
 }
 
-export { githubEventsOpenedPullRequestFixture }
+export { gitHubEventsOpenedPullRequestFixture }

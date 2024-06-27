@@ -5,9 +5,9 @@ import { config } from '~/src/config'
 import { handle } from '~/src/listeners/github/message-handler'
 
 function sqsListener(server) {
-  const queueUrl = config.get('sqsGithubQueue')
+  const queueUrl = config.get('sqsGitHubQueue')
 
-  server.logger.info(`Listening for github webhook events on ${queueUrl}`)
+  server.logger.info(`Listening for gitHub webhook events on ${queueUrl}`)
 
   const sqs = new SQSClient({
     region: config.get('awsRegion'),

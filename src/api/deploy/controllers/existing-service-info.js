@@ -1,8 +1,8 @@
 import { config } from '~/src/config'
-import { getContent } from '~/src/helpers/gitHub/get-content'
+import { getContent } from '~/src/helpers/github/get-content'
 import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service'
 
-const deploymentRepo = config.get('githubRepoTfService')
+const deploymentRepo = config.get('gitHubRepoTfService')
 const gitHubOwner = config.get('gitHubOrg')
 
 const existingServiceInfoController = {

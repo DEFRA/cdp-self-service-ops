@@ -7,7 +7,7 @@ import { failAction } from '~/src/helpers/fail-action'
 import { requestLogger } from '~/src/helpers/logging/request-logger'
 import { azureOidc } from '~/src/helpers/azure-oidc'
 import { mongoPlugin } from '~/src/helpers/mongodb'
-import { githubEventsPlugin } from '~/src/listeners/github/github-events-plugin'
+import { gitHubEventsPlugin } from '~/src/listeners/github/github-events-plugin'
 import { snsClientPlugin } from '~/src/helpers/sns-client'
 import { registerServerMethods } from '~/src/api/server-methods'
 import { secureContext } from '~/src/helpers/secure-context'
@@ -57,8 +57,8 @@ async function createServer() {
 
   await server.register({ plugin: mongoPlugin, options: {} })
 
-  if (config.get('sqsGithubEnabled')) {
-    await server.register(githubEventsPlugin)
+  if (config.get('sqsGitHubEnabled')) {
+    await server.register(gitHubEventsPlugin)
   }
 
   await server.register({ plugin: snsClientPlugin, options: {} })

@@ -1,5 +1,5 @@
 import { sqsListener } from '~/src/listeners/github/sqs-listener'
-import { githubEventsOpenedPullRequestFixture } from '~/src/__fixtures__/github_events'
+import { gitHubEventsOpenedPullRequestFixture } from '~/src/__fixtures__/github_events'
 import { handle } from '~/src/listeners/github/message-handler'
 import { flushPromises } from '~/test-helpers/flush-promises'
 
@@ -28,7 +28,7 @@ describe('#sqsListener', () => {
       {
         MessageId: '123456',
         ReceiptHandle: 'receipt-handle',
-        Body: JSON.stringify(githubEventsOpenedPullRequestFixture)
+        Body: JSON.stringify(gitHubEventsOpenedPullRequestFixture)
       }
     ]
   }
@@ -48,7 +48,7 @@ describe('#sqsListener', () => {
     expect(handle).toHaveBeenCalledTimes(1)
     expect(handle).toHaveBeenCalledWith(
       mockServer,
-      githubEventsOpenedPullRequestFixture
+      gitHubEventsOpenedPullRequestFixture
     )
   })
 

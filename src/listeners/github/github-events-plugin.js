@@ -1,8 +1,8 @@
 import { sqsListener } from '~/src/listeners/github/sqs-listener'
 
-const githubEventsPlugin = {
+const gitHubEventsPlugin = {
   plugin: {
-    name: 'githubEventsPlugin',
+    name: 'gitHubEventsPlugin',
     version: '1.0.0',
     register: function (server) {
       sqsListener(server)
@@ -10,4 +10,4 @@ const githubEventsPlugin = {
   }
 }
 
-export { githubEventsPlugin }
+export { gitHubEventsPlugin }

@@ -7,11 +7,11 @@ import { getRepoTeams } from '~/src/api/deploy/helpers/get-repo-teams'
 import { getSecretKeysForService } from '~/src/api/deploy/helpers/get-secret-keys-for-service'
 import { sendSnsDeploymentMessage } from '~/src/api/deploy/helpers/send-sns-deployment-message'
 import { commitDeploymentFile } from '~/src/api/deploy/helpers/commit-deployment-file'
-import { getLatestCommitSha } from '~/src/helpers/gitHub/get-latest-commit-sha'
+import { getLatestCommitSha } from '~/src/helpers/github/get-latest-commit-sha'
 import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service'
 
 const owner = config.get('gitHubOrg')
-const configRepo = config.get('githubRepoConfig')
+const configRepo = config.get('gitHubRepoConfig')
 
 const deployServiceController = {
   options: {

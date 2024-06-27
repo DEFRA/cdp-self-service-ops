@@ -1,7 +1,7 @@
 import { config } from '~/src/config'
 import { statuses } from '~/src/constants/statuses'
 
-const tfSvcInfra = config.get('githubRepoTfServiceInfra')
+const tfSvcInfra = config.get('gitHubRepoTfServiceInfra')
 
 async function createTestSuiteStatus(
   db,

@@ -13,7 +13,7 @@ import { createLogger } from '~/src/helpers/logging/logger'
 const bulkUpdateTfSvcInfra = async (db, trimmedWorkflow, status) => {
   const logger = createLogger()
   const org = config.get('gitHubOrg')
-  const tfSvcInfra = config.get('githubRepoTfServiceInfra')
+  const tfSvcInfra = config.get('gitHubRepoTfServiceInfra')
 
   const tenants = await lookupTenantServicesForCommit(environments.management)
 
@@ -65,7 +65,7 @@ const bulkUpdateTfSvcInfra = async (db, trimmedWorkflow, status) => {
 
     await createPlaceholderArtifact({
       service: serviceName,
-      githubUrl: `https://github.com/${org}/${serviceName}`,
+      gitHubUrl: `https://github.com/${org}/${serviceName}`,
       runMode
     })
   }

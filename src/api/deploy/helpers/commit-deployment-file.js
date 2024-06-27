@@ -1,7 +1,7 @@
 import { config } from '~/src/config'
 import { commitFiles } from '~/src/api/deploy/helpers/github/commit-github-files'
 
-const deploymentRepo = config.get('githubRepoTfService')
+const deploymentRepo = config.get('gitHubRepoTfService')
 const gitHubOwner = config.get('gitHubOrg')
 
 async function commitDeploymentFile(

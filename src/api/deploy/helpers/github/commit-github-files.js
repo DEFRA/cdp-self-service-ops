@@ -1,5 +1,5 @@
 import { octokit } from '~/src/helpers/oktokit'
-import { getLatestCommitSha } from '~/src/helpers/gitHub/get-latest-commit-sha'
+import { getLatestCommitSha } from '~/src/helpers/github/get-latest-commit-sha'
 
 async function commitFiles(
   owner,
