@@ -255,34 +255,48 @@ const serviceToSecretsMap = {
       ...squidSecrets('aqie-back-end')
     }
   },
+  'nms-frontend-alpha': {
+    dev: {
+      ...squidSecrets('nms-frontend-alpha'),
+      ...redisSecrets('nms-frontend-alpha')
+    },
+    test: {
+      ...squidSecrets('nms-frontend-alpha'),
+      ...redisSecrets('nms-frontend-alpha')
+    },
+    'pref-test': {
+      ...squidSecrets('nms-frontend-alpha'),
+      ...redisSecrets('nms-frontend-alpha')
+    },
+    prod: {
+      ...squidSecrets('nms-frontend-alpha'),
+      ...redisSecrets('nms-frontend-alpha')
+    }
+  },
   'nms-backend-alpha': {
     dev: {
       AZ_TENANT_ID: 'cdp/services/nms-backend-alpha:AZ_TENANT_ID',
       AZ_CLIENT_ID: 'cdp/services/nms-backend-alpha:AZ_CLIENT_ID',
       AZ_CLIENT_SECRET: 'cdp/services/nms-backend-alpha:AZ_CLIENT_SECRET',
-      ...squidSecrets('nms-backend-alpha'),
-      ...redisSecrets('nms-backend-alpha')
+      ...squidSecrets('nms-backend-alpha')
     },
     test: {
       AZ_TENANT_ID: 'cdp/services/nms-backend-alpha:AZ_TENANT_ID',
       AZ_CLIENT_ID: 'cdp/services/nms-backend-alpha:AZ_CLIENT_ID',
       AZ_CLIENT_SECRET: 'cdp/services/nms-backend-alpha:AZ_CLIENT_SECRET',
-      ...squidSecrets('nms-backend-alpha'),
-      ...redisSecrets('nms-backend-alpha')
+      ...squidSecrets('nms-backend-alpha')
     },
     'pref-test': {
       AZ_TENANT_ID: 'cdp/services/nms-backend-alpha:AZ_TENANT_ID',
       AZ_CLIENT_ID: 'cdp/services/nms-backend-alpha:AZ_CLIENT_ID',
       AZ_CLIENT_SECRET: 'cdp/services/nms-backend-alpha:AZ_CLIENT_SECRET',
-      ...squidSecrets('nms-backend-alpha'),
-      ...redisSecrets('nms-backend-alpha')
+      ...squidSecrets('nms-backend-alpha')
     },
     prod: {
       AZ_TENANT_ID: 'cdp/services/nms-backend-alpha:AZ_TENANT_ID',
       AZ_CLIENT_ID: 'cdp/services/nms-backend-alpha:AZ_CLIENT_ID',
       AZ_CLIENT_SECRET: 'cdp/services/nms-backend-alpha:AZ_CLIENT_SECRET',
-      ...squidSecrets('nms-backend-alpha'),
-      ...redisSecrets('nms-backend-alpha')
+      ...squidSecrets('nms-backend-alpha')
     }
   }
 }
