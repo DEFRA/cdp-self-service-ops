@@ -10,7 +10,7 @@ const existingServiceInfoController = {
     const environment = request.params.environment
     const imageName = request.params.imageName
 
-    const service = await lookupTenantService(environment, imageName)
+    const service = await lookupTenantService(imageName, environment)
 
     const filePath = `environments/${environment}/${service?.zone}/${imageName}.json`
 
