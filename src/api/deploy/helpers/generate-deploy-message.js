@@ -1,25 +1,19 @@
-import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service'
 import { serviceToSecretsMap } from '~/src/api/deploy/helpers/service-to-secrets-map'
 
 async function generateDeployMessage(
+  deploymentId,
   imageName,
   version,
   environment,
+  zone,
   instanceCount,
   cpu,
   memory,
   user,
-  deploymentId,
-  commitSha
+  configCommitSha
 ) {
-  const tenantService = await lookupTenantService(environment, imageName)
-
-  if (tenantService === undefined) {
-    throw new Error(`Unable to lookup ${imageName} in tenant services`)
-  }
-
-  const basePath = commitSha
-    ? `arn:aws:s3:::cdp-${environment}-service-configs/${commitSha}`
+  const basePath = configCommitSha
+    ? `arn:aws:s3:::cdp-${environment}-service-configs/${configCommitSha}`
     : `arn:aws:s3:::cdp-${environment}-service-configs`
 
   return {
@@ -53,7 +47,7 @@ async function generateDeployMessage(
     task_memory: memory,
     deploy_metrics: true,
     environment,
-    zone: tenantService.zone,
+    zone,
     deployed_by: {
       deployment_id: deploymentId,
       user_id: user.id,

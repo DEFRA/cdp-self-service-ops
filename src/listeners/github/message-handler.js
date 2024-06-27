@@ -3,11 +3,11 @@ import { config } from '~/src/config'
 import { workflowRunHandlerV2 } from '~/src/listeners/github/handlers/workflow-run-handler-v2'
 
 const validRepos = new Set([
-  config.get('githubRepoTfService'),
-  config.get('githubRepoTfServiceInfra'),
-  config.get('githubRepoConfig'),
-  config.get('githubRepoNginx'),
-  config.get('githubRepoCreateWorkflows')
+  config.get('gitHubRepoTfService'),
+  config.get('gitHubRepoTfServiceInfra'),
+  config.get('gitHubRepoConfig'),
+  config.get('gitHubRepoNginx'),
+  config.get('gitHubRepoCreateWorkflows')
 ])
 const validActions = new Set(['workflow_run', 'pull_request'])
 

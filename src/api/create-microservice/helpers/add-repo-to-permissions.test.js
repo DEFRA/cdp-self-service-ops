@@ -1,6 +1,6 @@
 import { createLogger } from '~/src/helpers/logging/logger'
 import { addRepoPermissions } from '~/src/api/create-microservice/helpers/add-repo-permissions'
-import githubOidcRepositoriesFixture from '~/src/__fixtures__/github_oidc_repositories'
+import gitHubOidcRepositoriesFixture from '~/src/__fixtures__/github_oidc_repositories'
 
 jest.mock('~/src/helpers/logging/logger', () => ({
   createLogger: jest.fn().mockReturnValue({
@@ -20,11 +20,11 @@ jest.mock('~/src/helpers/logging/logger', () => ({
 
 describe('#addRepoPermissions', () => {
   const logger = createLogger()
-  const permissionsFixture = JSON.stringify(githubOidcRepositoriesFixture)
+  const permissionsFixture = JSON.stringify(gitHubOidcRepositoriesFixture)
 
   test('Should insert a new repo in the correct position', () => {
     const expectedJson = JSON.stringify(
-      [...githubOidcRepositoriesFixture, 'DEFRA/cdp-mock-permissions'],
+      [...gitHubOidcRepositoriesFixture, 'DEFRA/cdp-mock-permissions'],
       null,
       2
     )
@@ -54,7 +54,7 @@ describe('#addRepoPermissions', () => {
 
   test('Should throw "Pre Addition" error', () => {
     const permissionsWithError = JSON.stringify([
-      ...githubOidcRepositoriesFixture,
+      ...gitHubOidcRepositoriesFixture,
       'invalid-permissions-n$me'
     ])
 

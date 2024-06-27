@@ -80,30 +80,30 @@ const config = convict({
     format: String,
     default: '2022-11-28'
   },
-  githubRepoTfServiceInfra: {
+  gitHubRepoTfServiceInfra: {
     doc: 'Terraform GitHub Service Infrastructure repository',
     format: String,
     default: 'cdp-tf-svc-infra'
   },
-  githubRepoTfService: {
+  gitHubRepoTfService: {
     doc: 'Terraform GitHub Service repository',
     format: String,
     default: 'cdp-tf-svc'
   },
-  githubRepoConfig: {
-    doc: 'github repo to create the application config in',
+  gitHubRepoConfig: {
+    doc: 'gitHub repo to create the application config in',
     format: String,
     default: 'cdp-app-config',
     env: 'GITHUB_REPO_APP_CONFIG'
   },
-  githubRepoNginx: {
-    doc: 'github repo to create the nginx config in',
+  gitHubRepoNginx: {
+    doc: 'gitHub repo to create the nginx config in',
     format: String,
     default: 'cdp-nginx-upstreams',
     env: 'GITHUB_REPO_NGINX'
   },
-  githubRepoCreateWorkflows: {
-    doc: 'Github repository containing the create workflows',
+  gitHubRepoCreateWorkflows: {
+    doc: 'GitHub repository containing the create workflows',
     format: String,
     default: 'cdp-create-workflows',
     env: 'GITHUB_REPO_CREATE_WORKFLOWS'
@@ -171,14 +171,14 @@ const config = convict({
     default: 'http://127.0.0.1:4566',
     env: 'SQS_ENDPOINT'
   },
-  sqsGithubQueue: {
-    doc: 'URL of sqs queue providing github events',
+  sqsGitHubQueue: {
+    doc: 'URL of sqs queue providing gitHub events',
     format: String,
     default: 'http://127.0.0.1:4566/000000000000/github-events',
     env: 'SQS_GITHUB_QUEUE'
   },
-  sqsGithubEnabled: {
-    doc: 'Should the service listen for github webhook events?',
+  sqsGitHubEnabled: {
+    doc: 'Should the service listen for gitHub webhook events?',
     format: Boolean,
     default: true,
     env: 'SQS_GITHUB_ENABLED'
@@ -231,8 +231,8 @@ const config = convict({
     default: 'create_smoke_test_suite.yml',
     env: 'CREATE_SMOKE_TEST_SUITE_WORKFLOW'
   },
-  githubBaseUrl: {
-    doc: 'Override the github base url for local testing',
+  gitHubBaseUrl: {
+    doc: 'Override the gitHub base url for local testing',
     format: '*',
     env: 'GITHUB_BASE_URL',
     default: null

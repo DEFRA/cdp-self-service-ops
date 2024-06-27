@@ -1,23 +1,15 @@
-import { octokit } from '~/src/helpers/oktokit'
 import { config } from '~/src/config'
 import { createLogger } from '~/src/helpers/logging/logger'
+import { getContent } from '~/src/helpers/github/get-content'
 
 async function addRepoToTenantServices(repositoryName, environment, zone) {
   const logger = createLogger()
-  const fileRepository = config.get('githubRepoTfServiceInfra')
+  const owner = config.get('gitHubOrg')
+  const fileRepository = config.get('gitHubRepoTfServiceInfra')
   const filePath = `environments/${environment}/resources/tenant_services.json`
 
   try {
-    const { data } = await octokit.rest.repos.getContent({
-      mediaType: {
-        format: 'raw'
-      },
-      owner: config.get('gitHubOrg'),
-      repo: fileRepository,
-      path: filePath,
-      ref: 'main'
-    })
-
+    const data = await getContent(owner, fileRepository, filePath)
     const parsedRepositories = JSON.parse(data)
 
     if (parsedRepositories[0][repositoryName] === undefined) {

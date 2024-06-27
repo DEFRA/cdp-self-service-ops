@@ -1,8 +1,7 @@
+import crypto from 'crypto'
 import { PublishCommand } from '@aws-sdk/client-sns'
 
-import * as crypto from 'crypto'
-
-async function sendSnsDeployMessage(snsClient, topic, msg) {
+async function sendSnsMessage(snsClient, topic, msg) {
   const input = {
     TopicArn: topic,
     Message: JSON.stringify(msg, null, 2),
@@ -25,4 +24,4 @@ async function sendSnsDeployMessage(snsClient, topic, msg) {
   return await snsClient.send(command)
 }
 
-export { sendSnsDeployMessage }
+export { sendSnsMessage }

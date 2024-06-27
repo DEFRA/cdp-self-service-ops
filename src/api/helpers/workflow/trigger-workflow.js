@@ -5,7 +5,7 @@ import { config } from '~/src/config'
 function triggerWorkflow(
   inputs,
   workflowId,
-  repo = config.get('githubRepoCreateWorkflows'),
+  repo = config.get('gitHubRepoCreateWorkflows'),
   org = config.get('gitHubOrg')
 ) {
   return octokit.request(

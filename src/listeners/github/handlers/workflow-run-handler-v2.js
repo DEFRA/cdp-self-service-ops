@@ -22,10 +22,10 @@ const workflowRunHandlerV2 = async (db, message) => {
   )
 
   switch (workflowRepo) {
-    case config.get('githubRepoTfServiceInfra'):
+    case config.get('gitHubRepoTfServiceInfra'):
       await handleTfSvcInfra(db, message)
       break
-    case config.get('githubRepoCreateWorkflows'):
+    case config.get('gitHubRepoCreateWorkflows'):
       await handleCdpCreateWorkflows(db, message)
       break
     default:
@@ -97,7 +97,7 @@ const handleCdpCreateWorkflows = async (db, message) => {
     )
 
     // Make sure statuses can only be progressed forward, not back (request -> in-progress -> success/failure)
-    // This can happen if the github events arrives in the wrong order or at the same time
+    // This can happen if the gitHub events arrives in the wrong order or at the same time
     const dontOverwrite = dontOverwriteStatus(workflowStatus)
     const updateResult = await db.collection('status').updateOne(
       {

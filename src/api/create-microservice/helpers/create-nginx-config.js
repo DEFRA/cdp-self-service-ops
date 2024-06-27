@@ -38,7 +38,7 @@ async function createNginxConfig(
 
   const pr = await octokit.createPullRequest({
     owner: config.get('gitHubOrg'),
-    repo: config.get('githubRepoNginx'),
+    repo: config.get('gitHubRepoNginx'),
     title: `Add config for ${repositoryName}`,
     body: `Auto generated Pull Request to add nginx config for ${repositoryName}`,
     head: `add-${repositoryName}-config-${new Date().getTime()}`,

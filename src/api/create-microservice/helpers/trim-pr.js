@@ -1,4 +1,4 @@
-// given a github create-PR response, extract the fields we're interested in
+// given a gitHub create-PR response, extract the fields we're interested in
 function trimPr(pr) {
   return {
     number: pr?.number,

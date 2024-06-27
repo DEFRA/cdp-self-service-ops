@@ -6,7 +6,8 @@ import { octokit } from '~/src/helpers/oktokit'
 import { enableAutoMergeGraphQl } from '~/src/helpers/graphql/enable-automerge.graphql'
 import { createLogger } from '~/src/helpers/logging/logger'
 import { prepPullRequestFiles } from '~/src/api/create-microservice/helpers/prep-pull-request-files'
-import { addRepoToGithubOidc } from '~/src/api/create-microservice/helpers/add-repo-to-github-oidc'
+import { addRepoToGitHubOidc } from '~/src/api/create-microservice/helpers/add-repo-to-github-oidc'
+import { getContent } from '~/src/helpers/github/get-content'
 
 /**
  *
@@ -17,7 +18,7 @@ import { addRepoToGithubOidc } from '~/src/api/create-microservice/helpers/add-r
  * @returns {Promise<void>}
  */
 const raiseInfraPullRequest = async (request, name, zone, environments) => {
-  const tfSvcInfra = config.get('githubRepoTfServiceInfra')
+  const tfSvcInfra = config.get('gitHubRepoTfServiceInfra')
   try {
     const tfSvcInfraPr = await createTestSuiteInfrastructureCode(
       name,
@@ -42,7 +43,7 @@ const raiseInfraPullRequest = async (request, name, zone, environments) => {
 }
 
 async function createTestSuiteInfrastructureCode(repoName, zone, environments) {
-  const fileRepository = config.get('githubRepoTfServiceInfra')
+  const fileRepository = config.get('gitHubRepoTfServiceInfra')
   const pullRequestFiles = new Map()
 
   const infrastructurePromises = environments.map(async (env) => {
@@ -50,7 +51,7 @@ async function createTestSuiteInfrastructureCode(repoName, zone, environments) {
       await addTestToTenantServices(repoName, env, zone)
     pullRequestFiles.set(tenantServicesFilePath, tenantServicesJson)
 
-    const [oidcFilePath, oidcJson] = await addRepoToGithubOidc(repoName, env)
+    const [oidcFilePath, oidcJson] = await addRepoToGitHubOidc(repoName, env)
     pullRequestFiles.set(oidcFilePath, oidcJson)
   })
 
@@ -79,20 +80,12 @@ async function createTestSuiteInfrastructureCode(repoName, zone, environments) {
 
 async function addTestToTenantServices(repositoryName, environment, zone) {
   const logger = createLogger()
-  const fileRepository = config.get('githubRepoTfServiceInfra')
+  const fileRepository = config.get('gitHubRepoTfServiceInfra')
   const filePath = `environments/${environment}/resources/tenant_services.json`
+  const owner = config.get('gitHubOrg')
 
   try {
-    const { data } = await octokit.rest.repos.getContent({
-      mediaType: {
-        format: 'raw'
-      },
-      owner: config.get('gitHubOrg'),
-      repo: fileRepository,
-      path: filePath,
-      ref: 'main'
-    })
-
+    const data = await getContent(owner, fileRepository, filePath)
     const parsedRepositories = JSON.parse(data)
 
     if (parsedRepositories[0][repositoryName] === undefined) {

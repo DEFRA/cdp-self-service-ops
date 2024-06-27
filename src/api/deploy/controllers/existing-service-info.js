@@ -1,43 +1,45 @@
-import Boom from '@hapi/boom'
-import { isUndefined } from 'lodash'
+import { config } from '~/src/config'
+import { getContent } from '~/src/helpers/github/get-content'
+import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service'
 
-import { getClusterServices } from '~/src/api/deploy/helpers/get-cluster-services'
+const deploymentRepo = config.get('gitHubRepoTfService')
+const gitHubOwner = config.get('gitHubOrg')
 
 const existingServiceInfoController = {
   handler: async (request, h) => {
     const environment = request.params.environment
     const imageName = request.params.imageName
 
-    const clusters = {}
+    const service = await lookupTenantService(environment, imageName)
 
-    const publicServices = await getClusterServices(environment, 'public')
-    clusters.publicService = publicServices.find(
-      (service) => service.container_image === imageName
+    const filePath = `environments/${environment}/${service?.zone}/${imageName}.json`
+
+    const deployment = await getExistingDeployment(
+      gitHubOwner,
+      deploymentRepo,
+      filePath
     )
 
-    if (!clusters.publicService) {
-      const protectedServices = await getClusterServices(
-        environment,
-        'protected'
-      )
-      clusters.protectedService = protectedServices.find(
-        (service) => service.container_image === imageName
-      )
-    }
-
-    if (
-      isUndefined(clusters.publicService) &&
-      isUndefined(clusters.protectedService)
-    ) {
-      throw Boom.notFound(`Service ${imageName} not found`)
-    }
-
+    const message = deployment ? 'success' : 'service not found'
+    const responseCode = deployment ? 200 : 404
     return h
       .response({
-        message: 'success',
-        serviceInfo: clusters.publicService ?? clusters.protectedService
+        message,
+        ...(deployment && { deployment })
       })
-      .code(200)
+      .code(responseCode)
+  }
+}
+
+async function getExistingDeployment(owner, repo, filePath) {
+  try {
+    const data = await getContent(owner, repo, filePath)
+    return JSON.parse(data)
+  } catch (error) {
+    if (error.status === 404) {
+      return null
+    }
+    throw error
   }
 }
 

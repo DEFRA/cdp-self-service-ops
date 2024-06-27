@@ -3,11 +3,15 @@ import Boom from '@hapi/boom'
 import { config } from '~/src/config'
 import { deployServiceValidation } from '~/src/api/deploy/helpers/schema/deploy-service-validation'
 import { registerDeployment } from '~/src/api/deploy/helpers/register-deployment'
-import { generateDeployMessage } from '~/src/api/deploy/helpers/generate-deploy-message'
-import { sendSnsDeployMessage } from '~/src/api/deploy/helpers/send-sns-deploy-message'
 import { getRepoTeams } from '~/src/api/deploy/helpers/get-repo-teams'
-import { octokit } from '~/src/helpers/oktokit'
 import { getSecretKeysForService } from '~/src/api/deploy/helpers/get-secret-keys-for-service'
+import { sendSnsDeploymentMessage } from '~/src/api/deploy/helpers/send-sns-deployment-message'
+import { commitDeploymentFile } from '~/src/api/deploy/helpers/commit-deployment-file'
+import { getLatestCommitSha } from '~/src/helpers/github/get-latest-commit-sha'
+import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service'
+
+const owner = config.get('gitHubOrg')
+const configRepo = config.get('gitHubRepoConfig')
 
 const deployServiceController = {
   options: {
@@ -41,7 +45,7 @@ const deployServiceController = {
     }
 
     const deploymentId = crypto.randomUUID()
-    const latestCommitSha = await getLatestCommitSha()
+    const configLatestCommitSha = await getLatestCommitSha(owner, configRepo)
     const latestSecretKeys = await getSecretKeysForService(
       payload.imageName,
       payload.environment
@@ -56,46 +60,39 @@ const deployServiceController = {
       payload.memory,
       user,
       deploymentId,
-      latestCommitSha,
+      configLatestCommitSha,
       latestSecretKeys
     )
 
-    const deployMessage = await generateDeployMessage(
-      payload.imageName,
-      payload.version,
+    const service = await lookupTenantService(
       payload.environment,
-      payload.instanceCount,
-      payload.cpu,
-      payload.memory,
-      user,
+      payload.imageName
+    )
+    if (!service) {
+      const message =
+        'Error encountered whilst attempting to find deployment zone information'
+      return h.response({ message }).code(500)
+    }
+
+    await sendSnsDeploymentMessage(
       deploymentId,
-      latestCommitSha
-    )
-    const topic = config.get('snsDeployTopicArn')
-    const snsResponse = await sendSnsDeployMessage(
+      payload,
+      service.zone,
+      user,
+      configLatestCommitSha,
       request.snsClient,
-      topic,
-      deployMessage
+      request.logger
     )
 
-    request.logger.info(
-      `SNS Deploy response: ${JSON.stringify(snsResponse, null, 2)}`
+    await commitDeploymentFile(
+      deploymentId,
+      payload,
+      service.zone,
+      user,
+      configLatestCommitSha
     )
-
     return h.response({ message: 'success', deploymentId }).code(200)
   }
-}
-
-async function getLatestCommitSha() {
-  const { data } = await octokit.rest.git.getRef({
-    mediaType: {
-      format: 'raw'
-    },
-    owner: config.get('gitHubOrg'),
-    repo: 'cdp-app-config',
-    ref: 'heads/main'
-  })
-  return data?.object?.sha
 }
 
 export { deployServiceController }
