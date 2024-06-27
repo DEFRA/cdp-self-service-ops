@@ -7,6 +7,7 @@ import { generateDeployMessage } from '~/src/api/deploy/helpers/generate-deploy-
 import { sendSnsDeployMessage } from '~/src/api/deploy/helpers/send-sns-deploy-message'
 import { getRepoTeams } from '~/src/api/deploy/helpers/get-repo-teams'
 import { octokit } from '~/src/helpers/oktokit'
+import { getSecretKeysForService } from '~/src/api/deploy/helpers/get-secret-keys-for-service'
 
 const deployServiceController = {
   options: {
@@ -41,6 +42,10 @@ const deployServiceController = {
 
     const deploymentId = crypto.randomUUID()
     const latestCommitSha = await getLatestCommitSha()
+    const latestSecretKeys = await getSecretKeysForService(
+      payload.imageName,
+      payload.environment
+    )
 
     await registerDeployment(
       payload.imageName,
@@ -50,7 +55,9 @@ const deployServiceController = {
       payload.cpu,
       payload.memory,
       user,
-      deploymentId
+      deploymentId,
+      latestCommitSha,
+      latestSecretKeys
     )
 
     const deployMessage = await generateDeployMessage(
