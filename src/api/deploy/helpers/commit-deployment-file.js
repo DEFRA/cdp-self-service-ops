@@ -14,6 +14,7 @@ async function commitDeploymentFile(
   const deployment = generateDeployment(
     user,
     payload,
+    zone,
     deploymentId,
     configCommitSha,
     false
@@ -34,6 +35,7 @@ async function commitDeploymentFile(
 function generateDeployment(
   user,
   payload,
+  zone,
   deploymentId,
   commitSha,
   deploy = true
@@ -48,6 +50,10 @@ function generateDeployment(
       configuration: {
         commitSha
       }
+    },
+    cluster: {
+      environment: payload.environment,
+      zone
     },
     resources: {
       instanceCount: payload.instanceCount,
