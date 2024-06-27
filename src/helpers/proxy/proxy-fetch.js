@@ -15,7 +15,7 @@ const proxyFetch = (url, opts) => {
     return undiciFetch(url, {
       ...opts,
       dispatcher: new ProxyAgent({
-        uri: config.get('httpsProxy'),
+        uri: proxy,
         keepAliveTimeout: 10,
         keepAliveMaxTimeout: 10
       })

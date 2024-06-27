@@ -8,9 +8,11 @@ async function registerDeployment(
   cpu,
   memory,
   user,
-  deploymentId
+  deploymentId,
+  latestCommitSha,
+  secretKeys
 ) {
-  const url = `${config.get('portalBackendApiUrl')}/deployments`
+  const url = `${config.get('portalBackendApiUrl')}/v2/deployments`
   await fetch(url, {
     method: 'post',
     headers: { 'Content-Type': 'application/json' },
@@ -22,7 +24,9 @@ async function registerDeployment(
       cpu: cpu.toString(),
       memory: memory.toString(),
       user,
-      deploymentId
+      deploymentId,
+      configVersion: latestCommitSha,
+      secrets: secretKeys
     })
   })
 }

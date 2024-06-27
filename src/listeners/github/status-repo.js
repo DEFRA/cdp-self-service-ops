@@ -19,12 +19,18 @@ async function updatePrStatus(db, repo, field, status, mergedSha) {
   const statusField = `${field}.status`
   const mergedShaField = `${field}.merged_sha`
 
-  return db
-    .collection('status')
-    .updateOne(
-      { repositoryName: repo },
-      { $set: { [statusField]: status, [mergedShaField]: mergedSha } }
-    )
+  const setFields = { [statusField]: status }
+  if (mergedSha) {
+    setFields[mergedShaField] = mergedSha
+  }
+
+  return db.collection('status').updateOne(
+    {
+      repositoryName: repo,
+      [statusField]: { $nin: dontOverwriteStatus(status) }
+    },
+    { $set: setFields }
+  )
 }
 
 async function updateWorkflowStatus(

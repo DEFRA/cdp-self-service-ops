@@ -109,29 +109,35 @@ const serviceToSecretsMap = {
       SESSION_COOKIE_PASSWORD:
         'cdp/services/forms-designer:SESSION_COOKIE_PASSWORD',
       ...redisSecrets('forms-designer'),
-      ...squidSecrets('forms-designer')
+      ...squidSecrets('forms-designer'),
+      AZURE_CLIENT_ID: 'cdp/services/forms-designer:AZURE_CLIENT_ID',
+      AZURE_CLIENT_SECRET: 'cdp/services/forms-designer:AZURE_CLIENT_SECRET'
     }
   },
   'forms-runner': {
     dev: {
+      NOTIFY_API_KEY: 'cdp/services/forms-runner-hqC5dr:NOTIFY_API_KEY',
       SESSION_COOKIE_PASSWORD:
         'cdp/services/forms-runner-hqC5dr:SESSION_COOKIE_PASSWORD',
       ...redisSecrets('forms-runner-hqC5dr'),
       ...squidSecrets('forms-runner-hqC5dr')
     },
     test: {
+      NOTIFY_API_KEY: 'cdp/services/forms-runner-GZ5VZ9:NOTIFY_API_KEY',
       SESSION_COOKIE_PASSWORD:
         'cdp/services/forms-runner-GZ5VZ9:SESSION_COOKIE_PASSWORD',
       ...redisSecrets('forms-runner-GZ5VZ9'),
       ...squidSecrets('forms-runner-GZ5VZ9')
     },
     'perf-test': {
+      NOTIFY_API_KEY: 'cdp/services/forms-runner-Wi9V7R:NOTIFY_API_KEY',
       SESSION_COOKIE_PASSWORD:
         'cdp/services/forms-runner-Wi9V7R:SESSION_COOKIE_PASSWORD',
       ...redisSecrets('forms-runner-Wi9V7R'),
       ...squidSecrets('forms-runner-Wi9V7R')
     },
     prod: {
+      NOTIFY_API_KEY: 'cdp/services/forms-runner-CNY3z9:NOTIFY_API_KEY',
       SESSION_COOKIE_PASSWORD:
         'cdp/services/forms-runner-CNY3z9:SESSION_COOKIE_PASSWORD',
       ...redisSecrets('forms-runner-CNY3z9'),
@@ -247,6 +253,50 @@ const serviceToSecretsMap = {
     },
     prod: {
       ...squidSecrets('aqie-back-end')
+    }
+  },
+  'nms-frontend-alpha': {
+    dev: {
+      ...squidSecrets('nms-frontend-alpha'),
+      ...redisSecrets('nms-frontend-alpha')
+    },
+    test: {
+      ...squidSecrets('nms-frontend-alpha'),
+      ...redisSecrets('nms-frontend-alpha')
+    },
+    'pref-test': {
+      ...squidSecrets('nms-frontend-alpha'),
+      ...redisSecrets('nms-frontend-alpha')
+    },
+    prod: {
+      ...squidSecrets('nms-frontend-alpha'),
+      ...redisSecrets('nms-frontend-alpha')
+    }
+  },
+  'nms-backend-alpha': {
+    dev: {
+      AZ_TENANT_ID: 'cdp/services/nms-backend-alpha:AZ_TENANT_ID',
+      AZ_CLIENT_ID: 'cdp/services/nms-backend-alpha:AZ_CLIENT_ID',
+      AZ_CLIENT_SECRET: 'cdp/services/nms-backend-alpha:AZ_CLIENT_SECRET',
+      ...squidSecrets('nms-backend-alpha')
+    },
+    test: {
+      AZ_TENANT_ID: 'cdp/services/nms-backend-alpha:AZ_TENANT_ID',
+      AZ_CLIENT_ID: 'cdp/services/nms-backend-alpha:AZ_CLIENT_ID',
+      AZ_CLIENT_SECRET: 'cdp/services/nms-backend-alpha:AZ_CLIENT_SECRET',
+      ...squidSecrets('nms-backend-alpha')
+    },
+    'pref-test': {
+      AZ_TENANT_ID: 'cdp/services/nms-backend-alpha:AZ_TENANT_ID',
+      AZ_CLIENT_ID: 'cdp/services/nms-backend-alpha:AZ_CLIENT_ID',
+      AZ_CLIENT_SECRET: 'cdp/services/nms-backend-alpha:AZ_CLIENT_SECRET',
+      ...squidSecrets('nms-backend-alpha')
+    },
+    prod: {
+      AZ_TENANT_ID: 'cdp/services/nms-backend-alpha:AZ_TENANT_ID',
+      AZ_CLIENT_ID: 'cdp/services/nms-backend-alpha:AZ_CLIENT_ID',
+      AZ_CLIENT_SECRET: 'cdp/services/nms-backend-alpha:AZ_CLIENT_SECRET',
+      ...squidSecrets('nms-backend-alpha')
     }
   }
 }
