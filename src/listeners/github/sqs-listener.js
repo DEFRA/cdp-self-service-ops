@@ -20,11 +20,11 @@ function sqsListener(server) {
     messageAttributeNames: ['All'],
     waitTimeSeconds: 10,
     visibilityTimeout: 400,
-    pollingWaitTimeMs: 1000,
+    pollingWaitTimeMs: 0,
     handleMessage: async (message) => {
       const payload = JSON.parse(message.Body)
       await handle(server, payload)
-
+      listener.updateOption('pollingWaitTimeMs', 0)
       return message
     },
     sqs
@@ -32,6 +32,7 @@ function sqsListener(server) {
 
   listener.on('error', (error) => {
     server.logger.error(error.message)
+    listener.updateOption('pollingWaitTimeMs', 2000)
   })
 
   listener.on('processing_error', (error) => {
