@@ -1,0 +1,28 @@
+import { SNSClient } from '@aws-sdk/client-sns'
+
+import { config } from '~/src/config'
+
+const snsClientPlugin = {
+  plugin: {
+    name: 'sns-client',
+    version: '1.0.0',
+    register: async function (server) {
+      server.logger.info('Setting up sns-client')
+
+      const client = new SNSClient({
+        region: config.get('awsRegion'),
+        endpoint: config.get('snsEndpoint')
+      })
+
+      server.logger.info('sns-client configured')
+      server.decorate('request', 'snsClient', client)
+
+      server.events.on('stop', () => {
+        server.logger.info(`Closing SNS client`)
+        client.destroy()
+      })
+    }
+  }
+}
+
+export { snsClientPlugin }
