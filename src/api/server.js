@@ -6,7 +6,7 @@ import { router } from '~/src/plugins/router'
 import { failAction } from '~/src/helpers/fail-action'
 import { requestLogger } from '~/src/plugins/request-logger'
 import { azureOidc } from '~/src/plugins/azure-oidc'
-import { mongoPlugin } from '~/src/plugins/mongodb'
+import { mongoDb } from '~/src/plugins/mongodb'
 import { snsClientPlugin } from '~/src/plugins/sns-client'
 import { registerServerMethods } from '~/src/api/server-methods'
 import { secureContext } from '~/src/helpers/secure-context'
@@ -57,7 +57,7 @@ async function createServer() {
   await server.register([
     azureOidc,
     sqsClient,
-    mongoPlugin,
+    mongoDb,
     snsClientPlugin,
     router
   ])
