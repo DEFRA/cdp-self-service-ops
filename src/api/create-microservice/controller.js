@@ -1,11 +1,10 @@
 import Boom from '@hapi/boom'
-import { isNil, isNull } from 'lodash'
 
 import { serviceTemplates } from '~/src/api/create-microservice/helpers/service-templates'
 import { createServiceValidationSchema } from '~/src/api/create-microservice/helpers/create-service-validation-schema'
 import { createServiceConfig } from '~/src/api/create-microservice/helpers/create-service-config'
 import { createNginxConfig } from '~/src/api/create-microservice/helpers/create-nginx-config'
-import { doUpdateTfSvcInfra } from '~/src/api/create-microservice/helpers/update-tfsvcinfra'
+import { updateTfSvcInfra } from '~/src/api/create-microservice/helpers/update-tfsvcinfra'
 import { config, environments } from '~/src/config'
 import { trimPr } from '~/src/api/create-microservice/helpers/trim-pr'
 import { triggerWorkflow } from '~/src/api/helpers/workflow/trigger-workflow'
@@ -37,13 +36,13 @@ const createMicroserviceController = {
     const org = config.get('gitHubOrg')
     const repositoryName = payload?.repositoryName
 
-    const zone = serviceTemplates[serviceTypeTemplate]?.zone ?? null
-    if (isNull(zone)) {
+    const zone = serviceTemplates[serviceTypeTemplate]?.zone
+    if (!zone) {
       throw Boom.badData(`Invalid service template: '${serviceTypeTemplate}'`)
     }
 
     const { team } = await request.server.methods.fetchTeam(payload.teamId)
-    if (isNil(team.github)) {
+    if (!team?.github) {
       throw Boom.badData(
         `Team ${team.name} does not have a link to a Github team`
       )
@@ -74,16 +73,16 @@ const createMicroserviceController = {
       )
     }
     // create the blank repo
-    await doCreateRepo(request, repositoryName, payload, team)
+    await createRepo(request, repositoryName, payload, team)
 
     // tf-svc-infra
-    await doUpdateTfSvcInfra(request, repositoryName, zone)
+    await updateTfSvcInfra(request, repositoryName, zone)
 
     // cdp-app-config
-    await doUpdateCdpAppConfig(request, repositoryName, team)
+    await updateCdpAppConfig(request, repositoryName, team)
 
     // cdp-nginx-upstreams
-    await doUpdateCdpNginxUpstream(request, repositoryName, zone)
+    await updateCdpNginxUpstream(request, repositoryName, zone)
 
     // cdp-squid-proxy
     await createSquidConfig(request, repositoryName)
@@ -104,7 +103,7 @@ const createMicroserviceController = {
   }
 }
 
-const doCreateRepo = async (request, repositoryName, payload, team) => {
+async function createRepo(request, repositoryName, payload, team) {
   try {
     const org = config.get('gitHubOrg')
     const serviceTypeTemplate = payload?.serviceTypeTemplate
@@ -137,7 +136,7 @@ const doCreateRepo = async (request, repositoryName, payload, team) => {
   }
 }
 
-const doUpdateCdpAppConfig = async (request, repositoryName, team) => {
+async function updateCdpAppConfig(request, repositoryName, team) {
   const cdpAppConfig = config.get('gitHubRepoConfig')
   try {
     const createServiceConfigResult = await createServiceConfig(
@@ -160,7 +159,7 @@ const doUpdateCdpAppConfig = async (request, repositoryName, team) => {
   }
 }
 
-const doUpdateCdpNginxUpstream = async (request, repositoryName, zone) => {
+async function updateCdpNginxUpstream(request, repositoryName, zone) {
   const cdpNginxUpstream = config.get('gitHubRepoNginx')
   try {
     const createNginxConfigResult = await createNginxConfig(

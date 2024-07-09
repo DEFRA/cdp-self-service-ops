@@ -3,7 +3,7 @@ import Boom from '@hapi/boom'
 import { config } from '~/src/config'
 
 async function getRepoTeams(repoName) {
-  const url = `${config.get('portalBackendApiUrl')}/repositories/${repoName}`
+  const url = `${config.get('portalBackendUrl')}/repositories/${repoName}`
   const response = await fetch(url, {
     method: 'get',
     headers: { 'Content-Type': 'application/json' }

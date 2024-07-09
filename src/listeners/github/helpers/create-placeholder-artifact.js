@@ -15,7 +15,7 @@ async function createPlaceholderArtifact({ service, gitHubUrl, runMode }) {
   )
 
   const url = `${config.get(
-    'portalBackendApiUrl'
+    'portalBackendUrl'
   )}/artifacts/placeholder${queryString}`
 
   logger.info(
