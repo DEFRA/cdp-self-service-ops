@@ -55,7 +55,7 @@
     "pino": "8.21.0",
     "qs": "6.12.1",
     "sqs-consumer": "9.1.0",
-    "undici": "6.18.2"
+    "undici": "6.19.2"
   },
   "devDependencies": {
     "@babel/cli": "7.24.6",
