@@ -29,6 +29,9 @@ const deployServiceController = {
   },
   handler: async (request, h) => {
     const payload = request.payload
+    const imageName = request.imageName
+    const environment = request.environment
+
     const user = {
       id: request.auth?.credentials?.id,
       displayName: request.auth?.credentials?.displayName
@@ -37,7 +40,7 @@ const deployServiceController = {
 
     const isAdmin = scope.includes(config.get('oidcAdminGroupId'))
     if (!isAdmin) {
-      const repoTeams = await getRepoTeams(payload.imageName)
+      const repoTeams = await getRepoTeams(imageName)
       const isTeamMember = repoTeams.some((team) => scope.includes(team.teamId))
       if (!isTeamMember) {
         throw Boom.forbidden('Insufficient scope')
@@ -46,15 +49,16 @@ const deployServiceController = {
 
     const deploymentId = crypto.randomUUID()
     const configLatestCommitSha = await getLatestCommitSha(owner, configRepo)
+    request.logger.info(`Config commit sha ${configLatestCommitSha}`)
     const latestSecretKeys = await getSecretKeysForService(
-      payload.imageName,
-      payload.environment
+      imageName,
+      environment
     )
 
     await registerDeployment(
-      payload.imageName,
+      imageName,
       payload.version,
-      payload.environment,
+      environment,
       payload.instanceCount,
       payload.cpu,
       payload.memory,
@@ -63,11 +67,13 @@ const deployServiceController = {
       configLatestCommitSha,
       latestSecretKeys
     )
+    request.logger.info('Deployment registered')
 
-    const service = await lookupTenantService(
-      payload.environment,
-      payload.imageName
+    const service = await lookupTenantService(imageName, environment)
+    request.logger.info(
+      `Service ${imageName} in ${environment} should be deployed to ${service.zone}`
     )
+
     if (!service) {
       const message =
         'Error encountered whilst attempting to find deployment zone information'
@@ -83,14 +89,17 @@ const deployServiceController = {
       request.snsClient,
       request.logger
     )
+    request.logger.info('deployment sns event sent')
 
     await commitDeploymentFile(
       deploymentId,
       payload,
       service.zone,
       user,
-      configLatestCommitSha
+      configLatestCommitSha,
+      request.logger
     )
+    request.logger.info('deployment commit file created')
     return h.response({ message: 'success', deploymentId }).code(200)
   }
 }

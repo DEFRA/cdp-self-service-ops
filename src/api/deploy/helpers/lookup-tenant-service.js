@@ -2,7 +2,7 @@ import { createLogger } from '~/src/helpers/logging/logger'
 import { getContent } from '~/src/helpers/github/get-content'
 import { config } from '~/src/config'
 
-async function lookupTenantService(environment, service) {
+async function lookupTenantService(service, environment) {
   const logger = createLogger()
   const filePath = `environments/${environment}/resources/tenant_services.json`
   const owner = config.get('gitHubOrg')

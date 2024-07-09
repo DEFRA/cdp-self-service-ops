@@ -9,7 +9,8 @@ async function commitDeploymentFile(
   payload,
   zone,
   user,
-  configCommitSha
+  configCommitSha,
+  logger
 ) {
   const deployment = generateDeployment(
     user,
@@ -22,6 +23,8 @@ async function commitDeploymentFile(
   const filePath = `environments/${payload.environment}/${zone}/${deployment.service.name}.json`
   const content = [{ path: filePath, obj: deployment }]
   const commitMessage = `Deploy ${deployment.service.name} ${payload.version} to ${payload.environment} - Initiated by ${user.displayName}`
+
+  logger.info(`Deployment file ${filePath}`)
 
   return await commitFiles(
     gitHubOwner,
