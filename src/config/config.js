@@ -31,6 +31,24 @@ const config = convict({
     format: String,
     default: path.normalize(path.join(__dirname, '..', '..'))
   },
+  awsRegion: {
+    doc: 'AWS region',
+    format: String,
+    default: 'eu-west-2',
+    env: 'AWS_REGION'
+  },
+  sqsEndpoint: {
+    doc: 'AWS SQS endpoint',
+    format: String,
+    default: 'http://127.0.0.1:4566',
+    env: 'SQS_ENDPOINT'
+  },
+  snsEndpoint: {
+    doc: 'AWS SNS endpoint',
+    format: String,
+    default: 'http://127.0.0.1:4566',
+    env: 'SNS_ENDPOINT'
+  },
   oidcWellKnownConfigurationUrl: {
     doc: 'OIDC .well-known configuration URL',
     format: String,
@@ -141,18 +159,6 @@ const config = convict({
     default: 'cdp-self-service-ops',
     env: 'MONGO_DATABASE'
   },
-  awsRegion: {
-    doc: 'AWS region',
-    format: String,
-    default: 'eu-west-2',
-    env: 'AWS_REGION'
-  },
-  snsEndpoint: {
-    doc: 'AWS SNS endpoint',
-    format: String,
-    default: 'http://127.0.0.1:4566',
-    env: 'SNS_ENDPOINT'
-  },
   snsDeployTopicArn: {
     doc: 'SNS Deploy Topic ARN',
     format: String,
@@ -165,23 +171,37 @@ const config = convict({
     default: 'arn:aws:sns:eu-west-2:000000000000:run-test-topic',
     env: 'SNS_RUN_TEST_TOPIC_ARN'
   },
-  sqsEndpoint: {
-    doc: 'AWS SQS endpoint',
-    format: String,
-    default: 'http://127.0.0.1:4566',
-    env: 'SQS_ENDPOINT'
-  },
-  sqsGitHubQueue: {
-    doc: 'URL of sqs queue providing gitHub events',
-    format: String,
-    default: 'http://127.0.0.1:4566/000000000000/github-events',
-    env: 'SQS_GITHUB_QUEUE'
-  },
-  sqsGitHubEnabled: {
-    doc: 'Should the service listen for gitHub webhook events?',
-    format: Boolean,
-    default: true,
-    env: 'SQS_GITHUB_ENABLED'
+  sqsGitHubEvents: {
+    queueUrl: {
+      doc: 'URL of sqs queue providing gitHub events',
+      format: String,
+      default: 'github-events',
+      env: 'SQS_GITHUB_QUEUE'
+    },
+    waitTimeSeconds: {
+      doc: 'The duration for which the call will wait for a message to arrive in the queue before returning',
+      format: Number,
+      default: 10,
+      env: 'SQS_GITHUB_WAIT_TIME_SECONDS'
+    },
+    visibilityTimeout: {
+      doc: 'The duration (in seconds) that the received messages are hidden from subsequent retrieve requests after being retrieved by a ReceiveMessage request.',
+      format: Number,
+      default: 400,
+      env: 'SQS_GITHUB_VISIBILITY_TIMEOUT'
+    },
+    pollingWaitTimeMs: {
+      doc: 'The duration to wait before repolling the queue',
+      format: Number,
+      default: 0,
+      env: 'SQS_GITHUB_POLLING_WAIT_TIME_MS'
+    },
+    enabled: {
+      doc: 'Should the service listen for gitHub webhook events?',
+      format: Boolean,
+      default: true,
+      env: 'SQS_GITHUB_ENABLED'
+    }
   },
   userServiceApiUrl: {
     doc: 'User Service Backend API url',
