@@ -10,9 +10,7 @@ describe('#calculateOverallStatus', () => {
         createRepository: { status: statuses.success },
         'cdp-tf-svc-infra': { status: statuses.success },
         'cdp-app-config': { status: statuses.success },
-        'cdp-nginx-upstreams': { status: statuses.success },
-        'cdp-squid-proxy': { status: statuses.success },
-        'cdp-grafana-svc': { status: statuses.success }
+        'cdp-nginx-upstreams': { status: statuses.success }
       })
 
       expect(result).toBe(statuses.success)
@@ -24,9 +22,7 @@ describe('#calculateOverallStatus', () => {
         createRepository: { status: statuses.success },
         'cdp-tf-svc-infra': { status: statuses.success },
         'cdp-app-config': { status: statuses.failure },
-        'cdp-nginx-upstreams': { status: statuses.success },
-        'cdp-squid-proxy': { status: statuses.success },
-        'cdp-grafana-svc': { status: statuses.success }
+        'cdp-nginx-upstreams': { status: statuses.success }
       })
 
       expect(result).toBe(statuses.failure)
@@ -38,9 +34,7 @@ describe('#calculateOverallStatus', () => {
         createRepository: { status: statuses.success },
         'cdp-tf-svc-infra': { status: statuses.success },
         'cdp-app-config': { status: 'some-weird-setting' },
-        'cdp-nginx-upstreams': { status: statuses.inProgress },
-        'cdp-squid-proxy': { status: statuses.success },
-        'cdp-grafana-svc': { status: statuses.success }
+        'cdp-nginx-upstreams': { status: statuses.inProgress }
       })
 
       expect(result).toBe(statuses.inProgress)

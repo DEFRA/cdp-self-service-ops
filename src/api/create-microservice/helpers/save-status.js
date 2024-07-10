@@ -5,8 +5,6 @@ import { creations } from '~/src/constants/creations'
 const tfSvcInfra = config.get('gitHubRepoTfServiceInfra')
 const cdpAppConfig = config.get('gitHubRepoConfig')
 const cdpNginxUpstream = config.get('gitHubRepoNginx')
-const cdpSquidConfig = config.get('gitHubRepoSquid')
-const cdpDashboards = config.get('gitHubRepoDashboards')
 
 function getStatusKeys(statusRecord) {
   const statusKeys = []
@@ -22,7 +20,7 @@ function getStatusKeys(statusRecord) {
       creations.perfTestsuite
     ].includes(statusRecord?.kind)
   ) {
-    statusKeys.push('createRepository', tfSvcInfra, cdpSquidConfig)
+    statusKeys.push('createRepository', tfSvcInfra)
   }
 
   if (statusRecord?.kind === creations.microservice) {
@@ -30,9 +28,7 @@ function getStatusKeys(statusRecord) {
       'createRepository',
       cdpNginxUpstream,
       cdpAppConfig,
-      tfSvcInfra,
-      cdpSquidConfig,
-      cdpDashboards
+      tfSvcInfra
     )
   }
 
@@ -93,12 +89,6 @@ async function initCreationStatus(
     },
     [cdpNginxUpstream]: {
       status: statuses.notRequested
-    },
-    [cdpSquidConfig]: {
-      status: statuses.notRequested
-    },
-    [cdpDashboards]: {
-      statuses: statuses.notRequested
     }
   }
   await db.collection('status').insertOne(status)
