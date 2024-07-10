@@ -29,8 +29,8 @@ const deployServiceController = {
   },
   handler: async (request, h) => {
     const payload = request.payload
-    const imageName = request.imageName
-    const environment = request.environment
+    const imageName = payload.imageName
+    const environment = payload.environment
 
     const user = {
       id: request.auth?.credentials?.id,
@@ -71,7 +71,7 @@ const deployServiceController = {
 
     const service = await lookupTenantService(imageName, environment)
     request.logger.info(
-      `Service ${imageName} in ${environment} should be deployed to ${service.zone}`
+      `Service ${imageName} in ${environment} should be deployed to ${service?.zone}`
     )
 
     if (!service) {
