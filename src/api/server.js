@@ -2,19 +2,24 @@ import path from 'path'
 import hapi from '@hapi/hapi'
 
 import { config } from '~/src/config'
-import { router } from '~/src/api/router'
+import { router } from '~/src/plugins/router'
 import { failAction } from '~/src/helpers/fail-action'
-import { requestLogger } from '~/src/helpers/logging/request-logger'
-import { azureOidc } from '~/src/helpers/azure-oidc'
-import { mongoPlugin } from '~/src/helpers/mongodb'
-import { githubEventsPlugin } from '~/src/listeners/github/github-events-plugin'
-import { snsClientPlugin } from '~/src/helpers/sns-client'
+import { requestLogger } from '~/src/plugins/request-logger'
+import { azureOidc } from '~/src/plugins/azure-oidc'
+import { mongoDb } from '~/src/plugins/mongodb'
+import { snsClientPlugin } from '~/src/plugins/sns-client'
 import { registerServerMethods } from '~/src/api/server-methods'
 import { secureContext } from '~/src/helpers/secure-context'
+import { setupWreckAgents } from '~/src/helpers/proxy/setup-wreck-agents'
+import { proxyAgent } from '~/src/helpers/proxy/proxy-agent'
+import { gitHubEventsListener } from '~/src/plugins/sqs-listener'
+import { sqsClient } from '~/src/plugins/sqs-client'
 
 const isProduction = config.get('isProduction')
 
 async function createServer() {
+  setupWreckAgents(proxyAgent())
+
   const server = hapi.server({
     port: config.get('port'),
     routes: {
@@ -49,17 +54,17 @@ async function createServer() {
     await server.register(secureContext)
   }
 
-  await server.register(azureOidc)
+  await server.register([
+    azureOidc,
+    sqsClient,
+    mongoDb,
+    snsClientPlugin,
+    router
+  ])
 
-  await server.register({ plugin: mongoPlugin, options: {} })
-
-  if (config.get('sqsGithubEnabled')) {
-    await server.register(githubEventsPlugin)
+  if (config.get('sqsGitHubEvents.enabled')) {
+    await server.register(gitHubEventsListener)
   }
-
-  await server.register({ plugin: snsClientPlugin, options: {} })
-
-  await server.register(router)
 
   registerServerMethods(server)
 

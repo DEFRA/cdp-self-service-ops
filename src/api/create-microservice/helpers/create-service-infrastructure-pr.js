@@ -1,12 +1,12 @@
 import { octokit } from '~/src/helpers/oktokit'
 import { config, environments } from '~/src/config'
-import { addRepoToGithubOidc } from '~/src/api/create-microservice/helpers/add-repo-to-github-oidc'
+import { addRepoToGitHubOidc } from '~/src/api/create-microservice/helpers/add-repo-to-github-oidc'
 import { addRepoToTenantServices } from '~/src/api/create-microservice/helpers/add-repo-to-tenant-services'
 import { prepPullRequestFiles } from '~/src/api/create-microservice/helpers/prep-pull-request-files'
 import { enableAutoMergeGraphQl } from '~/src/helpers/graphql/enable-automerge.graphql'
 
 async function createServiceInfrastructurePr(repoName, zone) {
-  const fileRepository = config.get('githubRepoTfServiceInfra')
+  const fileRepository = config.get('gitHubRepoTfServiceInfra')
   const pullRequestFiles = new Map()
 
   const infrastructurePromises = Object.values(environments).map(
@@ -15,7 +15,7 @@ async function createServiceInfrastructurePr(repoName, zone) {
         await addRepoToTenantServices(repoName, env, zone)
       pullRequestFiles.set(tenantServicesFilePath, tenantServicesJson)
 
-      const [oidcFilePath, oidcJson] = await addRepoToGithubOidc(repoName, env)
+      const [oidcFilePath, oidcJson] = await addRepoToGitHubOidc(repoName, env)
       pullRequestFiles.set(oidcFilePath, oidcJson)
     }
   )

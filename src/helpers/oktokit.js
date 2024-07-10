@@ -4,7 +4,7 @@ import { createAppAuth } from '@octokit/auth-app'
 import { config } from '~/src/config'
 import { restEndpointMethods } from '@octokit/plugin-rest-endpoint-methods'
 import { createPullRequest } from 'octokit-plugin-create-pull-request'
-import { proxyFetch } from '~/src/helpers/proxy-fetch'
+import { proxyFetch } from '~/src/helpers/proxy/proxy-fetch'
 
 const OctokitExtra = Octokit.plugin(restEndpointMethods, createPullRequest)
 
@@ -20,10 +20,10 @@ const init = () => {
   }
 
   // Test Mode, for use with cdp-portal-stubs
-  if (config.get('githubBaseUrl') != null) {
+  if (config.get('gitHubBaseUrl') != null) {
     cfg = {
       auth: 'test-value',
-      baseUrl: config.get('githubBaseUrl')
+      baseUrl: config.get('gitHubBaseUrl')
     }
   }
 

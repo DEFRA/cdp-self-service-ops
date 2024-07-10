@@ -3,6 +3,7 @@ import { config, environments } from '~/src/config'
 import { prepPullRequestFiles } from '~/src/api/create-microservice/helpers/prep-pull-request-files'
 import { enableAutoMergeGraphQl } from '~/src/helpers/graphql/enable-automerge.graphql'
 import { createLogger } from '~/src/helpers/logging/logger'
+import { getContent } from '~/src/helpers/github/get-content'
 
 const logger = createLogger()
 
@@ -34,7 +35,7 @@ async function createServiceConfig(repositoryName, team) {
 
   const pr = await octokit.createPullRequest({
     owner: config.get('gitHubOrg'),
-    repo: config.get('githubRepoConfig'),
+    repo: config.get('gitHubRepoConfig'),
     title: `Add base config for ${repositoryName}`,
     body: `Auto generated Pull Request to add default config for ${repositoryName}`,
     head: `add-${repositoryName}-config-${new Date().getTime()}`,
@@ -54,15 +55,9 @@ async function createServiceConfig(repositoryName, team) {
 }
 
 async function updateCodeOwners(repositoryName, teamGithubName) {
-  const { data } = await octokit.rest.repos.getContent({
-    mediaType: {
-      format: 'raw'
-    },
-    owner: config.get('gitHubOrg'),
-    repo: config.get('githubRepoConfig'),
-    path: '.github/CODEOWNERS',
-    ref: 'main'
-  })
+  const owner = config.get('gitHubOrg')
+  const repo = config.get('gitHubRepoConfig')
+  const data = await getContent(owner, repo, '.github/CODEOWNERS')
 
   if (data && teamGithubName) {
     return `${data}\n/services/${repositoryName}/ @defra/${teamGithubName}`

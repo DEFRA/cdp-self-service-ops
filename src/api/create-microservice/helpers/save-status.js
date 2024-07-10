@@ -2,9 +2,9 @@ import { config } from '~/src/config'
 import { statuses } from '~/src/constants/statuses'
 import { creations } from '~/src/constants/creations'
 
-const tfSvcInfra = config.get('githubRepoTfServiceInfra')
-const cdpAppConfig = config.get('githubRepoConfig')
-const cdpNginxUpstream = config.get('githubRepoNginx')
+const tfSvcInfra = config.get('gitHubRepoTfServiceInfra')
+const cdpAppConfig = config.get('gitHubRepoConfig')
+const cdpNginxUpstream = config.get('gitHubRepoNginx')
 
 function getStatusKeys(statusRecord) {
   const statusKeys = []
@@ -13,7 +13,13 @@ function getStatusKeys(statusRecord) {
     statusKeys.push('createRepository')
   }
 
-  if (statusRecord?.kind === creations.envTestsuite) {
+  if (
+    [
+      creations.envTestsuite,
+      creations.smokeTestSuite,
+      creations.perfTestsuite
+    ].includes(statusRecord?.kind)
+  ) {
     statusKeys.push('createRepository', tfSvcInfra)
   }
 

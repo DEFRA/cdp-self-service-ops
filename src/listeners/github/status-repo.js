@@ -1,4 +1,5 @@
 import { statuses } from '~/src/constants/statuses'
+import { dontOverwriteStatus } from '~/src/listeners/github/helpers/dont-overwrite-status'
 
 async function findByPrNumber(db, repo, prNumber) {
   const searchOn = `${repo}.pr.number`
@@ -18,12 +19,18 @@ async function updatePrStatus(db, repo, field, status, mergedSha) {
   const statusField = `${field}.status`
   const mergedShaField = `${field}.merged_sha`
 
-  return db
-    .collection('status')
-    .updateOne(
-      { repositoryName: repo },
-      { $set: { [statusField]: status, [mergedShaField]: mergedSha } }
-    )
+  const setFields = { [statusField]: status }
+  if (mergedSha) {
+    setFields[mergedShaField] = mergedSha
+  }
+
+  return db.collection('status').updateOne(
+    {
+      repositoryName: repo,
+      [statusField]: { $nin: dontOverwriteStatus(status) }
+    },
+    { $set: setFields }
+  )
 }
 
 async function updateWorkflowStatus(
@@ -36,12 +43,13 @@ async function updateWorkflowStatus(
 ) {
   const statusField = `${workflow}.status`
   const workflowField = `${workflow}.${branch}.workflow` // branch is either 'main' or 'pr'
-  return db
-    .collection('status')
-    .updateOne(
-      { repositoryName: repo },
-      { $set: { [statusField]: status, [workflowField]: workflowStatus } }
-    )
+  return db.collection('status').updateOne(
+    {
+      repositoryName: repo,
+      [statusField]: { $nin: dontOverwriteStatus(status) }
+    },
+    { $set: { [statusField]: status, [workflowField]: workflowStatus } }
+  )
 }
 
 async function updateStatus(db, repo, field, status) {

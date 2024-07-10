@@ -6,15 +6,14 @@ import {
 } from '~/src/listeners/github/status-repo'
 import { updateOverallStatus } from '~/src/api/create-microservice/helpers/save-status'
 import { createPlaceholderArtifact } from '~/src/listeners/github/helpers/create-placeholder-artifact'
-
-const { createLogger } = require('~/src/helpers/logging/logger')
+import { createLogger } from '~/src/helpers/logging/logger'
 
 // given a list of services, update the tf-svc-infra status for all of them to success
 // and create the placeholder artifact
 const bulkUpdateTfSvcInfra = async (db, trimmedWorkflow, status) => {
   const logger = createLogger()
   const org = config.get('gitHubOrg')
-  const tfSvcInfra = config.get('githubRepoTfServiceInfra')
+  const tfSvcInfra = config.get('gitHubRepoTfServiceInfra')
 
   const tenants = await lookupTenantServicesForCommit(environments.management)
 
@@ -60,12 +59,13 @@ const bulkUpdateTfSvcInfra = async (db, trimmedWorkflow, status) => {
     await updateOverallStatus(db, serviceName)
 
     logger.info(
-      `creating ${runMode} placeholder artifact for ${servicesToUpdate}`
+      { servicesToUpdate },
+      `creating ${runMode} placeholder artifact for ${serviceName}`
     )
 
     await createPlaceholderArtifact({
       service: serviceName,
-      githubUrl: `https://github.com/${org}/${serviceName}`,
+      gitHubUrl: `https://github.com/${org}/${serviceName}`,
       runMode
     })
   }

@@ -1,11 +1,11 @@
+import Boom from '@hapi/boom'
+
 import { deployTestSuiteValidation } from '~/src/api/deploy-test-suite/helpers/deploy-test-suite-validation'
 import { generateTestRunMessage } from '~/src/api/deploy-test-suite/helpers/generate-test-run-message'
-import { sendSnsDeployMessage } from '~/src/api/deploy/helpers/send-sns-deploy-message'
-
-import * as crypto from 'crypto'
-import { config } from '~/src/config'
+import { sendSnsMessage } from '~/src/api/deploy/helpers/sns/send-sns-message'
+import crypto from 'node:crypto'
+import { config, environments } from '~/src/config'
 import { createRecordTestRun } from '~/src/api/deploy-test-suite/helpers/record-test-run'
-import { Boom } from '@hapi/boom'
 import { getRepoTeams } from '~/src/api/deploy/helpers/get-repo-teams'
 
 const deployTestSuiteController = {
@@ -37,6 +37,16 @@ const deployTestSuiteController = {
       if (!isTeamMember) {
         throw Boom.forbidden('Insufficient scope')
       }
+
+      // Only admins can run test suites in the admin environments
+      if (
+        payload.environment === environments.infraDev ||
+        payload.environment === environments.management
+      ) {
+        throw Boom.forbidden(
+          'Insufficient scope to run suite in this environment'
+        )
+      }
     }
 
     const runId = crypto.randomUUID()
@@ -51,7 +61,7 @@ const deployTestSuiteController = {
     )
 
     const topic = config.get('snsRunTestTopicArn')
-    const snsResponse = await sendSnsDeployMessage(
+    const snsResponse = await sendSnsMessage(
       request.snsClient,
       topic,
       runMessage

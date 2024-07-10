@@ -2,10 +2,12 @@ import Boom from '@hapi/boom'
 import { isNil } from 'lodash'
 import { config } from '~/src/config'
 import { envTestSuiteValidation } from '~/src/api/create-env-test-suite/helpers/schema/env-test-suite-validation'
-import { createEnvTestSuiteStatus } from '~/src/api/create-env-test-suite/helpers/status/create-env-test-suite-status'
 import { createEnvTestSuite } from '~/src/api/create-env-test-suite/helpers/workflow/create-env-test-suite'
 import { updateOverallStatus } from '~/src/api/create-microservice/helpers/save-status'
-import { raiseInfraPullRequest } from '~/src/api/create-env-test-suite/helpers/raise-infra-pull-request'
+import { raiseInfraPullRequest } from '~/src/api/helpers/create/raise-infra-pull-request'
+import { testRunnerEnvironments } from '~/src/config/test-runner-environments'
+import { createTestSuiteStatus } from '~/src/api/helpers/create/create-test-suite-status'
+import { creations } from '~/src/constants/creations'
 
 const createEnvTestSuiteController = {
   options: {
@@ -35,12 +37,14 @@ const createEnvTestSuiteController = {
     request.logger.info(`Creating env test suite: ${repositoryName}`)
 
     try {
-      await createEnvTestSuiteStatus(
+      await createTestSuiteStatus(
         request.db,
         gitHubOrg,
         repositoryName,
         zone,
-        team
+        team,
+        creations.envTestsuite,
+        'cdp-node-env-test-suite-template'
       )
     } catch (e) {
       request.logger.error(e)
@@ -51,7 +55,12 @@ const createEnvTestSuiteController = {
 
     await createEnvTestSuite(request, repositoryName, payload, team)
 
-    await raiseInfraPullRequest(request, repositoryName, zone)
+    await raiseInfraPullRequest(
+      request,
+      repositoryName,
+      zone,
+      testRunnerEnvironments.environment
+    )
 
     // calculate and set the overall status
     await updateOverallStatus(request.db, repositoryName)

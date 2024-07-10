@@ -6,6 +6,8 @@ import { createRepository } from '~/src/api/create-repository'
 import { createTestSuite } from '~/src/api/create-test-suite'
 import { createEnvTestSuite } from '~/src/api/create-env-test-suite'
 import { deployTestSuite } from '~/src/api/deploy-test-suite'
+import { createPerfTestSuite } from '~/src/api/create-perf-test-suite'
+import { createSmokeTestSuite } from '~/src/api/create-smoke-test-suite'
 
 const router = {
   plugin: {
@@ -17,6 +19,8 @@ const router = {
         createRepository,
         createTestSuite,
         createEnvTestSuite,
+        createPerfTestSuite,
+        createSmokeTestSuite,
         deploy,
         deployTestSuite,
         status
