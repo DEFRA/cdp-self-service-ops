@@ -15,8 +15,6 @@ import {
   updateCreationStatus,
   updateOverallStatus
 } from '~/src/api/create-microservice/helpers/save-status'
-import { createSquidConfig } from '~/src/api/helpers/create/create-squid-config'
-import { createDashboard } from '~/src/api/helpers/create/create-dashboard'
 
 const createMicroserviceController = {
   options: {
@@ -79,12 +77,6 @@ const createMicroserviceController = {
     // cdp-nginx-upstreams
     await doUpdateCdpNginxUpstream(request, repositoryName, zone)
 
-    // cdp-squid-proxy
-    await createSquidConfig(request, repositoryName)
-
-    // cdp-grafana-svc
-    await createDashboard(request, repositoryName, zone)
-
     // calculate and set the overall status
     await updateOverallStatus(request.db, repositoryName)
 
@@ -103,16 +95,21 @@ const doCreateRepo = async (request, repositoryName, payload, team) => {
     const org = config.get('gitHubOrg')
     const serviceTypeTemplate = payload?.serviceTypeTemplate
 
-    await triggerWorkflow(
-      org,
-      config.get('gitHubRepoCreateWorkflows'),
-      config.get('createMicroServiceWorkflow'),
+    const result = await triggerWorkflow(
       {
         repositoryName,
         serviceTypeTemplate,
         team: team.github
-      }
+      },
+      config.get('createMicroServiceWorkflow')
     )
+
+    await updateCreationStatus(request.db, repositoryName, 'createRepository', {
+      status: statuses.inProgress,
+      url: `https://github.com/${org}/${repositoryName}`,
+      result
+    })
+    request.logger.info(`created repo ${repositoryName}`)
   } catch (e) {
     await updateCreationStatus(request.db, repositoryName, 'createRepository', {
       status: statuses.failure,
