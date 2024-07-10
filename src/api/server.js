@@ -14,6 +14,7 @@ import { setupWreckAgents } from '~/src/helpers/proxy/setup-wreck-agents'
 import { proxyAgent } from '~/src/helpers/proxy/proxy-agent'
 import { gitHubEventsListener } from '~/src/plugins/sqs-listener'
 import { sqsClient } from '~/src/plugins/sqs-client'
+import { pulse } from '~/src/plugins/pulse'
 
 const isProduction = config.get('isProduction')
 
@@ -55,6 +56,7 @@ async function createServer() {
   }
 
   await server.register([
+    pulse,
     azureOidc,
     sqsClient,
     mongoDb,
