@@ -16,6 +16,7 @@ import {
   updateOverallStatus
 } from '~/src/api/create-microservice/helpers/save-status'
 import { createSquidConfig } from '~/src/api/helpers/create/create-squid-config'
+import { createDashboard } from '~/src/api/helpers/create/create-dashboard'
 
 const createMicroserviceController = {
   options: {
@@ -80,6 +81,9 @@ const createMicroserviceController = {
 
     // cdp-squid-proxy
     await createSquidConfig(request, repositoryName)
+
+    // cdp-grafana-svc
+    await createDashboard(request, repositoryName, zone)
 
     // calculate and set the overall status
     await updateOverallStatus(request.db, repositoryName)

@@ -6,6 +6,7 @@ const tfSvcInfra = config.get('gitHubRepoTfServiceInfra')
 const cdpAppConfig = config.get('gitHubRepoConfig')
 const cdpNginxUpstream = config.get('gitHubRepoNginx')
 const cdpSquidConfig = config.get('gitHubRepoSquid')
+const cdpDashboards = config.get('gitHubRepoDashboards')
 
 function getStatusKeys(statusRecord) {
   const statusKeys = []
@@ -30,7 +31,8 @@ function getStatusKeys(statusRecord) {
       cdpNginxUpstream,
       cdpAppConfig,
       tfSvcInfra,
-      cdpSquidConfig
+      cdpSquidConfig,
+      cdpDashboards
     )
   }
 
@@ -94,6 +96,9 @@ async function initCreationStatus(
     },
     [cdpSquidConfig]: {
       status: statuses.notRequested
+    },
+    [cdpDashboards]: {
+      statuses: statuses.notRequested
     }
   }
   await db.collection('status').insertOne(status)

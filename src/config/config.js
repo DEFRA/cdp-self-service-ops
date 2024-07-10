@@ -126,6 +126,12 @@ const config = convict({
     default: 'cdp-squid-proxy',
     env: 'GITHUB_REPO_SQUID'
   },
+  gitHubRepoDashboards: {
+    doc: 'GitHub repo to create default dashboard config in',
+    format: String,
+    default: 'cdp-grafana-svc',
+    env: 'GITHUB_REPO_DASHBOARDS'
+  },
   gitHubRepoCreateWorkflows: {
     doc: 'GitHub repository containing the create workflows',
     format: String,
@@ -262,6 +268,12 @@ const config = convict({
     format: String,
     default: 'create_service.yml',
     env: 'CREATE_SQUID_CONFIG_WORKFLOW'
+  },
+  createDashboardWorkflow: {
+    doc: 'Github workflow to trigger when creating a default dashboard',
+    format: String,
+    default: 'create-dashboards-conf.yml',
+    env: 'CREATE_DASHBOARD_WORKFLOW'
   },
   gitHubBaseUrl: {
     doc: 'Override the gitHub base url for local testing',

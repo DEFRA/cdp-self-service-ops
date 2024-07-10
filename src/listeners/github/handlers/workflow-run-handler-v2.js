@@ -31,6 +31,9 @@ const workflowRunHandlerV2 = async (db, message) => {
     case config.get('gitHubRepoSquid'):
       await handleTriggeredWorkflow(db, message)
       break
+    case config.get('gitHubRepoDashboards'):
+      await handleTriggeredWorkflow(db, message)
+      break
     default:
       await handlePRWorkflow(db, message)
       break
