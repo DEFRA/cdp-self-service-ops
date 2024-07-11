@@ -74,7 +74,7 @@ const deployServiceController = {
     request.logger.info('Deployment registered')
 
     const service = await lookupTenantService(imageName, environment)
-  
+
     if (!service) {
       const message =
         'Error encountered whilst attempting to find deployment zone information'
