@@ -103,7 +103,7 @@ const doCreateRepo = async (request, repositoryName, payload, team) => {
     const org = config.get('gitHubOrg')
     const serviceTypeTemplate = payload?.serviceTypeTemplate
 
-    await triggerWorkflow(
+    const result = await triggerWorkflow(
       org,
       config.get('gitHubRepoCreateWorkflows'),
       config.get('createMicroServiceWorkflow'),
@@ -113,6 +113,14 @@ const doCreateRepo = async (request, repositoryName, payload, team) => {
         team: team.github
       }
     )
+
+    await updateCreationStatus(request.db, repositoryName, 'createRepository', {
+      status: statuses.inProgress,
+      url: `https://github.com/${org}/${repositoryName}`,
+      result
+    })
+
+    request.logger.info(`created repo ${repositoryName}`)
   } catch (e) {
     await updateCreationStatus(request.db, repositoryName, 'createRepository', {
       status: statuses.failure,
