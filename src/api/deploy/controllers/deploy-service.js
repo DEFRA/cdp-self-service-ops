@@ -32,6 +32,10 @@ const deployServiceController = {
     const imageName = payload.imageName
     const environment = payload.environment
 
+    request.logger.info(
+      `Deployment of ${imageName} to ${environment} in progress`
+    )
+
     const user = {
       id: request.auth?.credentials?.id,
       displayName: request.auth?.credentials?.displayName
@@ -70,15 +74,16 @@ const deployServiceController = {
     request.logger.info('Deployment registered')
 
     const service = await lookupTenantService(imageName, environment)
-    request.logger.info(
-      `Service ${imageName} in ${environment} should be deployed to ${service?.zone}`
-    )
-
+  
     if (!service) {
       const message =
         'Error encountered whilst attempting to find deployment zone information'
       return h.response({ message }).code(500)
     }
+
+    request.logger.info(
+      `Service ${imageName} in ${environment} should be deployed to ${service.zone}`
+    )
 
     await sendSnsDeploymentMessage(
       deploymentId,
