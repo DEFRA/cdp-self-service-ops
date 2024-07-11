@@ -13,7 +13,7 @@ async function lookupTenantService(service, environment) {
     const services = JSON.parse(data)
     return services[0][service]
   } catch (error) {
-    logger.error(error)
+    logger.error(error, `Error attempting to retrieve ${filePath} from GitHub`)
     return undefined
   }
 }
