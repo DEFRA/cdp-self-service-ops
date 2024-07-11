@@ -34,7 +34,7 @@ async function createNginxConfig(
     )
   )
 
-  logger.info(`creating nginx config for ${pullRequestFiles.size} environments`)
+  logger.info(`Creating nginx config for ${pullRequestFiles.size} environments`)
 
   const pr = await octokit.createPullRequest({
     owner: config.get('gitHubOrg'),

@@ -3,6 +3,7 @@ const statuses = {
   requested: 'requested',
   completed: 'completed',
   raised: 'raised',
+  queued: 'queued',
   open: 'pr_open',
   closed: 'pr_closed',
   merged: 'merged',

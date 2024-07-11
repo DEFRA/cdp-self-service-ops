@@ -25,15 +25,15 @@ const sqsListener = {
       })
 
       listener.on('error', (error) => {
-        server.logger.error(`error ${queueUrl} : ${error.message}`)
+        server.logger.error(`Error ${queueUrl} : ${error.message}`)
       })
 
       listener.on('processing_error', (error) => {
-        server.logger.error(`processing error ${queueUrl} : ${error.message}`)
+        server.logger.error(`Processing error ${queueUrl} : ${error.message}`)
       })
 
       listener.on('timeout_error', (error) => {
-        server.logger.error(`timeout error ${queueUrl} : ${error.message}`)
+        server.logger.error(`Timeout error ${queueUrl} : ${error.message}`)
       })
 
       server.events.on('closing', () => {

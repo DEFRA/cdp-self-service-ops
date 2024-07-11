@@ -292,6 +292,12 @@ const config = convict({
     format: String,
     default: '',
     env: 'CDP_HTTPS_PROXY'
+  },
+  serviceInfraCreateEvent: {
+    doc: 'Event for service infra create',
+    format: String,
+    default: 'service.infra.create',
+    env: 'SERVICE_INFRA_CREATE_EVENT'
   }
 })
 

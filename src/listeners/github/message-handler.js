@@ -29,7 +29,7 @@ const handle = async (server, message) => {
   }
 
   if (message.github_event === 'workflow_run') {
-    return await workflowRunHandlerV2(server.db, message)
+    return await workflowRunHandlerV2(server, message)
   }
 }
 

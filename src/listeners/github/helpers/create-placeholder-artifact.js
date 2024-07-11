@@ -19,7 +19,7 @@ async function createPlaceholderArtifact({ service, gitHubUrl, runMode }) {
   )}/artifacts/placeholder${queryString}`
 
   logger.info(
-    `calling create ${runMode} placeholder with ${service} ${gitHubUrl}`
+    `Calling create ${runMode} placeholder with ${service} ${gitHubUrl}`
   )
   return await fetch(url, {
     method: 'post'

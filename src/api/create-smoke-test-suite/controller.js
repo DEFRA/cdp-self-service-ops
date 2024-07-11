@@ -50,7 +50,7 @@ const createSmokeTestSuiteController = {
     } catch (e) {
       request.logger.error(e)
       throw Boom.badData(
-        `repository ${repositoryName} has already been requested or is in progress`
+        `Repository ${repositoryName} has already been requested or is in progress`
       )
     }
 

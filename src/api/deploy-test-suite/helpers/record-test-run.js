@@ -7,7 +7,7 @@ async function createRecordTestRun(imageName, runId, environment, user) {
 
   const url = `${config.get('portalBackendUrl')}/test-run`
 
-  logger.info(`recording  test-run for ${imageName} run ${runId} by ${user}`)
+  logger.info(`Recording  test-run for ${imageName} run ${runId} by ${user}`)
   return await fetch(url, {
     method: 'POST',
     headers: {

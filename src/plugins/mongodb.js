@@ -11,8 +11,8 @@ const mongoDb = {
       server.logger.info('Setting up mongodb')
 
       const client = await MongoClient.connect(options.mongoUrl, {
-        retryWrites: false,
-        readPreference: 'secondary',
+        retryWrites: options.retryWrites,
+        readPreference: options.readPreference,
         ...(server.secureContext && { secureContext: server.secureContext })
       })
 
@@ -48,8 +48,14 @@ const createIndexes = async (db) => {
   await db
     .collection('status')
     .createIndex({ repositoryName: 1 }, { unique: true })
+  await db
+    .collection('queue-events')
+    .createIndex({ repositoryName: 1, eventType: 1 }, { unique: true })
+  await db
+    .collection('queue-events')
+    .createIndex({ eventType: 1, requestedAt: 1 })
   await db.collection('status').createIndex({ repositoryName: 1, status: 1 })
   await db.collection('mongo-locks').createIndex({ id: 1 })
 }
 
-export { mongoDb }
+export { mongoDb, createIndexes }

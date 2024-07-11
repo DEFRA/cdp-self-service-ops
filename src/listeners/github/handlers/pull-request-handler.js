@@ -11,7 +11,7 @@ const pullRequestHandler = async (db, message) => {
     const prNumber = message.number
 
     logger.info(
-      `received pr webhook ${repo}:${prNumber}, ${message.action} ${message.pull_request.state} ${message.pull_request.merged}`
+      `Received pr webhook ${repo}:${prNumber}, ${message.action} ${message.pull_request.state} ${message.pull_request.merged}`
     )
 
     // Ignore PR events that are not opened or closed.

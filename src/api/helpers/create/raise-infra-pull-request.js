@@ -31,14 +31,14 @@ const raiseInfraPullRequest = async (request, name, zone, environments) => {
       pr: trimPr(tfSvcInfraPr?.data)
     })
     request.logger.info(
-      `created test suite infra PR for ${name}: ${tfSvcInfraPr.data.html_url}`
+      `Created test suite infra PR for ${name}: ${tfSvcInfraPr.data.html_url}`
     )
   } catch (e) {
     await updateCreationStatus(request.db, name, tfSvcInfra, {
       status: statuses.failure,
       result: e?.response ?? 'see cdp-self-service-ops logs'
     })
-    request.logger.error(`update cdp-tf-svc-infra ${name} failed ${e}`)
+    request.logger.error(`Update cdp-tf-svc-infra ${name} failed ${e}`)
   }
 }
 
