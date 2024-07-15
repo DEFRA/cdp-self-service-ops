@@ -23,7 +23,7 @@ async function generateDeployMessage(
     desired_count: instanceCount,
     env_files: [
       {
-        value: `${basePath}/global/global_protected_fixed.env`,
+        value: `${basePath}/global/global_fixed.env`,
         type: 's3'
       },
       {
