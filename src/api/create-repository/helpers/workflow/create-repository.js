@@ -1,7 +1,7 @@
 import { config } from '~/src/config'
 import { statuses } from '~/src/constants/statuses'
 import { updateRepositoryStatus } from '~/src/api/create-repository/helpers/status/update-repository-status'
-import { triggerWorkflow } from '~/src/api/helpers/workflow/trigger-workflow'
+import { triggerWorkflow } from '~/src/helpers/workflow/trigger-workflow'
 
 /**
  * @param {*} request

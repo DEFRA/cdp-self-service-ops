@@ -1,6 +1,6 @@
 import { config } from '~/src/config'
 import { statuses } from '~/src/constants/statuses'
-import { triggerWorkflow } from '~/src/api/helpers/workflow/trigger-workflow'
+import { triggerWorkflow } from '~/src/helpers/workflow/trigger-workflow'
 import { updateTestSuiteStatus } from '~/src/api/create-test-suite/helpers/status/update-test-suite-status'
 
 /**

@@ -6,7 +6,7 @@ import { createServiceConfig } from '~/src/api/create-microservice/helpers/creat
 import { createNginxConfig } from '~/src/api/create-microservice/helpers/create-nginx-config'
 import { config, environments } from '~/src/config'
 import { trimPr } from '~/src/api/create-microservice/helpers/trim-pr'
-import { triggerWorkflow } from '~/src/api/helpers/workflow/trigger-workflow'
+import { triggerWorkflow } from '~/src/helpers/workflow/trigger-workflow'
 import { statuses } from '~/src/constants/statuses'
 import {
   initCreationStatus,

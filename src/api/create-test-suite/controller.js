@@ -4,7 +4,7 @@ import { isNil } from 'lodash'
 import { config } from '~/src/config'
 import { testSuiteValidation } from '~/src/api/create-test-suite/helpers/schema/test-suite-validation'
 import { createTestSuiteStatus } from '~/src/api/create-test-suite/helpers/status/create-test-suite-status'
-import { createTestSuiteFromTemplate } from '~/src/api/helpers/create/create-test-suite-from-template'
+import { createTestSuiteFromTemplate } from '~/src/helpers/create/create-test-suite-from-template'
 
 const createTestSuiteController = {
   options: {

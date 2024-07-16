@@ -1,7 +1,7 @@
 import { config } from '~/src/config'
 import { statuses } from '~/src/constants/statuses'
 import { updateCreationStatus } from '~/src/api/create-microservice/helpers/save-status'
-import { triggerWorkflow } from '~/src/api/helpers/workflow/trigger-workflow'
+import { triggerWorkflow } from '~/src/helpers/workflow/trigger-workflow'
 
 const createDashboard = async (request, service, zone) => {
   const org = config.get('gitHubOrg')

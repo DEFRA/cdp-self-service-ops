@@ -2,13 +2,13 @@ import Boom from '@hapi/boom'
 import { isNil } from 'lodash'
 import { config } from '~/src/config'
 import { updateOverallStatus } from '~/src/api/create-microservice/helpers/save-status'
-import { raiseInfraPullRequest } from '~/src/api/helpers/create/raise-infra-pull-request'
+import { raiseInfraPullRequest } from '~/src/helpers/create/raise-infra-pull-request'
 import { testRunnerEnvironments } from '~/src/config/test-runner-environments'
-import { createTestSuiteStatus } from '~/src/api/helpers/create/create-test-suite-status'
+import { createTestSuiteStatus } from '~/src/helpers/create/create-test-suite-status'
 import { creations } from '~/src/constants/creations'
 import { smokeTestSuiteValidation } from '~/src/api/create-smoke-test-suite/helpers/schema/smoke-test-suite-validation'
-import { createTestSuiteFromTemplate } from '~/src/api/helpers/create/create-test-suite-from-template'
-import { createSquidConfig } from '~/src/api/helpers/create/create-squid-config'
+import { createTestSuiteFromTemplate } from '~/src/helpers/create/create-test-suite-from-template'
+import { createSquidConfig } from '~/src/helpers/create/create-squid-config'
 
 const createSmokeTestSuiteController = {
   options: {
