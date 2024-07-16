@@ -30,17 +30,22 @@ const addSecretController = {
   handler: async (request, h) => {
     const { serviceName, environment } = request.params
     const { secretValue, secretKey } = request.payload
-    const message = `Secret ${secretKey}  added for ${serviceName}`
+    const description = `Secret ${secretKey} added for ${serviceName}`
+    const topic = config.get('snsSecretsManagementTopicArn')
 
-    request.logger.debug(message)
+    request.logger.debug(description)
 
-    await sendSnsMessage(request, config.get('snsSecretsManagementTopicArn'), {
-      environment,
-      name: `cdp/services/${serviceName}`,
-      description: message,
-      secret_key: secretKey,
-      secret_value: secretValue,
-      action: 'update_secret'
+    await sendSnsMessage({
+      request,
+      topic,
+      message: {
+        environment,
+        name: `cdp/services/${serviceName}`,
+        description,
+        secret_key: secretKey,
+        secret_value: secretValue,
+        action: 'update_secret'
+      }
     })
 
     // TODO

@@ -25,8 +25,6 @@ async function sendSnsDeploymentMessage(
   serviceCode,
   request
 ) {
-  request
-  const { snsClient, logger } = request
   const deployMessage = await generateDeployMessage(
     deploymentId,
     payload.imageName,
@@ -42,11 +40,12 @@ async function sendSnsDeploymentMessage(
   )
 
   const topic = config.get('snsDeployTopicArn')
-  const snsResponse = await sendSnsMessage(
-    { snsClient, logger },
+  const snsResponse = await sendSnsMessage({
+    request,
     topic,
-    deployMessage
-  )
+    message: deployMessage
+  })
+  const { logger } = request
 
   logger.info(`SNS Deploy response: ${JSON.stringify(snsResponse, null, 2)}`)
 }
