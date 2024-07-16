@@ -18,7 +18,13 @@ const addSecretController = {
     validate: {
       params: secretParamsValidation(),
       payload: secretPayloadValidation,
-      failAction: () => Boom.boomify(Boom.badRequest())
+      failAction: (request, h, validationError) => {
+        request.logger.debug(
+          validationError,
+          `Validation error: ${validationError.message}`
+        )
+        return Boom.boomify(Boom.badRequest())
+      }
     }
   },
   handler: async (request, h) => {
