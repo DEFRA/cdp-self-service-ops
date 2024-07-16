@@ -1,5 +1,3 @@
-import { serviceToSecretsMap } from '~/src/api/deploy/helpers/service-to-secrets-map'
-
 async function generateDeployMessage(
   deploymentId,
   imageName,
@@ -42,7 +40,6 @@ async function generateDeployMessage(
     env_vars: {},
     healthcheck: `/${imageName}/health`,
     name: imageName,
-    secrets: serviceToSecretsMap[imageName]?.[environment] ?? {},
     task_cpu: cpu,
     task_memory: memory,
     deploy_metrics: true,
