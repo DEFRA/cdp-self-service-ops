@@ -9,6 +9,7 @@ import { deployTestSuite } from '~/src/api/deploy-test-suite'
 import { createPerfTestSuite } from '~/src/api/create-perf-test-suite'
 import { createSmokeTestSuite } from '~/src/api/create-smoke-test-suite'
 import { queuedEvents } from '~/src/api/queued-events'
+import { secrets } from '~/src/api/secrets'
 
 const router = {
   plugin: {
@@ -25,7 +26,8 @@ const router = {
         deploy,
         deployTestSuite,
         status,
-        queuedEvents
+        queuedEvents,
+        secrets
       ])
     }
   }

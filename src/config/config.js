@@ -183,6 +183,26 @@ const config = convict({
     default: 'arn:aws:sns:eu-west-2:000000000000:run-test-topic',
     env: 'SNS_RUN_TEST_TOPIC_ARN'
   },
+  snsSecretsManagementTopicArn: {
+    doc: 'SNS Secrets Management Topic ARN',
+    format: String,
+    default: 'arn:aws:sns:eu-west-2:000000000000:secret_management',
+    env: 'SNS_SECRETS_MANAGEMENT_TOPIC_ARN'
+  },
+  secrets: {
+    nonWritable: {
+      doc: 'Secret keys that cannot be overridden',
+      format: Array,
+      default: [
+        'REDIS_KEY_PREFIX',
+        'REDIS_PASSWORD',
+        'REDIS_USERNAME',
+        'SQUID_PASSWORD',
+        'SQUID_USERNAME'
+      ],
+      env: 'SECRETS_NON_WRITABLE'
+    }
+  },
   sqsGitHubEvents: {
     queueUrl: {
       doc: 'URL of sqs queue providing gitHub events',
