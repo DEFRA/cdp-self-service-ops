@@ -22,7 +22,11 @@ async function sendSnsMessage(request, topic, msg) {
   }
 
   const command = new PublishCommand(input)
-  return await snsClient.send(command)
+  const snsResponse = await snsClient.send(command)
+
+  logger.debug(snsResponse, `Sns message MessageId: ${snsResponse?.MessageId}`)
+
+  return snsResponse
 }
 
 export { sendSnsMessage }
