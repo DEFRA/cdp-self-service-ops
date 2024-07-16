@@ -153,11 +153,13 @@ const config = convict({
     format: Boolean,
     default: process.env.NODE_ENV === 'test'
   },
-  logLevel: {
-    doc: 'Logging level',
-    format: ['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent'],
-    default: 'info',
-    env: 'LOG_LEVEL'
+  get logLevel() {
+    return {
+      doc: 'Logging level',
+      format: ['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent'],
+      default: this.isDevelopment ? 'debug' : 'info',
+      env: 'LOG_LEVEL'
+    }
   },
   mongoUri: {
     doc: 'URI for mongodb',
