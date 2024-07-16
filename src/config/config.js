@@ -190,6 +190,7 @@ const config = convict({
     env: 'SNS_SECRETS_MANAGEMENT_TOPIC_ARN'
   },
   secrets: {
+    // TODO this will be moved to one place and referenced in both the PFE and here. For the moment just adding it as config for ease
     nonWritable: {
       doc: 'Secret keys that cannot be overridden',
       format: Array,
