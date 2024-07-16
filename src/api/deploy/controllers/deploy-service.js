@@ -86,8 +86,7 @@ const deployServiceController = {
       user,
       configLatestCommitSha,
       service.service_code,
-      request.snsClient,
-      request.logger
+      request
     )
     request.logger.info('Deployment sns event sent')
 

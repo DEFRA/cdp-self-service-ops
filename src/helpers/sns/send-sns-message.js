@@ -1,7 +1,8 @@
 import crypto from 'crypto'
 import { PublishCommand } from '@aws-sdk/client-sns'
 
-async function sendSnsMessage(snsClient, topic, msg) {
+async function sendSnsMessage(request, topic, msg) {
+  const { snsClient, logger } = request
   const input = {
     TopicArn: topic,
     Message: JSON.stringify(msg, null, 2),

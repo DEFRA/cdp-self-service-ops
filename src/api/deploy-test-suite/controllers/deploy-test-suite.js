@@ -61,11 +61,7 @@ const deployTestSuiteController = {
     )
 
     const topic = config.get('snsRunTestTopicArn')
-    const snsResponse = await sendSnsMessage(
-      request.snsClient,
-      topic,
-      runMessage
-    )
+    const snsResponse = await sendSnsMessage(request, topic, runMessage)
     request.logger.info(
       `SNS Run Test response: ${JSON.stringify(snsResponse, null, 2)}`
     )
