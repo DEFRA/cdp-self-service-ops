@@ -2,7 +2,7 @@ import Boom from '@hapi/boom'
 
 import { deployTestSuiteValidation } from '~/src/api/deploy-test-suite/helpers/deploy-test-suite-validation'
 import { generateTestRunMessage } from '~/src/api/deploy-test-suite/helpers/generate-test-run-message'
-import { sendSnsMessage } from '~/src/api/deploy/helpers/sns/send-sns-message'
+import { sendSnsMessage } from '~/src/helpers/sns/send-sns-message'
 import crypto from 'node:crypto'
 import { config, environments } from '~/src/config'
 import { createRecordTestRun } from '~/src/api/deploy-test-suite/helpers/record-test-run'

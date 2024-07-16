@@ -1,6 +1,6 @@
 import { generateDeployMessage } from '~/src/api/deploy/helpers/generate-deploy-message'
 import { config } from '~/src/config'
-import { sendSnsMessage } from '~/src/api/deploy/helpers/sns/send-sns-message'
+import { sendSnsMessage } from '~/src/helpers/sns/send-sns-message'
 
 /**
  * @typedef {import("@aws-sdk/client-sns").SNSClient} SNSClient
