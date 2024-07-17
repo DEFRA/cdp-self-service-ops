@@ -6,6 +6,7 @@ import {
   secretParamsValidation,
   secretPayloadValidation
 } from '~/src/api/secrets/helpers/schema/secret-validation'
+import { sanitize } from '~/src/helpers/sanitize'
 
 const addSecretController = {
   options: {
@@ -23,7 +24,7 @@ const addSecretController = {
           validationError,
           `Validation error: ${validationError.message}`
         )
-        return Boom.boomify(Boom.badRequest())
+        return Boom.boomify(Boom.badRequest(sanitize(validationError.message)))
       }
     }
   },
