@@ -298,6 +298,36 @@ const serviceToSecretsMap = {
       AZ_CLIENT_SECRET: 'cdp/services/nms-backend-alpha:AZ_CLIENT_SECRET',
       ...squidSecrets('nms-backend-alpha')
     }
+  },
+  'phi-frontend': {
+    dev: {
+      ...squidSecrets('phi-frontend'),
+      ...redisSecrets('phi-frontend')
+    },
+    test: {
+      PHI_PASSWORD: 'cdp/services/phi-frontend:PHI_PASSWORD',
+      COOKIE_PASSWORD: 'cdp/services/phi-frontend:COOKIE_PASSWORD',
+      SESSION_COOKIE_PASSWORD:
+        'cdp/services/phi-frontend:SESSION_COOKIE_PASSWORD',
+      ...squidSecrets('phi-frontend'),
+      ...redisSecrets('phi-frontend')
+    },
+    'pref-test': {
+      PHI_PASSWORD: 'cdp/services/phi-frontend:PHI_PASSWORD',
+      COOKIE_PASSWORD: 'cdp/services/phi-frontend:COOKIE_PASSWORD',
+      SESSION_COOKIE_PASSWORD:
+        'cdp/services/phi-frontend:SESSION_COOKIE_PASSWORD',
+      ...squidSecrets('phi-frontend'),
+      ...redisSecrets('phi-frontend')
+    },
+    prod: {
+      PHI_PASSWORD: 'cdp/services/phi-frontend:PHI_PASSWORD',
+      COOKIE_PASSWORD: 'cdp/services/phi-frontend:COOKIE_PASSWORD',
+      SESSION_COOKIE_PASSWORD:
+        'cdp/services/phi-frontend:SESSION_COOKIE_PASSWORD',
+      ...squidSecrets('phi-frontend'),
+      ...redisSecrets('phi-frontend')
+    }
   }
 }
 
