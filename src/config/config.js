@@ -192,9 +192,9 @@ const config = convict({
     env: 'SNS_SECRETS_MANAGEMENT_TOPIC_ARN'
   },
   secrets: {
-    // TODO this will be moved to one place and referenced in both the PFE and here. For the moment just adding it as config for ease
-    nonWritable: {
-      doc: 'Secret keys that cannot be overridden',
+    // TODO this will be moved to one place. For the moment just adding it as config for ease
+    global: {
+      doc: 'Platform supplied "Global" secret keys that cannot be overridden',
       format: Array,
       default: [
         'REDIS_KEY_PREFIX',

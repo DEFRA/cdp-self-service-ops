@@ -1,5 +1,6 @@
 import Joi from 'joi'
 import { omit } from 'lodash'
+
 import { config, environments } from '~/src/config'
 
 function secretParamsValidation() {
@@ -38,11 +39,11 @@ function secretParamsValidation() {
   }
 }
 
-const nonWritableSecrets = config.get('secrets').nonWritable
+const globalSecrets = config.get('secrets').global
 
 const secretPayloadValidation = Joi.object({
   secretKey: Joi.string()
-    .not(...nonWritableSecrets)
+    .not(...globalSecrets)
     .required(),
   secretValue: Joi.string().required(),
   teamId: Joi.string().uuid().required()
