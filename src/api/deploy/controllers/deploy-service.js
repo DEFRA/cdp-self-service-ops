@@ -1,11 +1,9 @@
 import Boom from '@hapi/boom'
-import { pick } from 'lodash'
 
 import { config } from '~/src/config'
 import { deployServiceValidation } from '~/src/api/deploy/helpers/schema/deploy-service-validation'
 import { registerDeployment } from '~/src/api/deploy/helpers/register-deployment'
 import { getRepoTeams } from '~/src/api/deploy/helpers/get-repo-teams'
-import { getSecrets } from '~/src/api/deploy/helpers/get-secrets'
 import { sendSnsDeploymentMessage } from '~/src/api/deploy/helpers/send-sns-deployment-message'
 import { commitDeploymentFile } from '~/src/api/deploy/helpers/commit-deployment-file'
 import { getLatestCommitSha } from '~/src/helpers/github/get-latest-commit-sha'
@@ -56,8 +54,6 @@ const deployServiceController = {
     const configLatestCommitSha = await getLatestCommitSha(owner, configRepo)
     request.logger.info(`Config commit sha ${configLatestCommitSha}`)
 
-    const secrets = await getSecrets(imageName, environment)
-
     await registerDeployment(
       imageName,
       payload.version,
@@ -67,8 +63,7 @@ const deployServiceController = {
       payload.memory,
       user,
       deploymentId,
-      configLatestCommitSha,
-      pick(secrets, ['keys', 'lastChangedDate', 'createdDate'])
+      configLatestCommitSha
     )
     request.logger.info('Deployment registered')
 
