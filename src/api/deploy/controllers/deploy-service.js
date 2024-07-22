@@ -1,10 +1,11 @@
 import Boom from '@hapi/boom'
+import { pick } from 'lodash'
 
 import { config } from '~/src/config'
 import { deployServiceValidation } from '~/src/api/deploy/helpers/schema/deploy-service-validation'
 import { registerDeployment } from '~/src/api/deploy/helpers/register-deployment'
 import { getRepoTeams } from '~/src/api/deploy/helpers/get-repo-teams'
-import { getSecretKeysForService } from '~/src/api/deploy/helpers/get-secret-keys-for-service'
+import { getSecrets } from '~/src/api/deploy/helpers/get-secrets'
 import { sendSnsDeploymentMessage } from '~/src/api/deploy/helpers/send-sns-deployment-message'
 import { commitDeploymentFile } from '~/src/api/deploy/helpers/commit-deployment-file'
 import { getLatestCommitSha } from '~/src/helpers/github/get-latest-commit-sha'
@@ -54,10 +55,8 @@ const deployServiceController = {
     const deploymentId = crypto.randomUUID()
     const configLatestCommitSha = await getLatestCommitSha(owner, configRepo)
     request.logger.info(`Config commit sha ${configLatestCommitSha}`)
-    const latestSecretKeys = await getSecretKeysForService(
-      imageName,
-      environment
-    )
+
+    const secrets = await getSecrets(imageName, environment)
 
     await registerDeployment(
       imageName,
@@ -69,7 +68,7 @@ const deployServiceController = {
       user,
       deploymentId,
       configLatestCommitSha,
-      latestSecretKeys
+      pick(secrets, ['keys', 'lastChangedDate', 'createdDate'])
     )
     request.logger.info('Deployment registered')
 
