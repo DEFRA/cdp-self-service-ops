@@ -67,7 +67,8 @@ async function initCreationStatus(
   repositoryName,
   payload,
   zone,
-  team
+  team,
+  user
 ) {
   const status = {
     org,
@@ -81,6 +82,7 @@ async function initCreationStatus(
       teamId: team.teamId,
       name: team.name
     },
+    creator: user,
     zone,
     createRepository: {
       status: statuses.notRequested

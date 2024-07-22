@@ -51,6 +51,11 @@ const createMicroserviceController = {
 
     request.logger.info(`creating service ${repositoryName}`)
 
+    const user = {
+      id: request.auth?.credentials?.id,
+      displayName: request.auth?.credentials?.displayName
+    }
+
     // Set up the initial DB record
     try {
       await initCreationStatus(
@@ -59,7 +64,8 @@ const createMicroserviceController = {
         repositoryName,
         payload,
         zone,
-        team
+        team,
+        user
       )
     } catch (e) {
       request.logger.error(e)
