@@ -1,9 +1,7 @@
 import { config } from '~/src/config'
 import { createLogger } from '~/src/helpers/logging/logger'
 
-const logger = createLogger()
-
-async function getSecretKeysForService(service, environment) {
+async function getSecrets(service, environment) {
   try {
     const url = `${config.get('portalBackendApiUrl')}/secrets/${environment}/${service}`
     const response = await fetch(url, {
@@ -13,12 +11,12 @@ async function getSecretKeysForService(service, environment) {
     const json = await response.json()
 
     if (response.ok) {
-      return json?.secrets ?? []
+      return json
     }
   } catch (e) {
-    logger.info(e)
+    createLogger().info(e)
   }
   return []
 }
 
-export { getSecretKeysForService }
+export { getSecrets }
