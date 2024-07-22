@@ -91,6 +91,7 @@ const deployServiceController = {
       service.zone,
       user,
       configLatestCommitSha,
+      service.service_code,
       request.snsClient,
       request.logger
     )
@@ -102,6 +103,7 @@ const deployServiceController = {
       service.zone,
       user,
       configLatestCommitSha,
+      service.service_code,
       request.logger
     )
     request.logger.info('deployment commit file created')
