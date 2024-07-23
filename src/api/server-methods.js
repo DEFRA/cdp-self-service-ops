@@ -26,7 +26,8 @@ function registerServerMethods(server) {
  * @returns {Promise<Team|Error>}
  */
 async function fetchTeam(teamId) {
-  const teamsEndpointUrl = config.get('userServiceApiUrl') + `/teams/${teamId}`
+  const teamsEndpointUrl =
+    config.get('userServiceBackendUrl') + `/teams/${teamId}`
 
   const response = await fetch(teamsEndpointUrl, {
     method: 'get',

@@ -61,6 +61,9 @@ describe('#workflow-run-handler-v2', () => {
         updateOne
       })
     }
+    const mockServer = {
+      db: mockDb
+    }
 
     const msg = {
       github_event: 'workflow_run',
@@ -83,7 +86,7 @@ describe('#workflow-run-handler-v2', () => {
         }
       }
     }
-    await workflowRunHandlerV2(mockDb, msg)
+    await workflowRunHandlerV2(mockServer, msg)
     expect(findOne).toHaveBeenCalledWith({
       'tf-svc-infra.merged_sha': '6d96270004515a0486bb7f76196a72b40c55a47f'
     })
@@ -126,6 +129,9 @@ describe('#workflow-run-handler-v2', () => {
         updateOne
       })
     }
+    const mockServer = {
+      db: mockDb
+    }
 
     const msg = {
       github_event: 'workflow_run',
@@ -148,7 +154,7 @@ describe('#workflow-run-handler-v2', () => {
         }
       }
     }
-    await workflowRunHandlerV2(mockDb, msg)
+    await workflowRunHandlerV2(mockServer, msg)
     expect(findOne).toHaveBeenCalledWith({
       'tf-svc-infra.merged_sha': '6d96270004515a0486bb7f76196a72b40c55a47f'
     })
@@ -172,6 +178,9 @@ describe('#workflow-run-handler-v2', () => {
         updateOne
       })
     }
+    const mockServer = {
+      db: mockDb
+    }
 
     const msg = {
       github_event: 'workflow_run',
@@ -194,7 +203,7 @@ describe('#workflow-run-handler-v2', () => {
         }
       }
     }
-    await workflowRunHandlerV2(mockDb, msg)
+    await workflowRunHandlerV2(mockServer, msg)
     expect(findOne).toHaveBeenCalledWith({
       'tf-svc-infra.merged_sha': '6d96270004515a0486bb7f76196a72b40c55a47f'
     })

@@ -7,6 +7,7 @@ import {
 import { updateOverallStatus } from '~/src/api/create-microservice/helpers/save-status'
 import { createPlaceholderArtifact } from '~/src/listeners/github/helpers/create-placeholder-artifact'
 import { createLogger } from '~/src/helpers/logging/logger'
+import { ackEvent } from '~/src/api/helpers/queued-events/queued-events'
 
 // given a list of services, update the tf-svc-infra status for all of them to success
 // and create the placeholder artifact
@@ -14,6 +15,7 @@ const bulkUpdateTfSvcInfra = async (db, trimmedWorkflow, status) => {
   const logger = createLogger()
   const org = config.get('gitHubOrg')
   const tfSvcInfra = config.get('gitHubRepoTfServiceInfra')
+  const eventType = config.get('serviceInfraCreateEvent')
 
   const tenants = await lookupTenantServicesForCommit(environments.management)
 
@@ -21,7 +23,7 @@ const bulkUpdateTfSvcInfra = async (db, trimmedWorkflow, status) => {
 
   if (tenants === undefined) {
     // TODO: handle error
-    logger.error('failed to lookup tenant services')
+    logger.error('Failed to lookup tenant services')
   }
   const tenantNames = new Set(Object.keys(tenants))
   const inProgressOrFailed = await findAllInProgressOrFailed(db)
@@ -46,7 +48,7 @@ const bulkUpdateTfSvcInfra = async (db, trimmedWorkflow, status) => {
       runMode = 'Job'
     }
 
-    logger.info(`updating ${serviceName} ${tfSvcInfra} status to success`)
+    logger.info(`Updating ${serviceName} ${tfSvcInfra} status to success`)
 
     await updateWorkflowStatus(
       db,
@@ -60,7 +62,7 @@ const bulkUpdateTfSvcInfra = async (db, trimmedWorkflow, status) => {
 
     logger.info(
       { servicesToUpdate },
-      `creating ${runMode} placeholder artifact for ${serviceName}`
+      `Creating ${runMode} placeholder artifact for ${serviceName}`
     )
 
     await createPlaceholderArtifact({
@@ -68,6 +70,8 @@ const bulkUpdateTfSvcInfra = async (db, trimmedWorkflow, status) => {
       gitHubUrl: `https://github.com/${org}/${serviceName}`,
       runMode
     })
+
+    await ackEvent(db, serviceName, eventType)
   }
 }
 

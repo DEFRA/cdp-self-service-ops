@@ -4,29 +4,27 @@ import { createServiceInfrastructurePr } from '~/src/api/create-microservice/hel
 import { updateCreationStatus } from '~/src/api/create-microservice/helpers/save-status'
 import { trimPr } from '~/src/api/create-microservice/helpers/trim-pr'
 
-const doUpdateTfSvcInfra = async (request, repositoryName, zone) => {
+async function updateTfSvcInfra(server, repositoryName, zone) {
   const tfSvcInfra = config.get('gitHubRepoTfServiceInfra')
   try {
     const pullRequest = await createServiceInfrastructurePr(
       repositoryName,
       zone
     )
-    await updateCreationStatus(request.db, repositoryName, tfSvcInfra, {
+    await updateCreationStatus(server.db, repositoryName, tfSvcInfra, {
       status: statuses.raised,
       pr: trimPr(pullRequest?.data)
     })
-    request.logger.info(
-      `created service infra PR for ${repositoryName}: ${pullRequest.data.html_url}`
+    server.logger.info(
+      `Created service infra PR for ${repositoryName}: ${pullRequest.data.html_url}`
     )
   } catch (e) {
-    await updateCreationStatus(request.db, repositoryName, tfSvcInfra, {
+    await updateCreationStatus(server.db, repositoryName, tfSvcInfra, {
       status: statuses.failure,
       result: e?.response ?? 'see cdp-self-service-ops logs'
     })
-    request.logger.error(
-      `update cdp-tf-svc-infra ${repositoryName} failed ${e}`
-    )
+    server.logger.error(`Update cdp-tf-svc-infra ${repositoryName} failed ${e}`)
   }
 }
 
-export { doUpdateTfSvcInfra }
+export { updateTfSvcInfra }

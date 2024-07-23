@@ -51,7 +51,7 @@ const deployTestSuiteController = {
 
     const runId = crypto.randomUUID()
 
-    request.logger.info(`running test suite ${payload.imageName} ${runId}`)
+    request.logger.info(`Running test suite ${payload.imageName} ${runId}`)
 
     const runMessage = generateTestRunMessage(
       payload.imageName,

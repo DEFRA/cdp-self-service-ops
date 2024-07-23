@@ -95,6 +95,49 @@ To view them in your command line run:
 $ npm run
 ```
 
+## Troubleshooting queued events
+
+| Endpoint                                         | Description                                              |
+| :----------------------------------------------- | :------------------------------------------------------- |
+| `GET: /queued-events`                            | query queued events                                      |
+| `PATCH: /queued-events/eventType/repositoryName` | Reset an event and trigger create service infra listener |
+
+### GET /queued-events
+
+| Optional queuer parameters | Description                                                                            |
+| :------------------------- | :------------------------------------------------------------------------------------- |
+| `eventType`                | Restrict the eventType in response. Currently only `service.infra.create` is supported |
+| `repositoryName`           | Restrict response to a specific repository                                             |
+| `includeProcessed`         | Return results that are processed in response (these are not returned by default)      |
+
+#### Curl
+
+`service.infra.create` events:
+
+```bash
+curl --location 'localhost:3009/queued-events?eventType=service.infra.create'
+```
+
+Specific repository:
+
+```bash
+curl --location 'localhost:3009/queued-events?repositoryName=my-service&eventType=service.infra.create'
+```
+
+Include processed events:
+
+```bash
+curl --location 'localhost:3009/queued-events?eventType=service.infra.create&includeProcessed=true'
+```
+
+### PATCH /queued-events/eventType/repositoryName
+
+#### Curl
+
+```bash
+curl --location --request PATCH 'localhost:3009/queued-events/service.infra.create/my-service'
+```
+
 ## API endpoints
 
 | Endpoint                                              | Description                             |

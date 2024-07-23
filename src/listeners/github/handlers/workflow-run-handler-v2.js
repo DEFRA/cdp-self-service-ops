@@ -12,18 +12,19 @@ import { dontOverwriteStatus } from '~/src/listeners/github/helpers/dont-overwri
 
 const logger = createLogger()
 
-const workflowRunHandlerV2 = async (db, message) => {
+const workflowRunHandlerV2 = async (server, message) => {
   const workflowRepo = message.repository?.name
   const headBranch = message.workflow_run?.head_branch
   const headSHA = message.workflow_run?.head_sha
+  const db = server.db
 
   logger.info(
-    `processing workflow_run message for ${workflowRepo}, ${headBranch}/${headSHA}, action: ${message.action}`
+    `Processing workflow_run message for ${workflowRepo}, ${headBranch}/${headSHA}, action: ${message.action}`
   )
 
   switch (workflowRepo) {
     case config.get('gitHubRepoTfServiceInfra'):
-      await handleTfSvcInfra(db, message)
+      await handleTfSvcInfra(db, message, server)
       break
     case config.get('gitHubRepoCreateWorkflows'):
       await handleCdpCreateWorkflows(db, message)
@@ -51,13 +52,13 @@ const trimWorkflowRun = (workflowRun) => {
   }
 }
 
-const handleTfSvcInfra = async (db, message) => {
+const handleTfSvcInfra = async (db, message, server) => {
   try {
     if (
       message.action === 'completed' &&
       message.workflow_run?.head_branch === 'main'
     ) {
-      logger.info(`handling tf-svc-infra workflow completed message from main`)
+      logger.info(`Handling tf-svc-infra workflow completed message from main`)
 
       // Any time cdp-tf-svc-infra completes on main, regardless of which commit triggered it
       // assume all services in management tenant-services.json are successfully created.
@@ -67,13 +68,16 @@ const handleTfSvcInfra = async (db, message) => {
         message.workflow_run?.conclusion
       )
       await bulkUpdateTfSvcInfra(
-        db,
+        server.db,
         trimWorkflowRun(message.workflow_run),
         status
       )
+
+      // emit to process queued create jobs
+      server.events.emit(config.get('serviceInfraCreateEvent'))
     } else {
       logger.info(
-        'handling tf-svc-infra workflow completed message from non-main'
+        'Handling tf-svc-infra workflow completed message from non-main'
       )
       await handlePRWorkflow(db, message)
     }
@@ -83,7 +87,7 @@ const handleTfSvcInfra = async (db, message) => {
 }
 
 const handleCdpCreateWorkflows = async (db, message) => {
-  logger.info(`handling cdp-create-workflows message`)
+  logger.info(`Handling cdp-create-workflows message`)
 
   try {
     const repoName = message.workflow_run?.name // we repurpose the name to track name of repo its creating
@@ -99,7 +103,7 @@ const handleCdpCreateWorkflows = async (db, message) => {
     )
 
     logger.info(
-      `attempting to update createRepository status for ${repoName} to ${workflowStatus}`
+      `Attempting to update createRepository status for ${repoName} to ${workflowStatus}`
     )
 
     // Make sure statuses can only be progressed forward, not back (request -> in-progress -> success/failure)
@@ -119,7 +123,7 @@ const handleCdpCreateWorkflows = async (db, message) => {
 
     if (updateResult.matchedCount > 0) {
       logger.info(
-        `set ${repoName} createRepository status to ${workflowStatus}`
+        `Set ${repoName} createRepository status to ${workflowStatus}`
       )
     } else {
       logger.warn(
@@ -197,7 +201,7 @@ const handlePRWorkflow = async (db, message) => {
         message.workflow_run?.conclusion
       )
       logger.info(
-        `updating status for creation job ${serviceRepo} ${workflowRepo}:${workflowStatus}`
+        `Updating status for creation job ${serviceRepo} ${workflowRepo}:${workflowStatus}`
       )
 
       let branch = 'pr'

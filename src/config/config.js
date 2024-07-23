@@ -215,17 +215,17 @@ const config = convict({
       env: 'SQS_GITHUB_ENABLED'
     }
   },
-  userServiceApiUrl: {
-    doc: 'User Service Backend API url',
+  userServiceBackendUrl: {
+    doc: 'User Service Backend url',
     format: String,
     default: 'http://localhost:3001',
-    env: 'USER_SERVICE_API_URL'
+    env: 'USER_SERVICE_BACKEND_URL'
   },
-  portalBackendApiUrl: {
-    doc: 'Portal backend for deployments and deployables root API url',
+  portalBackendUrl: {
+    doc: 'Portal Backend url',
     format: String,
     default: 'http://localhost:5094',
-    env: 'PORTAL_BACKEND_API_URL'
+    env: 'PORTAL_BACKEND_URL'
   },
   createMicroServiceWorkflow: {
     doc: 'Name of workflow to trigger when creating a microservice',
@@ -292,6 +292,12 @@ const config = convict({
     format: String,
     default: '',
     env: 'CDP_HTTPS_PROXY'
+  },
+  serviceInfraCreateEvent: {
+    doc: 'Event for service infra create',
+    format: String,
+    default: 'service.infra.create',
+    env: 'SERVICE_INFRA_CREATE_EVENT'
   }
 })
 

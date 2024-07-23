@@ -89,7 +89,7 @@ const deployServiceController = {
       request.snsClient,
       request.logger
     )
-    request.logger.info('deployment sns event sent')
+    request.logger.info('Deployment sns event sent')
 
     await commitDeploymentFile(
       deploymentId,
@@ -100,7 +100,7 @@ const deployServiceController = {
       service.service_code,
       request.logger
     )
-    request.logger.info('deployment commit file created')
+    request.logger.info('Deployment commit file created')
     return h.response({ message: 'success', deploymentId }).code(200)
   }
 }
