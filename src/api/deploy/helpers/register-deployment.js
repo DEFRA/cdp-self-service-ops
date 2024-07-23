@@ -9,8 +9,7 @@ async function registerDeployment(
   memory,
   user,
   deploymentId,
-  latestConfigCommitSha,
-  secrets
+  latestConfigCommitSha
 ) {
   const url = `${config.get('portalBackendApiUrl')}/v2/deployments`
   await fetch(url, {
@@ -25,8 +24,7 @@ async function registerDeployment(
       memory: memory.toString(),
       user,
       deploymentId,
-      configVersion: latestConfigCommitSha,
-      secrets
+      configVersion: latestConfigCommitSha
     })
   })
 }
