@@ -24,6 +24,7 @@ const createRepositoryController = {
 
     const payload = request?.payload
     const repositoryName = payload?.repositoryName
+    const visibility = payload?.repositoryVisibility
 
     const { team } = await request.server.methods.fetchTeam(payload?.teamId)
     if (isNil(team?.github)) {
@@ -37,9 +38,9 @@ const createRepositoryController = {
       gitHubOrg,
       repositoryName,
       payload,
-      team
+      team.github
     )
-    await createRepository(request, repositoryName, payload, team)
+    await createRepository(request, repositoryName, visibility, team.github)
 
     return h
       .response({

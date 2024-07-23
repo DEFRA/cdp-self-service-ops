@@ -3,20 +3,25 @@ import { statuses } from '~/src/constants/statuses'
 import { updateRepositoryStatus } from '~/src/api/create-repository/helpers/status/update-repository-status'
 import { triggerWorkflow } from '~/src/api/helpers/workflow/trigger-workflow'
 
-async function createRepository(request, repositoryName, payload, team) {
+/**
+ * @param {*} request
+ * @param {string} repositoryName
+ * @param {string} visibility
+ * @param {string} team
+ * @return {Promise<void>}
+ */
+async function createRepository(request, repositoryName, visibility, team) {
   const gitHubOrg = config.get('gitHubOrg')
+  const workflowRepo = config.get('gitHubRepoCreateWorkflows')
+  const workflowId = config.get('createRepositoryWorkflow')
   const updateStatus = updateRepositoryStatus(request.db, repositoryName)
 
   try {
-    const repositoryVisibility = payload.repositoryVisibility
-    const result = await triggerWorkflow(
-      {
-        repositoryName,
-        repositoryVisibility,
-        team: team.github
-      },
-      config.get('createRepositoryWorkflow')
-    )
+    const result = await triggerWorkflow(gitHubOrg, workflowRepo, workflowId, {
+      repositoryName,
+      repositoryVisibility: visibility,
+      team
+    })
 
     request.logger.info(
       `Create repository: ${repositoryName} workflow triggered successfully`
