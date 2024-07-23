@@ -2,12 +2,27 @@ import { generateDeployMessage } from '~/src/api/deploy/helpers/generate-deploy-
 import { config } from '~/src/config'
 import { sendSnsMessage } from '~/src/api/deploy/helpers/sns/send-sns-message'
 
+/**
+ * @typedef {import("@aws-sdk/client-sns").SNSClient} SNSClient
+ * @typedef {import("pino").Logger} Logger
+ *
+ * @param {string} deploymentId
+ * @param {{imageName: string, version:string, environment: string, instanceCount: number, cpu: number, memory: number}} payload
+ * @param {string} zone
+ * @param {{id: string, displayName: string}} user
+ * @param {string} configCommitSha
+ * @param {string} serviceCode
+ * @param {SNSClient} snsClient
+ * @param {Logger} logger
+ * @return {Promise<void>}
+ */
 async function sendSnsDeploymentMessage(
   deploymentId,
   payload,
   zone,
   user,
   configCommitSha,
+  serviceCode,
   snsClient,
   logger
 ) {
@@ -21,7 +36,8 @@ async function sendSnsDeploymentMessage(
     payload.cpu,
     payload.memory,
     user,
-    configCommitSha
+    configCommitSha,
+    serviceCode
   )
 
   const topic = config.get('snsDeployTopicArn')

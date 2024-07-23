@@ -1,3 +1,16 @@
+/**
+ * @param {string} deploymentId
+ * @param {string} imageName
+ * @param {string} version
+ * @param {string} environment
+ * @param {string} zone
+ * @param {number} instanceCount
+ * @param {string} cpu
+ * @param {string} memory
+ * @param {string} user
+ * @param {string} configCommitSha
+ * @param {?string} serviceCode
+ */
 async function generateDeployMessage(
   deploymentId,
   imageName,
@@ -8,7 +21,8 @@ async function generateDeployMessage(
   cpu,
   memory,
   user,
-  configCommitSha
+  configCommitSha,
+  serviceCode
 ) {
   const basePath = configCommitSha
     ? `arn:aws:s3:::cdp-${environment}-service-configs/${configCommitSha}`
@@ -49,7 +63,8 @@ async function generateDeployMessage(
       deployment_id: deploymentId,
       user_id: user.id,
       display_name: user.displayName
-    }
+    },
+    service_code: serviceCode
   }
 }
 
