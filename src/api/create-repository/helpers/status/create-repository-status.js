@@ -1,6 +1,14 @@
 import { creations } from '~/src/constants/creations'
 import { statuses } from '~/src/constants/statuses'
 
+/**
+ * @param {*} db
+ * @param {string} org
+ * @param {string} repositoryName
+ * @param {Object} payload
+ * @param {string} team
+ * @return {Promise<*>}
+ */
 async function createRepositoryStatus(db, org, repositoryName, payload, team) {
   const statusDocument = {
     kind: creations.repository,
