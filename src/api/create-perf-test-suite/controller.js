@@ -3,12 +3,12 @@ import { isNil } from 'lodash'
 import { config } from '~/src/config'
 import { updateOverallStatus } from '~/src/api/create-microservice/helpers/save-status'
 import { perfTestSuiteValidation } from '~/src/api/create-perf-test-suite/helpers/schema/perf-test-suite-validation'
-import { raiseInfraPullRequest } from '~/src/api/helpers/create/raise-infra-pull-request'
+import { raiseInfraPullRequest } from '~/src/helpers/create/raise-infra-pull-request'
 import { testRunnerEnvironments } from '~/src/config/test-runner-environments'
 import { creations } from '~/src/constants/creations'
-import { createTestSuiteStatus } from '~/src/api/helpers/create/create-test-suite-status'
-import { createTestSuiteFromTemplate } from '~/src/api/helpers/create/create-test-suite-from-template'
-import { createSquidConfig } from '~/src/api/helpers/create/create-squid-config'
+import { createTestSuiteStatus } from '~/src/helpers/create/create-test-suite-status'
+import { createTestSuiteFromTemplate } from '~/src/helpers/create/create-test-suite-from-template'
+import { createSquidConfig } from '~/src/helpers/create/create-squid-config'
 
 const createPerfTestSuiteController = {
   options: {

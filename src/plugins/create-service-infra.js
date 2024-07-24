@@ -2,7 +2,7 @@ import { updateTfSvcInfra } from '~/src/api/create-microservice/helpers/update-t
 import {
   getNextQueuedEvent,
   ackEvent
-} from '~/src/api/helpers/queued-events/queued-events'
+} from '~/src/helpers/queued-events/queued-events'
 import { getRepositoryStatus } from '~/src/api/status/helpers/get-repository-status'
 import { statuses } from '~/src/constants/statuses'
 import { config } from '~/src/config'

@@ -1,7 +1,7 @@
 import { config } from '~/src/config'
 import { updateCreationStatus } from '~/src/api/create-microservice/helpers/save-status'
 import { statuses } from '~/src/constants/statuses'
-import { queueEvent } from '~/src/api/helpers/queued-events/queued-events'
+import { queueEvent } from '~/src/helpers/queued-events/queued-events'
 
 async function queueTfSvcInfra(server, repositoryName, zone) {
   const tfSvcInfra = config.get('gitHubRepoTfServiceInfra')

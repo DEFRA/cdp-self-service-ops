@@ -1,4 +1,4 @@
-import { resetEvent } from '~/src/api/helpers/queued-events/queued-events'
+import { resetEvent } from '~/src/helpers/queued-events/queued-events'
 import { config } from '~/src/config'
 
 const resetEventController = {

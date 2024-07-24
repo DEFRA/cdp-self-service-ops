@@ -4,7 +4,7 @@ import {
   findAll,
   getNextQueuedEvent,
   queueEvent
-} from '~/src/api/helpers/queued-events/queued-events'
+} from '~/src/helpers/queued-events/queued-events'
 import { MongoClient } from 'mongodb'
 import timeunit from 'timeunit'
 import { setTimeout } from 'timers/promises'

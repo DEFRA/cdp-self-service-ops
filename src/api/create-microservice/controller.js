@@ -6,15 +6,15 @@ import { createServiceConfig } from '~/src/api/create-microservice/helpers/creat
 import { createNginxConfig } from '~/src/api/create-microservice/helpers/create-nginx-config'
 import { config, environments } from '~/src/config'
 import { trimPr } from '~/src/api/create-microservice/helpers/trim-pr'
-import { triggerWorkflow } from '~/src/api/helpers/workflow/trigger-workflow'
+import { triggerWorkflow } from '~/src/helpers/workflow/trigger-workflow'
 import { statuses } from '~/src/constants/statuses'
 import {
   initCreationStatus,
   updateCreationStatus,
   updateOverallStatus
 } from '~/src/api/create-microservice/helpers/save-status'
-import { createSquidConfig } from '~/src/api/helpers/create/create-squid-config'
-import { createDashboard } from '~/src/api/helpers/create/create-dashboard'
+import { createSquidConfig } from '~/src/helpers/create/create-squid-config'
+import { createDashboard } from '~/src/helpers/create/create-dashboard'
 import { queueTfSvcInfra } from '~/src/api/create-microservice/helpers/queue-tf-srv-Infra'
 
 const createMicroserviceController = {

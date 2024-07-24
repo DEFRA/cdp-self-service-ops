@@ -153,11 +153,13 @@ const config = convict({
     format: Boolean,
     default: process.env.NODE_ENV === 'test'
   },
-  logLevel: {
-    doc: 'Logging level',
-    format: ['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent'],
-    default: 'info',
-    env: 'LOG_LEVEL'
+  get logLevel() {
+    return {
+      doc: 'Logging level',
+      format: ['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent'],
+      default: this.isDevelopment ? 'debug' : 'info',
+      env: 'LOG_LEVEL'
+    }
   },
   mongoUri: {
     doc: 'URI for mongodb',
@@ -182,6 +184,26 @@ const config = convict({
     format: String,
     default: 'arn:aws:sns:eu-west-2:000000000000:run-test-topic',
     env: 'SNS_RUN_TEST_TOPIC_ARN'
+  },
+  snsSecretsManagementTopicArn: {
+    doc: 'SNS Secrets Management Topic ARN',
+    format: String,
+    default: 'arn:aws:sns:eu-west-2:000000000000:secret_management',
+    env: 'SNS_SECRETS_MANAGEMENT_TOPIC_ARN'
+  },
+  secrets: {
+    // TODO this will be moved to one place. For the moment just adding it as config for ease
+    global: {
+      doc: 'Platform supplied "Global" secret keys that cannot be overridden',
+      format: Array,
+      default: [
+        'REDIS_KEY_PREFIX',
+        'REDIS_USERNAME',
+        'REDIS_PASSWORD',
+        'SQUID_USERNAME',
+        'SQUID_PASSWORD'
+      ]
+    }
   },
   sqsGitHubEvents: {
     queueUrl: {
