@@ -13,8 +13,8 @@ import {
   updateCreationStatus,
   updateOverallStatus
 } from '~/src/api/create-microservice/helpers/save-status'
-import { createSquidConfig } from '~/src/api/helpers/create/create-squid-config'
-import { createDashboard } from '~/src/api/helpers/create/create-dashboard'
+import { createSquidConfig } from '~/src/helpers/create/create-squid-config'
+import { createDashboard } from '~/src/helpers/create/create-dashboard'
 import { queueTfSvcInfra } from '~/src/api/create-microservice/helpers/queue-tf-srv-Infra'
 
 const createMicroserviceController = {

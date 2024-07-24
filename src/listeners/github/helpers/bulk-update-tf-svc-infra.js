@@ -7,7 +7,7 @@ import {
 import { updateOverallStatus } from '~/src/api/create-microservice/helpers/save-status'
 import { createPlaceholderArtifact } from '~/src/listeners/github/helpers/create-placeholder-artifact'
 import { createLogger } from '~/src/helpers/logging/logger'
-import { ackEvent } from '~/src/api/helpers/queued-events/queued-events'
+import { ackEvent } from '~/src/helpers/queued-events/queued-events'
 
 // given a list of services, update the tf-svc-infra status for all of them to success
 // and create the placeholder artifact
