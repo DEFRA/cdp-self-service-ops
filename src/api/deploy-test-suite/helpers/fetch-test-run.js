@@ -13,11 +13,10 @@ import Boom from '@hapi/boom'
  * @return {Promise<TestRun>}
  */
 async function fetchTestRun(runId) {
-  const url = config.get('portalBackendApiUrl') + `/test-run/${runId}`
+  const url = config.get('portalBackendUrl') + `/test-run/${runId}`
   const response = await fetch(url, { method: 'get' })
-  const json = await response.json()
   if (response.ok) {
-    return json
+    return await response.json()
   }
   throw Boom.notFound(`Test Run ${runId} not found`)
 }

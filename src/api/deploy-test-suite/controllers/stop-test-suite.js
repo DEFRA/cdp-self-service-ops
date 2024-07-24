@@ -1,10 +1,10 @@
 import Boom from '@hapi/boom'
 import Joi from 'joi'
 
-import { config, environments } from '~/src/config'
+import { config } from '~/src/config'
 import { fetchTestRun } from '~/src/api/deploy-test-suite/helpers/fetch-test-run'
 import { isOwnerOfSuite } from '~/src/api/deploy-test-suite/helpers/is-owner-of-suite'
-import { sendSnsMessage } from '~/src/api/deploy/helpers/sns/send-sns-message'
+import { sendSnsMessage } from '~/src/helpers/sns/send-sns-message'
 
 const stopTestSuiteController = {
   options: {
@@ -39,18 +39,21 @@ const stopTestSuiteController = {
 
     const topic = config.get('snsStopTestTopicArn')
     const taskId = getTaskId(testRun.taskArn)
-    const stopMessage = {
+    const message = {
       environment: testRun.environment,
       task_id: taskId,
       deployed_by: user.displayName
     }
 
-    request.logger.info(`Stopping task ${taskId} in ${environments}`)
-    const snsResponse = await sendSnsMessage(
-      request.snsClient,
+    request.logger.info(`Stopping task ${taskId} in ${testRun.environment}`)
+
+    const snsResponse = await sendSnsMessage({
+      request,
       topic,
-      stopMessage
-    )
+      message,
+      environment: testRun.environment,
+      deduplicationId: taskId
+    })
     request.logger.info(
       `SNS Stop Test response: ${JSON.stringify(snsResponse, null, 2)}`
     )
