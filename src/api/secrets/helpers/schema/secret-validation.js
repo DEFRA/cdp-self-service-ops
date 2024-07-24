@@ -39,13 +39,15 @@ function secretParamsValidation() {
   }
 }
 
-const globalSecrets = config.get('secrets').global
+const globalSecretKeys = config.get('secrets.global')
 
 const secretPayloadValidation = Joi.object({
   secretKey: Joi.string()
-    .not(...globalSecrets)
+    .not(...globalSecretKeys)
+    .min(1)
+    .max(256)
     .required(),
-  secretValue: Joi.string().required(),
+  secretValue: Joi.string().min(1).max(256).required(),
   teamId: Joi.string().uuid().required()
 })
 

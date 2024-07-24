@@ -198,12 +198,11 @@ const config = convict({
       format: Array,
       default: [
         'REDIS_KEY_PREFIX',
-        'REDIS_PASSWORD',
         'REDIS_USERNAME',
-        'SQUID_PASSWORD',
-        'SQUID_USERNAME'
-      ],
-      env: 'SECRETS_NON_WRITABLE'
+        'REDIS_PASSWORD',
+        'SQUID_USERNAME',
+        'SQUID_PASSWORD'
+      ]
     }
   },
   sqsGitHubEvents: {
