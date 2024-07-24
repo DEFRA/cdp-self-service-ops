@@ -4,9 +4,10 @@ import { deployTestSuiteValidation } from '~/src/api/deploy-test-suite/helpers/d
 import { generateTestRunMessage } from '~/src/api/deploy-test-suite/helpers/generate-test-run-message'
 import { sendSnsMessage } from '~/src/helpers/sns/send-sns-message'
 import crypto from 'node:crypto'
-import { config, environments } from '~/src/config'
+import { config } from '~/src/config'
 import { createRecordTestRun } from '~/src/api/deploy-test-suite/helpers/record-test-run'
-import { getRepoTeams } from '~/src/api/deploy/helpers/get-repo-teams'
+import { isOwnerOfSuite } from '~/src/api/deploy-test-suite/helpers/is-owner-of-suite'
+import { canRunInEnvironment } from '~/src/api/deploy-test-suite/helpers/can-run-in-environment'
 
 const deployTestSuiteController = {
   options: {
@@ -30,23 +31,17 @@ const deployTestSuiteController = {
     }
     const scope = request.auth?.credentials?.scope
 
-    const isAdmin = scope.includes(config.get('oidcAdminGroupId'))
-    if (!isAdmin) {
-      const repoTeams = await getRepoTeams(payload.imageName)
-      const isTeamMember = repoTeams.some((team) => scope.includes(team.teamId))
-      if (!isTeamMember) {
-        throw Boom.forbidden('Insufficient scope')
-      }
+    if (!isOwnerOfSuite(payload.imageName, scope)) {
+      throw Boom.forbidden(
+        `Insufficient permissions to start test-suite ${payload.imageName}`
+      )
+    }
 
-      // Only admins can run test suites in the admin environments
-      if (
-        payload.environment === environments.infraDev ||
-        payload.environment === environments.management
-      ) {
-        throw Boom.forbidden(
-          'Insufficient scope to run suite in this environment'
-        )
-      }
+    // Only admins can run test suites in the admin environments
+    if (!canRunInEnvironment(payload.environment, scope)) {
+      throw Boom.forbidden(
+        'Insufficient permissions to run suite in this environment'
+      )
     }
 
     const runId = crypto.randomUUID()
