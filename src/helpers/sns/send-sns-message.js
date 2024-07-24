@@ -1,4 +1,4 @@
-import crypto from 'crypto'
+import crypto from 'node:crypto'
 import { PublishCommand } from '@aws-sdk/client-sns'
 
 async function sendSnsMessage({
