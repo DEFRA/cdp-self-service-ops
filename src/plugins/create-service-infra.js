@@ -37,7 +37,7 @@ const createServiceInfra = {
             await updateTfSvcInfra(
               server,
               queuedEvent.repositoryName,
-              queuedEvent.zone
+              queuedEvent.item.zone
             )
           } else {
             server.logger.info(
