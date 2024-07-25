@@ -39,15 +39,19 @@ function secretParamsValidation() {
   }
 }
 
-const globalSecretKeys = config.get('secrets.global')
+const platformGlobalSecretKeys = config.get('platformGlobalSecretKeys')
 
 const secretPayloadValidation = Joi.object({
   secretKey: Joi.string()
-    .not(...globalSecretKeys)
+    .not(...platformGlobalSecretKeys)
+    .pattern(/^\w*$/)
+    .pattern(/^[a-zA-Z0-9]\w*[a-zA-Z0-9]$/, {
+      name: 'startAndEndWithCharacter'
+    })
     .min(1)
-    .max(256)
+    .max(512)
     .required(),
-  secretValue: Joi.string().min(1).max(256).required(),
+  secretValue: Joi.string().pattern(/^\S*$/).min(1).max(512).required(),
   teamId: Joi.string().uuid().required()
 })
 

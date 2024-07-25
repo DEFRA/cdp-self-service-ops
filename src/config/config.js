@@ -197,19 +197,12 @@ const config = convict({
     default: 'arn:aws:sns:eu-west-2:000000000000:secret_management',
     env: 'SNS_SECRETS_MANAGEMENT_TOPIC_ARN'
   },
-  secrets: {
-    // TODO this will be moved to one place. For the moment just adding it as config for ease
-    global: {
-      doc: 'Platform supplied "Global" secret keys that cannot be overridden',
-      format: Array,
-      default: [
-        'REDIS_KEY_PREFIX',
-        'REDIS_USERNAME',
-        'REDIS_PASSWORD',
-        'SQUID_USERNAME',
-        'SQUID_PASSWORD'
-      ]
-    }
+  platformGlobalSecretKeys: {
+    doc: 'Global Platform level secret keys. These keys are not to be overridden',
+    format: Array,
+    default:
+      'SQUID_USERNAME,SQUID_PASSWORD,REDIS_USERNAME,REDIS_PASSWORD,REDIS_KEY_PREFIX,CDP_HTTP_PROXY,CDP_HTTPS_PROXY,HTTP_PROXY,HTTPS_PROXY',
+    env: 'PLATFORM_GLOBAL_SECRET_KEYS'
   },
   sqsGitHubEvents: {
     queueUrl: {
