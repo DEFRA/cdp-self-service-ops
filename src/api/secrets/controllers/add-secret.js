@@ -53,7 +53,7 @@ const addSecretController = {
     //  Add identifier for sent sns message to db collection with short ttl
     //  Poll a new sns endpoint that will be notified from the secret_management Topic, for add_secret messages that match identifier stored in collection
     //  Respond accordingly with success message or error exception from lambda
-    return h.response({ message: 'success' }).code(200)
+    return h.response({ message: 'Success' }).code(200)
   }
 }
 
