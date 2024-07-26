@@ -1,7 +1,7 @@
 import { config } from '~/src/config'
 import { commitFiles } from '~/src/api/deploy/helpers/github/commit-github-files'
 
-const deploymentRepo = config.get('gitHubRepoTfService')
+const deploymentRepo = config.get('gitHubRepoAppDeployments')
 const gitHubOwner = config.get('gitHubOrg')
 
 /**
@@ -30,11 +30,12 @@ async function commitDeploymentFile(
     zone,
     deploymentId,
     configCommitSha,
+    serviceCode,
     false
   )
   const filePath = `environments/${payload.environment}/${zone}/${deployment.service.name}.json`
   const content = [{ path: filePath, obj: deployment }]
-  const commitMessage = `Deploy ${deployment.service.name} ${payload.version} to ${payload.environment} - Initiated by ${user.displayName}`
+  const commitMessage = `${deployment.service.name} ${payload.version} to ${payload.environment}\nInitiated by ${user.displayName}`
 
   logger.info(`Deployment file ${filePath}`)
 
@@ -54,7 +55,7 @@ function generateDeployment(
   deploymentId,
   commitSha,
   serviceCode,
-  deploy = true
+  deploy
 ) {
   return {
     deploymentId,
@@ -81,7 +82,8 @@ function generateDeployment(
       user: {
         userId: user.id,
         displayName: user.displayName
-      }
+      },
+      deploymentEnvironment: process.env.ENVIRONMENT
     }
   }
 }
