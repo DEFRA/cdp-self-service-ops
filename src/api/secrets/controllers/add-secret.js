@@ -30,7 +30,7 @@ const addSecretController = {
   },
   handler: async (request, h) => {
     const { serviceName, environment } = request.params
-    const { secretValue, secretKey } = request.payload
+    const { secretKey, secretValue } = request.payload
     const description = `Secret ${secretKey} added for ${serviceName}`
     const topic = config.get('snsSecretsManagementTopicArn')
 
