@@ -3,7 +3,7 @@ import { config } from '~/src/config'
 import { workflowRunHandlerV2 } from '~/src/listeners/github/handlers/workflow-run-handler-v2'
 
 const githubWebhooks = new Set([
-  config.get('gitHubRepoTfService'),
+  config.get('gitHubRepoAppDeployments'),
   config.get('gitHubRepoTfServiceInfra'),
   config.get('gitHubRepoConfig'),
   config.get('gitHubRepoNginx'),

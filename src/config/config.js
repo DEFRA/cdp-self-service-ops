@@ -103,10 +103,10 @@ const config = convict({
     format: String,
     default: 'cdp-tf-svc-infra'
   },
-  gitHubRepoTfService: {
-    doc: 'Terraform GitHub Service repository',
+  gitHubRepoAppDeployments: {
+    doc: 'Repository to store deployment state for services on CDP',
     format: String,
-    default: 'cdp-tf-svc'
+    default: 'cdp-app-deployments'
   },
   gitHubRepoConfig: {
     doc: 'gitHub repo to create the application config in',
