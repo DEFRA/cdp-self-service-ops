@@ -5,31 +5,14 @@ import { config, environments } from '~/src/config'
 
 function secretParamsValidation() {
   return (params, options) => {
-    const adminTeamId = config.get('oidcAdminGroupId')
     const teamId = options.context.payload.teamId
-    let schema
 
-    if (teamId === adminTeamId) {
-      schema = Joi.object({
-        serviceName: Joi.string().min(1).required(),
-        environment: Joi.string()
-          .valid(...Object.values(environments))
-          .required()
-      })
-    }
-
-    if (teamId !== adminTeamId) {
-      schema = Joi.object({
-        serviceName: Joi.string().min(1).required(),
-        environment: Joi.string()
-          .valid(
-            ...Object.values(omit(environments, ['management', 'infraDev']))
-          )
-          .required()
-      })
-    }
-
-    const validationResult = schema.validate(params, options)
+    const validationResult = Joi.object({
+      serviceName: Joi.string().min(1).required(),
+      environment: Joi.string()
+        .valid(...getEnvironments(teamId))
+        .required()
+    }).validate(params, options)
 
     if (validationResult?.error) {
       throw validationResult.error
@@ -37,6 +20,13 @@ function secretParamsValidation() {
 
     return validationResult.value
   }
+}
+
+function getEnvironments(teamId) {
+  const adminTeamId = config.get('oidcAdminGroupId')
+  return teamId === adminTeamId
+    ? Object.values(environments)
+    : Object.values(omit(environments, ['management', 'infraDev']))
 }
 
 const platformGlobalSecretKeys = config.get('platformGlobalSecretKeys')
