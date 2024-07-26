@@ -25,7 +25,7 @@ async function getNextQueuedEvent(
   db,
   eventType,
   logger,
-  ttlInMillis = timeunit.minutes.toMillis(5),
+  ttlInMillis = timeunit.minutes.toMillis(15),
   maxRetries = 1
 ) {
   const latestEvent = await db
