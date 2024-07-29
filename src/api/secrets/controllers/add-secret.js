@@ -45,7 +45,7 @@ const addSecretController = {
         description,
         secret_key: secretKey,
         secret_value: secretValue,
-        action: 'update_secret'
+        action: 'add_secret'
       }
     })
 
