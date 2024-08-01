@@ -2,7 +2,12 @@ import { config } from '~/src/config'
 import { createLogger } from '~/src/helpers/logging/logger'
 import { getContent } from '~/src/helpers/github/get-content'
 
-async function addRepoToTenantServices(repositoryName, environment, zone) {
+async function addRepoToTenantServices(
+  repositoryName,
+  environment,
+  zone,
+  serviceCode
+) {
   const logger = createLogger()
   const owner = config.get('gitHubOrg')
   const fileRepository = config.get('gitHubRepoTfServiceInfra')
@@ -16,7 +21,8 @@ async function addRepoToTenantServices(repositoryName, environment, zone) {
       parsedRepositories[0][repositoryName] = {
         zone,
         mongo: zone === 'protected',
-        redis: zone === 'public'
+        redis: zone === 'public',
+        ...(serviceCode && { serviceCode })
       }
     } else {
       logger.warn(

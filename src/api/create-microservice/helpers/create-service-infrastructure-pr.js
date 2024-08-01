@@ -5,14 +5,14 @@ import { addRepoToTenantServices } from '~/src/api/create-microservice/helpers/a
 import { prepPullRequestFiles } from '~/src/api/create-microservice/helpers/prep-pull-request-files'
 import { enableAutoMergeGraphQl } from '~/src/helpers/graphql/enable-automerge.graphql'
 
-async function createServiceInfrastructurePr(repoName, zone) {
+async function createServiceInfrastructurePr(repoName, zone, serviceCode) {
   const fileRepository = config.get('gitHubRepoTfServiceInfra')
   const pullRequestFiles = new Map()
 
   const infrastructurePromises = Object.values(environments).map(
     async (env) => {
       const [tenantServicesFilePath, tenantServicesJson] =
-        await addRepoToTenantServices(repoName, env, zone)
+        await addRepoToTenantServices(repoName, env, zone, serviceCode)
       pullRequestFiles.set(tenantServicesFilePath, tenantServicesJson)
 
       const [oidcFilePath, oidcJson] = await addRepoToGitHubOidc(repoName, env)

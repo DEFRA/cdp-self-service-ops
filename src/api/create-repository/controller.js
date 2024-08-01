@@ -1,10 +1,10 @@
 import Boom from '@hapi/boom'
-import { isNil } from 'lodash'
 
 import { config } from '~/src/config'
 import { createRepository } from '~/src/api/create-repository/helpers/workflow/create-repository'
 import { repositoryValidation } from '~/src/api/create-repository/helpers/schema/repository-validation'
 import { createRepositoryStatus } from '~/src/api/create-repository/helpers/status/create-repository-status'
+import { fetchTeam } from '~/src/helpers/fetch-team'
 
 const createRepositoryController = {
   options: {
@@ -26,8 +26,8 @@ const createRepositoryController = {
     const repositoryName = payload?.repositoryName
     const visibility = payload?.repositoryVisibility
 
-    const { team } = await request.server.methods.fetchTeam(payload?.teamId)
-    if (isNil(team?.github)) {
+    const { team } = await fetchTeam(payload?.teamId)
+    if (!team?.github) {
       throw Boom.badData(`Team ${team.name} does not have a linked Github team`)
     }
 

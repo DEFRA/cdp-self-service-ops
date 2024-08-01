@@ -8,7 +8,6 @@ import { requestLogger } from '~/src/plugins/request-logger'
 import { azureOidc } from '~/src/plugins/azure-oidc'
 import { mongoDb } from '~/src/plugins/mongodb'
 import { snsClientPlugin } from '~/src/plugins/sns-client'
-import { registerServerMethods } from '~/src/api/server-methods'
 import { secureContext } from '~/src/helpers/secure-context'
 import { setupWreckAgents } from '~/src/helpers/proxy/setup-wreck-agents'
 import { proxyAgent } from '~/src/helpers/proxy/proxy-agent'
@@ -71,8 +70,6 @@ async function createServer() {
   }
   // process any unprocessed messages on server start
   await server.events.emit(config.get('serviceInfraCreateEvent'))
-
-  registerServerMethods(server)
 
   return server
 }
