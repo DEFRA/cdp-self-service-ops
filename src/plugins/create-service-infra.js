@@ -37,7 +37,8 @@ const createServiceInfra = {
             await updateTfSvcInfra(
               server,
               queuedEvent.repositoryName,
-              queuedEvent.item.zone
+              queuedEvent.item.zone,
+              getServiceCode(queuedEvent.item.serviceCodes, server.logger)
             )
           } else {
             server.logger.info(
@@ -48,6 +49,19 @@ const createServiceInfra = {
         }
       })
     }
+  }
+}
+
+function getServiceCode(serviceCodes, logger) {
+  if (serviceCodes?.at(0)) {
+    const [serviceCode, unexpectedServiceCode] = serviceCodes
+    // serviceCodes is a list as teams might have more than one service code.
+    if (unexpectedServiceCode) {
+      logger.Error(
+        `More than one service code found - ${serviceCodes}, '${serviceCode} will be used`
+      )
+    }
+    return serviceCode
   }
 }
 

@@ -3,7 +3,7 @@ import { updateCreationStatus } from '~/src/api/create-microservice/helpers/save
 import { statuses } from '~/src/constants/statuses'
 import { queueEvent } from '~/src/helpers/queued-events/queued-events'
 
-async function queueTfSvcInfra(server, repositoryName, zone) {
+async function queueTfSvcInfra(server, repositoryName, zone, serviceCodes) {
   const tfSvcInfra = config.get('gitHubRepoTfServiceInfra')
   const eventType = config.get('serviceInfraCreateEvent')
   try {
@@ -14,7 +14,7 @@ async function queueTfSvcInfra(server, repositoryName, zone) {
       server.db,
       repositoryName,
       eventType,
-      { zone },
+      { zone, serviceCodes },
       server.logger
     )
     server.events.emit(eventType)

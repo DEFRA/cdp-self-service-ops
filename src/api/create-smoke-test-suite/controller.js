@@ -1,5 +1,4 @@
 import Boom from '@hapi/boom'
-import { isNil } from 'lodash'
 import { config } from '~/src/config'
 import { updateOverallStatus } from '~/src/api/create-microservice/helpers/save-status'
 import { raiseInfraPullRequest } from '~/src/helpers/create/raise-infra-pull-request'
@@ -9,6 +8,7 @@ import { creations } from '~/src/constants/creations'
 import { smokeTestSuiteValidation } from '~/src/api/create-smoke-test-suite/helpers/schema/smoke-test-suite-validation'
 import { createTestSuiteFromTemplate } from '~/src/helpers/create/create-test-suite-from-template'
 import { createSquidConfig } from '~/src/helpers/create/create-squid-config'
+import { fetchTeam } from '~/src/helpers/fetch-team'
 
 const createSmokeTestSuiteController = {
   options: {
@@ -30,8 +30,8 @@ const createSmokeTestSuiteController = {
     const repositoryName = payload?.repositoryName
 
     const zone = 'public'
-    const { team } = await request.server.methods.fetchTeam(payload?.teamId)
-    if (isNil(team?.github)) {
+    const { team } = await fetchTeam(payload?.teamId)
+    if (!team?.github) {
       throw Boom.badData(`Team ${team.name} does not have a linked Github team`)
     }
 

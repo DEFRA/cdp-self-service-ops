@@ -1,5 +1,4 @@
 import Boom from '@hapi/boom'
-import { isNil } from 'lodash'
 import { config } from '~/src/config'
 import { updateOverallStatus } from '~/src/api/create-microservice/helpers/save-status'
 import { perfTestSuiteValidation } from '~/src/api/create-perf-test-suite/helpers/schema/perf-test-suite-validation'
@@ -9,6 +8,7 @@ import { creations } from '~/src/constants/creations'
 import { createTestSuiteStatus } from '~/src/helpers/create/create-test-suite-status'
 import { createTestSuiteFromTemplate } from '~/src/helpers/create/create-test-suite-from-template'
 import { createSquidConfig } from '~/src/helpers/create/create-squid-config'
+import { fetchTeam } from '~/src/helpers/fetch-team'
 
 const createPerfTestSuiteController = {
   options: {
@@ -30,8 +30,8 @@ const createPerfTestSuiteController = {
     const repositoryName = payload?.repositoryName
 
     const zone = 'public'
-    const { team } = await request.server.methods.fetchTeam(payload?.teamId)
-    if (isNil(team?.github)) {
+    const { team } = await fetchTeam(payload?.teamId)
+    if (!team?.github) {
       throw Boom.badData(`Team ${team.name} does not have a linked Github team`)
     }
 

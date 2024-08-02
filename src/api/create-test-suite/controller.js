@@ -1,10 +1,10 @@
 import Boom from '@hapi/boom'
-import { isNil } from 'lodash'
 
 import { config } from '~/src/config'
 import { testSuiteValidation } from '~/src/api/create-test-suite/helpers/schema/test-suite-validation'
 import { createTestSuiteStatus } from '~/src/api/create-test-suite/helpers/status/create-test-suite-status'
 import { createTestSuiteFromTemplate } from '~/src/helpers/create/create-test-suite-from-template'
+import { fetchTeam } from '~/src/helpers/fetch-team'
 
 const createTestSuiteController = {
   options: {
@@ -25,8 +25,8 @@ const createTestSuiteController = {
     const payload = request?.payload
     const repositoryName = payload?.repositoryName
 
-    const { team } = await request.server.methods.fetchTeam(payload?.teamId)
-    if (isNil(team?.github)) {
+    const { team } = await fetchTeam(payload?.teamId)
+    if (!team?.github) {
       throw Boom.badData(`Team ${team.name} does not have a linked Github team`)
     }
 

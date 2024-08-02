@@ -16,6 +16,7 @@ import {
 import { createSquidConfig } from '~/src/helpers/create/create-squid-config'
 import { createDashboard } from '~/src/helpers/create/create-dashboard'
 import { queueTfSvcInfra } from '~/src/api/create-microservice/helpers/queue-tf-srv-Infra'
+import { fetchTeam } from '~/src/helpers/fetch-team'
 
 const createMicroserviceController = {
   options: {
@@ -41,7 +42,7 @@ const createMicroserviceController = {
       throw Boom.badData(`Invalid service template: '${serviceTypeTemplate}'`)
     }
 
-    const { team } = await request.server.methods.fetchTeam(payload.teamId)
+    const { team } = await fetchTeam(payload.teamId)
     if (!team?.github) {
       throw Boom.badData(
         `Team ${team.name} does not have a link to a Github team`
@@ -74,7 +75,12 @@ const createMicroserviceController = {
     }
 
     // queue service infra creation
-    await queueTfSvcInfra(request.server, repositoryName, zone)
+    await queueTfSvcInfra(
+      request.server,
+      repositoryName,
+      zone,
+      team.serviceCodes
+    )
 
     // create the blank repo
     await createRepo(request, repositoryName, payload, team)
