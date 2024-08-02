@@ -55,7 +55,13 @@ const createEnvTestSuiteController = {
     }
 
     const template = config.get('createEnvTestSuiteWorkflow')
-    await createTestSuiteFromTemplate(request, template, repositoryName, team)
+    await createTestSuiteFromTemplate(
+      request,
+      template,
+      repositoryName,
+      team,
+      'environment'
+    )
 
     await createSquidConfig(request, repositoryName)
 

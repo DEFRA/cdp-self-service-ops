@@ -55,7 +55,13 @@ const createPerfTestSuiteController = {
     }
 
     const template = config.get('createPerfTestSuiteWorkflow')
-    await createTestSuiteFromTemplate(request, template, repositoryName, team)
+    await createTestSuiteFromTemplate(
+      request,
+      template,
+      repositoryName,
+      team,
+      'performance'
+    )
 
     await createSquidConfig(request, repositoryName)
 

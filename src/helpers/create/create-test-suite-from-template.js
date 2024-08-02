@@ -9,18 +9,21 @@ import { updateTestSuiteStatus } from '~/src/api/create-test-suite/helpers/statu
  * @param {string} template
  * @param {string} repositoryName
  * @param {{id: string, github: string}} team
+ * @param {string} testType
  * @returns {Promise<void>}
  */
 async function createTestSuiteFromTemplate(
   request,
   template,
   repositoryName,
-  team
+  team,
+  testType
 ) {
   const gitHubOrg = config.get('gitHubOrg')
   const createWorkflowRepository = config.get('gitHubRepoCreateWorkflows')
-
   const updateStatus = updateTestSuiteStatus(request.db, repositoryName)
+  const githubTopics = ['cdp', 'test', 'test-suite']
+  githubTopics.push(testType)
 
   try {
     const result = await triggerWorkflow(
@@ -29,7 +32,8 @@ async function createTestSuiteFromTemplate(
       template,
       {
         repositoryName,
-        team: team.github
+        team: team.github,
+        additionalGitHubTopics: githubTopics.toString()
       }
     )
 
