@@ -17,10 +17,12 @@ async function createRepository(request, repositoryName, visibility, team) {
   const updateStatus = updateRepositoryStatus(request.db, repositoryName)
 
   try {
+    const githubTopics = ['cdp', 'repository']
     const result = await triggerWorkflow(gitHubOrg, workflowRepo, workflowId, {
       repositoryName,
       repositoryVisibility: visibility,
-      team
+      team,
+      additionalGitHubTopics: githubTopics.toString()
     })
 
     request.logger.info(

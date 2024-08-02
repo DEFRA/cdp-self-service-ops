@@ -114,6 +114,13 @@ async function createRepo(request, repositoryName, payload, team) {
   try {
     const org = config.get('gitHubOrg')
     const serviceTypeTemplate = payload?.serviceTypeTemplate
+    const serviceTemplate = serviceTemplates[serviceTypeTemplate]
+    const gitHubTopics = [
+      'cdp',
+      'service',
+      serviceTemplate?.language,
+      serviceTemplate?.type
+    ]
 
     const result = await triggerWorkflow(
       org,
@@ -122,7 +129,8 @@ async function createRepo(request, repositoryName, payload, team) {
       {
         repositoryName,
         serviceTypeTemplate,
-        team: team.github
+        team: team.github,
+        additionalGitHubTopics: gitHubTopics.filter(Boolean).toString()
       }
     )
 

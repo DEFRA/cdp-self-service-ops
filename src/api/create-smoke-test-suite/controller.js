@@ -55,7 +55,13 @@ const createSmokeTestSuiteController = {
     }
 
     const template = config.get('createSmokeTestSuiteWorkflow')
-    await createTestSuiteFromTemplate(request, template, repositoryName, team)
+    await createTestSuiteFromTemplate(
+      request,
+      template,
+      repositoryName,
+      team,
+      'smoke'
+    )
 
     await createSquidConfig(request, repositoryName)
 

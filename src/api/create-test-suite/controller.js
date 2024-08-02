@@ -41,7 +41,13 @@ const createTestSuiteController = {
     )
 
     const template = config.get('createJourneyTestWorkflow')
-    await createTestSuiteFromTemplate(request, template, repositoryName, team)
+    await createTestSuiteFromTemplate(
+      request,
+      template,
+      repositoryName,
+      team,
+      'journey'
+    )
 
     return h
       .response({
