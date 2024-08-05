@@ -6,7 +6,6 @@ import { octokit } from '~/src/helpers/oktokit'
 import { enableAutoMergeGraphQl } from '~/src/helpers/graphql/enable-automerge.graphql'
 import { createLogger } from '~/src/helpers/logging/logger'
 import { prepPullRequestFiles } from '~/src/api/create-microservice/helpers/prep-pull-request-files'
-import { addRepoToGitHubOidc } from '~/src/api/create-microservice/helpers/add-repo-to-github-oidc'
 import { getContent } from '~/src/helpers/github/get-content'
 
 /**
@@ -50,9 +49,6 @@ async function createTestSuiteInfrastructureCode(repoName, zone, environments) {
     const [tenantServicesFilePath, tenantServicesJson] =
       await addTestToTenantServices(repoName, env, zone)
     pullRequestFiles.set(tenantServicesFilePath, tenantServicesJson)
-
-    const [oidcFilePath, oidcJson] = await addRepoToGitHubOidc(repoName, env)
-    pullRequestFiles.set(oidcFilePath, oidcJson)
   })
 
   await Promise.all(infrastructurePromises)
