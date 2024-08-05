@@ -8,6 +8,7 @@ import { config } from '~/src/config'
 import { createRecordTestRun } from '~/src/api/deploy-test-suite/helpers/record-test-run'
 import { isOwnerOfSuite } from '~/src/api/deploy-test-suite/helpers/is-owner-of-suite'
 import { canRunInEnvironment } from '~/src/api/deploy-test-suite/helpers/can-run-in-environment'
+import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service'
 
 const deployTestSuiteController = {
   options: {
@@ -46,13 +47,19 @@ const deployTestSuiteController = {
 
     const runId = crypto.randomUUID()
 
+    const tenantService = await lookupTenantService(
+      payload.imageName,
+      payload.environment
+    )
+
     request.logger.info(`Running test suite ${payload.imageName} ${runId}`)
 
     const runMessage = generateTestRunMessage(
       payload.imageName,
       payload.environment,
       runId,
-      user
+      user,
+      tenantService?.service_code
     )
 
     const topic = config.get('snsRunTestTopicArn')

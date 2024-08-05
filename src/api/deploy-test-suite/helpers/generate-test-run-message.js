@@ -1,4 +1,17 @@
-const generateTestRunMessage = (imageName, environment, runId, user) => {
+/**
+ * @param {string} imageName
+ * @param {string} environment
+ * @param {string} runId
+ * @param {{displayName: string, id: string}} user
+ * @param {?string} serviceCode
+ */
+const generateTestRunMessage = (
+  imageName,
+  environment,
+  runId,
+  user,
+  serviceCode
+) => {
   return {
     environment,
     runId,
@@ -19,7 +32,8 @@ const generateTestRunMessage = (imageName, environment, runId, user) => {
     environment_variables: {
       BASE_URL: `https://${environment}.cdp-int.defra.cloud/`,
       ENVIRONMENT: environment
-    }
+    },
+    service_code: serviceCode
   }
 }
 
