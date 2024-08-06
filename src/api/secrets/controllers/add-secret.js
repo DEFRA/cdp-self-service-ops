@@ -35,31 +35,34 @@ const addSecretController = {
     const description = `Secret ${secretKey} pending for ${serviceName}`
     const topic = config.get('snsSecretsManagementTopicArn')
 
-    await registerPendingSecret({
-      environment,
-      service: serviceName,
-      secretKey,
-      action: 'add_secret'
-    })
+    try {
+      request.logger.debug(description)
 
-    sendSnsMessage({
-      request,
-      topic,
-      message: {
+      await sendSnsMessage({
+        request,
+        topic,
+        message: {
+          environment,
+          name: `cdp/services/${serviceName}`,
+          description,
+          secret_key: secretKey,
+          secret_value: secretValue,
+          action: 'add_secret'
+        }
+      })
+
+      await registerPendingSecret({
         environment,
-        name: `cdp/services/${serviceName}`,
-        description,
-        secret_key: secretKey,
-        secret_value: secretValue,
+        service: serviceName,
+        secretKey,
         action: 'add_secret'
-      }
-    })
-      .then(request.logger.debug)
-      .catch(request.logger.error)
+      })
+      return h.response({ message: 'Secret being created' }).code(200)
+    } catch (error) {
+      request.logger.error(error, 'Error creating secret')
 
-    request.logger.debug(description)
-
-    return h.response({ message: 'Secret being created' }).code(200)
+      return Boom.notImplemented('Error creating secret')
+    }
   }
 }
 
