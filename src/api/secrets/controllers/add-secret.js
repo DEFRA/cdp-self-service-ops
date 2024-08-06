@@ -7,6 +7,7 @@ import {
   secretPayloadValidation
 } from '~/src/api/secrets/helpers/schema/secret-validation'
 import { sanitize } from '~/src/helpers/sanitize'
+import { registerPendingSecret } from '~/src/api/secrets/helpers/register-pending-secret'
 
 const addSecretController = {
   options: {
@@ -18,7 +19,7 @@ const addSecretController = {
     },
     validate: {
       params: secretParamsValidation(),
-      payload: secretPayloadValidation,
+      payload: secretPayloadValidation(),
       failAction: (request, h, validationError) => {
         request.logger.debug(
           validationError,
@@ -31,12 +32,17 @@ const addSecretController = {
   handler: async (request, h) => {
     const { serviceName, environment } = request.params
     const { secretValue, secretKey } = request.payload
-    const description = `Secret ${secretKey} added for ${serviceName}`
+    const description = `Secret ${secretKey} pending for ${serviceName}`
     const topic = config.get('snsSecretsManagementTopicArn')
 
-    request.logger.debug(description)
+    await registerPendingSecret({
+      environment,
+      service: serviceName,
+      secretKey,
+      action: 'add_secret'
+    })
 
-    await sendSnsMessage({
+    sendSnsMessage({
       request,
       topic,
       message: {
@@ -48,12 +54,12 @@ const addSecretController = {
         action: 'add_secret'
       }
     })
+      .then(request.logger.debug)
+      .catch(request.logger.error)
 
-    // TODO
-    //  Add identifier for sent sns message to db collection with short ttl
-    //  Poll a new sns endpoint that will be notified from the secret_management Topic, for add_secret messages that match identifier stored in collection
-    //  Respond accordingly with success message or error exception from lambda
-    return h.response({ message: 'Success' }).code(200)
+    request.logger.debug(description)
+
+    return h.response({ message: 'Secret being created' }).code(200)
   }
 }
 
