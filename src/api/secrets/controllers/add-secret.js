@@ -19,7 +19,7 @@ const addSecretController = {
     },
     validate: {
       params: secretParamsValidation(),
-      payload: secretPayloadValidation,
+      payload: secretPayloadValidation(),
       failAction: (request, h, validationError) => {
         request.logger.debug(
           validationError,
