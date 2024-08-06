@@ -7,29 +7,17 @@ function secretParamsValidation() {
   return (params, options) => {
     const adminTeamId = config.get('oidcAdminGroupId')
     const teamId = options.context.payload.teamId
-    let schema
+    const allowedEnvironments =
+      teamId === adminTeamId
+        ? Object.values(environments)
+        : Object.values(omit(environments, ['management', 'infraDev']))
 
-    if (teamId === adminTeamId) {
-      schema = Joi.object({
-        serviceName: Joi.string().min(1).required(),
-        environment: Joi.string()
-          .valid(...Object.values(environments))
-          .required()
-      })
-    }
-
-    if (teamId !== adminTeamId) {
-      schema = Joi.object({
-        serviceName: Joi.string().min(1).required(),
-        environment: Joi.string()
-          .valid(
-            ...Object.values(omit(environments, ['management', 'infraDev']))
-          )
-          .required()
-      })
-    }
-
-    const validationResult = schema.validate(params, options)
+    const validationResult = Joi.object({
+      serviceName: Joi.string().min(1).required(),
+      environment: Joi.string()
+        .valid(...allowedEnvironments)
+        .required()
+    }).validate(params, options)
 
     if (validationResult?.error) {
       throw validationResult.error
@@ -39,11 +27,9 @@ function secretParamsValidation() {
   }
 }
 
-const platformGlobalSecretKeys = config.get('platformGlobalSecretKeys')
-
 const secretPayloadValidation = Joi.object({
   secretKey: Joi.string()
-    .not(...platformGlobalSecretKeys)
+    .not(...config.get('platformGlobalSecretKeys'))
     .pattern(/^\w*$/)
     .pattern(/^[a-zA-Z0-9]\w*[a-zA-Z0-9]$/, {
       name: 'startAndEndWithCharacter'
