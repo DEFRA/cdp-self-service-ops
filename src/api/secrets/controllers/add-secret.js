@@ -36,8 +36,6 @@ const addSecretController = {
     const topic = config.get('snsSecretsManagementTopicArn')
 
     try {
-      request.logger.debug(description)
-
       await sendSnsMessage({
         request,
         topic,
@@ -57,6 +55,9 @@ const addSecretController = {
         secretKey,
         action: 'add_secret'
       })
+
+      request.logger.debug(description)
+
       return h.response({ message: 'Secret being created' }).code(200)
     } catch (error) {
       request.logger.error(error, 'Error creating secret')
