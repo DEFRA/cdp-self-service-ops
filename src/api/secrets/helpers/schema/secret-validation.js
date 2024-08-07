@@ -3,6 +3,10 @@ import { omit } from 'lodash'
 
 import { config, environments } from '~/src/config'
 
+/**
+ * Validates the params for secrets.
+ * @returns {Function} A function that validates the given parameters and options.
+ */
 function secretParamsValidation() {
   return (params, options) => {
     const adminTeamId = config.get('oidcAdminGroupId')
@@ -27,6 +31,10 @@ function secretParamsValidation() {
   }
 }
 
+/**
+ * Validates the payload for secrets.
+ * @returns {Object} Joi validation schema for the secret payload.
+ * */
 const secretPayloadValidation = () =>
   Joi.object({
     secretKey: Joi.string()
