@@ -6,7 +6,7 @@ import { testRunnerEnvironments } from '~/src/config/test-runner-environments'
 import { createTestSuiteStatus } from '~/src/helpers/create/create-test-suite-status'
 import { creations } from '~/src/constants/creations'
 import { smokeTestSuiteValidation } from '~/src/api/create-smoke-test-suite/helpers/schema/smoke-test-suite-validation'
-import { createTestSuiteFromTemplate } from '~/src/helpers/create/create-test-suite-from-template'
+import { createTemplatedRepo } from '~/src/helpers/create/create-templated-repo'
 import { createSquidConfig } from '~/src/helpers/create/create-squid-config'
 import { fetchTeam } from '~/src/helpers/fetch-team'
 
@@ -55,13 +55,8 @@ const createSmokeTestSuiteController = {
     }
 
     const template = config.get('createSmokeTestSuiteWorkflow')
-    await createTestSuiteFromTemplate(
-      request,
-      template,
-      repositoryName,
-      team,
-      'smoke'
-    )
+    const topics = ['cdp', 'test', 'test-suite', 'smoke']
+    await createTemplatedRepo(request, template, repositoryName, team, topics)
 
     await createSquidConfig(request, repositoryName)
 

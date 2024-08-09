@@ -3,7 +3,7 @@ import Boom from '@hapi/boom'
 import { config } from '~/src/config'
 import { testSuiteValidation } from '~/src/api/create-test-suite/helpers/schema/test-suite-validation'
 import { createTestSuiteStatus } from '~/src/api/create-test-suite/helpers/status/create-test-suite-status'
-import { createTestSuiteFromTemplate } from '~/src/helpers/create/create-test-suite-from-template'
+import { createTemplatedRepo } from '~/src/helpers/create/create-templated-repo'
 import { fetchTeam } from '~/src/helpers/fetch-team'
 
 const createTestSuiteController = {
@@ -41,13 +41,8 @@ const createTestSuiteController = {
     )
 
     const template = config.get('createJourneyTestWorkflow')
-    await createTestSuiteFromTemplate(
-      request,
-      template,
-      repositoryName,
-      team,
-      'journey'
-    )
+    const topics = ['cdp', 'test', 'test-suite', 'journey']
+    await createTemplatedRepo(request, template, repositoryName, team, topics)
 
     return h
       .response({

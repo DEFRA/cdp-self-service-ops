@@ -9,6 +9,15 @@ const dontOverwriteStatus = (workflowStatus) => {
     case statuses.closed:
     case statuses.requested:
       return [
+        statuses.queued,
+        statuses.success,
+        statuses.failure,
+        statuses.inProgress,
+        statuses.closed,
+        statuses.merged
+      ]
+    case statuses.queued:
+      return [
         statuses.success,
         statuses.failure,
         statuses.inProgress,

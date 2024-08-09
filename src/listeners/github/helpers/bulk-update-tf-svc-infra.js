@@ -24,6 +24,7 @@ const bulkUpdateTfSvcInfra = async (db, trimmedWorkflow, status) => {
   if (tenants === undefined) {
     // TODO: handle error
     logger.error('Failed to lookup tenant services')
+    throw new Error('Failed to lookup tenant services')
   }
   const tenantNames = new Set(Object.keys(tenants))
   const inProgressOrFailed = await findAllInProgressOrFailed(db)

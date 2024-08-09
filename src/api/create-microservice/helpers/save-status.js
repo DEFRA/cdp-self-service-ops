@@ -2,41 +2,36 @@ import { config } from '~/src/config'
 import { statuses } from '~/src/constants/statuses'
 import { creations } from '~/src/constants/creations'
 
-const tfSvcInfra = config.get('gitHubRepoTfServiceInfra')
-const cdpAppConfig = config.get('gitHubRepoConfig')
-const cdpNginxUpstream = config.get('gitHubRepoNginx')
-const cdpSquidConfig = config.get('gitHubRepoSquid')
-const cdpDashboards = config.get('gitHubRepoDashboards')
+const cdptfSvcInfra = config.get('github.repos.cdpTfSvcInfra')
+const cdpAppConfig = config.get('github.repos.cdpAppConfig')
+const cdpNginxUpstream = config.get('github.repos.cdpNginxUpstreams')
+const cdpSquidConfig = config.get('github.repos.cdpSquidProxy')
+const cdpDashboards = config.get('github.repos.cdpGrafanaSvc')
+const cdpCreateWorkflows = config.get('github.repos.createWorkflows')
 
 function getStatusKeys(statusRecord) {
-  const statusKeys = []
+  switch (statusRecord?.kind) {
+    case creations.repository:
+    case creations.testsuite:
+      return [cdpCreateWorkflows]
 
-  if (statusRecord?.kind === creations.repository) {
-    statusKeys.push('createRepository')
+    case creations.envTestsuite:
+    case creations.smokeTestSuite:
+    case creations.perfTestsuite:
+      return [cdpCreateWorkflows, cdptfSvcInfra, cdpSquidConfig]
+
+    case creations.microservice:
+      return [
+        cdpCreateWorkflows,
+        cdpNginxUpstream,
+        cdpAppConfig,
+        cdptfSvcInfra,
+        cdpSquidConfig,
+        cdpDashboards
+      ]
+    default:
+      return []
   }
-
-  if (
-    [
-      creations.envTestsuite,
-      creations.smokeTestSuite,
-      creations.perfTestsuite
-    ].includes(statusRecord?.kind)
-  ) {
-    statusKeys.push('createRepository', tfSvcInfra, cdpSquidConfig)
-  }
-
-  if (statusRecord?.kind === creations.microservice) {
-    statusKeys.push(
-      'createRepository',
-      cdpNginxUpstream,
-      cdpAppConfig,
-      tfSvcInfra,
-      cdpSquidConfig,
-      cdpDashboards
-    )
-  }
-
-  return statusKeys
 }
 
 function calculateOverallStatus(
@@ -61,6 +56,7 @@ function calculateOverallStatus(
   return statuses.inProgress
 }
 
+// TODO: parameterize the tracking fields and use in both microservice and test suite creation
 async function initCreationStatus(
   db,
   org,
@@ -84,10 +80,10 @@ async function initCreationStatus(
     },
     creator: user,
     zone,
-    createRepository: {
+    [cdpCreateWorkflows]: {
       status: statuses.notRequested
     },
-    [tfSvcInfra]: {
+    [cdptfSvcInfra]: {
       status: statuses.notRequested
     },
     [cdpAppConfig]: {

@@ -7,7 +7,7 @@ describe('#calculateOverallStatus', () => {
     test('Should provide a "Success" status', () => {
       const result = calculateOverallStatus({
         kind: creations.microservice,
-        createRepository: { status: statuses.success },
+        'cdp-create-workflows': { status: statuses.success },
         'cdp-tf-svc-infra': { status: statuses.success },
         'cdp-app-config': { status: statuses.success },
         'cdp-nginx-upstreams': { status: statuses.success },
@@ -21,7 +21,7 @@ describe('#calculateOverallStatus', () => {
     test('Should provide a "Failure" status', () => {
       const result = calculateOverallStatus({
         kind: creations.microservice,
-        createRepository: { status: statuses.success },
+        'cdp-create-workflows': { status: statuses.success },
         'cdp-tf-svc-infra': { status: statuses.success },
         'cdp-app-config': { status: statuses.failure },
         'cdp-nginx-upstreams': { status: statuses.success },
@@ -35,7 +35,7 @@ describe('#calculateOverallStatus', () => {
     test('Should provide an "In Progress" status', () => {
       const result = calculateOverallStatus({
         kind: creations.microservice,
-        createRepository: { status: statuses.success },
+        'cdp-create-workflows': { status: statuses.success },
         'cdp-tf-svc-infra': { status: statuses.success },
         'cdp-app-config': { status: 'some-weird-setting' },
         'cdp-nginx-upstreams': { status: statuses.inProgress },
@@ -51,7 +51,7 @@ describe('#calculateOverallStatus', () => {
     test('Should provide a "Success" status', () => {
       const result = calculateOverallStatus({
         kind: creations.repository,
-        createRepository: { status: statuses.success }
+        'cdp-create-workflows': { status: statuses.success }
       })
 
       expect(result).toBe(statuses.success)
@@ -60,7 +60,7 @@ describe('#calculateOverallStatus', () => {
     test('Should provide a "Failure" status', () => {
       const result = calculateOverallStatus({
         kind: creations.repository,
-        createRepository: { status: statuses.failure }
+        'cdp-create-workflows': { status: statuses.failure }
       })
 
       expect(result).toBe(statuses.failure)
@@ -69,7 +69,7 @@ describe('#calculateOverallStatus', () => {
     test('Should provide an "In Progress" status', () => {
       const result = calculateOverallStatus({
         kind: creations.repository,
-        createRepository: { status: 'some-weird-setting' }
+        'cdp-create-workflows': { status: 'some-weird-setting' }
       })
 
       expect(result).toBe(statuses.inProgress)

@@ -6,7 +6,7 @@ import { raiseInfraPullRequest } from '~/src/helpers/create/raise-infra-pull-req
 import { testRunnerEnvironments } from '~/src/config/test-runner-environments'
 import { creations } from '~/src/constants/creations'
 import { createTestSuiteStatus } from '~/src/helpers/create/create-test-suite-status'
-import { createTestSuiteFromTemplate } from '~/src/helpers/create/create-test-suite-from-template'
+import { createTemplatedRepo } from '~/src/helpers/create/create-templated-repo'
 import { createSquidConfig } from '~/src/helpers/create/create-squid-config'
 import { fetchTeam } from '~/src/helpers/fetch-team'
 
@@ -55,13 +55,8 @@ const createPerfTestSuiteController = {
     }
 
     const template = config.get('createPerfTestSuiteWorkflow')
-    await createTestSuiteFromTemplate(
-      request,
-      template,
-      repositoryName,
-      team,
-      'performance'
-    )
+    const topics = ['cdp', 'test', 'test-suite', 'performance']
+    await createTemplatedRepo(request, template, repositoryName, team, topics)
 
     await createSquidConfig(request, repositoryName)
 

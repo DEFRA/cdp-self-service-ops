@@ -293,7 +293,7 @@ const config = convict({
   createDashboardWorkflow: {
     doc: 'Github workflow to trigger when creating a default dashboard',
     format: String,
-    default: 'create-dashboards-conf.yml',
+    default: 'create-service.yml',
     env: 'CREATE_DASHBOARD_WORKFLOW'
   },
   gitHubBaseUrl: {
@@ -319,6 +319,115 @@ const config = convict({
     format: String,
     default: 'service.infra.create',
     env: 'SERVICE_INFRA_CREATE_EVENT'
+  },
+  github: {
+    org: 'DEFRA',
+    repos: {
+      cdpAppConfig: {
+        doc: 'GitHub repo for cdp-app-config',
+        format: String,
+        default: 'cdp-app-config',
+        env: 'GITHUB_REPO_APP_CONFIG'
+      },
+      cdpNginxUpstreams: {
+        doc: 'GitHub repo for cdp-nginx-upstreams',
+        format: String,
+        default: 'cdp-nginx-upstreams',
+        env: 'GITHUB_REPO_NGINX_UPSTREAMS'
+      },
+      cdpTfSvcInfra: {
+        doc: 'GitHub repo for cdp-tf-svc-infra',
+        format: String,
+        default: 'cdp-tf-svc-infra',
+        env: 'GITHUB_REPO_TF_SVC_INFRA'
+      },
+      cdpGrafanaSvc: {
+        doc: 'GitHub repo to create default dashboard config in',
+        format: String,
+        default: 'cdp-grafana-svc',
+        env: 'GITHUB_REPO_DASHBOARDS'
+      },
+      cdpSquidProxy: {
+        doc: 'GitHub repo to create default dashboard config in',
+        format: String,
+        default: 'cdp-squid-proxy',
+        env: 'GITHUB_REPO_SQUID_PROXY'
+      },
+      createWorkflows: {
+        doc: 'GitHub repository containing the create workflows',
+        format: String,
+        default: 'cdp-create-workflows',
+        env: 'GITHUB_REPO_CREATE_WORKFLOWS'
+      }
+    }
+  },
+  workflows: {
+    createAppConfig: {
+      doc: 'Github workflow to trigger when creating placeholder config',
+      format: String,
+      default: 'create-service.yml',
+      env: 'WORKFLOWS_CREATE_APP_CONFIG'
+    },
+    createNginxUpstreams: {
+      doc: 'Github workflow to trigger when creating nginx upstream config',
+      format: String,
+      default: 'create-service.yml',
+      env: 'WORKFLOWS_CREATE_NGINX_UPSTREAMS'
+    },
+    createTenantService: {
+      doc: 'Github workflow to trigger when tenant service infrastructure',
+      format: String,
+      default: 'create-service.yml',
+      env: 'WORKFLOWS_CREATE_TENANT_SERVICE'
+    },
+    createDashboard: {
+      doc: 'Github workflow to trigger when creating dashboard',
+      format: String,
+      default: 'create-service.yml',
+      env: 'WORKFLOWS_CREATE_DASHBOARDS'
+    },
+    createSquidConfig: {
+      doc: 'Name of workflow to trigger when creating squid config',
+      format: String,
+      default: 'create_service.yml',
+      env: 'WORKFLOWS_CREATE_SQUID_CONFIG'
+    },
+    createMicroService: {
+      doc: 'Name of workflow to trigger when creating a microservice',
+      format: String,
+      default: 'create_microservice.yml',
+      env: 'CREATE_MICROSERVICE_WORKFLOW'
+    },
+    createRepository: {
+      doc: 'Name of workflow to trigger when creating a repository',
+      format: String,
+      default: 'create_repository.yml',
+      env: 'CREATE_REPOSITORY_WORKFLOW'
+    },
+    createJourneyTest: {
+      doc: 'Name of workflow to trigger when creating a repository',
+      format: String,
+      default: 'create_journey_tests.yml',
+      env: 'CREATE_JOURNEY_TESTS_WORKFLOW'
+    },
+    createEnvTestSuite: {
+      doc: 'Name of workflow to trigger when creating a repository',
+      format: String,
+      default: 'create_env_test_suite.yml',
+      env: 'CREATE_ENV_TEST_SUITE_WORKFLOW'
+    },
+    createPerfTestSuite: {
+      doc: 'Name of workflow to trigger when creating a perf test repository',
+      format: String,
+      default: 'create_perf_test_suite.yml',
+      env: 'CREATE_PERF_TEST_SUITE_WORKFLOW'
+    },
+    createSmokeTestSuite: {
+      doc: 'Name of workflow to trigger when creating a perf test repository',
+      format: String,
+      default: 'create_smoke_test_suite.yml',
+      env: 'CREATE_SMOKE_TEST_SUITE_WORKFLOW'
+    }
   }
 })
 

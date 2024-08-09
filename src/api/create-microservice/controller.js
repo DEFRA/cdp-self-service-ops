@@ -2,21 +2,18 @@ import Boom from '@hapi/boom'
 
 import { serviceTemplates } from '~/src/api/create-microservice/helpers/service-templates'
 import { createServiceValidationSchema } from '~/src/api/create-microservice/helpers/create-service-validation-schema'
-import { createServiceConfig } from '~/src/api/create-microservice/helpers/create-service-config'
-import { createNginxConfig } from '~/src/api/create-microservice/helpers/create-nginx-config'
-import { config, environments } from '~/src/config'
-import { trimPr } from '~/src/api/create-microservice/helpers/trim-pr'
-import { triggerWorkflow } from '~/src/helpers/workflow/trigger-workflow'
-import { statuses } from '~/src/constants/statuses'
+import { config } from '~/src/config'
 import {
   initCreationStatus,
-  updateCreationStatus,
   updateOverallStatus
 } from '~/src/api/create-microservice/helpers/save-status'
 import { createSquidConfig } from '~/src/helpers/create/create-squid-config'
 import { createDashboard } from '~/src/helpers/create/create-dashboard'
-import { queueTfSvcInfra } from '~/src/api/create-microservice/helpers/queue-tf-srv-Infra'
 import { fetchTeam } from '~/src/helpers/fetch-team'
+import { createTenantService } from '~/src/helpers/create/create-tenant-service'
+import { createAppConfig } from '~/src/helpers/create/create-app-config'
+import { createNginxUpstreams } from '~/src/helpers/create/create-nginx-upstreams'
+import { createTemplatedRepo } from '~/src/helpers/create/create-templated-repo'
 
 const createMicroserviceController = {
   options: {
@@ -74,28 +71,50 @@ const createMicroserviceController = {
       )
     }
 
-    // queue service infra creation
-    await queueTfSvcInfra(
-      request.server,
-      repositoryName,
-      zone,
-      team.serviceCodes
-    )
+    const topics = [
+      'cdp',
+      'service',
+      serviceTemplates[serviceTypeTemplate]?.language,
+      serviceTemplates[serviceTypeTemplate]?.type
+    ]
 
-    // create the blank repo
-    await createRepo(request, repositoryName, payload, team)
+    const promises = [
+      // create the blank repo
 
-    // cdp-app-config
-    await updateCdpAppConfig(request, repositoryName, team)
+      createTemplatedRepo(
+        request,
+        config.get('workflows.createMicroService'),
+        repositoryName,
+        team,
+        topics,
+        {
+          serviceTypeTemplate
+        }
+      ),
 
-    // cdp-nginx-upstreams
-    await updateCdpNginxUpstream(request, repositoryName, zone)
+      // create all the infrastructure
+      createTenantService(request, repositoryName, {
+        service: repositoryName,
+        zone,
+        mongo_enabled: zone === 'protected',
+        redis_enabled: zone === 'public',
+        service_code: team.serviceCodes
+      }),
 
-    // cdp-squid-proxy
-    await createSquidConfig(request, repositoryName)
+      // cdp-app-config
+      createAppConfig(request, repositoryName),
 
-    // cdp-grafana-svc
-    await createDashboard(request, repositoryName, zone)
+      // cdp-nginx-upstreams
+      createNginxUpstreams(request, repositoryName, zone),
+
+      // cdp-squid-proxy
+      createSquidConfig(request, repositoryName),
+
+      // cdp-grafana-svc
+      createDashboard(request, repositoryName, zone)
+    ]
+
+    Promise.all(promises)
 
     // calculate and set the overall status
     await updateOverallStatus(request.db, repositoryName)
@@ -109,7 +128,7 @@ const createMicroserviceController = {
       .code(200)
   }
 }
-
+/*
 async function createRepo(request, repositoryName, payload, team) {
   try {
     const org = config.get('gitHubOrg')
@@ -149,55 +168,5 @@ async function createRepo(request, repositoryName, payload, team) {
     request.logger.error(e)
   }
 }
-
-async function updateCdpAppConfig(request, repositoryName, team) {
-  const cdpAppConfig = config.get('gitHubRepoConfig')
-  try {
-    const createServiceConfigResult = await createServiceConfig(
-      repositoryName,
-      team
-    )
-    await updateCreationStatus(request.db, repositoryName, cdpAppConfig, {
-      status: statuses.raised,
-      pr: trimPr(createServiceConfigResult?.data)
-    })
-    request.logger.info(
-      `Created service config PR for ${repositoryName}: ${createServiceConfigResult.data.html_url}`
-    )
-  } catch (e) {
-    await updateCreationStatus(request.db, repositoryName, cdpAppConfig, {
-      status: statuses.failure,
-      result: e?.response ?? 'see cdp-self-service-ops logs'
-    })
-    request.logger.error(`Update cdp-app-config ${repositoryName} failed ${e}`)
-  }
-}
-
-async function updateCdpNginxUpstream(request, repositoryName, zone) {
-  const cdpNginxUpstream = config.get('gitHubRepoNginx')
-  try {
-    const createNginxConfigResult = await createNginxConfig(
-      repositoryName,
-      zone,
-      environments,
-      [] // TODO: support user defined paths?
-    )
-    await updateCreationStatus(request.db, repositoryName, cdpNginxUpstream, {
-      status: statuses.raised,
-      pr: trimPr(createNginxConfigResult?.data)
-    })
-    request.logger.info(
-      `Created nginx PR for ${repositoryName}: ${createNginxConfigResult.data.html_url}`
-    )
-  } catch (e) {
-    await updateCreationStatus(request.db, repositoryName, cdpNginxUpstream, {
-      status: statuses.failure,
-      result: e?.response ?? 'see cdp-self-service-ops logs'
-    })
-    request.logger.error(
-      `Update cdp-nginx-upstreams ${repositoryName} failed ${e}`
-    )
-  }
-}
-
+*/
 export { createMicroserviceController }

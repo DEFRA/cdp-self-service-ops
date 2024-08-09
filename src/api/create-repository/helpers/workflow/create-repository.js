@@ -16,6 +16,7 @@ async function createRepository(request, repositoryName, visibility, team) {
   const workflowId = config.get('createRepositoryWorkflow')
   const updateStatus = updateRepositoryStatus(request.db, repositoryName)
 
+  // TODO: migrate to new createResourceFromWorkflow, frontend will need to know about the new field
   try {
     const githubTopics = ['cdp', 'repository']
     const result = await triggerWorkflow(gitHubOrg, workflowRepo, workflowId, {
