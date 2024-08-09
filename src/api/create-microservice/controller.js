@@ -14,6 +14,7 @@ import { createTenantService } from '~/src/helpers/create/create-tenant-service'
 import { createAppConfig } from '~/src/helpers/create/create-app-config'
 import { createNginxUpstreams } from '~/src/helpers/create/create-nginx-upstreams'
 import { createTemplatedRepo } from '~/src/helpers/create/create-templated-repo'
+import { creations } from '~/src/constants/creations'
 
 const createMicroserviceController = {
   options: {
@@ -48,21 +49,25 @@ const createMicroserviceController = {
 
     request.logger.info(`Creating service ${repositoryName}`)
 
-    const user = {
-      id: request.auth?.credentials?.id,
-      displayName: request.auth?.credentials?.displayName
-    }
-
     // Set up the initial DB record
     try {
       await initCreationStatus(
         request.db,
         org,
+        creations.microservice,
         repositoryName,
-        payload,
+        serviceTypeTemplate,
         zone,
         team,
-        user
+        request.auth?.credentials,
+        [
+          config.get('github.repos.createWorkflows'),
+          config.get('github.repos.cdpTfSvcInfra'),
+          config.get('github.repos.cdpAppConfig'),
+          config.get('github.repos.cdpNginxUpstreams'),
+          config.get('github.repos.cdpSquidProxy'),
+          config.get('github.repos.cdpGrafanaSvc')
+        ]
       )
     } catch (e) {
       request.logger.error(e)
@@ -78,6 +83,7 @@ const createMicroserviceController = {
       serviceTemplates[serviceTypeTemplate]?.type
     ]
 
+    // trigger all the workflows
     const promises = [
       // create the blank repo
 
@@ -114,7 +120,7 @@ const createMicroserviceController = {
       createDashboard(request, repositoryName, zone)
     ]
 
-    Promise.all(promises)
+    await Promise.all(promises)
 
     // calculate and set the overall status
     await updateOverallStatus(request.db, repositoryName)
@@ -128,45 +134,5 @@ const createMicroserviceController = {
       .code(200)
   }
 }
-/*
-async function createRepo(request, repositoryName, payload, team) {
-  try {
-    const org = config.get('gitHubOrg')
-    const serviceTypeTemplate = payload?.serviceTypeTemplate
-    const serviceTemplate = serviceTemplates[serviceTypeTemplate]
-    const gitHubTopics = [
-      'cdp',
-      'service',
-      serviceTemplate?.language,
-      serviceTemplate?.type
-    ]
 
-    const result = await triggerWorkflow(
-      org,
-      config.get('gitHubRepoCreateWorkflows'),
-      config.get('createMicroServiceWorkflow'),
-      {
-        repositoryName,
-        serviceTypeTemplate,
-        team: team.github,
-        additionalGitHubTopics: gitHubTopics.filter(Boolean).toString()
-      }
-    )
-
-    await updateCreationStatus(request.db, repositoryName, 'createRepository', {
-      status: statuses.inProgress,
-      url: `https://github.com/${org}/${repositoryName}`,
-      result
-    })
-    request.logger.info(`Created repo ${repositoryName}`)
-  } catch (e) {
-    await updateCreationStatus(request.db, repositoryName, 'createRepository', {
-      status: statuses.failure,
-      result: e
-    })
-    request.logger.error(`Created repo ${repositoryName} failed ${e}`)
-    request.logger.error(e)
-  }
-}
-*/
 export { createMicroserviceController }

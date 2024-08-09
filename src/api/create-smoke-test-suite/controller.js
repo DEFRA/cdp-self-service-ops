@@ -1,14 +1,8 @@
 import Boom from '@hapi/boom'
 import { config } from '~/src/config'
-import { updateOverallStatus } from '~/src/api/create-microservice/helpers/save-status'
-import { raiseInfraPullRequest } from '~/src/helpers/create/raise-infra-pull-request'
-import { testRunnerEnvironments } from '~/src/config/test-runner-environments'
-import { createTestSuiteStatus } from '~/src/helpers/create/create-test-suite-status'
 import { creations } from '~/src/constants/creations'
 import { smokeTestSuiteValidation } from '~/src/api/create-smoke-test-suite/helpers/schema/smoke-test-suite-validation'
-import { createTemplatedRepo } from '~/src/helpers/create/create-templated-repo'
-import { createSquidConfig } from '~/src/helpers/create/create-squid-config'
-import { fetchTeam } from '~/src/helpers/fetch-team'
+import { createTestRunnerSuite } from '~/src/helpers/create/create-test-runner-suite'
 
 const createSmokeTestSuiteController = {
   options: {
@@ -24,51 +18,17 @@ const createSmokeTestSuiteController = {
     }
   },
   handler: async (request, h) => {
-    const gitHubOrg = config.get('gitHubOrg')
-
     const payload = request?.payload
     const repositoryName = payload?.repositoryName
 
-    const zone = 'public'
-    const { team } = await fetchTeam(payload?.teamId)
-    if (!team?.github) {
-      throw Boom.badData(`Team ${team.name} does not have a linked Github team`)
-    }
-
-    request.logger.info(`Creating smoke test suite: ${repositoryName}`)
-
-    try {
-      await createTestSuiteStatus(
-        request.db,
-        gitHubOrg,
-        repositoryName,
-        zone,
-        team,
-        creations.smokeTestSuite,
-        'cdp-node-env-test-suite-template' // for now env and smoke share the same template
-      )
-    } catch (e) {
-      request.logger.error(e)
-      throw Boom.badData(
-        `Repository ${repositoryName} has already been requested or is in progress`
-      )
-    }
-
-    const template = config.get('createSmokeTestSuiteWorkflow')
-    const topics = ['cdp', 'test', 'test-suite', 'smoke']
-    await createTemplatedRepo(request, template, repositoryName, team, topics)
-
-    await createSquidConfig(request, repositoryName)
-
-    await raiseInfraPullRequest(
+    await createTestRunnerSuite(
       request,
       repositoryName,
-      zone,
-      testRunnerEnvironments.smoke
+      creations.smokeTestSuite,
+      payload?.teamId,
+      config.get('workflows.createSmokeTestSuite'),
+      ['smoke']
     )
-
-    // calculate and set the overall status
-    await updateOverallStatus(request.db, repositoryName)
 
     return h
       .response({

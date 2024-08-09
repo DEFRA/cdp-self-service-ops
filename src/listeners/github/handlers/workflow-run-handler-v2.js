@@ -42,7 +42,9 @@ const workflowRunHandlerV2 = async (server, message) => {
   const workflowRepo = message.repository?.name
   const headBranch = message.workflow_run?.head_branch
   const headSHA = message.workflow_run?.head_sha
-  const workflowPath = path.basename(message.workflow_run?.path)
+  const workflowPath = message.workflow_run?.path
+    ? path.basename(message.workflow_run?.path)
+    : undefined
 
   if (headBranch !== 'main') {
     logger.info(

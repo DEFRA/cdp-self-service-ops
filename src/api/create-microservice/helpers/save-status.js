@@ -56,49 +56,53 @@ function calculateOverallStatus(
   return statuses.inProgress
 }
 
-// TODO: parameterize the tracking fields and use in both microservice and test suite creation
+/**
+ *
+ * @param { import('mongodb').Db } db               - mongodb client
+ * @param {string} org                              - GitHub org
+ * @param {string} kind                             - what kind of resource is it (set in creations.js)
+ * @param {string} repositoryName                   - name of resource being created
+ * @param {string} serviceTypeTemplate              - what template is it made from
+ * @param {"public" | "protected" | undefined} zone - what zone does this run in, if applicable
+ * @param {{teamId: string, name: string}} team     - which team owns the resource
+ * @param {{id: string, displayName: string}} user  - who requested the creation of it
+ * @param {string[]} workflows                      - which GitHub repos to track statuses from
+ * @returns {Promise<{creator, org, zone, kind, started: Date, team: {teamId: (string|*), name}, repositoryName, serviceTypeTemplate, portalVersion: number, status: string}>}
+ */
 async function initCreationStatus(
   db,
   org,
+  kind,
   repositoryName,
-  payload,
+  serviceTypeTemplate,
   zone,
   team,
-  user
+  user,
+  workflows
 ) {
   const status = {
     org,
     repositoryName,
     portalVersion: 2,
-    kind: creations.microservice,
+    kind,
     status: statuses.inProgress,
     started: new Date(),
-    serviceTypeTemplate: payload.serviceTypeTemplate,
+    serviceTypeTemplate,
     team: {
       teamId: team.teamId,
       name: team.name
     },
-    creator: user,
-    zone,
-    [cdpCreateWorkflows]: {
-      status: statuses.notRequested
+    creator: {
+      id: user?.id,
+      displayName: user?.displayName
     },
-    [cdptfSvcInfra]: {
-      status: statuses.notRequested
-    },
-    [cdpAppConfig]: {
-      status: statuses.notRequested
-    },
-    [cdpNginxUpstream]: {
-      status: statuses.notRequested
-    },
-    [cdpSquidConfig]: {
-      status: statuses.notRequested
-    },
-    [cdpDashboards]: {
-      statuses: statuses.notRequested
-    }
+    zone
   }
+
+  for (const workflow of workflows) {
+    status[workflow] = { status: statuses.notRequested }
+  }
+
   await db.collection('status').insertOne(status)
   return status
 }
