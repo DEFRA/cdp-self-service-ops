@@ -21,7 +21,7 @@ const createTestSuiteController = {
     }
   },
   handler: async (request, h) => {
-    const org = config.get('gitHubOrg')
+    const org = config.get('github.org')
 
     const payload = request?.payload
     const repositoryName = payload?.repositoryName

@@ -3,7 +3,7 @@ import { getContent } from '~/src/helpers/github/get-content'
 import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service'
 
 const deploymentRepo = config.get('gitHubRepoAppDeployments')
-const gitHubOwner = config.get('gitHubOrg')
+const gitHubOwner = config.get('github.org')
 
 const existingServiceInfoController = {
   handler: async (request, h) => {

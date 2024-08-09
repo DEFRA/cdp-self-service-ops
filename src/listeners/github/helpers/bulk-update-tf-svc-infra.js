@@ -13,7 +13,7 @@ import { ackEvent } from '~/src/helpers/queued-events/queued-events'
 // and create the placeholder artifact
 const bulkUpdateTfSvcInfra = async (db, trimmedWorkflow, status) => {
   const logger = createLogger()
-  const org = config.get('gitHubOrg')
+  const org = config.get('github.org')
   const tfSvcInfra = config.get('gitHubRepoTfServiceInfra')
   const eventType = config.get('serviceInfraCreateEvent')
 

@@ -5,7 +5,7 @@ import { config } from '~/src/config'
 async function lookupTenantServicesForCommit(environment, sha) {
   const logger = createLogger()
   const filePath = `environments/${environment}/resources/tenant_services.json`
-  const owner = config.get('gitHubOrg')
+  const owner = config.get('github.org')
   const repo = config.get('gitHubRepoTfServiceInfra')
 
   try {

@@ -2,7 +2,7 @@ import { config } from '~/src/config'
 import { commitFiles } from '~/src/api/deploy/helpers/github/commit-github-files'
 
 const deploymentRepo = config.get('gitHubRepoAppDeployments')
-const gitHubOwner = config.get('gitHubOrg')
+const gitHubOwner = config.get('github.org')
 
 /**
  * @typedef {import("pino").Logger} Logger

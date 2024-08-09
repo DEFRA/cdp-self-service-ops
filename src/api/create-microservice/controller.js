@@ -32,7 +32,7 @@ const createMicroserviceController = {
   handler: async (request, h) => {
     const payload = request?.payload
     const serviceTypeTemplate = payload?.serviceTypeTemplate
-    const org = config.get('gitHubOrg')
+    const org = config.get('github.org')
     const repositoryName = payload?.repositoryName
 
     const zone = serviceTemplates[serviceTypeTemplate]?.zone
