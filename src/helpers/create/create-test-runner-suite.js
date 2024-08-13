@@ -72,7 +72,7 @@ export async function createTestRunnerSuite(
       zone,
       mongo_enabled: 'false',
       redis_enabled: 'false',
-      service_code: team.serviceCodes,
+      service_code: team.serviceCodes[0] ?? '',
       test_suite: repositoryName
     })
   ])

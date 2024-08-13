@@ -94,7 +94,7 @@ async function createMicroservice(
       zone,
       mongo_enabled: zone === 'protected' ? 'true' : 'false',
       redis_enabled: zone === 'public' ? 'true' : 'false',
-      service_code: team.serviceCodes
+      service_code: team.serviceCodes[0] ?? ''
     }),
     createAppConfig(request, repositoryName),
     createNginxUpstreams(request, repositoryName, zone),
