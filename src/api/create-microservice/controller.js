@@ -26,7 +26,7 @@ const createMicroserviceController = {
     if (!zone) {
       throw Boom.badData(`Invalid service template: '${serviceTypeTemplate}'`)
     }
-    const user = request.request.auth?.credentials
+    const user = request.auth?.credentials
 
     await createMicroservice(
       request,
