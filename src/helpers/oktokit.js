@@ -20,10 +20,10 @@ const init = () => {
   }
 
   // Test Mode, for use with cdp-portal-stubs
-  if (config.get('gitHubBaseUrl') != null) {
+  if (config.get('github.baseUrl') != null) {
     cfg = {
       auth: 'test-value',
-      baseUrl: config.get('gitHubBaseUrl')
+      baseUrl: config.get('github.baseUrl')
     }
   }
 

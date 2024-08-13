@@ -2,9 +2,10 @@ import Boom from '@hapi/boom'
 
 import { config } from '~/src/config'
 import { testSuiteValidation } from '~/src/api/create-test-suite/helpers/schema/test-suite-validation'
-import { createTestSuiteStatus } from '~/src/api/create-test-suite/helpers/status/create-test-suite-status'
-import { createTestSuiteFromTemplate } from '~/src/helpers/create/create-test-suite-from-template'
+import { createTemplatedRepo } from '~/src/helpers/create/workflows/create-templated-repo'
 import { fetchTeam } from '~/src/helpers/fetch-team'
+import { creations } from '~/src/constants/creations'
+import { initCreationStatus } from '~/src/helpers/create/init-creation-status'
 
 const createTestSuiteController = {
   options: {
@@ -20,7 +21,7 @@ const createTestSuiteController = {
     }
   },
   handler: async (request, h) => {
-    const gitHubOrg = config.get('gitHubOrg')
+    const org = config.get('github.org')
 
     const payload = request?.payload
     const repositoryName = payload?.repositoryName
@@ -32,21 +33,24 @@ const createTestSuiteController = {
 
     request.logger.info(`Creating repository: ${repositoryName}`)
 
-    await createTestSuiteStatus(
+    await initCreationStatus(
       request.db,
-      gitHubOrg,
+      org,
+      creations.testsuite,
       repositoryName,
-      payload,
-      team
+      config.get('workflows.createJourneyTest'),
+      undefined,
+      team,
+      request.auth?.credentials,
+      [config.get('github.repos.createWorkflows')]
     )
 
-    const template = config.get('createJourneyTestWorkflow')
-    await createTestSuiteFromTemplate(
+    await createTemplatedRepo(
       request,
-      template,
+      config.get('workflows.createJourneyTest'),
       repositoryName,
       team,
-      'journey'
+      ['cdp', 'repository', 'test-suite', 'journey']
     )
 
     return h

@@ -1,36 +1,41 @@
 import { statuses } from '~/src/constants/statuses'
-import { workflowRunHandlerV2 } from '~/src/listeners/github/handlers/workflow-run-handler-v2'
+import {
+  shouldWorkflowBeProcessed,
+  workflowRunHandlerV2
+} from '~/src/listeners/github/handlers/workflow-run-handler-v2'
+import { handleTriggeredWorkflow } from '~/src/listeners/github/handlers/handle-triggered-workflow'
+import { handleTfSvcInfraWorkflow } from '~/src/listeners/github/handlers/handle-tf-svc-infra-workflow'
 
-jest.mock('~/src/api/create-microservice/helpers/save-status', () => ({
-  updateWorkflowStatus: jest.fn(),
-  findByCommitHash: jest.fn()
-}))
-
-jest.mock('~/src/helpers/oktokit', () => ({
-  octokit: {
-    createPullRequest: jest.fn(),
-    request: jest.fn(),
-    graphql: jest.fn(),
-    rest: {
-      pulls: {
-        merge: jest.fn()
-      }
-    }
+jest.mock('~/src/listeners/github/handlers/handle-triggered-workflow', () => {
+  return {
+    handleTriggeredWorkflow: jest.fn()
   }
-}))
+})
 
-jest.mock('~/src/listeners/github/helpers/create-placeholder-artifact', () => ({
-  createPlaceholderArtifact: jest.fn()
-}))
+jest.mock(
+  '~/src/listeners/github/handlers/handle-tf-svc-infra-workflow',
+  () => ({
+    handleTfSvcInfraWorkflow: jest.fn()
+  })
+)
+
+const mockServer = {
+  db: {}
+}
 
 describe('#workflow-run-handler-v2', () => {
-  test('Should ignore workflow events that are not tracked', async () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+  })
+
+  test('Should not process workflows that are not on the main branch', async () => {
     const msg = {
       github_event: 'workflow_run',
       action: 'completed',
       workflow_run: {
         head_branch: 'not-main',
-        head_sha: '6d96270004515a0486bb7f76196a72b40c55a47f'
+        head_sha: '6d96270004515a0486bb7f76196a72b40c55a47f',
+        path: '.github/workflows/create-service.yml'
       },
       repository: {
         name: 'tf-svc',
@@ -40,31 +45,12 @@ describe('#workflow-run-handler-v2', () => {
       }
     }
 
-    await workflowRunHandlerV2({}, msg)
+    await workflowRunHandlerV2(mockServer, msg)
+    expect(handleTriggeredWorkflow).not.toHaveBeenCalled()
+    expect(handleTfSvcInfraWorkflow).not.toHaveBeenCalled()
   })
 
-  test('set status to failed status when a workflow run fails', async () => {
-    const mockStatusRecord = {
-      repositoryName: 'test-repo',
-      zone: 'protected',
-      status: statuses.inProgress,
-      createRepository: { status: statuses.notRequested },
-      'cdp-app-config': { status: statuses.success },
-      'tf-svc-infra': { status: statuses.notRequested },
-      'cdp-nginx-upstreams': { status: statuses.notRequested }
-    }
-    const findOne = jest.fn().mockReturnValue(mockStatusRecord)
-    const updateOne = jest.fn().mockReturnValue({})
-    const mockDb = {
-      collection: jest.fn().mockReturnValue({
-        findOne,
-        updateOne
-      })
-    }
-    const mockServer = {
-      db: mockDb
-    }
-
+  test('call handleTriggeredWorkflow for a valid repo thats not cdp-tf-svc-infra', async () => {
     const msg = {
       github_event: 'workflow_run',
       action: 'completed',
@@ -74,64 +60,55 @@ describe('#workflow-run-handler-v2', () => {
         html_url: 'http://localhost',
         created_at: new Date(0),
         updated_at: new Date(0),
-        path: '/test',
+        path: '.github/workflows/create-service.yml',
         head_branch: 'main',
         head_sha: '6d96270004515a0486bb7f76196a72b40c55a47f',
         conclusion: statuses.failure
       },
       repository: {
-        name: 'tf-svc-infra',
+        name: 'cdp-app-config',
         owner: {
           login: 'test-org'
         }
       }
     }
     await workflowRunHandlerV2(mockServer, msg)
-    expect(findOne).toHaveBeenCalledWith({
-      'tf-svc-infra.merged_sha': '6d96270004515a0486bb7f76196a72b40c55a47f'
-    })
-
-    expect(updateOne).toHaveBeenNthCalledWith(
-      1,
-      { repositoryName: 'test-repo', 'tf-svc-infra.status': { $nin: [] } },
-      {
-        $set: {
-          'tf-svc-infra.main.workflow': {
-            id: 999,
-            name: 'wf-name',
-            html_url: 'http://localhost',
-            created_at: new Date(0),
-            updated_at: new Date(0),
-            path: '/test'
-          },
-
-          'tf-svc-infra.status': statuses.failure
-        }
-      }
-    )
+    expect(handleTriggeredWorkflow).toHaveBeenCalled()
+    expect(handleTfSvcInfraWorkflow).not.toHaveBeenCalled()
   })
 
-  test('set overall status to in-progress when something hasnt finished', async () => {
-    const mockStatusRecord = {
-      repositoryName: 'test-repo',
-      zone: 'protected',
-      status: statuses.inProgress,
-      createRepository: { status: statuses.success },
-      'cdp-app-config': { status: statuses.success },
-      'tf-svc-infra': { status: statuses.inProgress },
-      'cdp-nginx-upstreams': { status: statuses.inProgress }
+  test('call handleTfSvcInfraWorkflow for a valid repo is cdp-tf-svc-infra', async () => {
+    const msg = {
+      github_event: 'workflow_run',
+      action: 'completed',
+      workflow_run: {
+        id: 999,
+        name: 'wf-name',
+        html_url: 'http://localhost',
+        created_at: new Date(0),
+        updated_at: new Date(0),
+        path: '.github/workflows/create-service.yml',
+        head_branch: 'main',
+        head_sha: '6d96270004515a0486bb7f76196a72b40c55a47f',
+        conclusion: statuses.failure
+      },
+      repository: {
+        name: 'cdp-tf-svc-infra',
+        owner: {
+          login: 'test-org'
+        }
+      }
     }
-    const findOne = jest.fn().mockReturnValue(mockStatusRecord)
-    const updateOne = jest.fn().mockReturnValue({})
-    const mockDb = {
-      collection: jest.fn().mockReturnValue({
-        findOne,
-        updateOne
-      })
-    }
-    const mockServer = {
-      db: mockDb
-    }
+    await workflowRunHandlerV2(mockServer, msg)
+    expect(handleTriggeredWorkflow).not.toHaveBeenCalled()
+    expect(handleTfSvcInfraWorkflow).toHaveBeenCalled()
+  })
+
+  test('not process anything that is an unsupported repo', async () => {
+    jest.mock('~/src/helpers/create/init-creation-status', () => ({
+      updateWorkflowStatus: jest.fn(),
+      findByCommitHash: jest.fn()
+    }))
 
     const msg = {
       github_event: 'workflow_run',
@@ -142,92 +119,38 @@ describe('#workflow-run-handler-v2', () => {
         html_url: 'http://localhost',
         created_at: new Date(0),
         updated_at: new Date(0),
-        path: '/test',
+        path: '.github/workflows/create-service.yml',
         head_branch: 'main',
         head_sha: '6d96270004515a0486bb7f76196a72b40c55a47f',
         conclusion: statuses.failure
       },
       repository: {
-        name: 'tf-svc-infra',
+        name: 'cdp-portal-frontend',
         owner: {
           login: 'test-org'
         }
       }
     }
     await workflowRunHandlerV2(mockServer, msg)
-    expect(findOne).toHaveBeenCalledWith({
-      'tf-svc-infra.merged_sha': '6d96270004515a0486bb7f76196a72b40c55a47f'
-    })
+    expect(handleTriggeredWorkflow).not.toHaveBeenCalled()
+    expect(handleTfSvcInfraWorkflow).not.toHaveBeenCalled()
   })
+})
 
-  test('completed status is not overwritten by out of order in-progress message', async () => {
-    const mockStatusRecord = {
-      repositoryName: 'test-repo',
-      zone: 'protected',
-      status: statuses.completed,
-      createRepository: { status: statuses.notRequested },
-      'cdp-app-config': { status: statuses.success },
-      'tf-svc-infra': { status: statuses.notRequested },
-      'cdp-nginx-upstreams': { status: statuses.notRequested }
-    }
-    const findOne = jest.fn().mockReturnValue(mockStatusRecord)
-    const updateOne = jest.fn().mockReturnValue({})
-    const mockDb = {
-      collection: jest.fn().mockReturnValue({
-        findOne,
-        updateOne
-      })
-    }
-    const mockServer = {
-      db: mockDb
-    }
-
-    const msg = {
-      github_event: 'workflow_run',
-      action: 'in_progress',
-      workflow_run: {
-        id: 999,
-        name: 'wf-name',
-        html_url: 'http://localhost',
-        created_at: new Date(0),
-        updated_at: new Date(0),
-        path: '/test',
-        head_branch: 'main',
-        head_sha: '6d96270004515a0486bb7f76196a72b40c55a47f',
-        conclusion: statuses.inProgress
-      },
-      repository: {
-        name: 'tf-svc-infra',
-        owner: {
-          login: 'test-org'
-        }
-      }
-    }
-    await workflowRunHandlerV2(mockServer, msg)
-    expect(findOne).toHaveBeenCalledWith({
-      'tf-svc-infra.merged_sha': '6d96270004515a0486bb7f76196a72b40c55a47f'
-    })
-
-    expect(updateOne).toHaveBeenNthCalledWith(
-      1,
-      {
-        repositoryName: 'test-repo',
-        'tf-svc-infra.status': { $nin: [statuses.success, statuses.failure] }
-      },
-      {
-        $set: {
-          'tf-svc-infra.main.workflow': {
-            id: 999,
-            name: 'wf-name',
-            html_url: 'http://localhost',
-            created_at: new Date(0),
-            updated_at: new Date(0),
-            path: '/test'
-          },
-
-          'tf-svc-infra.status': statuses.inProgress
-        }
-      }
+describe('#shouldWorkflowBeProcessed', () => {
+  test('Should return false for unknown repos', () => {
+    expect(
+      shouldWorkflowBeProcessed('invalid-repo', 'create-service.yml')
+    ).toBe(false)
+  })
+  test('Should return false for valid repo but invalid workflow', () => {
+    expect(shouldWorkflowBeProcessed('cdp-app-config', 'invalid.yml')).toBe(
+      false
     )
+  })
+  test('Should return true for valid repo but invalid workflow', () => {
+    expect(
+      shouldWorkflowBeProcessed('cdp-app-config', 'create-service.yml')
+    ).toBe(true)
   })
 })

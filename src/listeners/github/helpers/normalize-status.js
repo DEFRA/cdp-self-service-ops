@@ -13,6 +13,8 @@ const normalizeStatus = (action, conclusion) => {
     case 'in_progress':
     case statuses.inProgress:
       return statuses.inProgress
+    case statuses.queued:
+      return statuses.queued
     case statuses.requested:
       return statuses.requested
     default:

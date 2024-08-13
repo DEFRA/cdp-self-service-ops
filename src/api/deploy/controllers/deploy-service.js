@@ -9,8 +9,8 @@ import { commitDeploymentFile } from '~/src/api/deploy/helpers/commit-deployment
 import { getLatestCommitSha } from '~/src/helpers/github/get-latest-commit-sha'
 import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service'
 
-const owner = config.get('gitHubOrg')
-const configRepo = config.get('gitHubRepoConfig')
+const owner = config.get('github.org')
+const configRepo = config.get('github.repos.cdpAppConfig')
 
 const deployServiceController = {
   options: {

@@ -14,7 +14,6 @@ import { proxyAgent } from '~/src/helpers/proxy/proxy-agent'
 import { gitHubEventsListener } from '~/src/plugins/sqs-listener'
 import { sqsClient } from '~/src/plugins/sqs-client'
 import { pulse } from '~/src/plugins/pulse'
-import { createServiceInfra } from '~/src/plugins/create-service-infra'
 
 const isProduction = config.get('isProduction')
 
@@ -61,15 +60,12 @@ async function createServer() {
     sqsClient,
     mongoDb,
     snsClientPlugin,
-    router,
-    createServiceInfra
+    router
   ])
 
   if (config.get('sqsGitHubEvents.enabled')) {
     await server.register(gitHubEventsListener)
   }
-  // process any unprocessed messages on server start
-  await server.events.emit(config.get('serviceInfraCreateEvent'))
 
   return server
 }

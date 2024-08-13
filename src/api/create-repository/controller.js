@@ -1,10 +1,11 @@
 import Boom from '@hapi/boom'
 
 import { config } from '~/src/config'
-import { createRepository } from '~/src/api/create-repository/helpers/workflow/create-repository'
 import { repositoryValidation } from '~/src/api/create-repository/helpers/schema/repository-validation'
-import { createRepositoryStatus } from '~/src/api/create-repository/helpers/status/create-repository-status'
 import { fetchTeam } from '~/src/helpers/fetch-team'
+import { creations } from '~/src/constants/creations'
+import { initCreationStatus } from '~/src/helpers/create/init-creation-status'
+import { createTemplatedRepo } from '~/src/helpers/create/workflows/create-templated-repo'
 
 const createRepositoryController = {
   options: {
@@ -20,7 +21,7 @@ const createRepositoryController = {
     }
   },
   handler: async (request, h) => {
-    const gitHubOrg = config.get('gitHubOrg')
+    const org = config.get('github.org')
 
     const payload = request?.payload
     const repositoryName = payload?.repositoryName
@@ -33,14 +34,26 @@ const createRepositoryController = {
 
     request.logger.info(`Creating repository: ${repositoryName}`)
 
-    await createRepositoryStatus(
+    await initCreationStatus(
       request.db,
-      gitHubOrg,
+      org,
+      creations.repository,
       repositoryName,
-      payload,
-      team.github
+      config.get('workflows.createRepository'),
+      undefined,
+      team,
+      request.auth?.credentials,
+      [config.get('github.repos.createWorkflows')]
     )
-    await createRepository(request, repositoryName, visibility, team.github)
+
+    await createTemplatedRepo(
+      request,
+      config.get('workflows.createRepository'),
+      repositoryName,
+      team,
+      ['cdp', 'repository'],
+      { repositoryVisibility: visibility }
+    )
 
     return h
       .response({
