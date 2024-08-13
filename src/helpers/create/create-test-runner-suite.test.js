@@ -89,8 +89,8 @@ describe('#create-test-runner-suite', () => {
       {
         service,
         zone: 'public',
-        mongo_enabled: false,
-        redis_enabled: false,
+        mongo_enabled: 'false',
+        redis_enabled: 'false',
         service_code: 'TST',
         test_suite: service
       }

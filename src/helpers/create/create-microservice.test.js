@@ -16,7 +16,7 @@ jest.mock('~/src/helpers/create/workflows/trigger-workflow', () => ({
 const logger = { info: jest.fn(), error: jest.fn(), warn: jest.fn() }
 let connection
 let db
-const service = 'test-service-12345'
+const service = `test-service-${new Date().toISOString()}`
 
 beforeEach(async () => {
   await db.collection('status').deleteMany({ repositoryName: service })
@@ -39,7 +39,6 @@ describe('#create-test-runner-suite', () => {
     fetchTeam.mockResolvedValue({
       team: { teamId: '123', name: 'test', github: 'test', serviceCodes: 'TST' }
     })
-    // createResourceFromWorkflow.mockResolvedValue()
 
     const request = {
       db,
@@ -77,8 +76,8 @@ describe('#create-test-runner-suite', () => {
       {
         service,
         zone: 'public',
-        mongo_enabled: false,
-        redis_enabled: true,
+        mongo_enabled: 'false',
+        redis_enabled: 'true',
         service_code: 'TST'
       }
     )

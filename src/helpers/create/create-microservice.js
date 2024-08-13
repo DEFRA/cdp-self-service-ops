@@ -92,8 +92,8 @@ async function createMicroservice(
     createTenantInfrastructure(request, repositoryName, {
       service: repositoryName,
       zone,
-      mongo_enabled: zone === 'protected',
-      redis_enabled: zone === 'public',
+      mongo_enabled: zone === 'protected' ? 'true' : 'false',
+      redis_enabled: zone === 'public' ? 'true' : 'false',
       service_code: team.serviceCodes
     }),
     createAppConfig(request, repositoryName),

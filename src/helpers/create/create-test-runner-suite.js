@@ -70,8 +70,8 @@ export async function createTestRunnerSuite(
     createTenantInfrastructure(request, repositoryName, {
       service: repositoryName,
       zone,
-      mongo_enabled: false,
-      redis_enabled: false,
+      mongo_enabled: 'false',
+      redis_enabled: 'false',
       service_code: team.serviceCodes,
       test_suite: repositoryName
     })
