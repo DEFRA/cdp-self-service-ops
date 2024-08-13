@@ -2,6 +2,11 @@ import { config } from '~/src/config'
 import fetch from 'node-fetch'
 import Boom from '@hapi/boom'
 
+/**
+ *
+ * @param {string} teamId
+ * @returns {Promise<{name: string, description: string, github: string, serviceCodes: string[], teamId: string, users: {userId: string, name:string}[]}>}
+ */
 async function fetchTeam(teamId) {
   const teamsEndpointUrl =
     config.get('userServiceBackendUrl') + `/teams/${teamId}`

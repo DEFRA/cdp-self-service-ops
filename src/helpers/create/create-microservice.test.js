@@ -37,7 +37,12 @@ afterAll(async () => {
 describe('#create-test-runner-suite', () => {
   test('Should create microservice', async () => {
     fetchTeam.mockResolvedValue({
-      team: { teamId: '123', name: 'test', github: 'test', serviceCodes: 'TST' }
+      team: {
+        teamId: '123',
+        name: 'test',
+        github: 'test',
+        serviceCodes: ['TST']
+      }
     })
 
     const request = {
