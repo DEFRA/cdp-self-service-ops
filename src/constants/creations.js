@@ -1,5 +1,5 @@
 /**
- * Note! when adding a new creation type, make sure you also update `getStatusKeys` in `save-status.js`
+ * Note! when adding a new creation type, make sure you also update `getStatusKeys` in `init-creation-status.js`
  * If you dont then it wont track creation state of things like tf-svc-infra updates.
  */
 const creations = {

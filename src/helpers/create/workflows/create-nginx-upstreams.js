@@ -1,7 +1,9 @@
 import { config } from '~/src/config'
-import { createResourceFromWorkflow } from '~/src/helpers/workflow/create-resource-from-workflow'
+import { createResourceFromWorkflow } from '~/src/helpers/create/workflows/create-resource-from-workflow'
 
 /**
+ * Creates default service routing
+ *
  * @param {{ db: import('mongodb').Db, logger: import('pino').Logger}} request
  * @param {string} service
  * @param {'public'|'protected'} zone

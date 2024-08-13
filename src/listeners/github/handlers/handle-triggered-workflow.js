@@ -1,4 +1,4 @@
-import { updateOverallStatus } from '~/src/api/create-microservice/helpers/save-status'
+import { updateOverallStatus } from '~/src/helpers/create/init-creation-status'
 import { trimWorkflowRun } from '~/src/listeners/github/helpers/trim-workflow-run'
 import {
   findByRepoName,

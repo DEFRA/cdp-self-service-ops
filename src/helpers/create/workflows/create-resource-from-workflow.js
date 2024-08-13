@@ -1,6 +1,6 @@
 import { statuses } from '~/src/constants/statuses'
-import { updateCreationStatus } from '~/src/api/create-microservice/helpers/save-status'
-import { triggerWorkflow } from '~/src/helpers/workflow/trigger-workflow'
+import { updateCreationStatus } from '~/src/helpers/create/init-creation-status'
+import { triggerWorkflow } from '~/src/helpers/create/workflows/trigger-workflow'
 
 /**
  * Triggers a given workflow and updates the status record

@@ -1,7 +1,8 @@
 import { config } from '~/src/config'
-import { createResourceFromWorkflow } from '~/src/helpers/workflow/create-resource-from-workflow'
+import { createResourceFromWorkflow } from '~/src/helpers/create/workflows/create-resource-from-workflow'
 
 /**
+ * Creates a new GitHub repository from a template
  *
  * @param {{ db: import('mongodb').Db, logger: import('pino').Logger}} request
  * @param {string} workflow          - name of the workflow in cdpCreateWorkflows to use
@@ -19,13 +20,13 @@ async function createTemplatedRepo(
   githubTopics,
   extraInputs = {}
 ) {
-  const gitHubOrg = config.get('github.org')
+  const org = config.get('github.org')
   const repo = config.get('github.repos.createWorkflows')
 
   await createResourceFromWorkflow(
     request,
     repositoryName,
-    gitHubOrg,
+    org,
     repo,
     workflow,
     {

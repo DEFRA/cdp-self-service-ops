@@ -2,7 +2,7 @@ import { config } from '~/src/config'
 import { statuses } from '~/src/constants/statuses'
 import { creations } from '~/src/constants/creations'
 
-const cdptfSvcInfra = config.get('github.repos.cdpTfSvcInfra')
+const cdpTfSvcInfra = config.get('github.repos.cdpTfSvcInfra')
 const cdpAppConfig = config.get('github.repos.cdpAppConfig')
 const cdpNginxUpstream = config.get('github.repos.cdpNginxUpstreams')
 const cdpSquidConfig = config.get('github.repos.cdpSquidProxy')
@@ -18,14 +18,14 @@ function getStatusKeys(statusRecord) {
     case creations.envTestsuite:
     case creations.smokeTestSuite:
     case creations.perfTestsuite:
-      return [cdpCreateWorkflows, cdptfSvcInfra, cdpSquidConfig]
+      return [cdpCreateWorkflows, cdpTfSvcInfra, cdpSquidConfig]
 
     case creations.microservice:
       return [
         cdpCreateWorkflows,
         cdpNginxUpstream,
         cdpAppConfig,
-        cdptfSvcInfra,
+        cdpTfSvcInfra,
         cdpSquidConfig,
         cdpDashboards
       ]

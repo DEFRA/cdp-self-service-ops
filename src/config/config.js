@@ -98,46 +98,6 @@ const config = convict({
     format: String,
     default: '2022-11-28'
   },
-  gitHubRepoTfServiceInfra: {
-    doc: 'Terraform GitHub Service Infrastructure repository',
-    format: String,
-    default: 'cdp-tf-svc-infra'
-  },
-  gitHubRepoAppDeployments: {
-    doc: 'Repository to store deployment state for services on CDP',
-    format: String,
-    default: 'cdp-app-deployments'
-  },
-  gitHubRepoConfig: {
-    doc: 'gitHub repo to create the application config in',
-    format: String,
-    default: 'cdp-app-config',
-    env: 'GITHUB_REPO_APP_CONFIG'
-  },
-  gitHubRepoNginx: {
-    doc: 'gitHub repo to create the nginx config in',
-    format: String,
-    default: 'cdp-nginx-upstreams',
-    env: 'GITHUB_REPO_NGINX'
-  },
-  gitHubRepoSquid: {
-    doc: 'GitHub repo to create squid config in',
-    format: String,
-    default: 'cdp-squid-proxy',
-    env: 'GITHUB_REPO_SQUID'
-  },
-  gitHubRepoDashboards: {
-    doc: 'GitHub repo to create default dashboard config in',
-    format: String,
-    default: 'cdp-grafana-svc',
-    env: 'GITHUB_REPO_DASHBOARDS'
-  },
-  gitHubRepoCreateWorkflows: {
-    doc: 'GitHub repository containing the create workflows',
-    format: String,
-    default: 'cdp-create-workflows',
-    env: 'GITHUB_REPO_CREATE_WORKFLOWS'
-  },
   isProduction: {
     doc: 'If this application running in the production environment',
     format: Boolean,
@@ -248,60 +208,6 @@ const config = convict({
     default: 'http://localhost:5094',
     env: 'PORTAL_BACKEND_URL'
   },
-  createMicroServiceWorkflow: {
-    doc: 'Name of workflow to trigger when creating a microservice',
-    format: String,
-    default: 'create_microservice.yml',
-    env: 'CREATE_MICROSERVICE_WORKFLOW'
-  },
-  createRepositoryWorkflow: {
-    doc: 'Name of workflow to trigger when creating a repository',
-    format: String,
-    default: 'create_repository.yml',
-    env: 'CREATE_REPOSITORY_WORKFLOW'
-  },
-  createJourneyTestWorkflow: {
-    doc: 'Name of workflow to trigger when creating a repository',
-    format: String,
-    default: 'create_journey_tests.yml',
-    env: 'CREATE_JOURNEY_TESTS_WORKFLOW'
-  },
-  createEnvTestSuiteWorkflow: {
-    doc: 'Name of workflow to trigger when creating a repository',
-    format: String,
-    default: 'create_env_test_suite.yml',
-    env: 'CREATE_ENV_TEST_SUITE_WORKFLOW'
-  },
-  createPerfTestSuiteWorkflow: {
-    doc: 'Name of workflow to trigger when creating a perf test repository',
-    format: String,
-    default: 'create_perf_test_suite.yml',
-    env: 'CREATE_PERF_TEST_SUITE_WORKFLOW'
-  },
-  createSmokeTestSuiteWorkflow: {
-    doc: 'Name of workflow to trigger when creating a perf test repository',
-    format: String,
-    default: 'create_smoke_test_suite.yml',
-    env: 'CREATE_SMOKE_TEST_SUITE_WORKFLOW'
-  },
-  createSquidConfigWorkflow: {
-    doc: 'Name of workflow to trigger when creating a repository',
-    format: String,
-    default: 'create_service.yml',
-    env: 'CREATE_SQUID_CONFIG_WORKFLOW'
-  },
-  createDashboardWorkflow: {
-    doc: 'Github workflow to trigger when creating a default dashboard',
-    format: String,
-    default: 'create-service.yml',
-    env: 'CREATE_DASHBOARD_WORKFLOW'
-  },
-  gitHubBaseUrl: {
-    doc: 'Override the gitHub base url for local testing',
-    format: '*',
-    env: 'GITHUB_BASE_URL',
-    default: null
-  },
   httpProxy: {
     doc: 'HTTP Proxy',
     format: String,
@@ -321,7 +227,18 @@ const config = convict({
     env: 'SERVICE_INFRA_CREATE_EVENT'
   },
   github: {
-    org: 'DEFRA',
+    org: {
+      doc: 'GitHub Organisation',
+      format: String,
+      default: 'DEFRA',
+      env: 'GITHUB_ORG'
+    },
+    baseUrl: {
+      doc: 'Override the gitHub base url for local testing',
+      format: '*',
+      env: 'GITHUB_BASE_URL',
+      default: null
+    },
     repos: {
       cdpAppConfig: {
         doc: 'GitHub repo for cdp-app-config',
@@ -358,6 +275,11 @@ const config = convict({
         format: String,
         default: 'cdp-create-workflows',
         env: 'GITHUB_REPO_CREATE_WORKFLOWS'
+      },
+      appDeployments: {
+        doc: 'Repository to store deployment state for services on CDP',
+        format: String,
+        default: 'cdp-app-deployments'
       }
     }
   },
@@ -389,7 +311,7 @@ const config = convict({
     createSquidConfig: {
       doc: 'Name of workflow to trigger when creating squid config',
       format: String,
-      default: 'create_service.yml',
+      default: 'create-service.yml',
       env: 'WORKFLOWS_CREATE_SQUID_CONFIG'
     },
     createMicroService: {

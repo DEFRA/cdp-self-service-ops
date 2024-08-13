@@ -3,7 +3,7 @@ import { creations } from '~/src/constants/creations'
 import {
   calculateOverallStatus,
   initCreationStatus
-} from '~/src/api/create-microservice/helpers/save-status'
+} from '~/src/helpers/create/init-creation-status'
 
 describe('#initCreationStatus', () => {
   test('Should add whatever workflows are given as keys', async () => {

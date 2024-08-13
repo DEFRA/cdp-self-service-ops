@@ -66,8 +66,6 @@ async function createServer() {
   if (config.get('sqsGitHubEvents.enabled')) {
     await server.register(gitHubEventsListener)
   }
-  // process any unprocessed messages on server start
-  await server.events.emit(config.get('serviceInfraCreateEvent'))
 
   return server
 }

@@ -2,10 +2,10 @@ import Boom from '@hapi/boom'
 
 import { config } from '~/src/config'
 import { testSuiteValidation } from '~/src/api/create-test-suite/helpers/schema/test-suite-validation'
-import { createTemplatedRepo } from '~/src/helpers/create/create-templated-repo'
+import { createTemplatedRepo } from '~/src/helpers/create/workflows/create-templated-repo'
 import { fetchTeam } from '~/src/helpers/fetch-team'
 import { creations } from '~/src/constants/creations'
-import { initCreationStatus } from '~/src/api/create-microservice/helpers/save-status'
+import { initCreationStatus } from '~/src/helpers/create/init-creation-status'
 
 const createTestSuiteController = {
   options: {
@@ -38,7 +38,7 @@ const createTestSuiteController = {
       org,
       creations.testsuite,
       repositoryName,
-      config.get('createJourneyTestWorkflow'),
+      config.get('workflows.createJourneyTest'),
       undefined,
       team,
       request.auth?.credentials,
@@ -47,7 +47,7 @@ const createTestSuiteController = {
 
     await createTemplatedRepo(
       request,
-      config.get('createJourneyTestWorkflow'),
+      config.get('workflows.createJourneyTest'),
       repositoryName,
       team,
       ['cdp', 'repository', 'test-suite', 'journey']

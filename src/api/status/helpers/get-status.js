@@ -1,7 +1,7 @@
 /**
  * Get create service status
- * @param db
- * @param statuses ['in-progress', 'success', 'failure']
+ * @param {import('mongodb').Db} db
+ * @param {string[]} statuses
  * @returns {Promise<*>}
  */
 async function getStatus(db, statuses) {

@@ -3,13 +3,13 @@ import { config } from '~/src/config'
 import { workflowRunHandlerV2 } from '~/src/listeners/github/handlers/workflow-run-handler-v2'
 
 const githubWebhooks = new Set([
-  config.get('gitHubRepoAppDeployments'),
-  config.get('gitHubRepoTfServiceInfra'),
-  config.get('gitHubRepoConfig'),
-  config.get('gitHubRepoNginx'),
-  config.get('gitHubRepoCreateWorkflows'),
-  config.get('gitHubRepoSquid'),
-  config.get('gitHubRepoDashboards')
+  config.get('github.repos.appDeployments'),
+  config.get('github.repos.cdpTfSvcInfra'),
+  config.get('github.repos.cdpAppConfig'),
+  config.get('github.repos.cdpNginxUpstreams'),
+  config.get('github.repos.createWorkflows'),
+  config.get('github.repos.cdpSquidProxy'),
+  config.get('github.repos.cdpGrafanaSvc')
 ])
 const validActions = new Set(['workflow_run', 'pull_request'])
 

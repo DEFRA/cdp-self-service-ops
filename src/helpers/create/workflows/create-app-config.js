@@ -1,6 +1,13 @@
 import { config } from '~/src/config'
-import { createResourceFromWorkflow } from '~/src/helpers/workflow/create-resource-from-workflow'
+import { createResourceFromWorkflow } from '~/src/helpers/create/workflows/create-resource-from-workflow'
 
+/**
+ * Creates placeholder application config
+ *
+ * @param {{ db: import('mongodb').Db, logger: import('pino').Logger}} request
+ * @param {string} service
+ * @returns {Promise<void>}
+ */
 const createAppConfig = async (request, service) => {
   const org = config.get('github.org')
   const repo = config.get('github.repos.cdpAppConfig')

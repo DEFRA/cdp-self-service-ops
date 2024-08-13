@@ -1,7 +1,7 @@
 import { config } from '~/src/config'
 import { commitFiles } from '~/src/api/deploy/helpers/github/commit-github-files'
 
-const deploymentRepo = config.get('gitHubRepoAppDeployments')
+const deploymentRepo = config.get('github.repos.appDeployments')
 const gitHubOwner = config.get('github.org')
 
 /**

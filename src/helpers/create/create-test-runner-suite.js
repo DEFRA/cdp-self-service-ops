@@ -3,18 +3,22 @@ import { config } from '~/src/config'
 import {
   initCreationStatus,
   updateOverallStatus
-} from '~/src/api/create-microservice/helpers/save-status'
-import { createTemplatedRepo } from '~/src/helpers/create/create-templated-repo'
-import { createSquidConfig } from '~/src/helpers/create/create-squid-config'
+} from '~/src/helpers/create/init-creation-status'
+import {
+  createTemplatedRepo,
+  createSquidConfig
+} from '~/src/helpers/create/workflows'
 import { fetchTeam } from '~/src/helpers/fetch-team'
-import { createTenantService } from '~/src/helpers/create/create-tenant-service'
+import { createTenantInfrastructure } from '~/src/helpers/create/workflows/create-tenant-infrastructure'
 
 /**
+ * Helper to create test suites that run on the platform (rather than GitHub).
  *
- * @param {{db: import('mongodb').Db, logger: import('pino').Logger, auth: {credentials: Object|undefined}}} request
+ * @param {{db: import('mongodb').Db, logger: import('pino').Logger}} request
  * @param {string} repositoryName
  * @param {string} kind
  * @param {string} teamId
+ * @param {{id: string, displayName: string}} user
  * @param {string} templateWorkflow
  * @param {string[]} extraTopics
  * @returns {Promise<void>}
@@ -24,6 +28,7 @@ export async function createTestRunnerSuite(
   repositoryName,
   kind,
   teamId,
+  user,
   templateWorkflow,
   extraTopics = []
 ) {
@@ -32,30 +37,24 @@ export async function createTestRunnerSuite(
     throw Boom.badData(`Team ${team.name} does not have a linked Github team`)
   }
 
+  const org = config.get('github.org')
   const zone = 'public'
 
-  try {
-    await initCreationStatus(
-      request.db,
-      config.get('github.org'),
-      kind,
-      repositoryName,
-      templateWorkflow,
-      zone,
-      team,
-      request.auth?.credentials,
-      [
-        config.get('github.repos.createWorkflows'),
-        config.get('github.repos.cdpTfSvcInfra'),
-        config.get('github.repos.cdpSquidProxy')
-      ]
-    )
-  } catch (e) {
-    request.logger.error(e)
-    throw Boom.badData(
-      `Repository ${repositoryName} has already been requested or is in progress`
-    )
-  }
+  await initCreationStatus(
+    request.db,
+    org,
+    kind,
+    repositoryName,
+    templateWorkflow,
+    zone,
+    team,
+    user,
+    [
+      config.get('github.repos.createWorkflows'),
+      config.get('github.repos.cdpTfSvcInfra'),
+      config.get('github.repos.cdpSquidProxy')
+    ]
+  )
 
   const topics = ['cdp', 'test', 'test-suite', ...[extraTopics]]
 
@@ -68,7 +67,7 @@ export async function createTestRunnerSuite(
       topics
     ),
     createSquidConfig(request, repositoryName),
-    createTenantService(request, repositoryName, {
+    createTenantInfrastructure(request, repositoryName, {
       service: repositoryName,
       zone,
       mongo_enabled: false,

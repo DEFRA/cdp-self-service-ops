@@ -105,7 +105,7 @@ describe('#workflow-run-handler-v2', () => {
   })
 
   test('not process anything that is an unsupported repo', async () => {
-    jest.mock('~/src/api/create-microservice/helpers/save-status', () => ({
+    jest.mock('~/src/helpers/create/init-creation-status', () => ({
       updateWorkflowStatus: jest.fn(),
       findByCommitHash: jest.fn()
     }))

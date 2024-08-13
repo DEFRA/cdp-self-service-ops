@@ -20,12 +20,14 @@ const createPerfTestSuiteController = {
   handler: async (request, h) => {
     const payload = request?.payload
     const repositoryName = payload.repositoryName
+    const user = request.auth?.credentials
 
     await createTestRunnerSuite(
       request,
       repositoryName,
       creations.perfTestsuite,
       payload?.teamId,
+      user,
       config.get('workflows.createPerfTestSuite'),
       ['performance']
     )

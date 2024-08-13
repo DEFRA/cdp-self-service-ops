@@ -4,7 +4,7 @@ import {
   findAllInProgressOrFailed,
   updateWorkflowStatus
 } from '~/src/listeners/github/status-repo'
-import { updateOverallStatus } from '~/src/api/create-microservice/helpers/save-status'
+import { updateOverallStatus } from '~/src/helpers/create/init-creation-status'
 import { createPlaceholderArtifact } from '~/src/listeners/github/helpers/create-placeholder-artifact'
 import { createLogger } from '~/src/helpers/logging/logger'
 import { ackEvent } from '~/src/helpers/queued-events/queued-events'
@@ -14,7 +14,7 @@ import { ackEvent } from '~/src/helpers/queued-events/queued-events'
 const bulkUpdateTfSvcInfra = async (db, trimmedWorkflow, status) => {
   const logger = createLogger()
   const org = config.get('github.org')
-  const tfSvcInfra = config.get('gitHubRepoTfServiceInfra')
+  const tfSvcInfra = config.get('github.repos.cdpTfSvcInfra')
   const eventType = config.get('serviceInfraCreateEvent')
 
   const tenants = await lookupTenantServicesForCommit(environments.management)
@@ -45,7 +45,10 @@ const bulkUpdateTfSvcInfra = async (db, trimmedWorkflow, status) => {
     const serviceName = servicesToUpdate[i].name
 
     let runMode = 'Service'
-    if (servicesToUpdate[i].tenantConfig.testSuite !== undefined) {
+    if (
+      servicesToUpdate[i].tenantConfig?.testSuite &&
+      servicesToUpdate[i].tenantConfig?.testSuite !== ''
+    ) {
       runMode = 'Job'
     }
 
