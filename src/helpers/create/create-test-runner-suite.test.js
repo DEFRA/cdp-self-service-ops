@@ -4,19 +4,17 @@ import { createLogger } from '~/src/helpers/logging/logger'
 import { creations } from '~/src/constants/creations'
 import { fetchTeam } from '~/src/helpers/fetch-team'
 import { createTestRunnerSuite } from '~/src/helpers/create/create-test-runner-suite'
-import { createResourceFromWorkflow } from '~/src/helpers/create/workflows/create-resource-from-workflow'
+import { triggerWorkflow } from '~/src/helpers/create/workflows/trigger-workflow'
 import { config } from '~/src/config'
+import { statuses } from '~/src/constants/statuses'
 
 jest.mock('~/src/helpers/fetch-team', () => ({
   fetchTeam: jest.fn()
 }))
 
-jest.mock(
-  '~/src/helpers/create/workflows/create-resource-from-workflow',
-  () => ({
-    createResourceFromWorkflow: jest.fn()
-  })
-)
+jest.mock('~/src/helpers/create/workflows/trigger-workflow', () => ({
+  triggerWorkflow: jest.fn()
+}))
 
 const logger = createLogger()
 let connection
@@ -62,9 +60,7 @@ describe('#create-test-runner-suite', () => {
     )
 
     // Create repo
-    expect(createResourceFromWorkflow).toHaveBeenCalledWith(
-      request,
-      service,
+    expect(triggerWorkflow).toHaveBeenCalledWith(
       config.get('github.org'),
       config.get('github.repos.createWorkflows'),
       'create-smoke-test.yml',
@@ -76,9 +72,7 @@ describe('#create-test-runner-suite', () => {
     )
 
     // Create Squid
-    expect(createResourceFromWorkflow).toHaveBeenCalledWith(
-      request,
-      service,
+    expect(triggerWorkflow).toHaveBeenCalledWith(
       config.get('github.org'),
       config.get('github.repos.cdpSquidProxy'),
       config.get('workflows.createSquidConfig'),
@@ -88,9 +82,7 @@ describe('#create-test-runner-suite', () => {
     )
 
     // Create infrastructure
-    expect(createResourceFromWorkflow).toHaveBeenCalledWith(
-      request,
-      service,
+    expect(triggerWorkflow).toHaveBeenCalledWith(
       config.get('github.org'),
       config.get('github.repos.cdpTfSvcInfra'),
       config.get('workflows.createTenantService'),
@@ -102,6 +94,21 @@ describe('#create-test-runner-suite', () => {
         service_code: 'TST',
         test_suite: service
       }
+    )
+
+    const status = await db
+      .collection('status')
+      .findOne({ repositoryName: service })
+
+    expect(status?.repositoryName).toEqual(service)
+    expect(status[config.get('github.repos.cdpTfSvcInfra')]?.status).toEqual(
+      statuses.requested
+    )
+    expect(status[config.get('github.repos.cdpSquidProxy')]?.status).toEqual(
+      statuses.requested
+    )
+    expect(status[config.get('github.repos.createWorkflows')]?.status).toEqual(
+      statuses.requested
     )
   })
 })

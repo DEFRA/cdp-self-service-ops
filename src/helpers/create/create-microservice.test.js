@@ -1,19 +1,17 @@
 import { config } from '~/src/config'
 import { MongoClient } from 'mongodb'
 import { fetchTeam } from '~/src/helpers/fetch-team'
-import { createResourceFromWorkflow } from '~/src/helpers/create/workflows/create-resource-from-workflow'
 import { createMicroservice } from '~/src/helpers/create/create-microservice'
+import { statuses } from '~/src/constants/statuses'
+import { triggerWorkflow } from '~/src/helpers/create/workflows/trigger-workflow'
 
 jest.mock('~/src/helpers/fetch-team', () => ({
   fetchTeam: jest.fn()
 }))
 
-jest.mock(
-  '~/src/helpers/create/workflows/create-resource-from-workflow',
-  () => ({
-    createResourceFromWorkflow: jest.fn()
-  })
-)
+jest.mock('~/src/helpers/create/workflows/trigger-workflow', () => ({
+  triggerWorkflow: jest.fn()
+}))
 
 const logger = { info: jest.fn(), error: jest.fn(), warn: jest.fn() }
 let connection
@@ -56,13 +54,10 @@ describe('#create-test-runner-suite', () => {
       'team',
       { id: '123', displayName: 'test user' }
     )
-
-    expect(createResourceFromWorkflow).toHaveBeenCalledTimes(6)
+    expect(triggerWorkflow).toHaveBeenCalledTimes(6)
 
     // Create repo
-    expect(createResourceFromWorkflow).toHaveBeenCalledWith(
-      request,
-      service,
+    expect(triggerWorkflow).toHaveBeenCalledWith(
       config.get('github.org'),
       config.get('github.repos.createWorkflows'),
       'create_microservice.yml',
@@ -75,9 +70,7 @@ describe('#create-test-runner-suite', () => {
     )
 
     // Create infrastructure
-    expect(createResourceFromWorkflow).toHaveBeenCalledWith(
-      request,
-      service,
+    expect(triggerWorkflow).toHaveBeenCalledWith(
       config.get('github.org'),
       config.get('github.repos.cdpTfSvcInfra'),
       config.get('workflows.createTenantService'),
@@ -91,9 +84,7 @@ describe('#create-test-runner-suite', () => {
     )
 
     // Create App Config
-    expect(createResourceFromWorkflow).toHaveBeenCalledWith(
-      request,
-      service,
+    expect(triggerWorkflow).toHaveBeenCalledWith(
       config.get('github.org'),
       config.get('github.repos.cdpAppConfig'),
       config.get('workflows.createAppConfig'),
@@ -103,9 +94,7 @@ describe('#create-test-runner-suite', () => {
     )
 
     // Create Nginx
-    expect(createResourceFromWorkflow).toHaveBeenCalledWith(
-      request,
-      service,
+    expect(triggerWorkflow).toHaveBeenCalledWith(
       config.get('github.org'),
       config.get('github.repos.cdpNginxUpstreams'),
       config.get('workflows.createNginxUpstreams'),
@@ -116,9 +105,7 @@ describe('#create-test-runner-suite', () => {
     )
 
     // Create Squid
-    expect(createResourceFromWorkflow).toHaveBeenCalledWith(
-      request,
-      service,
+    expect(triggerWorkflow).toHaveBeenCalledWith(
       config.get('github.org'),
       config.get('github.repos.cdpSquidProxy'),
       config.get('workflows.createSquidConfig'),
@@ -128,9 +115,7 @@ describe('#create-test-runner-suite', () => {
     )
 
     // Create Dashboard
-    expect(createResourceFromWorkflow).toHaveBeenCalledWith(
-      request,
-      service,
+    expect(triggerWorkflow).toHaveBeenCalledWith(
       config.get('github.org'),
       config.get('github.repos.cdpGrafanaSvc'),
       config.get('workflows.createDashboard'),
@@ -138,6 +123,30 @@ describe('#create-test-runner-suite', () => {
         service,
         service_zone: 'public'
       }
+    )
+
+    const status = await db
+      .collection('status')
+      .findOne({ repositoryName: service })
+
+    expect(status?.repositoryName).toEqual(service)
+    expect(status[config.get('github.repos.cdpAppConfig')]?.status).toEqual(
+      statuses.requested
+    )
+    expect(
+      status[config.get('github.repos.cdpNginxUpstreams')]?.status
+    ).toEqual(statuses.requested)
+    expect(status[config.get('github.repos.cdpTfSvcInfra')]?.status).toEqual(
+      statuses.requested
+    )
+    expect(status[config.get('github.repos.cdpGrafanaSvc')]?.status).toEqual(
+      statuses.requested
+    )
+    expect(status[config.get('github.repos.cdpSquidProxy')]?.status).toEqual(
+      statuses.requested
+    )
+    expect(status[config.get('github.repos.createWorkflows')]?.status).toEqual(
+      statuses.requested
     )
   })
 })
