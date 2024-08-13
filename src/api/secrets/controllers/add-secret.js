@@ -7,6 +7,7 @@ import {
   secretPayloadValidation
 } from '~/src/api/secrets/helpers/schema/secret-validation'
 import { sanitize } from '~/src/helpers/sanitize'
+import { registerPendingSecret } from '~/src/api/secrets/helpers/register-pending-secret'
 
 const addSecretController = {
   options: {
@@ -18,7 +19,7 @@ const addSecretController = {
     },
     validate: {
       params: secretParamsValidation(),
-      payload: secretPayloadValidation,
+      payload: secretPayloadValidation(),
       failAction: (request, h, validationError) => {
         request.logger.debug(
           validationError,
@@ -31,29 +32,38 @@ const addSecretController = {
   handler: async (request, h) => {
     const { serviceName, environment } = request.params
     const { secretValue, secretKey } = request.payload
-    const description = `Secret ${secretKey} added for ${serviceName}`
+    const description = `Secret ${secretKey} pending for ${serviceName}`
     const topic = config.get('snsSecretsManagementTopicArn')
 
-    request.logger.debug(description)
+    try {
+      await sendSnsMessage({
+        request,
+        topic,
+        message: {
+          environment,
+          name: `cdp/services/${serviceName}`,
+          description,
+          secret_key: secretKey,
+          secret_value: secretValue,
+          action: 'add_secret'
+        }
+      })
 
-    await sendSnsMessage({
-      request,
-      topic,
-      message: {
+      await registerPendingSecret({
         environment,
-        name: `cdp/services/${serviceName}`,
-        description,
-        secret_key: secretKey,
-        secret_value: secretValue,
+        service: serviceName,
+        secretKey,
         action: 'add_secret'
-      }
-    })
+      })
 
-    // TODO
-    //  Add identifier for sent sns message to db collection with short ttl
-    //  Poll a new sns endpoint that will be notified from the secret_management Topic, for add_secret messages that match identifier stored in collection
-    //  Respond accordingly with success message or error exception from lambda
-    return h.response({ message: 'Success' }).code(200)
+      request.logger.debug(description)
+
+      return h.response({ message: 'Secret being created' }).code(200)
+    } catch (error) {
+      request.logger.error(error, 'Error creating secret')
+
+      return Boom.notImplemented('Error creating secret')
+    }
   }
 }
 
