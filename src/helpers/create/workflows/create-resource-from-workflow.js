@@ -27,7 +27,13 @@ const createResourceFromWorkflow = async (
     await triggerWorkflow(org, repo, workflow, inputs)
 
     await updateCreationStatus(request.db, service, repo, {
-      status: statuses.requested
+      status: statuses.requested,
+      trigger: {
+        org,
+        repo,
+        workflow,
+        inputs
+      }
     })
   } catch (e) {
     await updateCreationStatus(request.db, service, repo, {
