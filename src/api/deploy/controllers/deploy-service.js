@@ -11,6 +11,7 @@ import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-serv
 
 const owner = config.get('github.org')
 const configRepo = config.get('github.repos.cdpAppConfig')
+const deployFromFileEnvironments = config.get('deployFromFileEnvironments')
 
 const deployServiceController = {
   options: {
@@ -67,7 +68,11 @@ const deployServiceController = {
     )
     request.logger.info('Deployment registered')
 
-    const service = await lookupTenantService(imageName, environment)
+    const service = await lookupTenantService(
+      imageName,
+      environment,
+      request.logger
+    )
 
     if (!service) {
       const message =
@@ -79,16 +84,23 @@ const deployServiceController = {
       `Service ${imageName} in ${environment} should be deployed to ${service.zone}`
     )
 
-    await sendSnsDeploymentMessage(
-      deploymentId,
-      payload,
-      service.zone,
-      user,
-      configLatestCommitSha,
-      service.service_code,
-      request
-    )
-    request.logger.info('Deployment sns event sent')
+    const shouldDeployByFile = deployFromFileEnvironments.includes(environment)
+    if (!shouldDeployByFile) {
+      await sendSnsDeploymentMessage(
+        deploymentId,
+        payload,
+        service.zone,
+        user,
+        configLatestCommitSha,
+        service.service_code,
+        request
+      )
+      request.logger.info('Deployment sns event sent')
+    } else {
+      request.logger.info(
+        'Deployment sns event not sent - deploying via deployment file'
+      )
+    }
 
     await commitDeploymentFile(
       deploymentId,
@@ -97,6 +109,7 @@ const deployServiceController = {
       user,
       configLatestCommitSha,
       service.service_code,
+      shouldDeployByFile,
       request.logger
     )
     request.logger.info('Deployment commit file created')

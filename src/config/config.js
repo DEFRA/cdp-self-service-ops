@@ -2,6 +2,23 @@ import convict from 'convict'
 import path from 'path'
 
 import { version } from '~/package.json'
+import { environments } from '~/src/config/environments'
+
+convict.addFormat({
+  name: 'environment-array',
+  validate: function (values) {
+    const envs = Object.values(environments)
+    const validEnvs = values.every((value) => envs.includes(value))
+    if (!validEnvs) {
+      throw new Error(
+        `DEPLOY_FROM_FILE_ENVIRONMENTS environment variable contained unknown environments`
+      )
+    }
+  },
+  coerce: function (val) {
+    return val.split(',')
+  }
+})
 
 const config = convict({
   env: {
@@ -350,6 +367,12 @@ const config = convict({
       default: 'create_smoke_test_suite.yml',
       env: 'CREATE_SMOKE_TEST_SUITE_WORKFLOW'
     }
+  },
+  deployFromFileEnvironments: {
+    doc: 'list of environments where we should deploy from file',
+    format: 'environment-array',
+    default: ['infra-dev'],
+    env: 'DEPLOY_FROM_FILE_ENVIRONMENTS'
   }
 })
 

@@ -13,6 +13,7 @@ const gitHubOwner = config.get('github.org')
  * @param {{id: string, displayName: string}} user
  * @param {string} configCommitSha
  * @param {?string} serviceCode
+ * @param {?boolean} deploy
  * @param {Logger} logger
  */
 async function commitDeploymentFile(
@@ -22,6 +23,7 @@ async function commitDeploymentFile(
   user,
   configCommitSha,
   serviceCode,
+  deploy,
   logger
 ) {
   const deployment = generateDeployment(
@@ -31,7 +33,7 @@ async function commitDeploymentFile(
     deploymentId,
     configCommitSha,
     serviceCode,
-    false
+    deploy
   )
   const filePath = `environments/${payload.environment}/${zone}/${deployment.service.name}.json`
   const content = [{ path: filePath, obj: deployment }]
