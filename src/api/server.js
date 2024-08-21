@@ -56,7 +56,7 @@ async function createServer() {
   }
 
   await server.register([
-    ...(enablePulse ? pulse : []),
+    ...(enablePulse ? [pulse] : []),
     azureOidc,
     sqsClient,
     mongoDb,
