@@ -4,6 +4,10 @@ import path from 'path'
 import { version } from '~/package.json'
 import { environments } from '~/src/config/environments'
 
+const isProduction = process.env.NODE_ENV === 'production'
+const isTest = process.env.NODE_ENV === 'test'
+const isDevelopment = process.env.NODE_ENV === 'development'
+
 convict.addFormat({
   name: 'environment-array',
   validate: function (values) {
@@ -118,25 +122,23 @@ const config = convict({
   isProduction: {
     doc: 'If this application running in the production environment',
     format: Boolean,
-    default: process.env.NODE_ENV === 'production'
+    default: isProduction
   },
   isDevelopment: {
     doc: 'If this application running in the development environment',
     format: Boolean,
-    default: process.env.NODE_ENV !== 'production'
+    default: isDevelopment
   },
   isTest: {
     doc: 'If this application running in the test environment',
     format: Boolean,
-    default: process.env.NODE_ENV === 'test'
+    default: isTest
   },
-  get logLevel() {
-    return {
-      doc: 'Logging level',
-      format: ['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent'],
-      default: this.isDevelopment ? 'debug' : 'info',
-      env: 'LOG_LEVEL'
-    }
+  logLevel: {
+    doc: 'Logging level',
+    format: ['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent'],
+    default: isDevelopment ? 'debug' : 'info',
+    env: 'LOG_LEVEL'
   },
   mongoUri: {
     doc: 'URI for mongodb',
@@ -373,6 +375,18 @@ const config = convict({
     format: 'environment-array',
     default: ['infra-dev'],
     env: 'DEPLOY_FROM_FILE_ENVIRONMENTS'
+  },
+  enablePulse: {
+    doc: 'Enable Pulse',
+    format: Boolean,
+    default: isProduction,
+    env: 'ENABLE_PULSE'
+  },
+  enableSecureContext: {
+    doc: 'Enable Secure Context',
+    format: Boolean,
+    default: isProduction,
+    env: 'ENABLE_SECURE_CONTEXT'
   }
 })
 
