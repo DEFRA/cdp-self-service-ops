@@ -15,7 +15,8 @@ import { gitHubEventsListener } from '~/src/plugins/sqs-listener'
 import { sqsClient } from '~/src/plugins/sqs-client'
 import { pulse } from '~/src/plugins/pulse'
 
-const isProduction = config.get('isProduction')
+const enableSecureContext = config.get('enableSecureContext')
+const enablePulse = config.get('enablePulse')
 
 async function createServer() {
   setupWreckAgents(proxyAgent())
@@ -50,12 +51,12 @@ async function createServer() {
 
   await server.register(requestLogger)
 
-  if (isProduction) {
+  if (enableSecureContext) {
     await server.register(secureContext)
   }
 
   await server.register([
-    pulse,
+    ...(enablePulse ? pulse : []),
     azureOidc,
     sqsClient,
     mongoDb,
