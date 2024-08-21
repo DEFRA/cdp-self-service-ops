@@ -1,6 +1,5 @@
 {
   "watch": ["./src"],
   "ignore": ["**/*.test.*"],
-  "ext": "js,json,njk,scss",
-  "signal": "SIGINT"
+  "ext": "js,json,njk,scss"
 }
