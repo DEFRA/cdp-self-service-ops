@@ -373,7 +373,7 @@ const config = convict({
   deployFromFileEnvironments: {
     doc: 'list of environments where we should deploy from file',
     format: 'environment-array',
-    default: ['infra-dev'],
+    default: [],
     env: 'DEPLOY_FROM_FILE_ENVIRONMENTS'
   },
   enablePulse: {
