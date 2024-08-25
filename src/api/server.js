@@ -55,8 +55,11 @@ async function createServer() {
     await server.register(secureContext)
   }
 
+  if (enablePulse) {
+    await server.register(pulse)
+  }
+
   await server.register([
-    ...(enablePulse ? [pulse] : []),
     azureOidc,
     sqsClient,
     mongoDb,
