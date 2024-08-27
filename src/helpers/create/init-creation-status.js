@@ -107,10 +107,25 @@ async function initCreationStatus(
   return status
 }
 
+/**
+ *
+ * @param db
+ * @param {string} repo
+ * @param {string} field - The name of the field/workflow being updated
+ * @param {{status: string, trigger: {org: string, repo: string, workflow: string, inputs: object}, result: Object|undefined }} status
+ * @returns {Promise<*>}
+ */
 async function updateCreationStatus(db, repo, field, status) {
-  return await db
-    .collection('status')
-    .updateOne({ repositoryName: repo }, { $set: { [field]: status } })
+  return await db.collection('status').updateOne(
+    { repositoryName: repo },
+    {
+      $set: {
+        [`${field}.status`]: status.status,
+        [`${field}.trigger`]: status.trigger,
+        [`${field}.result`]: status.result
+      }
+    }
+  )
 }
 
 async function updateOverallStatus(db, repositoryName) {

@@ -1,4 +1,3 @@
-import { pullRequestHandler } from '~/src/listeners/github/handlers/pull-request-handler'
 import { config } from '~/src/config'
 import { workflowRunHandlerV2 } from '~/src/listeners/github/handlers/workflow-run-handler-v2'
 
@@ -11,7 +10,7 @@ const githubWebhooks = new Set([
   config.get('github.repos.cdpSquidProxy'),
   config.get('github.repos.cdpGrafanaSvc')
 ])
-const validActions = new Set(['workflow_run', 'pull_request'])
+const validActions = new Set(['workflow_run'])
 
 const shouldProcess = (message) => {
   const eventType = message.github_event
@@ -22,10 +21,6 @@ const shouldProcess = (message) => {
 const handle = async (server, message) => {
   if (!shouldProcess(message)) {
     return
-  }
-
-  if (message.github_event === 'pull_request') {
-    return await pullRequestHandler(server.db, message)
   }
 
   if (message.github_event === 'workflow_run') {

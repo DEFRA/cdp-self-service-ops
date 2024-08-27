@@ -4,8 +4,6 @@ const statuses = {
   completed: 'completed',
   raised: 'raised',
   queued: 'queued',
-  open: 'pr_open',
-  closed: 'pr_closed',
   merged: 'merged',
   inProgress: 'in-progress',
   success: 'success',
