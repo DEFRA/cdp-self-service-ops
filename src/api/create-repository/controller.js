@@ -50,7 +50,7 @@ const createRepositoryController = {
       request,
       config.get('workflows.createRepository'),
       repositoryName,
-      team,
+      team.github,
       ['cdp', 'repository'],
       { repositoryVisibility: visibility }
     )
