@@ -321,6 +321,16 @@ const config = convict({
       default: 'create-service.yml',
       env: 'WORKFLOWS_CREATE_TENANT_SERVICE'
     },
+    applyTenantService: {
+      doc: 'Github workflow triggered by merges to cdp-tf-svc-infra. Used for recovering failed create runs.',
+      format: String,
+      default: 'apply.yml'
+    },
+    manualApplyTenantService: {
+      doc: 'Github workflow for manually applying cdp-tf-svc-infra. Used for recovering failed create runs.',
+      format: String,
+      default: 'manual.yml'
+    },
     createDashboard: {
       doc: 'Github workflow to trigger when creating dashboard',
       format: String,
