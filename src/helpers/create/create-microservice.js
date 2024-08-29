@@ -83,7 +83,7 @@ async function createMicroservice(
       request,
       config.get('workflows.createMicroService'),
       repositoryName,
-      team,
+      team.github,
       topics,
       {
         serviceTypeTemplate
@@ -96,7 +96,7 @@ async function createMicroservice(
       redis_enabled: zone === 'public' ? 'true' : 'false',
       service_code: team.serviceCodes?.at(0) ?? ''
     }),
-    createAppConfig(request, repositoryName),
+    createAppConfig(request, repositoryName, team.github),
     createNginxUpstreams(request, repositoryName, zone),
     createSquidConfig(request, repositoryName),
     createDashboard(request, repositoryName, zone)

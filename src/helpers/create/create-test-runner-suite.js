@@ -63,7 +63,7 @@ export async function createTestRunnerSuite(
       request,
       templateWorkflow,
       repositoryName,
-      team,
+      team.github,
       topics
     ),
     createSquidConfig(request, repositoryName),
