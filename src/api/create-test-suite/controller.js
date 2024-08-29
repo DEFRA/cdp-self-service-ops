@@ -49,7 +49,7 @@ const createTestSuiteController = {
       request,
       config.get('workflows.createJourneyTest'),
       repositoryName,
-      team,
+      team.github,
       ['cdp', 'repository', 'test-suite', 'journey']
     )
 

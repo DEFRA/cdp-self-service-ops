@@ -93,7 +93,8 @@ describe('#create-test-runner-suite', () => {
       config.get('github.repos.cdpAppConfig'),
       config.get('workflows.createAppConfig'),
       {
-        service
+        service,
+        team: 'test'
       }
     )
 

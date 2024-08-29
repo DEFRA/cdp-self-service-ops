@@ -16,7 +16,6 @@ import { sqsClient } from '~/src/plugins/sqs-client'
 import { pulse } from '~/src/plugins/pulse'
 
 const enableSecureContext = config.get('enableSecureContext')
-const enablePulse = config.get('enablePulse')
 
 async function createServer() {
   setupWreckAgents(proxyAgent())
@@ -55,11 +54,8 @@ async function createServer() {
     await server.register(secureContext)
   }
 
-  if (enablePulse) {
-    await server.register(pulse)
-  }
-
   await server.register([
+    pulse,
     azureOidc,
     sqsClient,
     mongoDb,
