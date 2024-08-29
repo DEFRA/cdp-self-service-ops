@@ -376,12 +376,6 @@ const config = convict({
     default: [],
     env: 'DEPLOY_FROM_FILE_ENVIRONMENTS'
   },
-  enablePulse: {
-    doc: 'Enable Pulse',
-    format: Boolean,
-    default: isProduction,
-    env: 'ENABLE_PULSE'
-  },
   enableSecureContext: {
     doc: 'Enable Secure Context',
     format: Boolean,
