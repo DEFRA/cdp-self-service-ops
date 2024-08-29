@@ -68,11 +68,7 @@ const deployServiceController = {
     )
     request.logger.info('Deployment registered')
 
-    const service = await lookupTenantService(
-      imageName,
-      environment,
-      request.logger
-    )
+    const service = await lookupTenantService(imageName, environment)
 
     if (!service) {
       const message =

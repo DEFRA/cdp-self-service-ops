@@ -32,7 +32,7 @@ async function lookupTenantService(service, environment, ref = 'main') {
     return service
   } catch (error) {
     logger.error(
-      `Error attempting to retrieve ${filePath} from GitHub - Falling back to tenant_services.json`
+      `Error attempting to retrieve ${filePath} from GitHub - Falling back to tenant_services.json, ${error}`
     )
     return await lookupLegacyTenantService(service, environment, org, repo, ref)
   }
