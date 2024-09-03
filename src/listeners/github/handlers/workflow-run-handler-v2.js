@@ -60,7 +60,7 @@ const workflowRunHandlerV2 = async (server, message) => {
     )
     switch (workflowRepo) {
       case config.get('github.repos.cdpTfSvcInfra'):
-        await handleTfSvcInfraWorkflow(db, logger, message)
+        await handleTfSvcInfraWorkflow(db, logger, message, workflowFile)
         break
       default:
         await handleTriggeredWorkflow(db, logger, message)
