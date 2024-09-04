@@ -20,7 +20,9 @@ const handleTfSvcInfraWorkflow = async (db, logger, message, workflowFile) => {
 
     if (workflowFile === config.get('workflows.createTenantService')) {
       if (message.action === 'completed') {
-        logger.info('Ignoring cdp-tf-svc-infra create-service complete status')
+        logger.info(
+          `Ignoring ${config.get('workflows.createTenantService')} complete status`
+        )
         return
       }
       await handleTriggeredWorkflow(db, logger, message)
@@ -32,9 +34,7 @@ const handleTfSvcInfraWorkflow = async (db, logger, message, workflowFile) => {
       workflowFile === config.get('workflows.manualApplyTenantService')
     ) {
       if (message.action === 'completed') {
-        logger.info(
-          `Handling tf-svc-infra workflow completed message from main`
-        )
+        logger.info(`Bulk-updating cdp-tf-svc-infra`)
 
         // Any time cdp-tf-svc-infra completes on main, regardless of which commit triggered it
         // assume all services in management tenant-services.json are successfully created.
