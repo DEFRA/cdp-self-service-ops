@@ -2,6 +2,7 @@ import { bulkUpdateTfSvcInfra } from '~/src/listeners/github/helpers/bulk-update
 import { normalizeStatus } from '~/src/listeners/github/helpers/normalize-status'
 import { trimWorkflowRun } from '~/src/listeners/github/helpers/trim-workflow-run'
 import { handleTriggeredWorkflow } from '~/src/listeners/github/handlers/handle-triggered-workflow'
+import { config } from '~/src/config'
 
 /**
  * Specific handler for tf-svc-infra create-service calls. On completion, it triggers bulkUpdateTfSvcInfra
@@ -10,28 +11,48 @@ import { handleTriggeredWorkflow } from '~/src/listeners/github/handlers/handle-
  * @param { import('mongodb').Db } db
  * @param { import('pino').Logger } logger
  * @param {Object} message
+ * @param {string} workflowFile
  * @returns {Promise<void>}
  */
-const handleTfSvcInfraWorkflow = async (db, logger, message) => {
+const handleTfSvcInfraWorkflow = async (db, logger, message, workflowFile) => {
   try {
-    if (message.action === 'completed') {
-      logger.info(`Handling tf-svc-infra workflow completed message from main`)
+    logger.info(`handling tf-svc-infra workflow ${workflowFile}`)
 
-      // Any time cdp-tf-svc-infra completes on main, regardless of which commit triggered it
-      // assume all services in management tenant-services.json are successfully created.
-      // (we use management as it is responsible for the ECR)
-      const status = normalizeStatus(
-        message.action,
-        message.workflow_run?.conclusion
-      )
-      await bulkUpdateTfSvcInfra(
-        db,
-        trimWorkflowRun(message.workflow_run),
-        status
-      )
-    } else {
+    if (workflowFile === config.get('workflows.createTenantService')) {
+      if (message.action === 'completed') {
+        logger.info(
+          `Ignoring ${config.get('workflows.createTenantService')} complete status`
+        )
+        return
+      }
       await handleTriggeredWorkflow(db, logger, message)
+      return
     }
+
+    if (
+      workflowFile === config.get('workflows.applyTenantService') ||
+      workflowFile === config.get('workflows.manualApplyTenantService')
+    ) {
+      if (message.action === 'completed') {
+        logger.info(`Bulk-updating cdp-tf-svc-infra`)
+
+        // Any time cdp-tf-svc-infra completes on main, regardless of which commit triggered it
+        // assume all services in management tenant-services.json are successfully created.
+        // (we use management as it is responsible for the ECR)
+        const status = normalizeStatus(
+          message.action,
+          message.workflow_run?.conclusion
+        )
+        await bulkUpdateTfSvcInfra(
+          db,
+          trimWorkflowRun(message.workflow_run),
+          status
+        )
+      }
+      return
+    }
+
+    logger.info(`did not process tf-svc-infra workflow`)
   } catch (e) {
     logger.error(e)
   }
