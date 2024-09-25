@@ -16,6 +16,7 @@ const snsClientPlugin = {
 
       server.logger.info('sns-client configured')
       server.decorate('request', 'snsClient', client)
+      server.decorate('server', 'snsClient', client)
 
       server.events.on('stop', () => {
         server.logger.info(`Closing SNS client`)

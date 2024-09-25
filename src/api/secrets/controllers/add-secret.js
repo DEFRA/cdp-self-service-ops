@@ -37,7 +37,7 @@ const addSecretController = {
 
     try {
       await sendSnsMessage({
-        request,
+        snsClient: request.snsClient,
         topic,
         message: {
           environment,
@@ -46,7 +46,8 @@ const addSecretController = {
           secret_key: secretKey,
           secret_value: secretValue,
           action: 'add_secret'
-        }
+        },
+        logger: request.logger
       })
 
       await registerPendingSecret({

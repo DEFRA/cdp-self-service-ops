@@ -48,9 +48,10 @@ const stopTestSuiteController = {
     request.logger.info(`Stopping task ${taskId} in ${testRun.environment}`)
 
     const snsResponse = await sendSnsMessage({
-      request,
+      snsClient: request.snsClient,
       topic,
       message,
+      logger: request.logger,
       environment: testRun.environment,
       deduplicationId: taskId
     })
