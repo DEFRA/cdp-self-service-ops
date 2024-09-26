@@ -18,11 +18,15 @@ const shouldProcess = (message, eventType) => {
 }
 
 const handle = async (server, message) => {
-  if (shouldProcess(message, 'workflow_run')) {
-    return await workflowRunHandlerV2(server, message)
-  }
-  if (shouldProcess(message, 'workflow_run')) {
-    return await workflowRunAlertHandler(server, message)
+  try {
+    if (shouldProcess(message, 'workflow_run')) {
+      return await workflowRunHandlerV2(server, message)
+    }
+    if (shouldProcess(message, 'workflow_run')) {
+      return await workflowRunAlertHandler(server, message)
+    }
+  } catch (error) {
+    server.logger.error(error, 'Exception in workflow handler')
   }
 }
 
