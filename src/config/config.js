@@ -158,6 +158,12 @@ const config = convict({
     default: 'arn:aws:sns:eu-west-2:000000000000:deploy-topic',
     env: 'SNS_DEPLOY_TOPIC_ARN'
   },
+  snsCdpNotificationArn: {
+    doc: 'SNS CDP Notification Topic ARN',
+    format: String,
+    default: 'arn:aws:sns:eu-west-2:000000000000:cdp-notification',
+    env: 'SNS_CDP_NOTIFICATION_TOPIC_ARN'
+  },
   snsRunTestTopicArn: {
     doc: 'SNS Run Test Topic ARN',
     format: String,
@@ -175,6 +181,12 @@ const config = convict({
     format: String,
     default: 'arn:aws:sns:eu-west-2:000000000000:secret_management',
     env: 'SNS_SECRETS_MANAGEMENT_TOPIC_ARN'
+  },
+  sendFailedActionNotification: {
+    doc: 'Send notification for failed GitHub Action',
+    format: Boolean,
+    default: false,
+    env: 'SEND_FAILED_ACTION_NOTIFICATION'
   },
   platformGlobalSecretKeys: {
     doc: 'Global Platform level secret keys. These keys are not to be overridden',

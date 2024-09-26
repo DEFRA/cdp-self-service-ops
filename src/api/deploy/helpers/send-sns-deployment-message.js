@@ -41,9 +41,10 @@ async function sendSnsDeploymentMessage(
 
   const topic = config.get('snsDeployTopicArn')
   const snsResponse = await sendSnsMessage({
-    request,
+    snsClient: request.snsClient,
     topic,
-    message: deployMessage
+    message: deployMessage,
+    logger: request.logger
   })
   const { logger } = request
 

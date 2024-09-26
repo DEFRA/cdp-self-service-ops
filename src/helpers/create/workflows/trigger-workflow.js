@@ -3,9 +3,9 @@ import { octokit } from '~/src/helpers/oktokit'
 import { config } from '~/src/config'
 
 /**
- * Trigger a given github workflow
- * @param {string} org        - github org the workflow is in
- * @param {string} repo       - name of the github repo the workflow is in
+ * Trigger a given GitHub workflow
+ * @param {string} org        - GitHub org the workflow is in
+ * @param {string} repo       - name of the GitHub repo the workflow is in
  * @param {string} workflowId - name of the workflow file to trigger
  * @param {object} inputs     - input params to pass to the workflow
  */
