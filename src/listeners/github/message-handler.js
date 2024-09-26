@@ -1,6 +1,6 @@
 import { config } from '~/src/config'
-import { workflowRunHandlerV2 } from '~/src/listeners/github/handlers/workflow-run-handler-v2'
-import { workflowRunAlertHandler } from '~/src/listeners/github/handlers/workflow-run-alert-handler'
+import { workflowRunCreationHandlerV2 } from '~/src/listeners/github/handlers/workflow-run-creation-handler-v2'
+import { workflowRunNotificationHandler } from '~/src/listeners/github/handlers/workflow-run-notification-handler'
 
 const githubWebhooks = new Set([
   config.get('github.repos.appDeployments'),
@@ -20,13 +20,13 @@ const shouldProcess = (message, eventType) => {
 const handle = async (server, message) => {
   try {
     if (shouldProcess(message, 'workflow_run')) {
-      return await workflowRunHandlerV2(server, message)
+      await workflowRunCreationHandlerV2(server, message)
     }
     if (shouldProcess(message, 'workflow_run')) {
-      return await workflowRunAlertHandler(server, message)
+      await workflowRunNotificationHandler(server, message)
     }
   } catch (error) {
-    server.logger.error(error, 'Exception in workflow handler')
+    server.logger.error(error, 'Exception in github events processing handler')
   }
 }
 

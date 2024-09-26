@@ -21,7 +21,7 @@ const handleTfSvcInfraWorkflow = async (db, logger, message, workflowFile) => {
     if (workflowFile === config.get('workflows.createTenantService')) {
       if (message.action === 'completed') {
         logger.info(
-          `Ignoring ${config.get('workflows.createTenantService')} complete status`
+          `Creation handler: Ignoring ${config.get('workflows.createTenantService')} complete status`
         )
         return
       }
@@ -34,7 +34,7 @@ const handleTfSvcInfraWorkflow = async (db, logger, message, workflowFile) => {
       workflowFile === config.get('workflows.manualApplyTenantService')
     ) {
       if (message.action === 'completed') {
-        logger.info(`Bulk-updating cdp-tf-svc-infra`)
+        logger.info(`Creation handler: Bulk updating cdp-tf-svc-infra`)
 
         // Any time cdp-tf-svc-infra completes on main, regardless of which commit triggered it
         // assume all services in management tenant-services.json are successfully created.
@@ -52,7 +52,7 @@ const handleTfSvcInfraWorkflow = async (db, logger, message, workflowFile) => {
       return
     }
 
-    logger.info(`did not process tf-svc-infra workflow`)
+    logger.info(`Creation handler: Did not process tf-svc-infra workflow`)
   } catch (e) {
     logger.error(e)
   }

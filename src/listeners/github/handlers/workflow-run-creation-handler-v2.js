@@ -37,7 +37,7 @@ const shouldWorkflowBeProcessed = (repo, workflow) => {
   }
 }
 
-const workflowRunHandlerV2 = async (server, message) => {
+const workflowRunCreationHandlerV2 = async (server, message) => {
   const db = server.db
   const workflowRepo = message.repository?.name
   const headBranch = message.workflow_run?.head_branch
@@ -48,7 +48,7 @@ const workflowRunHandlerV2 = async (server, message) => {
 
   if (headBranch !== 'main') {
     logger.info(
-      `Not processing workflow run ${workflowRepo}/${workflowFile}, not running on main branch`
+      `Creation handler: Not processing workflow run ${workflowRepo}/${workflowFile}, not running on main branch`
     )
     return
   }
@@ -56,7 +56,7 @@ const workflowRunHandlerV2 = async (server, message) => {
   // Are we interested in handling the event?
   if (shouldWorkflowBeProcessed(workflowRepo, workflowFile)) {
     logger.info(
-      `Processing workflow_run message for ${workflowRepo}, ${headBranch}/${headSHA}, action: ${message.action}`
+      `Creation handler: Processing workflow_run message for ${workflowRepo}, ${headBranch}/${headSHA}, action: ${message.action}`
     )
     switch (workflowRepo) {
       case config.get('github.repos.cdpTfSvcInfra'):
@@ -67,8 +67,10 @@ const workflowRunHandlerV2 = async (server, message) => {
         break
     }
   } else {
-    logger.info(`Not processing ${workflowRepo}/${workflowFile}`)
+    logger.info(
+      `Creation handler: Not processing ${workflowRepo}/${workflowFile}`
+    )
   }
 }
 
-export { workflowRunHandlerV2, shouldWorkflowBeProcessed }
+export { workflowRunCreationHandlerV2, shouldWorkflowBeProcessed }
