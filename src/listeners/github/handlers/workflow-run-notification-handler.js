@@ -128,6 +128,10 @@ async function workflowRunNotificationHandler(server, event) {
       author
     })
 
+    server.logger.info(
+      `Notification handler: Sending notification to ${slackChannel}`
+    )
+
     const topic = config.get('snsCdpNotificationArn')
     await sendSnsMessage({
       snsClient: server.snsClient,
