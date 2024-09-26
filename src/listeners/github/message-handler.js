@@ -18,15 +18,26 @@ const shouldProcess = (message, eventType) => {
 }
 
 const handle = async (server, message) => {
-  try {
-    if (shouldProcess(message, 'workflow_run')) {
+  if (shouldProcess(message, 'workflow_run')) {
+    try {
       await workflowRunCreationHandlerV2(server, message)
+    } catch (error) {
+      server.logger.error(
+        error,
+        'Exception in github events processing creation handler'
+      )
     }
-    if (shouldProcess(message, 'workflow_run')) {
+  }
+
+  if (shouldProcess(message, 'workflow_run')) {
+    try {
       await workflowRunNotificationHandler(server, message)
+    } catch (error) {
+      server.logger.error(
+        error,
+        'Exception in github events processing notification handler'
+      )
     }
-  } catch (error) {
-    server.logger.error(error, 'Exception in github events processing handler')
   }
 }
 

@@ -108,41 +108,45 @@ async function workflowRunNotificationHandler(server, event) {
   const sendFailedActionNotification = config.get(
     'sendFailedActionNotification'
   )
+
   const ActionFailed = shouldSendAlert(headBranch, action, conclusion)
 
   if (ActionFailed) {
     server.logger.info(
       `Notification handler: '${workflowName}' in ${repo} failed: ${workflowUrl} with status '${conclusion}'`
     )
-  }
+    if (sendFailedActionNotification) {
+      server.logger.info(
+        `Notification handler: Sending notification to ${slackChannel}`
+      )
 
-  if (ActionFailed && sendFailedActionNotification) {
-    const message = generateSlackMessage({
-      slackChannel,
-      workflowName,
-      repo,
-      repoUrl,
-      workflowUrl,
-      runNumber,
-      commitMessage,
-      author
-    })
+      const message = generateSlackMessage({
+        slackChannel,
+        workflowName,
+        repo,
+        repoUrl,
+        workflowUrl,
+        runNumber,
+        commitMessage,
+        author
+      })
 
-    server.logger.info(
-      `Notification handler: Sending notification to ${slackChannel}`
-    )
-
-    const topic = config.get('snsCdpNotificationArn')
-    await sendSnsMessage({
-      snsClient: server.snsClient,
-      topic,
-      message: {
-        team: 'platform',
-        slack_channel: slackChannel,
-        message
-      },
-      logger: server.logger
-    })
+      const topic = config.get('snsCdpNotificationArn')
+      await sendSnsMessage({
+        snsClient: server.snsClient,
+        topic,
+        message: {
+          team: 'platform',
+          slack_channel: slackChannel,
+          message
+        },
+        logger: server.logger
+      })
+    } else {
+      server.logger.info(
+        `Notification handler: Not sending sns message - ${sendFailedActionNotification}`
+      )
+    }
   }
 }
 
