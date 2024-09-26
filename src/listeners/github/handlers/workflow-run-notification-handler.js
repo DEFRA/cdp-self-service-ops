@@ -88,7 +88,7 @@ function shouldSendAlert(headBranch, action, conclusion) {
   )
 }
 
-async function workflowRunAlertHandler(server, event) {
+async function workflowRunNotificationHandler(server, event) {
   const { name: repo, html_url: repoUrl } = event.repository
   const action = event.action
   const {
@@ -112,7 +112,7 @@ async function workflowRunAlertHandler(server, event) {
 
   if (ActionFailed) {
     server.logger.info(
-      `Workflow '${workflowName}' in ${repo} failed: ${workflowUrl}`
+      `Notification handler: '${workflowName}' in ${repo} failed: ${workflowUrl} with status '${conclusion}'`
     )
   }
 
@@ -142,4 +142,4 @@ async function workflowRunAlertHandler(server, event) {
   }
 }
 
-export { workflowRunAlertHandler }
+export { workflowRunNotificationHandler }

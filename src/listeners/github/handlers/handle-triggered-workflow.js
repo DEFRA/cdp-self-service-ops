@@ -32,7 +32,7 @@ const handleTriggeredWorkflow = async (db, logger, message) => {
     )
 
     logger.info(
-      `attempting to update ${message.repository?.name} status for ${serviceRepo} to ${workflowStatus}`
+      `Creation handler: Attempting to update ${message.repository?.name} status for ${serviceRepo} to ${workflowStatus}`
     )
 
     await updateWorkflowStatus(

@@ -1,8 +1,8 @@
 import { statuses } from '~/src/constants/statuses'
 import {
   shouldWorkflowBeProcessed,
-  workflowRunHandlerV2
-} from '~/src/listeners/github/handlers/workflow-run-handler-v2'
+  workflowRunCreationHandlerV2
+} from '~/src/listeners/github/handlers/workflow-run-creation-handler-v2'
 import { handleTriggeredWorkflow } from '~/src/listeners/github/handlers/handle-triggered-workflow'
 import { handleTfSvcInfraWorkflow } from '~/src/listeners/github/handlers/handle-tf-svc-infra-workflow'
 
@@ -45,7 +45,7 @@ describe('#workflow-run-handler-v2', () => {
       }
     }
 
-    await workflowRunHandlerV2(mockServer, msg)
+    await workflowRunCreationHandlerV2(mockServer, msg)
     expect(handleTriggeredWorkflow).not.toHaveBeenCalled()
     expect(handleTfSvcInfraWorkflow).not.toHaveBeenCalled()
   })
@@ -72,7 +72,7 @@ describe('#workflow-run-handler-v2', () => {
         }
       }
     }
-    await workflowRunHandlerV2(mockServer, msg)
+    await workflowRunCreationHandlerV2(mockServer, msg)
     expect(handleTriggeredWorkflow).toHaveBeenCalled()
     expect(handleTfSvcInfraWorkflow).not.toHaveBeenCalled()
   })
@@ -99,7 +99,7 @@ describe('#workflow-run-handler-v2', () => {
         }
       }
     }
-    await workflowRunHandlerV2(mockServer, msg)
+    await workflowRunCreationHandlerV2(mockServer, msg)
     expect(handleTriggeredWorkflow).not.toHaveBeenCalled()
     expect(handleTfSvcInfraWorkflow).toHaveBeenCalled()
   })
@@ -131,7 +131,7 @@ describe('#workflow-run-handler-v2', () => {
         }
       }
     }
-    await workflowRunHandlerV2(mockServer, msg)
+    await workflowRunCreationHandlerV2(mockServer, msg)
     expect(handleTriggeredWorkflow).not.toHaveBeenCalled()
     expect(handleTfSvcInfraWorkflow).not.toHaveBeenCalled()
   })
