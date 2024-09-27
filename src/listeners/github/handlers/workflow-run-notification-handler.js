@@ -132,6 +132,7 @@ async function workflowRunNotificationHandler(server, event) {
       })
 
       const topic = config.get('snsCdpNotificationArn')
+      const environment = config.get('environment')
       await sendSnsMessage({
         snsClient: server.snsClient,
         topic,
@@ -140,12 +141,11 @@ async function workflowRunNotificationHandler(server, event) {
           slack_channel: slackChannel,
           message
         },
-        logger: server.logger
+        logger: server.logger,
+        environment
       })
     } else {
-      server.logger.info(
-        `Notification handler: Not sending sns message - ${sendFailedActionNotification}`
-      )
+      server.logger.info(`Notification handler: Not sending sns message`)
     }
   }
 }
