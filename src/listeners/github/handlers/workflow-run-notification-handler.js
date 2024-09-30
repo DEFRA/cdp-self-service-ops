@@ -103,8 +103,7 @@ async function workflowRunNotificationHandler(server, event) {
   const commitMessage = headCommit.message
   const author = headCommit.author.name
 
-  const slackChannel = 'cdp-platform-alerts'
-
+  const slackChannel = config.get('platformAlertSlackChannel')
   const sendFailedActionNotification = config.get(
     'sendFailedActionNotification'
   )

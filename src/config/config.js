@@ -409,6 +409,12 @@ const config = convict({
     format: Boolean,
     default: isProduction,
     env: 'ENABLE_SECURE_CONTEXT'
+  },
+  platformAlertSlackChannel: {
+    doc: 'Slack Channel for alerts',
+    format: String,
+    default: 'cdp-platform-alerts',
+    env: 'PLATFORM_ALERT_SLACK_CHANNEL'
   }
 })
 
