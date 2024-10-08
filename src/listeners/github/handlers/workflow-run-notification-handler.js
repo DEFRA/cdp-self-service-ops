@@ -80,19 +80,31 @@ const failedConclusions = new Set([
   'startup_failure'
 ])
 
-function shouldSendAlert(headBranch, action, conclusion) {
+function shouldSendAlert(event) {
+  const action = event.action
+  const {
+    head_branch: headBranch,
+    conclusion,
+    name: workflowName
+  } = event.workflow_run
+  const repoName = event.repository?.name
+  const cdpTfSvcInfra = config.get('github.repos.cdpTfSvcInfra')
+
+  const infraDevTfSvcInfraRun =
+    repoName === cdpTfSvcInfra &&
+    workflowName.toLocaleLowerCase().includes('infra-dev')
+
   return (
     headBranch === 'main' &&
     action === 'completed' &&
-    failedConclusions.has(conclusion)
+    failedConclusions.has(conclusion) &&
+    !infraDevTfSvcInfraRun
   )
 }
 
 async function workflowRunNotificationHandler(server, event) {
   const { name: repo, html_url: repoUrl } = event.repository
-  const action = event.action
   const {
-    head_branch: headBranch,
     name: workflowName,
     html_url: workflowUrl,
     run_number: runNumber,
@@ -108,7 +120,7 @@ async function workflowRunNotificationHandler(server, event) {
     'sendFailedActionNotification'
   )
 
-  const ActionFailed = shouldSendAlert(headBranch, action, conclusion)
+  const ActionFailed = shouldSendAlert(event)
 
   if (ActionFailed) {
     server.logger.info(
