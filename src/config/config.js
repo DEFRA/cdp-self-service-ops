@@ -191,7 +191,7 @@ const config = convict({
   sendFailedActionNotification: {
     doc: 'Send notification for failed GitHub Action',
     format: Boolean,
-    default: false,
+    default: true,
     env: 'SEND_FAILED_ACTION_NOTIFICATION'
   },
   platformGlobalSecretKeys: {
