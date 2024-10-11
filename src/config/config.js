@@ -188,6 +188,12 @@ const config = convict({
     default: 'arn:aws:sns:eu-west-2:000000000000:secret_management',
     env: 'SNS_SECRETS_MANAGEMENT_TOPIC_ARN'
   },
+  snsRunWebShellTopicArn: {
+    doc: 'SNS Run WebShell Topic ARN',
+    format: String,
+    default: 'arn:aws:sns:eu-west-2:000000000000:run-webshell-topic',
+    env: 'SNS_RUN_WEBSHELL_TOPIC_ARN'
+  },
   sendFailedActionNotification: {
     doc: 'Send notification for failed GitHub Action',
     format: Boolean,

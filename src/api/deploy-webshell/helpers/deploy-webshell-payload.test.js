@@ -1,0 +1,25 @@
+import { deployWebShellPayload } from '~/src/api/deploy-webshell/helpers/deploy-webshell-payload'
+
+describe('#deployWebShellPayload', () => {
+  test('should generate a valid payload', () => {
+    const payload = deployWebShellPayload({
+      environment: 'test',
+      service: 'service-name',
+      token: '1234',
+      user: { id: '9999-9999', displayName: 'User Name' }
+    })
+
+    const expected = {
+      deployed_by: {
+        displayName: 'User Name',
+        id: '9999-9999'
+      },
+      environment: 'test',
+      role: 'service-name',
+      token: '1234',
+      zone: 'ops'
+    }
+
+    expect(payload).toEqual(expected)
+  })
+})
