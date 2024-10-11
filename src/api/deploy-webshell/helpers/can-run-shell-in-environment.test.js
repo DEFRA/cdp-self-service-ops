@@ -14,7 +14,7 @@ describe('#canRunShellInEnvironment', () => {
 
   test('non-admins cannot run shells in prod, infra-dev or management', () => {
     const adminGroup = 'admin-group'
-    const scope = ['other-group']
+    const nonAdmin = ['other-group']
 
     const restricted = [
       environments.prod,
@@ -24,11 +24,11 @@ describe('#canRunShellInEnvironment', () => {
     const allowed = [environments.test, environments.dev, environments.perfTest]
 
     restricted.forEach((env) => {
-      expect(canRunShellInEnvironment(env, scope, adminGroup)).toBe(false)
+      expect(canRunShellInEnvironment(env, nonAdmin, adminGroup)).toBe(false)
     })
 
     allowed.forEach((env) => {
-      expect(canRunShellInEnvironment(env, scope, adminGroup)).toBe(true)
+      expect(canRunShellInEnvironment(env, nonAdmin, adminGroup)).toBe(true)
     })
   })
 })

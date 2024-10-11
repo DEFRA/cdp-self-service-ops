@@ -13,21 +13,24 @@ export function canRunShellInEnvironment(
   scope,
   adminGroup = config.get('oidcAdminGroupId')
 ) {
+  // No one can run in prod for now.
   if (environment === environments.prod) {
-    // At some point we might want to provide a break-glass for this
+    // At some point we might want to provide a break-glass for this.
     return false
   }
 
+  // Admins can run in all other environments
   if (scope.includes(adminGroup)) {
     return true
   }
 
-  switch (environment) {
-    case environments.infraDev:
-    case environments.management:
-    case environments.prod:
-      return false
-    default:
-      return true
+  // Non-admin can't run shells in prod or admin environments.
+  if (
+    environment === environments.infraDev ||
+    environment === environments.management
+  ) {
+    return false
   }
+
+  return true
 }
