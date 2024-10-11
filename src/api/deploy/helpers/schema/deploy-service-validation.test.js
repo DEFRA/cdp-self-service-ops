@@ -36,7 +36,7 @@ describe('#deployServiceValidation', () => {
     expect(
       deployServiceValidation().validate(payload).error.details.at(0).message
     ).toContain(
-      '"environment" must be one of [management, infra-dev, dev, test, perf-test, prod]'
+      '"environment" must be one of [management, infra-dev, dev, test, perf-test, ext-test, prod]'
     )
   })
 
