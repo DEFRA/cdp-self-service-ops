@@ -10,7 +10,7 @@ const repo = config.get('github.repos.cdpTfSvcInfra')
 
 const schema = Joi.object({
   zone: Joi.string().valid('public', 'protected').required(),
-  service_code: Joi.string().min(3).required(),
+  service_code: Joi.any(),
   mongo: Joi.boolean(),
   redis: Joi.boolean(),
   testSuite: Joi.string()
@@ -31,7 +31,7 @@ async function lookupTenantService(service, environment, ref = 'main') {
     Joi.assert(service, schema) // Check file in correct format
     return service
   } catch (error) {
-    logger.error(`Error attempting to retrieve ${filePath} from GitHub`)
+    logger.error(error, `Error attempting to retrieve ${filePath} from GitHub`)
   }
 }
 
