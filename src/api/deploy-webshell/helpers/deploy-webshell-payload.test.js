@@ -4,6 +4,7 @@ describe('#deployWebShellPayload', () => {
   test('should generate a valid payload', () => {
     const payload = deployWebShellPayload({
       environment: 'test',
+      zone: 'public',
       service: 'service-name',
       token: '1234',
       user: { id: '9999-9999', displayName: 'User Name' }
@@ -17,7 +18,7 @@ describe('#deployWebShellPayload', () => {
       environment: 'test',
       role: 'service-name',
       token: '1234',
-      zone: 'ops'
+      zone: 'public'
     }
 
     expect(payload).toEqual(expected)
