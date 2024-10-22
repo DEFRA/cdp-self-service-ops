@@ -6,6 +6,7 @@ import { config } from '~/src/config'
 
 import Boom from '@hapi/boom'
 import { deployWebShellPayload } from '~/src/api/deploy-webshell/helpers/deploy-webshell-payload'
+import { lookupTenantService } from '~/.server/api/deploy/helpers/lookup-tenant-service'
 
 const deployWebShellController = {
   options: {
@@ -37,6 +38,18 @@ const deployWebShellController = {
       )
     }
 
+    const tenant = await lookupTenantService(
+      payload.service,
+      payload.environment
+    )
+
+    if (!tenant?.zone) {
+      request.logger.error(
+        `failed to find zone for ${payload.service} in ${payload.environment}`
+      )
+      throw Boom.forbidden('Failed to lookup service in this environment')
+    }
+
     request.logger.info(
       `WebShell requested ${JSON.stringify(payload)} by ${user.displayName}`
     )
@@ -47,6 +60,7 @@ const deployWebShellController = {
       user,
       token,
       environment: payload.environment,
+      zone: tenant.zone,
       service: payload.service
     })
 
