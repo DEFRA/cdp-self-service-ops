@@ -6,7 +6,7 @@ import { config } from '~/src/config'
 
 import Boom from '@hapi/boom'
 import { deployWebShellPayload } from '~/src/api/deploy-webshell/helpers/deploy-webshell-payload'
-import { lookupTenantService } from '~/.server/api/deploy/helpers/lookup-tenant-service'
+import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service'
 
 const deployWebShellController = {
   options: {
