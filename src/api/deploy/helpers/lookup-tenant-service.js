@@ -13,7 +13,7 @@ const schema = Joi.object({
   service_code: Joi.any(),
   mongo: Joi.boolean(),
   redis: Joi.boolean(),
-  testSuite: Joi.string()
+  test_suite: Joi.string()
 }).unknown(true)
 
 /**
