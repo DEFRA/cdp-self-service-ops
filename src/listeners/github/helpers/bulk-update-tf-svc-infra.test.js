@@ -85,4 +85,45 @@ describe('bulkUpdateTtfSvcInfra', () => {
     expect(updateOverallStatus).not.toHaveBeenCalled()
     expect(createPlaceholderArtifact).not.toHaveBeenCalled()
   })
+
+  test('it should update a test_suite thats pending and has a tenant json entry', async () => {
+    findAllInProgressOrFailed.mockResolvedValue([
+      {
+        repositoryName: 'test1'
+      }
+    ])
+    lookupTenantService.mockResolvedValue({
+      test_suite: 'test1',
+      zone: 'public',
+      mongo: false,
+      redis: false,
+      service_code: 'TST'
+    })
+
+    const db = {}
+    const workflow = {
+      name: 'test1',
+      id: 1,
+      html_url: `http://localhost:8080/test1`,
+      created_at: new Date(),
+      updated_at: new Date(),
+      path: '.github/workflows/create-service.yml'
+    }
+    await bulkUpdateTfSvcInfra(db, workflow, statuses.success)
+
+    expect(updateWorkflowStatus).toHaveBeenCalledWith(
+      db,
+      'test1',
+      'cdp-tf-svc-infra',
+      'main',
+      statuses.success,
+      workflow
+    )
+    expect(updateOverallStatus).toHaveBeenCalledWith(db, 'test1')
+    expect(createPlaceholderArtifact).toHaveBeenCalledWith({
+      service: 'test1',
+      gitHubUrl: `https://github.com/DEFRA/test1`,
+      runMode: 'Job'
+    })
+  })
 })
