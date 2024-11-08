@@ -1,4 +1,5 @@
 import { deployTestSuiteController } from '~/src/api/deploy-test-suite/controllers/deploy-test-suite'
+import { triggerTestSuiteController } from '~/src/api/deploy-test-suite/controllers/trigger-test-suite'
 import { stopTestSuiteController } from '~/src/api/deploy-test-suite/controllers/stop-test-suite'
 
 const deployTestSuite = {
@@ -10,6 +11,11 @@ const deployTestSuite = {
           method: 'POST',
           path: '/deploy-test-suite',
           ...deployTestSuiteController
+        },
+        {
+          method: 'POST',
+          path: '/trigger-test-suite',
+          ...triggerTestSuiteController
         },
         {
           method: 'POST',
