@@ -9,7 +9,7 @@ import { getRepoTeams } from '~/src/api/deploy/helpers/get-repo-teams'
  * @return {Promise<boolean>}
  */
 async function isOwnerOfSuite(testSuite, scope) {
-  if (scope.includes(config.get('oidcAdminGroupId'))) return true
+  if (scope.includes(config.get('oidc.adminGroupId'))) return true
   const repoTeams = await getRepoTeams(testSuite)
   return repoTeams.some((team) => scope.includes(team.teamId))
 }

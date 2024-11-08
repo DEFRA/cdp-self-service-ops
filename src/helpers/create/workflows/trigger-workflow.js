@@ -19,7 +19,7 @@ function triggerWorkflow(org, repo, workflowId, inputs) {
       ref: 'main',
       inputs,
       headers: {
-        'X-GitHub-Api-Version': config.get('gitHubApiVersion')
+        'X-GitHub-Api-Version': config.get('github.apiVersion')
       }
     }
   )

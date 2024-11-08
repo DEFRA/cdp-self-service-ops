@@ -11,7 +11,7 @@ import { config, environments } from '~/src/config'
 export function canRunShellInEnvironment(
   environment,
   scope,
-  adminGroup = config.get('oidcAdminGroupId')
+  adminGroup = config.get('oidc.adminGroupId')
 ) {
   // No one can run in prod for now.
   if (environment === environments.prod) {

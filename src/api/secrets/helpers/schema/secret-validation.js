@@ -9,7 +9,7 @@ import { config, environments } from '~/src/config'
  */
 function secretParamsValidation() {
   return (params, options) => {
-    const adminTeamId = config.get('oidcAdminGroupId')
+    const adminTeamId = config.get('oidc.adminGroupId')
     const teamId = options.context.payload.teamId
     const allowedEnvironments =
       teamId === adminTeamId
