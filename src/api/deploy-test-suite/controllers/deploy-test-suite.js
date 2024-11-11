@@ -1,13 +1,9 @@
 import Boom from '@hapi/boom'
 
 import { deployTestSuiteValidation } from '~/src/api/deploy-test-suite/helpers/deploy-test-suite-validation'
-import { generateTestRunMessage } from '~/src/api/deploy-test-suite/helpers/generate-test-run-message'
-import { sendSnsMessage } from '~/src/helpers/sns/send-sns-message'
-import crypto from 'node:crypto'
-import { config } from '~/src/config'
-import { createRecordTestRun } from '~/src/api/deploy-test-suite/helpers/record-test-run'
 import { isOwnerOfSuite } from '~/src/api/deploy-test-suite/helpers/is-owner-of-suite'
 import { canRunInEnvironment } from '~/src/api/deploy-test-suite/helpers/can-run-in-environment'
+import { runTestSuite } from '~/src/api/deploy-test-suite/helpers/run-test-suite'
 
 const deployTestSuiteController = {
   options: {
@@ -24,55 +20,39 @@ const deployTestSuiteController = {
     }
   },
   handler: async (request, h) => {
-    const payload = request.payload
+    const { imageName, environment } = request.payload
     const user = {
       id: request.auth?.credentials?.id,
       displayName: request.auth?.credentials?.displayName
     }
     const scope = request.auth?.credentials?.scope
 
-    if (!isOwnerOfSuite(payload.imageName, scope)) {
+    request.logger.info({ scope }, '--------')
+
+    if (!isOwnerOfSuite(imageName, scope)) {
       throw Boom.forbidden(
-        `Insufficient permissions to start test-suite ${payload.imageName}`
+        `Insufficient permissions to start test-suite ${imageName}`
       )
     }
 
     // Only admins can run test suites in the admin environments
-    if (!canRunInEnvironment(payload.environment, scope)) {
+    if (!canRunInEnvironment(environment, scope)) {
       throw Boom.forbidden(
         'Insufficient permissions to run suite in this environment'
       )
     }
 
-    const runId = crypto.randomUUID()
-
-    request.logger.info(`Running test suite ${payload.imageName} ${runId}`)
-
-    const runMessage = generateTestRunMessage(
-      payload.imageName,
-      payload.environment,
-      runId,
-      user
+    const runId = await runTestSuite(
+      imageName,
+      environment,
+      user,
+      request.snsClient,
+      request.logger
     )
 
-    const topic = config.get('snsRunTestTopicArn')
-    const snsResponse = await sendSnsMessage({
-      snsClient: request.snsClient,
-      topic,
-      message: runMessage,
-      logger: request.logger
-    })
-    request.logger.info(
-      `SNS Run Test response: ${JSON.stringify(snsResponse, null, 2)}`
-    )
-
-    // Inform the backend about the new test run so it can track the results.
-    await createRecordTestRun(
-      payload.imageName,
-      runId,
-      payload.environment,
-      user
-    )
+    if (!runId) {
+      return h.response({ message: 'Failed to send SNS message' }).code(500)
+    }
 
     return h.response({ message: 'success', runId }).code(200)
   }
