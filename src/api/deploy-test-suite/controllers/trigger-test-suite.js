@@ -1,16 +1,5 @@
-import crypto from 'node:crypto'
-
-import { config } from '~/src/config'
 import { triggerTestSuiteValidation } from '~/src/api/deploy-test-suite/helpers/trigger-test-suite-validation'
-import { generateTestRunMessage } from '~/src/api/deploy-test-suite/helpers/generate-test-run-message'
-import { createRecordTestRun } from '~/src/api/deploy-test-suite/helpers/record-test-run'
-import { sendSnsMessage } from '~/src/helpers/sns/send-sns-message'
-
-const botUser = {
-  id: 'cdp-bot',
-  displayName: 'CDP Bot'
-}
-const snsRunTestTopic = config.get('snsRunTestTopicArn')
+import { runTestSuite } from '~/src/api/deploy-test-suite/helpers/run-test-suite'
 
 const triggerTestSuiteController = {
   options: {
@@ -24,34 +13,19 @@ const triggerTestSuiteController = {
     }
   },
   handler: async (request, h) => {
-    const { imageName, environment } = request.payload
+    const { imageName, environment, user } = request.payload
 
-    const runId = crypto.randomUUID()
-
-    const runMessage = generateTestRunMessage(
+    const runId = await runTestSuite(
       imageName,
       environment,
-      runId,
-      botUser
+      user,
+      request.snsClient,
+      request.logger
     )
-    const snsResponse = await sendSnsMessage({
-      snsClient: request.snsClient,
-      topic: snsRunTestTopic,
-      message: runMessage,
-      logger: request.logger
-    })
 
-    if (!snsResponse) {
-      request.logger.error('Failed to send SNS message')
+    if (!runId) {
       return h.response({ message: 'Failed to send SNS message' }).code(500)
     }
-
-    request.logger.info(
-      `SNS Run Test response: ${JSON.stringify(snsResponse, null, 2)}`
-    )
-
-    // Inform the backend about the new test run so it can track the results.
-    await createRecordTestRun(imageName, runId, environment, botUser)
 
     return h.response({ message: 'success', runId }).code(200)
   }
