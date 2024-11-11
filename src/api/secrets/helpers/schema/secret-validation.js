@@ -44,9 +44,9 @@ const secretPayloadValidation = () =>
         name: 'startAndEndWithCharacter'
       })
       .min(1)
-      .max(512)
+      .max(20000)
       .required(),
-    secretValue: Joi.string().pattern(/^\S*$/).min(1).max(512).required(),
+    secretValue: Joi.string().pattern(/^\S*$/).min(1).max(20000).required(),
     teamId: Joi.string().uuid().required()
   })
 
