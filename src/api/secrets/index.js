@@ -1,16 +1,19 @@
 import { addSecretController } from '~/src/api/secrets/controllers/add-secret'
+import { withTracing } from '~/src/helpers/tracing/tracing'
 
 const secrets = {
   plugin: {
     name: 'secrets',
     register: async (server) => {
-      server.route([
-        {
-          method: 'POST',
-          path: '/secrets/add/{serviceName}/{environment}',
-          ...addSecretController
-        }
-      ])
+      server.route(
+        [
+          {
+            method: 'POST',
+            path: '/secrets/add/{serviceName}/{environment}',
+            ...addSecretController
+          }
+        ].map(withTracing)
+      )
     }
   }
 }

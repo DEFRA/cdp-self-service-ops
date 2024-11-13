@@ -1,10 +1,11 @@
 import Boom from '@hapi/boom'
 
 import { config } from '~/src/config'
+import { fetcher } from '~/src/helpers/fetcher'
 
 async function getRepoTeams(repoName) {
   const url = `${config.get('portalBackendUrl')}/repositories/${repoName}`
-  const response = await fetch(url, {
+  const response = await fetcher(url, {
     method: 'get',
     headers: { 'Content-Type': 'application/json' }
   })

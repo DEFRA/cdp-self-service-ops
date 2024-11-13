@@ -1,6 +1,7 @@
 import { config } from '~/src/config'
 
 import { createLogger } from '~/src/helpers/logging/logger'
+import { fetcher } from '~/src/helpers/fetcher'
 
 async function createRecordTestRun(imageName, runId, environment, user) {
   const logger = createLogger()
@@ -10,7 +11,7 @@ async function createRecordTestRun(imageName, runId, environment, user) {
   logger.info(
     `Recording  test-run for ${imageName} run ${runId} by ${user.displayName}`
   )
-  return await fetch(url, {
+  return await fetcher(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

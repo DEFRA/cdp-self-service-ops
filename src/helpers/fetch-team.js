@@ -1,5 +1,5 @@
 import { config } from '~/src/config'
-import fetch from 'node-fetch'
+import { fetcher } from '~/src/helpers/fetcher'
 import Boom from '@hapi/boom'
 
 /**
@@ -11,7 +11,7 @@ async function fetchTeam(teamId) {
   const teamsEndpointUrl =
     config.get('userServiceBackendUrl') + `/teams/${teamId}`
 
-  const response = await fetch(teamsEndpointUrl, {
+  const response = await fetcher(teamsEndpointUrl, {
     method: 'get',
     headers: { 'Content-Type': 'application/json' }
   })
