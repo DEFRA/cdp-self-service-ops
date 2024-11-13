@@ -326,6 +326,20 @@ const config = convict({
       }
     }
   },
+  tracing: {
+    enabled: {
+      doc: 'Propagate trace headers across calls',
+      format: Boolean,
+      default: true,
+      env: 'TRACING_ENABLED'
+    },
+    header: {
+      doc: 'Which header to track',
+      format: String,
+      default: 'x-cdp-request-id',
+      env: 'TRACING_HEADER'
+    }
+  },
   workflows: {
     createAppConfig: {
       doc: 'Github workflow to trigger when creating placeholder config',
