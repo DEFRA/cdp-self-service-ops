@@ -6,8 +6,8 @@ import { registerDeployment } from '~/src/api/deploy/helpers/register-deployment
 import { getRepoTeams } from '~/src/api/deploy/helpers/get-repo-teams'
 import { sendSnsDeploymentMessage } from '~/src/api/deploy/helpers/send-sns-deployment-message'
 import { commitDeploymentFile } from '~/src/api/deploy/helpers/commit-deployment-file'
-import { getLatestCommitSha } from '~/src/helpers/github/get-latest-commit-sha'
 import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service'
+import { getLatestAppConfigCommitSha } from '~/src/helpers/portal-backend/get-latest-app-config-commit-sha'
 
 const deployFromFileEnvironments = config.get('deployFromFileEnvironments')
 
@@ -49,7 +49,7 @@ const deployServiceController = {
       }
     }
 
-    const configLatestCommitSha = await getLatestCommitSha(environment)
+    const configLatestCommitSha = await getLatestAppConfigCommitSha(environment)
     request.logger.info(`Config commit sha ${configLatestCommitSha}`)
 
     const deploymentId = crypto.randomUUID()

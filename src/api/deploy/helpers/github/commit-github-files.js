@@ -6,10 +6,9 @@ async function commitFiles(
   repo,
   branch = `main`,
   commitMessage,
-  content,
-  environment
+  content
 ) {
-  const commitSha = await getLatestCommitSha(environment)
+  const commitSha = await getLatestCommitSha(owner, repo, branch)
   const commitTreeSha = await getCommitTreeSha(owner, repo, commitSha)
   const tree = await createDeploymentBlobTree(owner, repo, content)
   const gitCommitTree = await createCommitTree(owner, repo, commitTreeSha, tree)
@@ -23,11 +22,11 @@ async function commitFiles(
   return await setBranchToCommit(owner, repo, branch, newCommit.sha)
 }
 
-async function getCommitTreeSha(owner, repo, commitTreeSha) {
+async function getCommitTreeSha(owner, repo, commitSha) {
   const { data } = await octokit.rest.git.getCommit({
     owner,
     repo,
-    commit_sha: commitTreeSha
+    commit_sha: commitSha
   })
   return data?.tree?.sha
 }

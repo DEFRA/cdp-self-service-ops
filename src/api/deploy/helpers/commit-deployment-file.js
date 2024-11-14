@@ -46,8 +46,7 @@ async function commitDeploymentFile(
     deploymentRepo,
     'main',
     commitMessage,
-    content,
-    payload.environment
+    content
   )
 }
 
