@@ -9,8 +9,6 @@ import { commitDeploymentFile } from '~/src/api/deploy/helpers/commit-deployment
 import { getLatestCommitSha } from '~/src/helpers/github/get-latest-commit-sha'
 import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service'
 
-const owner = config.get('github.org')
-const configRepo = config.get('github.repos.cdpAppConfig')
 const deployFromFileEnvironments = config.get('deployFromFileEnvironments')
 
 const deployServiceController = {
@@ -51,9 +49,10 @@ const deployServiceController = {
       }
     }
 
-    const deploymentId = crypto.randomUUID()
-    const configLatestCommitSha = await getLatestCommitSha(owner, configRepo)
+    const configLatestCommitSha = await getLatestCommitSha(environment)
     request.logger.info(`Config commit sha ${configLatestCommitSha}`)
+
+    const deploymentId = crypto.randomUUID()
 
     await registerDeployment(
       imageName,

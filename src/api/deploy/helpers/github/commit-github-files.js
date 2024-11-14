@@ -6,9 +6,10 @@ async function commitFiles(
   repo,
   branch = `main`,
   commitMessage,
-  content
+  content,
+  environment
 ) {
-  const commitSha = await getLatestCommitSha(owner, repo, branch)
+  const commitSha = await getLatestCommitSha(environment)
   const commitTreeSha = await getCommitTreeSha(owner, repo, commitSha)
   const tree = await createDeploymentBlobTree(owner, repo, content)
   const gitCommitTree = await createCommitTree(owner, repo, commitTreeSha, tree)

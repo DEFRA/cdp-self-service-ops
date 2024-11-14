@@ -25,9 +25,7 @@ Core delivery platform Self-Service Ops Node.js Backend.
   - [Auto minor versioning](#auto-minor-versioning)
   - [Major or Patch versioning](#major-or-patch-versioning)
 - [Docker](#docker)
-  - [Development Image](#development-image)
-  - [Production Image](#production-image)
-- [Licence](#licence)
+  º- [Licence](#licence)
   - [About the licence](#about-the-licence)
 
 ## Requirements
@@ -68,6 +66,23 @@ To run the application in `development` mode run:
 $ npm run dev
 ```
 
+#### To run locally with docker images
+
+To run the application alongside `cdp-local-environment` docker images,
+you need to include env vars from `cdp-local-environment` files e.g:
+
+```
+AWS_ACCESS_KEY_ID=test
+AWS_REGION=eu-west-2
+AWS_SECRET_ACCESS_KEY=test
+AWS_SECRET_KEY=test
+GITHUB_BASE_URL=http://localhost:3939
+SQS_GITHUB_QUEUE=http://localhost:4566/000000000000/github-events
+USER_SERVICE_BACKEND_URL=http:/localhost:3001
+PORTAL_BACKEND_URL=http://localhost:5094
+OIDC_WELL_KNOWN_CONFIGURATION_URL=http://cdp.127.0.0.1.sslip.io:3939/63983fc2-cfff-45bb-8ec2-959e21062b9a/v2.0/.well-known/openid-configuration
+```
+
 #### Updating dependencies
 
 To update dependencies, globally install https://www.npmjs.com/package/npm-check-updates. Then run the below script,
@@ -104,11 +119,11 @@ $ npm run
 
 ### GET /queued-events
 
-| Optional queuer parameters | Description                                                                            |
-| :------------------------- | :------------------------------------------------------------------------------------- |
-| `eventType`                | Restrict the eventType in response. Currently only `service.infra.create` is supported |
-| `repositoryName`           | Restrict response to a specific repository                                             |
-| `includeProcessed`         | Return results that are processed in response (these are not returned by default)      |
+| Optional query parameters | Description                                                                            |
+| :------------------------ | :------------------------------------------------------------------------------------- |
+| `eventType`               | Restrict the eventType in response. Currently only `service.infra.create` is supported |
+| `repositoryName`          | Restrict response to a specific repository                                             |
+| `includeProcessed`        | Return results that are processed in response (these are not returned by default)      |
 
 #### Curl
 
@@ -216,10 +231,8 @@ Then:
 - Push this code with the auto generated commit to your GitHub Repository
 - Raise a Pull Request
 - Merge your code into the `main` branch
-- The [deploy GitHub Actions workflow](./.github/workflows/deploy.yml) will tag and push your `major` or `patch`
-  version tags to your GitHub Repository
-- The [deploy GitHub Actions workflow](./.github/workflows/deploy.yml) will release your `major` or `patch`
-  versioned code
+- The [GitHub Actions workflow](./.github/workflows/publish.yml) will tag and push your `major` or `patch`
+  version tags to your GitHub Repository and release your `major` or `patch` versioned code
 
 ## Docker
 
