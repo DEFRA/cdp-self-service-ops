@@ -11,7 +11,7 @@ import { config, environments } from '~/src/config'
 function canRunInEnvironment(
   environment,
   scope,
-  adminGroup = config.get('oidcAdminGroupId')
+  adminGroup = config.get('oidc.adminGroupId')
 ) {
   if (scope.includes(adminGroup)) {
     return true

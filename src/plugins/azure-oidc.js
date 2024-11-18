@@ -10,7 +10,7 @@ const azureOidc = {
       await server.register(jwt)
 
       const oidc = await proxyFetch(
-        config.get('oidcWellKnownConfigurationUrl')
+        config.get('oidc.wellKnownConfigurationUrl')
       ).then((res) => res.json())
 
       server.auth.strategy('azure-oidc', 'jwt', {
@@ -18,7 +18,7 @@ const azureOidc = {
           uri: oidc.jwks_uri
         },
         verify: {
-          aud: config.get('oidcAudience'),
+          aud: config.get('oidc.audience'),
           iss: oidc.issuer,
           sub: false,
           nbf: true,

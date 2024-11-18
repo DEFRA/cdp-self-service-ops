@@ -9,7 +9,7 @@ const createPerfTestSuiteController = {
     auth: {
       strategy: 'azure-oidc',
       access: {
-        scope: [config.get('oidcAdminGroupId'), '{payload.teamId}']
+        scope: [config.get('oidc.adminGroupId'), '{payload.teamId}']
       }
     },
     validate: {

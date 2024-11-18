@@ -110,54 +110,26 @@ const config = convict({
     default: 'http://127.0.0.1:4566',
     env: 'SNS_ENDPOINT'
   },
-  oidcWellKnownConfigurationUrl: {
-    doc: 'OIDC .well-known configuration URL',
-    format: String,
-    env: 'OIDC_WELL_KNOWN_CONFIGURATION_URL',
-    default:
-      'https://login.microsoftonline.com/6f504113-6b64-43f2-ade9-242e05780007/v2.0/.well-known/openid-configuration'
-  },
-  oidcAudience: {
-    doc: 'OIDC Audience for verification',
-    format: String,
-    env: 'OIDC_AUDIENCE',
-    default: '63983fc2-cfff-45bb-8ec2-959e21062b9a'
-  },
-  oidcAdminGroupId: {
-    doc: 'OIDC Admin Group ID',
-    format: String,
-    env: 'OIDC_ADMIN_GROUP_ID',
-    default: 'aabe63e7-87ef-4beb-a596-c810631fc474'
-  },
-  gitHubAppId: {
-    doc: 'GitHub Api authentication App Id',
-    format: String,
-    env: 'GITHUB_APP_ID',
-    default: '407916'
-  },
-  gitHubAppInstallationId: {
-    doc: 'GitHub Api authentication App Installation Id',
-    format: String,
-    env: 'GITHUB_APP_INSTALLATION_ID',
-    default: '43275761'
-  },
-  gitHubAppPrivateKey: {
-    doc: 'GitHub Api authentication App Private Key. This key is a base64 encoded secret',
-    format: '*',
-    default: '',
-    sensitive: true,
-    env: 'GITHUB_API_AUTH_APP_PRIVATE_KEY'
-  },
-  gitHubOrg: {
-    doc: 'GitHub Organisation',
-    format: String,
-    default: 'DEFRA',
-    env: 'GITHUB_ORG'
-  },
-  gitHubApiVersion: {
-    doc: 'GitHub Api Version',
-    format: String,
-    default: '2022-11-28'
+  oidc: {
+    wellKnownConfigurationUrl: {
+      doc: 'OIDC .well-known configuration URL',
+      format: String,
+      env: 'OIDC_WELL_KNOWN_CONFIGURATION_URL',
+      default:
+        'https://login.microsoftonline.com/6f504113-6b64-43f2-ade9-242e05780007/v2.0/.well-known/openid-configuration'
+    },
+    audience: {
+      doc: 'OIDC Audience for verification',
+      format: String,
+      env: 'OIDC_AUDIENCE',
+      default: '63983fc2-cfff-45bb-8ec2-959e21062b9a'
+    },
+    adminGroupId: {
+      doc: 'OIDC Admin Group ID',
+      format: String,
+      env: 'OIDC_ADMIN_GROUP_ID',
+      default: 'aabe63e7-87ef-4beb-a596-c810631fc474'
+    }
   },
   isProduction: {
     doc: 'If this application running in the production environment',
@@ -298,6 +270,32 @@ const config = convict({
     env: 'SERVICE_INFRA_CREATE_EVENT'
   },
   github: {
+    app: {
+      id: {
+        doc: 'GitHub Api authentication App Id',
+        format: String,
+        env: 'GITHUB_APP_ID',
+        default: '407916'
+      },
+      installationId: {
+        doc: 'GitHub Api authentication App Installation Id',
+        format: String,
+        env: 'GITHUB_APP_INSTALLATION_ID',
+        default: '43275761'
+      },
+      privateKey: {
+        doc: 'GitHub Api authentication App Private Key. This key is a base64 encoded secret',
+        format: '*',
+        default: '',
+        sensitive: true,
+        env: 'GITHUB_API_AUTH_APP_PRIVATE_KEY'
+      }
+    },
+    apiVersion: {
+      doc: 'GitHub Api Version',
+      format: String,
+      default: '2022-11-28'
+    },
     org: {
       doc: 'GitHub Organisation',
       format: String,

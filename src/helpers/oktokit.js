@@ -12,9 +12,9 @@ const init = () => {
   let cfg = {
     authStrategy: createAppAuth,
     auth: {
-      appId: config.get('gitHubAppId'),
-      privateKey: Buffer.from(config.get('gitHubAppPrivateKey'), 'base64'),
-      installationId: config.get('gitHubAppInstallationId')
+      appId: config.get('github.app.id'),
+      privateKey: Buffer.from(config.get('github.app.privateKey'), 'base64'),
+      installationId: config.get('github.app.installationId')
     },
     request: { fetch: proxyFetch }
   }
