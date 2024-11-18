@@ -22,11 +22,11 @@ async function commitFiles(
   return await setBranchToCommit(owner, repo, branch, newCommit.sha)
 }
 
-async function getCommitTreeSha(owner, repo, commitTreeSha) {
+async function getCommitTreeSha(owner, repo, commitSha) {
   const { data } = await octokit.rest.git.getCommit({
     owner,
     repo,
-    commit_sha: commitTreeSha
+    commit_sha: commitSha
   })
   return data?.tree?.sha
 }

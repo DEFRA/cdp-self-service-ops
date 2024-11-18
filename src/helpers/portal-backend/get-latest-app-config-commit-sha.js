@@ -1,10 +1,9 @@
-import Boom from '@hapi/boom'
-
 import { config } from '~/src/config'
 import { fetcher } from '~/src/helpers/fetcher'
+import Boom from '@hapi/boom'
 
-async function getRepoTeams(repoName) {
-  const url = `${config.get('portalBackendUrl')}/repositories/${repoName}`
+async function getLatestAppConfigCommitSha(environment) {
+  const url = `${config.get('portalBackendUrl')}/config/latest/${environment}`
   const response = await fetcher(url, {
     method: 'get',
     headers: { 'Content-Type': 'application/json' }
@@ -12,10 +11,10 @@ async function getRepoTeams(repoName) {
   const json = await response.json()
 
   if (response.ok) {
-    return json?.repository?.teams
+    return json?.commitSha
   }
 
   throw Boom.boomify(new Error(json.message), { statusCode: response.status })
 }
 
-export { getRepoTeams }
+export { getLatestAppConfigCommitSha }
