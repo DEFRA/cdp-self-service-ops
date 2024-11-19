@@ -8,14 +8,12 @@ import {
 } from '~/src/api/secrets/helpers/schema/secret-validation'
 import { sanitize } from '~/src/helpers/sanitize'
 import { registerPendingSecret } from '~/src/api/secrets/helpers/register-pending-secret'
+import { canAddSecretInEnv } from '~/src/api/secrets/helpers/can-add-secret'
 
 const addSecretController = {
   options: {
     auth: {
-      strategy: 'azure-oidc',
-      access: {
-        scope: [config.get('oidc.adminGroupId'), '{payload.teamId}']
-      }
+      strategy: 'azure-oidc'
     },
     validate: {
       params: secretParamsValidation(),
@@ -34,6 +32,11 @@ const addSecretController = {
     const { secretValue, secretKey } = request.payload
     const description = `Secret ${secretKey} pending for ${serviceName}`
     const topic = config.get('snsSecretsManagementTopicArn')
+    const scope = request.auth?.credentials?.scope
+
+    if (!canAddSecretInEnv(serviceName, environment, scope)) {
+      throw Boom.forbidden('Insufficient permissions to update this secret')
+    }
 
     try {
       await sendSnsMessage({
