@@ -1,35 +1,17 @@
 import Joi from 'joi'
-import { omit } from 'lodash'
-
 import { config, environments } from '~/src/config'
 
 /**
  * Validates the params for secrets.
  * @returns {Function} A function that validates the given parameters and options.
  */
-function secretParamsValidation() {
-  return (params, options) => {
-    const adminTeamId = config.get('oidc.adminGroupId')
-    const teamId = options.context.payload.teamId
-    const allowedEnvironments =
-      teamId === adminTeamId
-        ? Object.values(environments)
-        : Object.values(omit(environments, ['management', 'infraDev']))
-
-    const validationResult = Joi.object({
-      serviceName: Joi.string().min(1).required(),
-      environment: Joi.string()
-        .valid(...allowedEnvironments)
-        .required()
-    }).validate(params, options)
-
-    if (validationResult?.error) {
-      throw validationResult.error
-    }
-
-    return validationResult.value
-  }
-}
+const secretParamsValidation = () =>
+  Joi.object({
+    serviceName: Joi.string().min(1).required(),
+    environment: Joi.string()
+      .valid(...Object.values(environments))
+      .required()
+  })
 
 /**
  * Validates the payload for secrets.
@@ -46,8 +28,7 @@ const secretPayloadValidation = () =>
       .min(1)
       .max(20000)
       .required(),
-    secretValue: Joi.string().pattern(/^\S*$/).min(1).max(20000).required(),
-    teamId: Joi.string().uuid().required()
-  })
+    secretValue: Joi.string().pattern(/^\S*$/).min(1).max(20000).required()
+  }).unknown(true)
 
 export { secretParamsValidation, secretPayloadValidation }
