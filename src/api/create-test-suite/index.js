@@ -1,5 +1,5 @@
-import { createTestSuiteController } from '~/src/api/create-test-suite/controller'
-import { withTracing } from '~/src/helpers/tracing/tracing'
+import { createTestSuiteController } from '~/src/api/create-test-suite/controller.js'
+import { withTracing } from '~/src/helpers/tracing/tracing.js'
 
 const createTestSuite = {
   plugin: {

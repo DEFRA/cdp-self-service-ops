@@ -1,10 +1,10 @@
 import Boom from '@hapi/boom'
 import Joi from 'joi'
 
-import { config } from '~/src/config'
-import { fetchTestRun } from '~/src/api/deploy-test-suite/helpers/fetch-test-run'
-import { isOwnerOfSuite } from '~/src/api/deploy-test-suite/helpers/is-owner-of-suite'
-import { sendSnsMessage } from '~/src/helpers/sns/send-sns-message'
+import { config } from '~/src/config/index.js'
+import { fetchTestRun } from '~/src/api/deploy-test-suite/helpers/fetch-test-run.js'
+import { isOwnerOfSuite } from '~/src/api/deploy-test-suite/helpers/is-owner-of-suite.js'
+import { sendSnsMessage } from '~/src/helpers/sns/send-sns-message.js'
 
 const stopTestSuiteController = {
   options: {

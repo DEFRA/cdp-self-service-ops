@@ -1,8 +1,9 @@
 import Boom from '@hapi/boom'
-import { config } from '~/src/config'
-import { envTestSuiteValidation } from '~/src/api/create-env-test-suite/helpers/schema/env-test-suite-validation'
-import { creations } from '~/src/constants/creations'
-import { createTestRunnerSuite } from '~/src/helpers/create/create-test-runner-suite'
+
+import { config } from '~/src/config/index.js'
+import { envTestSuiteValidation } from '~/src/api/create-env-test-suite/helpers/schema/env-test-suite-validation.js'
+import { creations } from '~/src/constants/creations.js'
+import { createTestRunnerSuite } from '~/src/helpers/create/create-test-runner-suite.js'
 
 const createEnvTestSuiteController = {
   options: {

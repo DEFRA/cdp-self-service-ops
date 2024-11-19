@@ -1,5 +1,5 @@
-import { createPerfTestSuiteController } from '~/src/api/create-perf-test-suite/controller'
-import { withTracing } from '~/src/helpers/tracing/tracing'
+import { createPerfTestSuiteController } from '~/src/api/create-perf-test-suite/controller.js'
+import { withTracing } from '~/src/helpers/tracing/tracing.js'
 
 const createPerfTestSuite = {
   plugin: {

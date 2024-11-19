@@ -1,6 +1,6 @@
 import { SNSClient } from '@aws-sdk/client-sns'
 
-import { config } from '~/src/config'
+import { config } from '~/src/config/index.js'
 
 const snsClientPlugin = {
   plugin: {

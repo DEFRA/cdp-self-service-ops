@@ -1,5 +1,5 @@
-import { createEnvTestSuiteController } from '~/src/api/create-env-test-suite/controller'
-import { withTracing } from '~/src/helpers/tracing/tracing'
+import { createEnvTestSuiteController } from '~/src/api/create-env-test-suite/controller.js'
+import { withTracing } from '~/src/helpers/tracing/tracing.js'
 
 const createEnvTestSuite = {
   plugin: {

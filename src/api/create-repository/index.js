@@ -1,5 +1,5 @@
-import { createRepositoryController } from '~/src/api/create-repository/controller'
-import { withTracing } from '~/src/helpers/tracing/tracing'
+import { createRepositoryController } from '~/src/api/create-repository/controller.js'
+import { withTracing } from '~/src/helpers/tracing/tracing.js'
 
 const createRepository = {
   plugin: {

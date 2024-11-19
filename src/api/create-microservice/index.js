@@ -1,5 +1,5 @@
-import { createMicroserviceController } from '~/src/api/create-microservice/controller'
-import { withTracing } from '~/src/helpers/tracing/tracing'
+import { createMicroserviceController } from '~/src/api/create-microservice/controller.js'
+import { withTracing } from '~/src/helpers/tracing/tracing.js'
 
 const createMicroservice = {
   plugin: {

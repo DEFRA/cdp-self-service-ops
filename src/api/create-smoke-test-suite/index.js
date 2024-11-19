@@ -1,5 +1,5 @@
-import { createSmokeTestSuiteController } from '~/src/api/create-smoke-test-suite/controller'
-import { withTracing } from '~/src/helpers/tracing/tracing'
+import { createSmokeTestSuiteController } from '~/src/api/create-smoke-test-suite/controller.js'
+import { withTracing } from '~/src/helpers/tracing/tracing.js'
 
 const createSmokeTestSuite = {
   plugin: {

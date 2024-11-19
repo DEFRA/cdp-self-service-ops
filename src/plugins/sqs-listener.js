@@ -1,6 +1,7 @@
 import { Consumer } from 'sqs-consumer'
-import { config } from '~/src/config'
-import { handle } from '~/src/listeners/github/message-handler'
+
+import { config } from '~/src/config/index.js'
+import { handle } from '~/src/listeners/github/message-handler.js'
 
 const sqsListener = {
   plugin: {

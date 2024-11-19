@@ -1,8 +1,9 @@
 import Boom from '@hapi/boom'
-import { config } from '~/src/config'
-import { createServiceValidationSchema } from '~/src/api/create-microservice/helpers/create-service-validation-schema'
-import { createMicroservice } from '~/src/helpers/create/create-microservice'
-import { serviceTemplates } from '~/src/api/create-microservice/helpers/service-templates'
+
+import { config } from '~/src/config/index.js'
+import { createServiceValidationSchema } from '~/src/api/create-microservice/helpers/create-service-validation-schema.js'
+import { createMicroservice } from '~/src/helpers/create/create-microservice.js'
+import { serviceTemplates } from '~/src/api/create-microservice/helpers/service-templates.js'
 
 const createMicroserviceController = {
   options: {

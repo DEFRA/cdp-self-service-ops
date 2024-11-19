@@ -1,7 +1,7 @@
 import jwt from '@hapi/jwt'
 
-import { config } from '~/src/config'
-import { proxyFetch } from '~/src/helpers/proxy/proxy-fetch'
+import { config } from '~/src/config/index.js'
+import { proxyFetch } from '~/src/helpers/proxy/proxy-fetch.js'
 
 const azureOidc = {
   plugin: {

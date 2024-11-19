@@ -1,8 +1,8 @@
 import {
   inProgressController,
   repositoryStatusController
-} from '~/src/api/status/controllers'
-import { withTracing } from '~/src/helpers/tracing/tracing'
+} from '~/src/api/status/controllers/index.js'
+import { withTracing } from '~/src/helpers/tracing/tracing.js'
 
 const status = {
   plugin: {

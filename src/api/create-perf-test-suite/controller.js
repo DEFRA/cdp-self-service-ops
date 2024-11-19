@@ -1,8 +1,9 @@
 import Boom from '@hapi/boom'
-import { config } from '~/src/config'
-import { perfTestSuiteValidation } from '~/src/api/create-perf-test-suite/helpers/schema/perf-test-suite-validation'
-import { creations } from '~/src/constants/creations'
-import { createTestRunnerSuite } from '~/src/helpers/create/create-test-runner-suite'
+
+import { config } from '~/src/config/index.js'
+import { perfTestSuiteValidation } from '~/src/api/create-perf-test-suite/helpers/schema/perf-test-suite-validation.js'
+import { creations } from '~/src/constants/creations.js'
+import { createTestRunnerSuite } from '~/src/helpers/create/create-test-runner-suite.js'
 
 const createPerfTestSuiteController = {
   options: {

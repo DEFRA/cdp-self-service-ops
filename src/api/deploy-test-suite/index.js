@@ -1,7 +1,7 @@
-import { deployTestSuiteController } from '~/src/api/deploy-test-suite/controllers/deploy-test-suite'
-import { triggerTestSuiteController } from '~/src/api/deploy-test-suite/controllers/trigger-test-suite'
-import { stopTestSuiteController } from '~/src/api/deploy-test-suite/controllers/stop-test-suite'
-import { withTracing } from '~/src/helpers/tracing/tracing'
+import { deployTestSuiteController } from '~/src/api/deploy-test-suite/controllers/deploy-test-suite.js'
+import { triggerTestSuiteController } from '~/src/api/deploy-test-suite/controllers/trigger-test-suite.js'
+import { stopTestSuiteController } from '~/src/api/deploy-test-suite/controllers/stop-test-suite.js'
+import { withTracing } from '~/src/helpers/tracing/tracing.js'
 
 const deployTestSuite = {
   plugin: {

@@ -1,5 +1,5 @@
-import { config } from '~/src/config'
-import { createServer } from '~/src/api/server'
+import { config } from '~/src/config/index.js'
+import { createServer } from '~/src/api/server.js'
 
 async function startServer() {
   const server = await createServer()

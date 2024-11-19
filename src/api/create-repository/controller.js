@@ -1,11 +1,11 @@
 import Boom from '@hapi/boom'
 
-import { config } from '~/src/config'
-import { repositoryValidation } from '~/src/api/create-repository/helpers/schema/repository-validation'
-import { fetchTeam } from '~/src/helpers/fetch-team'
-import { creations } from '~/src/constants/creations'
-import { initCreationStatus } from '~/src/helpers/create/init-creation-status'
-import { createTemplatedRepo } from '~/src/helpers/create/workflows/create-templated-repo'
+import { config } from '~/src/config/index.js'
+import { repositoryValidation } from '~/src/api/create-repository/helpers/schema/repository-validation.js'
+import { fetchTeam } from '~/src/helpers/fetch-team.js'
+import { creations } from '~/src/constants/creations.js'
+import { initCreationStatus } from '~/src/helpers/create/init-creation-status.js'
+import { createTemplatedRepo } from '~/src/helpers/create/workflows/create-templated-repo.js'
 
 const createRepositoryController = {
   options: {

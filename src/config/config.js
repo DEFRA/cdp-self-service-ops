@@ -2,7 +2,7 @@ import convict from 'convict'
 import path from 'path'
 
 import { version } from '~/package.json'
-import { environments } from '~/src/config/environments'
+import { environments } from '~/src/config/environments.js'
 
 const isProduction = process.env.NODE_ENV === 'production'
 const isTest = process.env.NODE_ENV === 'test'

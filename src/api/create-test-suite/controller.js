@@ -1,11 +1,11 @@
 import Boom from '@hapi/boom'
 
-import { config } from '~/src/config'
-import { testSuiteValidation } from '~/src/api/create-test-suite/helpers/schema/test-suite-validation'
-import { createTemplatedRepo } from '~/src/helpers/create/workflows/create-templated-repo'
-import { fetchTeam } from '~/src/helpers/fetch-team'
-import { creations } from '~/src/constants/creations'
-import { initCreationStatus } from '~/src/helpers/create/init-creation-status'
+import { config } from '~/src/config/index.js'
+import { testSuiteValidation } from '~/src/api/create-test-suite/helpers/schema/test-suite-validation.js'
+import { createTemplatedRepo } from '~/src/helpers/create/workflows/create-templated-repo.js'
+import { fetchTeam } from '~/src/helpers/fetch-team.js'
+import { creations } from '~/src/constants/creations.js'
+import { initCreationStatus } from '~/src/helpers/create/init-creation-status.js'
 
 const createTestSuiteController = {
   options: {

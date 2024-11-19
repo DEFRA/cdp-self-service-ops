@@ -1,8 +1,9 @@
 import Boom from '@hapi/boom'
-import { config } from '~/src/config'
-import { creations } from '~/src/constants/creations'
-import { smokeTestSuiteValidation } from '~/src/api/create-smoke-test-suite/helpers/schema/smoke-test-suite-validation'
-import { createTestRunnerSuite } from '~/src/helpers/create/create-test-runner-suite'
+
+import { config } from '~/src/config/index.js'
+import { creations } from '~/src/constants/creations.js'
+import { smokeTestSuiteValidation } from '~/src/api/create-smoke-test-suite/helpers/schema/smoke-test-suite-validation.js'
+import { createTestRunnerSuite } from '~/src/helpers/create/create-test-runner-suite.js'
 
 const createSmokeTestSuiteController = {
   options: {

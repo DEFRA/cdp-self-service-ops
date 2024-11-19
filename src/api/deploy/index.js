@@ -2,8 +2,8 @@ import {
   deployServiceOptionsController,
   deployServiceController,
   existingServiceInfoController
-} from '~/src/api/deploy/controllers'
-import { withTracing } from '~/src/helpers/tracing/tracing'
+} from '~/src/api/deploy/controllers/index.js'
+import { withTracing } from '~/src/helpers/tracing/tracing.js'
 
 const deploy = {
   plugin: {

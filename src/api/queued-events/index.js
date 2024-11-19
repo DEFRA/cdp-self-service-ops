@@ -1,6 +1,6 @@
-import { getEventsController } from '~/src/api/queued-events/controller/get-events'
-import { resetEventController } from '~/src/api/queued-events/controller/reset-event'
-import { withTracing } from '~/src/helpers/tracing/tracing'
+import { getEventsController } from '~/src/api/queued-events/controller/get-events.js'
+import { resetEventController } from '~/src/api/queued-events/controller/reset-event.js'
+import { withTracing } from '~/src/helpers/tracing/tracing.js'
 
 const queuedEvents = {
   plugin: {
