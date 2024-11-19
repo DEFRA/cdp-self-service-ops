@@ -2,8 +2,8 @@ import Joi from 'joi'
 import Boom from '@hapi/boom'
 import { isNull } from 'lodash'
 
-import { statuses } from '~/src/constants/statuses'
-import { getRepositoryStatus } from '~/src/api/status/helpers/get-repository-status'
+import { statuses } from '~/src/constants/statuses.js'
+import { getRepositoryStatus } from '~/src/api/status/helpers/get-repository-status.js'
 
 const repositoryStatusController = {
   options: {

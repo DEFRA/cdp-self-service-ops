@@ -1,8 +1,8 @@
 import Joi from 'joi'
 
-import { environments } from '~/src/config'
-import { ecsCpuToMemoryOptionsMap } from '~/src/api/deploy/helpers/ecs-cpu-to-memory-options-map'
-import { buildMemoryValidation } from '~/src/api/deploy/helpers/schema/build-memory-validation'
+import { environments } from '~/src/config/index.js'
+import { ecsCpuToMemoryOptionsMap } from '~/src/api/deploy/helpers/ecs-cpu-to-memory-options-map.js'
+import { buildMemoryValidation } from '~/src/api/deploy/helpers/schema/build-memory-validation.js'
 
 const validCpuValues = Object.keys(ecsCpuToMemoryOptionsMap).map((cpu) =>
   Number.parseInt(cpu)

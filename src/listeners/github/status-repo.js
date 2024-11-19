@@ -1,5 +1,5 @@
-import { statuses } from '~/src/constants/statuses'
-import { dontOverwriteStatus } from '~/src/listeners/github/helpers/dont-overwrite-status'
+import { statuses } from '~/src/constants/statuses.js'
+import { dontOverwriteStatus } from '~/src/listeners/github/helpers/dont-overwrite-status.js'
 
 async function findByRepoName(db, repoName) {
   return db.collection('status').findOne({ repositoryName: repoName })

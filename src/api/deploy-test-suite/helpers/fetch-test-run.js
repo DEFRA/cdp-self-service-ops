@@ -1,6 +1,7 @@
-import { config } from '~/src/config'
 import Boom from '@hapi/boom'
-import { fetcher } from '~/src/helpers/fetcher'
+
+import { config } from '~/src/config/index.js'
+import { fetcher } from '~/src/helpers/fetcher.js'
 
 /**
  * Gets test run details from cdp-portal-backend.

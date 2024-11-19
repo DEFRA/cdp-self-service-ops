@@ -1,9 +1,9 @@
-import { statuses } from '~/src/constants/statuses'
-import { creations } from '~/src/constants/creations'
+import { statuses } from '~/src/constants/statuses.js'
+import { creations } from '~/src/constants/creations.js'
 import {
   calculateOverallStatus,
   initCreationStatus
-} from '~/src/helpers/create/init-creation-status'
+} from '~/src/helpers/create/init-creation-status.js'
 
 describe('#initCreationStatus', () => {
   test('Should add whatever workflows are given as keys', async () => {

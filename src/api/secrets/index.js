@@ -1,5 +1,5 @@
-import { addSecretController } from '~/src/api/secrets/controllers/add-secret'
-import { withTracing } from '~/src/helpers/tracing/tracing'
+import { addSecretController } from '~/src/api/secrets/controllers/add-secret.js'
+import { withTracing } from '~/src/helpers/tracing/tracing.js'
 
 const secrets = {
   plugin: {

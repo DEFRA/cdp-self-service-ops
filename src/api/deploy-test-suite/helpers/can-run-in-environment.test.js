@@ -1,5 +1,5 @@
-import { canRunInEnvironment } from '~/src/api/deploy-test-suite/helpers/can-run-in-environment'
-import { environments } from '~/src/config'
+import { canRunInEnvironment } from '~/src/api/deploy-test-suite/helpers/can-run-in-environment.js'
+import { environments } from '~/src/config/index.js'
 
 describe('#can-run-in-environment', () => {
   test('Admin can run everywhere', () => {

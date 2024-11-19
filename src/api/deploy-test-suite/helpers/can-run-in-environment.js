@@ -1,4 +1,4 @@
-import { config, environments } from '~/src/config'
+import { config, environments } from '~/src/config/index.js'
 
 /**
  * Is a user allowed to run a test suite in given environment.

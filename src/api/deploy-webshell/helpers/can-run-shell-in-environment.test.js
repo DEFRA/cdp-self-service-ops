@@ -1,5 +1,5 @@
+import { environments } from '~/src/config/index.js'
 import { canRunShellInEnvironment } from '~/src/api/deploy-webshell/helpers/can-run-shell-in-environment'
-import { environments } from '~/src/config'
 
 describe('#canRunShellInEnvironment', () => {
   test('admins can run in all environments except prod', () => {

@@ -1,10 +1,10 @@
-import { updateOverallStatus } from '~/src/helpers/create/init-creation-status'
-import { trimWorkflowRun } from '~/src/listeners/github/helpers/trim-workflow-run'
+import { updateOverallStatus } from '~/src/helpers/create/init-creation-status.js'
+import { trimWorkflowRun } from '~/src/listeners/github/helpers/trim-workflow-run.js'
 import {
   findByRepoName,
   updateWorkflowStatus
-} from '~/src/listeners/github/status-repo'
-import { normalizeStatus } from '~/src/listeners/github/helpers/normalize-status'
+} from '~/src/listeners/github/status-repo.js'
+import { normalizeStatus } from '~/src/listeners/github/helpers/normalize-status.js'
 
 /**
  * Generic handler for any workflow messages that are triggered directly via workflow-dispatch.

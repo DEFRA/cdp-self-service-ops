@@ -1,5 +1,5 @@
-import { config } from '~/src/config'
-import { getRepoTeams } from '~/src/api/deploy/helpers/get-repo-teams'
+import { config } from '~/src/config/index.js'
+import { getRepoTeams } from '~/src/api/deploy/helpers/get-repo-teams.js'
 
 /**
  * Does a given scope own a test suite.

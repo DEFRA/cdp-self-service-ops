@@ -1,5 +1,5 @@
-import { config } from '~/src/config'
-import { sendSnsMessage } from '~/src/helpers/sns/send-sns-message'
+import { config } from '~/src/config/index.js'
+import { sendSnsMessage } from '~/src/helpers/sns/send-sns-message.js'
 
 function generateSlackMessage({
   slackChannel,

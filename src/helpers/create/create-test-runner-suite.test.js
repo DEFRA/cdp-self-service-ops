@@ -1,12 +1,12 @@
 import { MongoClient } from 'mongodb'
-import { createLogger } from '~/src/helpers/logging/logger'
 
-import { creations } from '~/src/constants/creations'
-import { fetchTeam } from '~/src/helpers/fetch-team'
-import { createTestRunnerSuite } from '~/src/helpers/create/create-test-runner-suite'
-import { triggerWorkflow } from '~/src/helpers/create/workflows/trigger-workflow'
-import { config } from '~/src/config'
-import { statuses } from '~/src/constants/statuses'
+import { config } from '~/src/config/index.js'
+import { createLogger } from '~/src/helpers/logging/logger.js'
+import { creations } from '~/src/constants/creations.js'
+import { fetchTeam } from '~/src/helpers/fetch-team.js'
+import { createTestRunnerSuite } from '~/src/helpers/create/create-test-runner-suite.js'
+import { triggerWorkflow } from '~/src/helpers/create/workflows/trigger-workflow.js'
+import { statuses } from '~/src/constants/statuses.js'
 
 jest.mock('~/src/helpers/fetch-team', () => ({
   fetchTeam: jest.fn()

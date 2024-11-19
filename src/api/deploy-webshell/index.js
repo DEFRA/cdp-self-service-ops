@@ -1,5 +1,5 @@
-import { deployWebShellController } from '~/src/api/deploy-webshell/controllers/deploy-webshell'
-import { withTracing } from '~/src/helpers/tracing/tracing'
+import { deployWebShellController } from '~/src/api/deploy-webshell/controllers/deploy-webshell.js'
+import { withTracing } from '~/src/helpers/tracing/tracing.js'
 
 const deployWebShell = {
   plugin: {

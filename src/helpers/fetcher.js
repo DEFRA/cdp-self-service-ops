@@ -1,4 +1,4 @@
-import { getTraceId } from '~/src/helpers/tracing/tracing'
+import { getTraceId } from '~/src/helpers/tracing/tracing.js'
 
 export async function fetcher(url, options = {}) {
   return await fetch(url, {

@@ -1,12 +1,12 @@
-import { config } from '~/src/config'
+import { config } from '~/src/config/index.js'
 import {
   findAllInProgressOrFailed,
   updateWorkflowStatus
-} from '~/src/listeners/github/status-repo'
-import { updateOverallStatus } from '~/src/helpers/create/init-creation-status'
-import { createPlaceholderArtifact } from '~/src/listeners/github/helpers/create-placeholder-artifact'
-import { createLogger } from '~/src/helpers/logging/logger'
-import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service'
+} from '~/src/listeners/github/status-repo.js'
+import { updateOverallStatus } from '~/src/helpers/create/init-creation-status.js'
+import { createPlaceholderArtifact } from '~/src/listeners/github/helpers/create-placeholder-artifact.js'
+import { createLogger } from '~/src/helpers/logging/logger.js'
+import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service.js'
 
 /**
  * given a list of services, update the tf-svc-infra status for all of them to success

@@ -1,4 +1,4 @@
-import { statuses } from '~/src/constants/statuses'
+import { statuses } from '~/src/constants/statuses.js'
 
 const normalizeStatus = (action, conclusion) => {
   switch (action) {

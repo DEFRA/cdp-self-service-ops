@@ -1,4 +1,4 @@
-import { generateDeployMessage } from '~/src/api/deploy/helpers/generate-deploy-message'
+import { generateDeployMessage } from '~/src/api/deploy/helpers/generate-deploy-message.js'
 
 describe('#generateDeployMessage', () => {
   test('should prefix deployments with sha and use global_fixed', async () => {

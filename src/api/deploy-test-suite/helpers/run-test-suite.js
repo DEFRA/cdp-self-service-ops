@@ -1,6 +1,6 @@
 import crypto from 'node:crypto'
 
-import { config } from '~/src/config'
+import { config } from '~/src/config/index.js'
 import { generateTestRunMessage } from '~/src/api/deploy-test-suite/helpers/generate-test-run-message'
 import { sendSnsMessage } from '~/src/helpers/sns/send-sns-message'
 import { createRecordTestRun } from '~/src/api/deploy-test-suite/helpers/record-test-run'

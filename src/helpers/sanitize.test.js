@@ -1,4 +1,4 @@
-import { sanitize } from '~/src/helpers/sanitize'
+import { sanitize } from '~/src/helpers/sanitize.js'
 
 describe('#sanitize', () => {
   test('Should sanitize string as expected', () => {

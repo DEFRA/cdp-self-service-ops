@@ -1,15 +1,16 @@
-import { createIndexes } from '~/src/plugins/mongodb'
+import { MongoClient } from 'mongodb'
+import timeunit from 'timeunit'
+import { setTimeout } from 'timers/promises'
+
+import { config } from '~/src/config/index.js'
+import { createIndexes } from '~/src/plugins/mongodb.js'
 import {
   ackEvent,
   findAll,
   getNextQueuedEvent,
   queueEvent
-} from '~/src/helpers/queued-events/queued-events'
-import { MongoClient } from 'mongodb'
-import timeunit from 'timeunit'
-import { setTimeout } from 'timers/promises'
-import { config } from '~/src/config'
-import { createLogger } from '~/src/helpers/logging/logger'
+} from '~/src/helpers/queued-events/queued-events.js'
+import { createLogger } from '~/src/helpers/logging/logger.js'
 
 const eventType = config.get('serviceInfraCreateEvent')
 const logger = createLogger()

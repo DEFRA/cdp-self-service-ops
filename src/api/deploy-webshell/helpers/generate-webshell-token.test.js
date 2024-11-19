@@ -1,4 +1,4 @@
-import { generateWebShellToken } from '~/src/api/deploy-webshell/helpers/generate-webshell-token'
+import { generateWebShellToken } from '~/src/api/deploy-webshell/helpers/generate-webshell-token.js'
 
 describe('#generate-webshell-token', () => {
   test('should generate unique tokens', () => {

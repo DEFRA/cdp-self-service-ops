@@ -1,4 +1,4 @@
-import { ecsCpuToMemoryOptionsMap } from '~/src/api/deploy/helpers/ecs-cpu-to-memory-options-map'
+import { ecsCpuToMemoryOptionsMap } from '~/src/api/deploy/helpers/ecs-cpu-to-memory-options-map.js'
 
 describe('ecsCpuToMemoryMap', () => {
   test('Cpu of 8192 should only allows memory in increments of 4gb', () => {

@@ -1,12 +1,12 @@
-import { deployWebShellValidation } from '~/src/api/deploy-webshell/helpers/deploy-webshell-validation'
-import { sendSnsMessage } from '~/src/helpers/sns/send-sns-message'
-import { canRunShellInEnvironment } from '~/src/api/deploy-webshell/helpers/can-run-shell-in-environment'
-import { generateWebShellToken } from '~/src/api/deploy-webshell/helpers/generate-webshell-token'
-import { config } from '~/src/config'
-
 import Boom from '@hapi/boom'
-import { deployWebShellPayload } from '~/src/api/deploy-webshell/helpers/deploy-webshell-payload'
-import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service'
+
+import { config } from '~/src/config/index.js'
+import { deployWebShellValidation } from '~/src/api/deploy-webshell/helpers/deploy-webshell-validation.js'
+import { sendSnsMessage } from '~/src/helpers/sns/send-sns-message.js'
+import { canRunShellInEnvironment } from '~/src/api/deploy-webshell/helpers/can-run-shell-in-environment.js'
+import { generateWebShellToken } from '~/src/api/deploy-webshell/helpers/generate-webshell-token.js'
+import { deployWebShellPayload } from '~/src/api/deploy-webshell/helpers/deploy-webshell-payload.js'
+import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service.js'
 
 const deployWebShellController = {
   options: {

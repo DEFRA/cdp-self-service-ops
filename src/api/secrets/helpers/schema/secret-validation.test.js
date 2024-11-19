@@ -1,10 +1,10 @@
 import Joi from 'joi'
 
-import { config } from '~/src/config'
+import { config } from '~/src/config/index.js'
 import {
   secretParamsValidation,
   secretPayloadValidation
-} from '~/src/api/secrets/helpers/schema/secret-validation'
+} from '~/src/api/secrets/helpers/schema/secret-validation.js'
 
 describe('#secretParamsValidation', () => {
   test('Should validate a service name and environment', () => {

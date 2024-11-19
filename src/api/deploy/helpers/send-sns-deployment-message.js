@@ -1,6 +1,6 @@
-import { generateDeployMessage } from '~/src/api/deploy/helpers/generate-deploy-message'
-import { config } from '~/src/config'
-import { sendSnsMessage } from '~/src/helpers/sns/send-sns-message'
+import { config } from '~/src/config/index.js'
+import { generateDeployMessage } from '~/src/api/deploy/helpers/generate-deploy-message.js'
+import { sendSnsMessage } from '~/src/helpers/sns/send-sns-message.js'
 
 /**
  * @typedef {import("@hapi/hapi").Request} Request

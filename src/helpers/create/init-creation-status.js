@@ -1,6 +1,6 @@
-import { config } from '~/src/config'
-import { statuses } from '~/src/constants/statuses'
-import { creations } from '~/src/constants/creations'
+import { config } from '~/src/config/index.js'
+import { statuses } from '~/src/constants/statuses.js'
+import { creations } from '~/src/constants/creations.js'
 
 const cdpTfSvcInfra = config.get('github.repos.cdpTfSvcInfra')
 const cdpAppConfig = config.get('github.repos.cdpAppConfig')

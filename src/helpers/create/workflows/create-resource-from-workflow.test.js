@@ -1,11 +1,11 @@
 import { MongoClient } from 'mongodb'
-import { createLogger } from '~/src/helpers/logging/logger'
-import { triggerWorkflow } from '~/src/helpers/create/workflows/trigger-workflow'
 
-import { createResourceFromWorkflow } from '~/src/helpers/create/workflows/create-resource-from-workflow'
-import { initCreationStatus } from '~/src/helpers/create/init-creation-status'
-import { creations } from '~/src/constants/creations'
-import { statuses } from '~/src/constants/statuses'
+import { createLogger } from '~/src/helpers/logging/logger.js'
+import { triggerWorkflow } from '~/src/helpers/create/workflows/trigger-workflow.js'
+import { createResourceFromWorkflow } from '~/src/helpers/create/workflows/create-resource-from-workflow.js'
+import { initCreationStatus } from '~/src/helpers/create/init-creation-status.js'
+import { creations } from '~/src/constants/creations.js'
+import { statuses } from '~/src/constants/statuses.js'
 
 const logger = createLogger()
 let connection

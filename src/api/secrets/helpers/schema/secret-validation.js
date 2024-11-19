@@ -1,5 +1,6 @@
 import Joi from 'joi'
-import { config, environments } from '~/src/config'
+
+import { config, environments } from '~/src/config/index.js'
 
 /**
  * Validates the params for secrets.
