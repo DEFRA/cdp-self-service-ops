@@ -4,7 +4,7 @@ const secrets = {
   plugin: {
     name: 'secrets',
     register: async (server) => {
-      server.route([
+      await server.route([
         {
           method: 'POST',
           path: '/secrets/add/{serviceName}/{environment}',

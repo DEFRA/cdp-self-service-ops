@@ -2,7 +2,7 @@ import { statuses } from '~/src/constants/statuses.js'
 import { dontOverwriteStatus } from '~/src/listeners/github/helpers/dont-overwrite-status.js'
 
 async function findByRepoName(db, repoName) {
-  return db.collection('status').findOne({ repositoryName: repoName })
+  return await db.collection('status').findOne({ repositoryName: repoName })
 }
 
 /**
@@ -32,7 +32,7 @@ async function updateWorkflowStatus(
     }
   }
 
-  return db.collection('status').updateOne(filter, update)
+  return await db.collection('status').updateOne(filter, update)
 }
 
 async function findAllInProgressOrFailed(db) {

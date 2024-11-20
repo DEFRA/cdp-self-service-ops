@@ -4,7 +4,7 @@ const health = {
   plugin: {
     name: 'health',
     register: async (server) => {
-      server.route({
+      await server.route({
         method: 'GET',
         path: '/health',
         ...healthController

@@ -4,7 +4,7 @@ const createEnvTestSuite = {
   plugin: {
     name: 'create-env-test-suite',
     register: async (server) => {
-      server.route([
+      await server.route([
         {
           method: 'POST',
           path: '/create-env-test-suite',

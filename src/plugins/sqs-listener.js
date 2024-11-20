@@ -8,7 +8,7 @@ const sqsListener = {
     name: 'sqsListener',
     multiple: true,
     version: '0.1.0',
-    register: async (server, options) => {
+    register: (server, options) => {
       const queueUrl = options.config.queueUrl
 
       server.logger.info(`Listening for scan result events on ${queueUrl}`)

@@ -4,7 +4,7 @@ const createRepository = {
   plugin: {
     name: 'create-repository',
     register: async (server) => {
-      server.route([
+      await server.route([
         {
           method: 'POST',
           path: '/create-repository',

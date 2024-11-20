@@ -7,7 +7,7 @@ const status = {
   plugin: {
     name: 'status',
     register: async (server) => {
-      server.route([
+      await server.route([
         {
           method: 'GET',
           path: '/status/in-progress',

@@ -34,7 +34,12 @@ const addSecretController = {
     const topic = config.get('snsSecretsManagementTopicArn')
     const scope = request.auth?.credentials?.scope
 
-    if (!canAddSecretInEnv(serviceName, environment, scope)) {
+    const canAddSecret = await canAddSecretInEnv(
+      serviceName,
+      environment,
+      scope
+    )
+    if (!canAddSecret) {
       throw Boom.forbidden('Insufficient permissions to update this secret')
     }
 

@@ -4,7 +4,7 @@ const createMicroservice = {
   plugin: {
     name: 'create-microservice',
     register: async (server) => {
-      server.route([
+      await server.route([
         {
           method: 'POST',
           path: '/create-microservice',

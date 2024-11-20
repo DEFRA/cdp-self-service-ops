@@ -5,7 +5,7 @@ const queuedEvents = {
   plugin: {
     name: 'queued-events',
     register: async (server) => {
-      server.route([
+      await server.route([
         {
           method: 'GET',
           path: '/queued-events',

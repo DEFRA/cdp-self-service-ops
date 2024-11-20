@@ -6,7 +6,7 @@ const snsClientPlugin = {
   plugin: {
     name: 'sns-client',
     version: '1.0.0',
-    register: async function (server) {
+    register: function (server) {
       server.logger.info('Setting up sns-client')
 
       const client = new SNSClient({

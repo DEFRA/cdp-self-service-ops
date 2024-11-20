@@ -8,7 +8,7 @@ const deploy = {
   plugin: {
     name: 'deploy',
     register: async (server) => {
-      server.route([
+      await server.route([
         {
           method: 'POST',
           path: '/deploy-service',

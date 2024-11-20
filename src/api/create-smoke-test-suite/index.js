@@ -4,7 +4,7 @@ const createSmokeTestSuite = {
   plugin: {
     name: 'create-smoke-test-suite',
     register: async (server) => {
-      server.route([
+      await server.route([
         {
           method: 'POST',
           path: '/create-smoke-test-suite',

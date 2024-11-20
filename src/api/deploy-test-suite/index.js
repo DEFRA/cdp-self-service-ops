@@ -6,7 +6,7 @@ const deployTestSuite = {
   plugin: {
     name: 'deploy-test-suite',
     register: async (server) => {
-      server.route([
+      await server.route([
         {
           method: 'POST',
           path: '/deploy-test-suite',

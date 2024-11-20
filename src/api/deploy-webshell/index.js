@@ -4,7 +4,7 @@ const deployWebShell = {
   plugin: {
     name: 'deploy-webshell',
     register: async (server) => {
-      server.route([
+      await server.route([
         {
           method: 'POST',
           path: '/deploy-webshell',
