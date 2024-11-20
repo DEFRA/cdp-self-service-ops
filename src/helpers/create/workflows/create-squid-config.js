@@ -3,7 +3,6 @@ import { createResourceFromWorkflow } from '~/src/helpers/create/workflows/creat
 
 /**
  * Creates default Squid proxy config
- *
  * @param {{ db: import('mongodb').Db, logger: import('pino').Logger}} request
  * @param {string} service
  * @returns {Promise<void>}

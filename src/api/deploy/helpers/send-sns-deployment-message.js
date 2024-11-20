@@ -6,7 +6,6 @@ import { sendSnsMessage } from '~/src/helpers/sns/send-sns-message.js'
  * @typedef {import("@hapi/hapi").Request} Request
  * @typedef {import("@aws-sdk/client-sns").SNSClient} SNSClient
  * @typedef {import("pino").Logger} Logger
- *
  * @param {string} deploymentId
  * @param {{imageName: string, version:string, environment: string, instanceCount: number, cpu: number, memory: number}} payload
  * @param {string} zone

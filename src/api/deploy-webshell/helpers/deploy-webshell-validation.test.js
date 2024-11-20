@@ -14,6 +14,6 @@ describe('#deployWebShellValidation', () => {
       service: 'foo',
       environment: 'test-incorrect'
     })
-    expect(res.error).not.toBeUndefined()
+    expect(res.error).toBeDefined()
   })
 })

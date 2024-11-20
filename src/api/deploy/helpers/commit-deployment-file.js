@@ -6,7 +6,6 @@ const gitHubOwner = config.get('github.org')
 
 /**
  * @typedef {import("pino").Logger} Logger
- *
  * @param {string} deploymentId
  * @param {{imageName: string, version:string, environment: string, instanceCount: number, cpu: number, memory: number}} payload
  * @param {string} zone

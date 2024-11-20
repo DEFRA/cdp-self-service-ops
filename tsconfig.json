@@ -11,6 +11,7 @@
     "skipLibCheck": true,
     "strictFunctionTypes": true,
     "strictNullChecks": true,
+    "forceConsistentCasingInFileNames": true,
     "types": ["jest", "node"]
   },
   "exclude": [".cache", ".public", ".server", "coverage", "node_modules"],

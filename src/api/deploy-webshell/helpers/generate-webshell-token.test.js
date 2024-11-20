@@ -6,6 +6,6 @@ describe('#generate-webshell-token', () => {
   })
 
   test('should generate a token of a given length', () => {
-    expect(generateWebShellToken(32).length).toBe(32)
+    expect(generateWebShellToken(32)).toHaveLength(32)
   })
 })

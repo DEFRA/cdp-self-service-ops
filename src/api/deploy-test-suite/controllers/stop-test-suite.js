@@ -65,7 +65,6 @@ const stopTestSuiteController = {
 
 /**
  * Split a full task ARN into just the task ID.
- *
  * @param {string} taskArn
  * @return {string}
  */

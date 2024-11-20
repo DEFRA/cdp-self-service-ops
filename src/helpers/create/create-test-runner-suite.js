@@ -7,13 +7,12 @@ import {
 import {
   createTemplatedRepo,
   createSquidConfig
-} from '~/src/helpers/create/workflows.js'
+} from '~/src/helpers/create/workflows/index.js'
 import { fetchTeam } from '~/src/helpers/fetch-team.js'
 import { createTenantInfrastructure } from '~/src/helpers/create/workflows/create-tenant-infrastructure.js'
 
 /**
  * Helper to create test suites that run on the platform (rather than GitHub).
- *
  * @param {{db: import('mongodb').Db, logger: import('pino').Logger}} request
  * @param {string} repositoryName
  * @param {string} kind

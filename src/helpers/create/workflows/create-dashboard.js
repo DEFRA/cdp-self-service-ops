@@ -3,7 +3,6 @@ import { createResourceFromWorkflow } from '~/src/helpers/create/workflows/creat
 
 /**
  * Create default dashboards
- *
  * @param {{ db: import('mongodb').Db, logger: import('pino').Logger}} request
  * @param {string} service
  * @param {'public'|'protected'} zone

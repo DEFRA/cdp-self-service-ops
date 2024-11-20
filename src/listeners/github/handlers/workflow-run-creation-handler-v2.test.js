@@ -143,11 +143,13 @@ describe('#shouldWorkflowBeProcessed', () => {
       shouldWorkflowBeProcessed('invalid-repo', 'create-service.yml')
     ).toBe(false)
   })
+
   test('Should return false for valid repo but invalid workflow', () => {
     expect(shouldWorkflowBeProcessed('cdp-app-config', 'invalid.yml')).toBe(
       false
     )
   })
+
   test('Should return true for valid repo but invalid workflow', () => {
     expect(
       shouldWorkflowBeProcessed('cdp-app-config', 'create-service.yml')

@@ -17,7 +17,7 @@ describe('#secretParamsValidation', () => {
     const params = { serviceName: 'service1', environment: 'foo' }
     const { error } = secretParamsValidation().validate(params)
     expect(error).toBeInstanceOf(Joi.ValidationError)
-    expect(error.message).toEqual(
+    expect(error.message).toBe(
       '"environment" must be one of [management, infra-dev, dev, test, perf-test, ext-test, prod]'
     )
   })
@@ -26,7 +26,7 @@ describe('#secretParamsValidation', () => {
     const params = { serviceName: '', environment: 'dev' }
     const { error } = secretParamsValidation().validate(params)
     expect(error).toBeInstanceOf(Joi.ValidationError)
-    expect(error.message).toEqual('"serviceName" is not allowed to be empty')
+    expect(error.message).toBe('"serviceName" is not allowed to be empty')
   })
 })
 
@@ -51,7 +51,7 @@ describe('#secretPayloadValidation', () => {
     const { error } = secretPayloadValidation().validate(payload)
 
     expect(error).toBeInstanceOf(Joi.ValidationError)
-    expect(error.message).toEqual('"secretKey" contains an invalid value')
+    expect(error.message).toBe('"secretKey" contains an invalid value')
   })
 
   test('Should provide an error for invalid secretKey', () => {
@@ -63,7 +63,7 @@ describe('#secretPayloadValidation', () => {
 
     const { error } = secretPayloadValidation().validate(payload)
     expect(error).toBeInstanceOf(Joi.ValidationError)
-    expect(error.message).toEqual(
+    expect(error.message).toBe(
       '"secretKey" with value "invalid secret key!" fails to match the required pattern: /^\\w*$/'
     )
   })
@@ -77,7 +77,7 @@ describe('#secretPayloadValidation', () => {
 
     const { error } = secretPayloadValidation().validate(payload)
     expect(error).toBeInstanceOf(Joi.ValidationError)
-    expect(error.message).toEqual(
+    expect(error.message).toBe(
       '"secretValue" with value "invalid secret value!" fails to match the required pattern: /^\\S*$/'
     )
   })

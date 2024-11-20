@@ -3,7 +3,6 @@ import { createResourceFromWorkflow } from '~/src/helpers/create/workflows/creat
 
 /**
  * Creates a new GitHub repository from a template
- *
  * @param {{ db: import('mongodb').Db, logger: import('pino').Logger}} request
  * @param {string} workflow       - name of the workflow in cdpCreateWorkflows to use
  * @param {string} repositoryName - name of the GitHub repo to be created

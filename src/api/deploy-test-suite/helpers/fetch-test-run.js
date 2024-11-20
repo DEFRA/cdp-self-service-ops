@@ -5,12 +5,10 @@ import { fetcher } from '~/src/helpers/fetcher.js'
 
 /**
  * Gets test run details from cdp-portal-backend.
- *
  * @typedef {Object} TestRun
  * @property {string} runId
  * @property {string}testSuite
  * @property {string} taskArn
- *
  * @param runId
  * @return {Promise<TestRun>}
  */
