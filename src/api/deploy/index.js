@@ -3,31 +3,28 @@ import {
   deployServiceController,
   existingServiceInfoController
 } from '~/src/api/deploy/controllers'
-import { withTracing } from '~/src/helpers/tracing/tracing'
 
 const deploy = {
   plugin: {
     name: 'deploy',
     register: async (server) => {
-      server.route(
-        [
-          {
-            method: 'POST',
-            path: '/deploy-service',
-            ...deployServiceController
-          },
-          {
-            method: 'GET',
-            path: '/deploy-service/options',
-            ...deployServiceOptionsController
-          },
-          {
-            method: 'GET',
-            path: '/deploy-service/info/{environment}/{imageName}',
-            ...existingServiceInfoController
-          }
-        ].map(withTracing)
-      )
+      server.route([
+        {
+          method: 'POST',
+          path: '/deploy-service',
+          ...deployServiceController
+        },
+        {
+          method: 'GET',
+          path: '/deploy-service/options',
+          ...deployServiceOptionsController
+        },
+        {
+          method: 'GET',
+          path: '/deploy-service/info/{environment}/{imageName}',
+          ...existingServiceInfoController
+        }
+      ])
     }
   }
 }
