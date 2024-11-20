@@ -1,5 +1,5 @@
 import convict from 'convict'
-import path from 'path'
+import { cwd } from 'node:process'
 
 import { version } from '~/package.json'
 import { environments } from '~/src/config/environments'
@@ -25,12 +25,26 @@ convict.addFormat({
 })
 
 const config = convict({
-  serviceVersion: {
-    doc: 'The service version, this variable is injected into your docker container in CDP environments',
-    format: String,
-    nullable: true,
-    default: null,
-    env: 'SERVICE_VERSION'
+  service: {
+    name: {
+      doc: 'Api Service Name',
+      format: String,
+      default: 'CDP Self-Service Ops'
+    },
+    version: {
+      doc: 'The service version, this variable is injected into your docker container in CDP environments',
+      format: String,
+      nullable: true,
+      default: null,
+      env: 'SERVICE_VERSION'
+    },
+    environment: {
+      doc: 'The environment the app is running in',
+      format: String,
+      nullable: true,
+      default: null,
+      env: 'ENVIRONMENT'
+    }
   },
   env: {
     doc: 'The application environment.',
@@ -55,11 +69,6 @@ const config = convict({
     format: String,
     default: version
   },
-  serviceName: {
-    doc: 'Api Service Name',
-    format: String,
-    default: 'CDP Self-Service Ops'
-  },
   log: {
     enabled: {
       doc: 'Is logging enabled',
@@ -70,7 +79,7 @@ const config = convict({
     level: {
       doc: 'Logging level',
       format: ['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent'],
-      default: isDevelopment ? 'debug' : 'info',
+      default: isProduction ? 'info' : 'debug',
       env: 'LOG_LEVEL'
     },
     format: {
@@ -90,7 +99,7 @@ const config = convict({
   root: {
     doc: 'Project root',
     format: String,
-    default: path.normalize(path.join(__dirname, '..', '..'))
+    default: cwd()
   },
   awsRegion: {
     doc: 'AWS region',

@@ -14,6 +14,7 @@ import { proxyAgent } from '~/src/helpers/proxy/proxy-agent'
 import { gitHubEventsListener } from '~/src/plugins/sqs-listener'
 import { sqsClient } from '~/src/plugins/sqs-client'
 import { pulse } from '~/src/plugins/pulse'
+import { tracing } from '~/src/helpers/tracing/tracing'
 
 const enableSecureContext = config.get('enableSecureContext')
 
@@ -48,7 +49,8 @@ async function createServer() {
     }
   })
 
-  await server.register(requestLogger)
+  // Add tracer and request logger before all other plugins
+  await server.register([tracing, requestLogger])
 
   if (enableSecureContext) {
     await server.register(secureContext)
