@@ -1,5 +1,5 @@
 import convict from 'convict'
-import path from 'path'
+import { cwd } from 'node:process'
 
 import { version } from '~/package.json'
 import { environments } from '~/src/config/environments'
@@ -99,7 +99,7 @@ const config = convict({
   root: {
     doc: 'Project root',
     format: String,
-    default: path.normalize(path.join(__dirname, '..', '..'))
+    default: cwd()
   },
   awsRegion: {
     doc: 'AWS region',
