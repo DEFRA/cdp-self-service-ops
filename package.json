@@ -2,7 +2,8 @@
   "name": "cdp-self-service-ops",
   "version": "0.33.0",
   "description": "Automates create and deployment of services",
-  "main": "src/index.js",
+  "main": ".server/index.js",
+  "type": "module",
   "engines": {
     "node": "20.11.1"
   },
@@ -15,7 +16,8 @@
     "format": "prettier --write 'src/**/*.js' '**/*.{js,cjs,md,json,config.js,test.js}'",
     "format:check": "prettier --check 'src/**/*.js' '**/*.{js,cjs,md,json,config.js,test.js}'",
     "postinstall": "npm run setup:husky",
-    "lint": "npm run lint:js lint:types",
+    "lint": "npm run lint:js",
+    "lint:type": "npm run lint:js lint:types",
     "lint:fix": "eslint --cache --fix .",
     "lint:js": "eslint --cache .",
     "postversion": "git add package.json package-lock.json && git commit -m $npm_package_version",

@@ -7,7 +7,7 @@ import {
 import {
   createTemplatedRepo,
   createSquidConfig
-} from '~/src/helpers/create/workflows'
+} from '~/src/helpers/create/workflows.js'
 import { fetchTeam } from '~/src/helpers/fetch-team.js'
 import { createTenantInfrastructure } from '~/src/helpers/create/workflows/create-tenant-infrastructure.js'
 

@@ -1,4 +1,4 @@
-import { octokit } from '~/src/helpers/oktokit'
+import { octokit } from '~/src/helpers/oktokit.js'
 
 import { getLatestCommitSha } from '~/src/helpers/github/get-latest-commit-sha.js'
 

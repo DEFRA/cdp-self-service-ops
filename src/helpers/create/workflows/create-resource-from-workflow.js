@@ -1,4 +1,4 @@
-import { statuses } from '~/src/constants/statuses'
+import { statuses } from '~/src/constants/statuses.js'
 import { updateCreationStatus } from '~/src/helpers/create/init-creation-status.js'
 import { triggerWorkflow } from '~/src/helpers/create/workflows/trigger-workflow.js'
 
