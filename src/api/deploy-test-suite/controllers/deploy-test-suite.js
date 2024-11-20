@@ -29,7 +29,9 @@ const deployTestSuiteController = {
 
     request.logger.info({ scope }, '--------')
 
-    if (!isOwnerOfSuite(imageName, scope)) {
+    const isOwner = await isOwnerOfSuite(imageName, scope)
+
+    if (!isOwner) {
       throw Boom.forbidden(
         `Insufficient permissions to start test-suite ${imageName}`
       )

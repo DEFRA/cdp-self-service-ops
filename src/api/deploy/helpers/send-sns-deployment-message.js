@@ -24,7 +24,7 @@ async function sendSnsDeploymentMessage(
   serviceCode,
   request
 ) {
-  const deployMessage = await generateDeployMessage(
+  const deployMessage = generateDeployMessage(
     deploymentId,
     payload.imageName,
     payload.version,

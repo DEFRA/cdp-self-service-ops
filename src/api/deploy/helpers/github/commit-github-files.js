@@ -81,7 +81,7 @@ async function createNewCommit(owner, repo, message, treeSha, commitSha) {
 }
 
 async function setBranchToCommit(owner, repo, branch, commitSha) {
-  const { data } = octokit.rest.git.updateRef({
+  const { data } = await octokit.rest.git.updateRef({
     owner,
     repo,
     ref: `heads/${branch}`,

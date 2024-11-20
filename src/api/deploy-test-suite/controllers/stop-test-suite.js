@@ -31,7 +31,9 @@ const stopTestSuiteController = {
     }
     const scope = request.auth?.credentials?.scope
 
-    if (!isOwnerOfSuite(testRun.testSuite, scope)) {
+    const isOwner = await isOwnerOfSuite(testRun.testSuite, scope)
+
+    if (!isOwner) {
       throw Boom.forbidden(
         `Insufficient permissions to stop test-suite ${testRun.runId}`
       )
