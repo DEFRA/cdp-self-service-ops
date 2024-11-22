@@ -25,10 +25,10 @@ const createEnvTestSuiteController = {
     await createTestRunnerSuite(
       request,
       repositoryName,
-      creations.envTestsuite,
+      creations.envTestsuite, // TODO This is now creating "Journey tests" rename to journeyTestSuite
       payload?.teamId,
       user,
-      config.get('workflows.createEnvTestSuite'),
+      config.get('workflows.createEnvTestSuite'), // TODO This is now creating "Journey tests" rename to createJourneyTestSuite
       ['environment']
     )
 
