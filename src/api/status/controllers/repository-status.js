@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import Boom from '@hapi/boom'
-import { isNull } from 'lodash'
+import isNull from 'lodash/isNull.js'
 
 import { statuses } from '~/src/constants/statuses.js'
 import { getRepositoryStatus } from '~/src/api/status/helpers/get-repository-status.js'

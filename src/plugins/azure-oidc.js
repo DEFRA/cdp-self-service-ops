@@ -26,7 +26,7 @@ const azureOidc = {
           maxAgeSec: 5400, // 90 minutes
           timeSkewSec: 15
         },
-        validate: (artifacts, request, h) => {
+        validate: (artifacts) => {
           const payload = artifacts.decoded.payload
           return {
             isValid: true,
