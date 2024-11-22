@@ -9,7 +9,7 @@ import { triggerWorkflow } from '~/src/helpers/create/workflows/trigger-workflow
  * @param {string} org      - GitHub org
  * @param {string} repo     - repo the workflow is in
  * @param {string} workflow - name of the workflow file
- * @param {Object} inputs   - input params to pass to workflow
+ * @param {object} inputs   - input params to pass to workflow
  * @returns {Promise<void>}
  */
 const createResourceFromWorkflow = async (

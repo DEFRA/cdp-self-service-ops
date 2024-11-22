@@ -13,7 +13,7 @@ import { sendSnsMessage } from '~/src/helpers/sns/send-sns-message.js'
  * @param {string} configCommitSha
  * @param {string} serviceCode
  * @param {Request & {snsClient: SNSClient, logger: Logger}} request
- * @return {Promise<void>}
+ * @returns {Promise<void>}
  */
 async function sendSnsDeploymentMessage(
   deploymentId,

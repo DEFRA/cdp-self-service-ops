@@ -8,7 +8,7 @@ import { createResourceFromWorkflow } from '~/src/helpers/create/workflows/creat
  * @param {string} repositoryName - name of the GitHub repo to be created
  * @param {string} team           - team that will own the repo
  * @param {string[]} githubTopics - list of topics to add to the repo
- * @param {Object} extraInputs    - extra fields to pass to the job
+ * @param {object} extraInputs    - extra fields to pass to the job
  * @returns {Promise<void>}
  */
 async function createTemplatedRepo(

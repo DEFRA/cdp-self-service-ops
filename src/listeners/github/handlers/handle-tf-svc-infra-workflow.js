@@ -10,7 +10,7 @@ import { handleTriggeredWorkflow } from '~/src/listeners/github/handlers/handle-
  * On other statuses it just hands off to handleTriggeredWorkflow
  * @param { import('mongodb').Db } db
  * @param { import('pino').Logger } logger
- * @param {Object} message
+ * @param {object} message
  * @param {string} workflowFile
  * @returns {Promise<void>}
  */

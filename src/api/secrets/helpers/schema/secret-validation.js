@@ -16,7 +16,7 @@ const secretParamsValidation = () =>
 
 /**
  * Validates the payload for secrets.
- * @returns {Object} Joi validation schema for the secret payload.
+ * @returns {object} Joi validation schema for the secret payload.
  */
 const secretPayloadValidation = () =>
   Joi.object({

@@ -9,7 +9,9 @@ describe('#initCreationStatus', () => {
   test('Should add whatever workflows are given as keys', async () => {
     const mockDb = {
       collection: () => ({
-        insertOne: () => {}
+        insertOne: () => {
+          /* Do nothing */
+        }
       })
     }
 

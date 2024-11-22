@@ -6,7 +6,7 @@ import { getRepoTeams } from '~/src/api/deploy/helpers/get-repo-teams.js'
  * @param {string} service
  * @param {string} env
  * @param {string[]} scope
- * @return {Promise<boolean>}
+ * @returns {Promise<boolean>}
  */
 export async function canAddSecretInEnv(service, env, scope) {
   if (scope.includes(config.get('oidc.adminGroupId'))) return true

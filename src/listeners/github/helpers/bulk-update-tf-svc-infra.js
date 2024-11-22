@@ -11,9 +11,9 @@ import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-serv
 /**
  * given a list of services, update the tf-svc-infra status for all of them to success
  * and create the placeholder artifact
- * @param db
- * @param trimmedWorkflow
- * @param status
+ * @param {object} db
+ * @param {object} trimmedWorkflow
+ * @param {string} status
  * @returns {Promise<void>}
  */
 const bulkUpdateTfSvcInfra = async (db, trimmedWorkflow, status) => {

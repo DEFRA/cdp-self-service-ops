@@ -12,7 +12,7 @@ import { normalizeStatus } from '~/src/listeners/github/helpers/normalize-status
  * link to the status record.
  * @param { import('mongodb').Db } db
  * @param { import('pino').Logger } logger
- * @param {Object} message
+ * @param {object} message
  * @returns {Promise<void>}
  */
 const handleTriggeredWorkflow = async (db, logger, message) => {

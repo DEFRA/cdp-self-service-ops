@@ -20,6 +20,7 @@ beforeAll(async () => {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
+  // eslint-disable-next-line @typescript-eslint/await-thenable
   db = await connection.db(globalThis.__MONGO_DB_NAME__)
 })
 

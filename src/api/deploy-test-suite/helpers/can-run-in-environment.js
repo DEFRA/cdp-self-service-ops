@@ -5,7 +5,7 @@ import { config, environments } from '~/src/config/index.js'
  * @param {string} environment
  * @param {string[]} scope
  * @param {string} adminGroup
- * @return {boolean}
+ * @returns {boolean}
  */
 function canRunInEnvironment(
   environment,
