@@ -34,7 +34,7 @@ const createEnvTestSuiteController = {
 
     return h
       .response({
-        message: 'Env test suite creation has started',
+        message: 'Journey test suite creation has started',
         repositoryName,
         statusUrl: `/status/${repositoryName}`
       })
