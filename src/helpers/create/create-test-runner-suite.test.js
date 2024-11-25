@@ -52,26 +52,30 @@ describe('#create-test-runner-suite', () => {
       db,
       logger
     }
+    const createJourneyTestSuiteWorkflow = config.get(
+      'workflows.createJourneyTestSuite'
+    )
 
     await createTestRunnerSuite(
       request,
       service,
-      creations.smokeTestSuite,
+      creations.journeyTestsuite,
       'team',
       { id: '123', displayName: 'test user' },
-      'create-smoke-test.yml',
-      ['smoke']
+      createJourneyTestSuiteWorkflow,
+      'cdp-node-env-test-suite-template',
+      ['journey']
     )
 
     // Create repo
     expect(triggerWorkflow).toHaveBeenCalledWith(
       config.get('github.org'),
       config.get('github.repos.createWorkflows'),
-      'create-smoke-test.yml',
+      'create_journey_test_suite.yml',
       {
         repositoryName: service,
         team: 'test',
-        additionalGitHubTopics: 'cdp,test,test-suite,smoke'
+        additionalGitHubTopics: 'cdp,test,test-suite,journey'
       }
     )
 

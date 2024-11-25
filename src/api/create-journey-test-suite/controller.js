@@ -30,7 +30,8 @@ const createJourneyTestSuiteController = {
       payload?.teamId,
       user,
       config.get('workflows.createJourneyTestSuite'),
-      ['environment']
+      'cdp-node-env-test-suite-template', // TODO update template to new journey tests template name
+      ['journey']
     )
 
     return h

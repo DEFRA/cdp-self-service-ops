@@ -30,6 +30,7 @@ const createPerfTestSuiteController = {
       payload?.teamId,
       user,
       config.get('workflows.createPerfTestSuite'),
+      'cdp-perf-test-suite-template',
       ['performance']
     )
 
