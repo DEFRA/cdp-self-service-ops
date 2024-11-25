@@ -26,16 +26,16 @@ const createEnvTestSuiteController = {
     await createTestRunnerSuite(
       request,
       repositoryName,
-      creations.envTestsuite,
+      creations.envTestsuite, // TODO This is now creating "Journey tests" rename to journeyTestSuite
       payload?.teamId,
       user,
-      config.get('workflows.createEnvTestSuite'),
+      config.get('workflows.createEnvTestSuite'), // TODO This is now creating "Journey tests" rename to createJourneyTestSuite
       ['environment']
     )
 
     return h
       .response({
-        message: 'Env test suite creation has started',
+        message: 'Journey test suite creation has started',
         repositoryName,
         statusUrl: `/status/${repositoryName}`
       })
