@@ -27,7 +27,7 @@ const shouldWorkflowBeProcessed = (repo, workflow) => {
       return [
         cfg.workflows.createMicroService,
         cfg.workflows.createRepository,
-        cfg.workflows.createEnvTestSuite, // TODO This is now creating "Journey tests" rename to createJourneyTestSuite
+        cfg.workflows.createJourneyTestSuite,
         cfg.workflows.createPerfTestSuite
       ].includes(workflow)
     default:

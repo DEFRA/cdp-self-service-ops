@@ -1,14 +1,14 @@
-import { health } from '~/src/api/health'
-import { deploy } from '~/src/api/deploy'
-import { status } from '~/src/api/status'
+import { createJourneyTestSuite } from '~/src/api/create-journey-test-suite'
 import { createMicroservice } from '~/src/api/create-microservice'
-import { createRepository } from '~/src/api/create-repository'
-import { createEnvTestSuite } from '~/src/api/create-env-test-suite'
-import { deployTestSuite } from '~/src/api/deploy-test-suite'
 import { createPerfTestSuite } from '~/src/api/create-perf-test-suite'
+import { createRepository } from '~/src/api/create-repository'
+import { deploy } from '~/src/api/deploy'
+import { deployTestSuite } from '~/src/api/deploy-test-suite'
+import { deployWebShell } from '~/src/api/deploy-webshell'
+import { health } from '~/src/api/health'
 import { queuedEvents } from '~/src/api/queued-events'
 import { secrets } from '~/src/api/secrets'
-import { deployWebShell } from '~/src/api/deploy-webshell'
+import { status } from '~/src/api/status'
 
 const router = {
   plugin: {
@@ -18,7 +18,7 @@ const router = {
         health,
         createMicroservice,
         createRepository,
-        createEnvTestSuite,
+        createJourneyTestSuite,
         createPerfTestSuite,
         deploy,
         deployTestSuite,

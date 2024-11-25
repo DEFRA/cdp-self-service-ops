@@ -1,10 +1,11 @@
 import Boom from '@hapi/boom'
+
 import { config } from '~/src/config'
-import { envTestSuiteValidation } from '~/src/api/create-env-test-suite/helpers/schema/env-test-suite-validation'
 import { creations } from '~/src/constants/creations'
+import { journeyTestSuiteValidation } from '~/src/api/create-journey-test-suite/helpers/schema/journey-test-suite-validation'
 import { createTestRunnerSuite } from '~/src/helpers/create/create-test-runner-suite'
 
-const createEnvTestSuiteController = {
+const createJourneyTestSuiteController = {
   options: {
     auth: {
       strategy: 'azure-oidc',
@@ -13,7 +14,7 @@ const createEnvTestSuiteController = {
       }
     },
     validate: {
-      payload: envTestSuiteValidation,
+      payload: journeyTestSuiteValidation,
       failAction: () => Boom.boomify(Boom.badRequest())
     }
   },
@@ -25,10 +26,10 @@ const createEnvTestSuiteController = {
     await createTestRunnerSuite(
       request,
       repositoryName,
-      creations.envTestsuite, // TODO This is now creating "Journey tests" rename to journeyTestSuite
+      creations.journeyTestsuite,
       payload?.teamId,
       user,
-      config.get('workflows.createEnvTestSuite'), // TODO This is now creating "Journey tests" rename to createJourneyTestSuite
+      config.get('workflows.createJourneyTestSuite'),
       ['environment']
     )
 
@@ -42,4 +43,4 @@ const createEnvTestSuiteController = {
   }
 }
 
-export { createEnvTestSuiteController }
+export { createJourneyTestSuiteController }

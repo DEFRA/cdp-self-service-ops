@@ -1,6 +1,6 @@
 import Joi from 'joi'
 
-const envTestSuiteValidation = Joi.object({
+const journeyTestSuiteValidation = Joi.object({
   repositoryName: Joi.string()
     .pattern(/^[\w-]*$/)
     .pattern(/^[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]$/, {
@@ -23,4 +23,4 @@ const envTestSuiteValidation = Joi.object({
     .required()
 })
 
-export { envTestSuiteValidation }
+export { journeyTestSuiteValidation }
