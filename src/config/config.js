@@ -431,8 +431,8 @@ const config = convict({
     createJourneyTestSuite: {
       doc: 'Name of workflow to trigger when creating a journey test suite',
       format: String,
-      default: 'create_env_test_suite.yml', // TODO This is now creating "Journey tests" rename to create_journey_test_suite.yml
-      env: 'CREATE_ENV_TEST_SUITE_WORKFLOW' // TODO This is now creating "Journey tests" rename to CREATE_JOURNEY_TEST_SUITE_WORKFLOW
+      default: 'create_journey_test_suite.yml',
+      env: 'CREATE_JOURNEY_TEST_SUITE_WORKFLOW'
     },
     createPerfTestSuite: {
       doc: 'Name of workflow to trigger when creating a perf test repository',
