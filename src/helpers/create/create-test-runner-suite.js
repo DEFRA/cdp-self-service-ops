@@ -20,6 +20,7 @@ import { createTenantInfrastructure } from '~/src/helpers/create/workflows/creat
  * @param {string} teamId
  * @param {{id: string, displayName: string}} user
  * @param {string} templateWorkflow
+ * @param {string} serviceTypeTemplate
  * @param {string[]} extraTopics
  * @returns {Promise<void>}
  */
@@ -30,6 +31,7 @@ export async function createTestRunnerSuite(
   teamId,
   user,
   templateWorkflow,
+  serviceTypeTemplate,
   extraTopics = []
 ) {
   const { team } = await fetchTeam(teamId)
@@ -45,7 +47,7 @@ export async function createTestRunnerSuite(
     org,
     kind,
     repositoryName,
-    templateWorkflow,
+    serviceTypeTemplate,
     zone,
     team,
     user,
