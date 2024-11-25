@@ -428,12 +428,7 @@ const config = convict({
       default: 'create_repository.yml',
       env: 'CREATE_REPOSITORY_WORKFLOW'
     },
-    createJourneyTest: {
-      doc: 'Name of workflow to trigger when creating a repository',
-      format: String,
-      default: 'create_journey_tests.yml',
-      env: 'CREATE_JOURNEY_TESTS_WORKFLOW'
-    },
+    // TODO This is now creating "Journey tests" rename to createJourneyTestSuite
     createEnvTestSuite: {
       doc: 'Name of workflow to trigger when creating a repository',
       format: String,
@@ -445,12 +440,6 @@ const config = convict({
       format: String,
       default: 'create_perf_test_suite.yml',
       env: 'CREATE_PERF_TEST_SUITE_WORKFLOW'
-    },
-    createSmokeTestSuite: {
-      doc: 'Name of workflow to trigger when creating a perf test repository',
-      format: String,
-      default: 'create_smoke_test_suite.yml',
-      env: 'CREATE_SMOKE_TEST_SUITE_WORKFLOW'
     }
   },
   deployFromFileEnvironments: {
