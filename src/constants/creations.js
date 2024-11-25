@@ -5,7 +5,7 @@
 const creations = {
   microservice: 'microservice',
   repository: 'repository',
-  envTestsuite: 'env-testsuite', // TODO This is now creating "Journey tests" rename to journeyTestSuite
+  journeyTestsuite: 'journey-testsuite',
   perfTestsuite: 'perf-testsuite'
 }
 

@@ -12,11 +12,9 @@ const cdpCreateWorkflows = config.get('github.repos.createWorkflows')
 function getStatusKeys(statusRecord) {
   switch (statusRecord?.kind) {
     case creations.repository:
-    case creations.testsuite:
       return [cdpCreateWorkflows]
 
-    case creations.envTestsuite:
-    case creations.smokeTestSuite:
+    case creations.journeyTestsuite:
     case creations.perfTestsuite:
       return [cdpCreateWorkflows, cdpTfSvcInfra, cdpSquidConfig]
 
