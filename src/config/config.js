@@ -1,7 +1,6 @@
 import convict from 'convict'
 import { cwd } from 'node:process'
 
-import { version } from '~/package.json'
 import { environments } from '~/src/config/environments.js'
 
 const isProduction = process.env.NODE_ENV === 'production'
@@ -63,11 +62,6 @@ const config = convict({
     format: 'port',
     default: 3009,
     env: 'PORT'
-  },
-  version: {
-    doc: 'Api version',
-    format: String,
-    default: version
   },
   log: {
     enabled: {
