@@ -11,7 +11,7 @@
  * @param {string} configCommitSha
  * @param {?string} serviceCode
  */
-async function generateDeployMessage(
+function generateDeployMessage(
   deploymentId,
   imageName,
   version,

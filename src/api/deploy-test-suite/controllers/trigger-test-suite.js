@@ -1,5 +1,5 @@
-import { triggerTestSuiteValidation } from '~/src/api/deploy-test-suite/helpers/trigger-test-suite-validation'
-import { runTestSuite } from '~/src/api/deploy-test-suite/helpers/run-test-suite'
+import { triggerTestSuiteValidation } from '~/src/api/deploy-test-suite/helpers/trigger-test-suite-validation.js'
+import { runTestSuite } from '~/src/api/deploy-test-suite/helpers/run-test-suite.js'
 
 const triggerTestSuiteController = {
   options: {

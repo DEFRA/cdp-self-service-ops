@@ -1,9 +1,9 @@
-import { createJourneyTestSuiteController } from '~/src/api/create-journey-test-suite/controller'
+import { createJourneyTestSuiteController } from '~/src/api/create-journey-test-suite/controller.js'
 
 const createJourneyTestSuite = {
   plugin: {
     name: 'create-journey-test-suite',
-    register: async (server) => {
+    register: (server) => {
       server.route([
         {
           method: 'POST',

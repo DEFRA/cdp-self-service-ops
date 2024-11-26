@@ -1,9 +1,9 @@
 import Boom from '@hapi/boom'
 
-import { deployTestSuiteValidation } from '~/src/api/deploy-test-suite/helpers/deploy-test-suite-validation'
-import { isOwnerOfSuite } from '~/src/api/deploy-test-suite/helpers/is-owner-of-suite'
-import { canRunInEnvironment } from '~/src/api/deploy-test-suite/helpers/can-run-in-environment'
-import { runTestSuite } from '~/src/api/deploy-test-suite/helpers/run-test-suite'
+import { deployTestSuiteValidation } from '~/src/api/deploy-test-suite/helpers/deploy-test-suite-validation.js'
+import { isOwnerOfSuite } from '~/src/api/deploy-test-suite/helpers/is-owner-of-suite.js'
+import { canRunInEnvironment } from '~/src/api/deploy-test-suite/helpers/can-run-in-environment.js'
+import { runTestSuite } from '~/src/api/deploy-test-suite/helpers/run-test-suite.js'
 
 const deployTestSuiteController = {
   options: {
@@ -29,7 +29,9 @@ const deployTestSuiteController = {
 
     request.logger.info({ scope }, '--------')
 
-    if (!isOwnerOfSuite(imageName, scope)) {
+    const isOwner = await isOwnerOfSuite(imageName, scope)
+
+    if (!isOwner) {
       throw Boom.forbidden(
         `Insufficient permissions to start test-suite ${imageName}`
       )

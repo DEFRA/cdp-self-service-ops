@@ -1,5 +1,5 @@
 import { getTraceId } from '~/src/helpers/tracing/async-local-storage.js'
-import { config } from '~/src/config'
+import { config } from '~/src/config/index.js'
 
 /**
  * @param {string} url

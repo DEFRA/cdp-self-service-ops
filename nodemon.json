@@ -1,5 +1,9 @@
 {
   "watch": ["./src"],
-  "ignore": ["**/*.test.*"],
-  "ext": "js,json,njk,scss"
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "ignore": ["**/*.test.*", "./src/test-helpers"],
+  "ext": "js,cjs,json,njk,scss",
+  "signal": "SIGINT"
 }

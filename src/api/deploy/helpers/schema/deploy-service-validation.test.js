@@ -1,4 +1,4 @@
-import { deployServiceValidation } from '~/src/api/deploy/helpers/schema/deploy-service-validation'
+import { deployServiceValidation } from '~/src/api/deploy/helpers/schema/deploy-service-validation.js'
 
 describe('#deployServiceValidation', () => {
   test('Schema should pass validation without errors', () => {

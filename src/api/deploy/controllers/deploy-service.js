@@ -1,13 +1,13 @@
 import Boom from '@hapi/boom'
 
-import { config } from '~/src/config'
-import { deployServiceValidation } from '~/src/api/deploy/helpers/schema/deploy-service-validation'
-import { registerDeployment } from '~/src/api/deploy/helpers/register-deployment'
-import { getRepoTeams } from '~/src/api/deploy/helpers/get-repo-teams'
-import { sendSnsDeploymentMessage } from '~/src/api/deploy/helpers/send-sns-deployment-message'
-import { commitDeploymentFile } from '~/src/api/deploy/helpers/commit-deployment-file'
-import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service'
-import { getLatestAppConfigCommitSha } from '~/src/helpers/portal-backend/get-latest-app-config-commit-sha'
+import { config } from '~/src/config/index.js'
+import { deployServiceValidation } from '~/src/api/deploy/helpers/schema/deploy-service-validation.js'
+import { registerDeployment } from '~/src/api/deploy/helpers/register-deployment.js'
+import { getRepoTeams } from '~/src/api/deploy/helpers/get-repo-teams.js'
+import { sendSnsDeploymentMessage } from '~/src/api/deploy/helpers/send-sns-deployment-message.js'
+import { commitDeploymentFile } from '~/src/api/deploy/helpers/commit-deployment-file.js'
+import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service.js'
+import { getLatestAppConfigCommitSha } from '~/src/helpers/portal-backend/get-latest-app-config-commit-sha.js'
 
 const deployFromFileEnvironments = config.get('deployFromFileEnvironments')
 

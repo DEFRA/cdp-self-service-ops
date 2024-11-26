@@ -1,12 +1,12 @@
 import { SNSClient } from '@aws-sdk/client-sns'
 
-import { config } from '~/src/config'
+import { config } from '~/src/config/index.js'
 
 const snsClientPlugin = {
   plugin: {
     name: 'sns-client',
     version: '1.0.0',
-    register: async function (server) {
+    register: function (server) {
       server.logger.info('Setting up sns-client')
 
       const client = new SNSClient({

@@ -1,11 +1,11 @@
-import { getEventsController } from '~/src/api/queued-events/controller/get-events'
-import { resetEventController } from '~/src/api/queued-events/controller/reset-event'
+import { getEventsController } from '~/src/api/queued-events/controller/get-events.js'
+import { resetEventController } from '~/src/api/queued-events/controller/reset-event.js'
 
 const queuedEvents = {
   plugin: {
     name: 'queued-events',
     register: async (server) => {
-      server.route([
+      await server.route([
         {
           method: 'GET',
           path: '/queued-events',

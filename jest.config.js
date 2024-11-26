@@ -1,4 +1,7 @@
-module.exports = {
+/**
+ * @type {Config}
+ */
+export default {
   rootDir: '.',
   verbose: true,
   resetModules: true,
@@ -12,7 +15,10 @@ module.exports = {
     '<rootDir>/node_modules/',
     '<rootDir>/.server',
     '<rootDir>/src/__fixtures__',
-    'index.js'
+    '<rootDir>/src/server/common/test-helpers'
   ],
   coverageDirectory: '<rootDir>/coverage'
 }
+/**
+ * @import { Config } from 'jest'
+ */

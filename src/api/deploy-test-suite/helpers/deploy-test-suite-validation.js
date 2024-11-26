@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { environments } from '~/src/config'
+import { environments } from '~/src/config/index.js'
 
 const deployTestSuiteValidation = () => {
   return Joi.object({

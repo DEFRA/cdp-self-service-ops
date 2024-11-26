@@ -1,4 +1,4 @@
-import { statuses } from '~/src/constants/statuses'
+import { statuses } from '~/src/constants/statuses.js'
 
 // Status precedence from lowest (0) to highest.
 // Lower statuses should not override higher ones.

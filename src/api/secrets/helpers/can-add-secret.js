@@ -1,13 +1,12 @@
-import { config, environments } from '~/src/config'
-import { getRepoTeams } from '~/src/api/deploy/helpers/get-repo-teams'
+import { config, environments } from '~/src/config/index.js'
+import { getRepoTeams } from '~/src/api/deploy/helpers/get-repo-teams.js'
 
 /**
  * Does a given scope own a test suite.
- *
  * @param {string} service
  * @param {string} env
  * @param {string[]} scope
- * @return {Promise<boolean>}
+ * @returns {Promise<boolean>}
  */
 export async function canAddSecretInEnv(service, env, scope) {
   if (scope.includes(config.get('oidc.adminGroupId'))) return true

@@ -1,6 +1,6 @@
-import { getContent } from '~/src/helpers/github/get-content'
-import { config } from '~/src/config/config'
-import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service'
+import { config } from '~/src/config/index.js'
+import { getContent } from '~/src/helpers/github/get-content.js'
+import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service.js'
 
 jest.mock('~/src/helpers/github/get-content', () => ({
   getContent: jest.fn()

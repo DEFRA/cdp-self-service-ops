@@ -1,10 +1,10 @@
 import Wreck from '@hapi/wreck'
 
-import { createLogger } from '~/src/helpers/logging/logger'
+import { createLogger } from '~/src/helpers/logging/logger.js'
 
 /**
  * Provide Wreck http client agents
- * @param proxy
+ * @param {object} proxy
  */
 function setupWreckAgents(proxy) {
   if (proxy?.agent) {

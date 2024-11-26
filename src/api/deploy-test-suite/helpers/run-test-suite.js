@@ -1,9 +1,9 @@
 import crypto from 'node:crypto'
 
-import { config } from '~/src/config'
-import { generateTestRunMessage } from '~/src/api/deploy-test-suite/helpers/generate-test-run-message'
-import { sendSnsMessage } from '~/src/helpers/sns/send-sns-message'
-import { createRecordTestRun } from '~/src/api/deploy-test-suite/helpers/record-test-run'
+import { config } from '~/src/config/index.js'
+import { generateTestRunMessage } from '~/src/api/deploy-test-suite/helpers/generate-test-run-message.js'
+import { sendSnsMessage } from '~/src/helpers/sns/send-sns-message.js'
+import { createRecordTestRun } from '~/src/api/deploy-test-suite/helpers/record-test-run.js'
 
 const snsRunTestTopic = config.get('snsRunTestTopicArn')
 

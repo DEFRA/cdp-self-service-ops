@@ -1,7 +1,7 @@
-import { config } from '~/src/config'
+import { config } from '~/src/config/index.js'
 
-import { createLogger } from '~/src/helpers/logging/logger'
-import { fetcher } from '~/src/helpers/fetcher'
+import { createLogger } from '~/src/helpers/logging/logger.js'
+import { fetcher } from '~/src/helpers/fetcher.js'
 
 async function createRecordTestRun(imageName, runId, environment, user) {
   const logger = createLogger()

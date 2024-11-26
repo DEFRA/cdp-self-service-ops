@@ -1,5 +1,6 @@
 import Joi from 'joi'
-import { config, environments } from '~/src/config'
+
+import { config, environments } from '~/src/config/index.js'
 
 /**
  * Validates the params for secrets.
@@ -15,8 +16,8 @@ const secretParamsValidation = () =>
 
 /**
  * Validates the payload for secrets.
- * @returns {Object} Joi validation schema for the secret payload.
- * */
+ * @returns {object} Joi validation schema for the secret payload.
+ */
 const secretPayloadValidation = () =>
   Joi.object({
     secretKey: Joi.string()

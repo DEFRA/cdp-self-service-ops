@@ -1,7 +1,7 @@
 import Joi from 'joi'
 
-import { buildMemoryValidation } from '~/src/api/deploy/helpers/schema/build-memory-validation'
-import { ecsCpuToMemoryOptionsMap } from '~/src/api/deploy/helpers/ecs-cpu-to-memory-options-map'
+import { buildMemoryValidation } from '~/src/api/deploy/helpers/schema/build-memory-validation.js'
+import { ecsCpuToMemoryOptionsMap } from '~/src/api/deploy/helpers/ecs-cpu-to-memory-options-map.js'
 
 describe('#buildMemoryValidation', () => {
   const testValidationSchema = (cpu) =>

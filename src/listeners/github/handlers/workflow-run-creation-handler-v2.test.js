@@ -1,10 +1,10 @@
-import { statuses } from '~/src/constants/statuses'
+import { statuses } from '~/src/constants/statuses.js'
 import {
   shouldWorkflowBeProcessed,
   workflowRunCreationHandlerV2
-} from '~/src/listeners/github/handlers/workflow-run-creation-handler-v2'
-import { handleTriggeredWorkflow } from '~/src/listeners/github/handlers/handle-triggered-workflow'
-import { handleTfSvcInfraWorkflow } from '~/src/listeners/github/handlers/handle-tf-svc-infra-workflow'
+} from '~/src/listeners/github/handlers/workflow-run-creation-handler-v2.js'
+import { handleTriggeredWorkflow } from '~/src/listeners/github/handlers/handle-triggered-workflow.js'
+import { handleTfSvcInfraWorkflow } from '~/src/listeners/github/handlers/handle-tf-svc-infra-workflow.js'
 
 jest.mock('~/src/listeners/github/handlers/handle-triggered-workflow', () => {
   return {
@@ -143,11 +143,13 @@ describe('#shouldWorkflowBeProcessed', () => {
       shouldWorkflowBeProcessed('invalid-repo', 'create-service.yml')
     ).toBe(false)
   })
+
   test('Should return false for valid repo but invalid workflow', () => {
     expect(shouldWorkflowBeProcessed('cdp-app-config', 'invalid.yml')).toBe(
       false
     )
   })
+
   test('Should return true for valid repo but invalid workflow', () => {
     expect(
       shouldWorkflowBeProcessed('cdp-app-config', 'create-service.yml')

@@ -1,17 +1,16 @@
-import { config } from '~/src/config'
 import Boom from '@hapi/boom'
-import { fetcher } from '~/src/helpers/fetcher'
+
+import { config } from '~/src/config/index.js'
+import { fetcher } from '~/src/helpers/fetcher.js'
 
 /**
  * Gets test run details from cdp-portal-backend.
- *
- * @typedef {Object} TestRun
+ * @typedef {object} TestRun
  * @property {string} runId
- * @property {string}testSuite
+ * @property {string} testSuite
  * @property {string} taskArn
- *
- * @param runId
- * @return {Promise<TestRun>}
+ * @param {string} runId
+ * @returns {Promise<TestRun>}
  */
 async function fetchTestRun(runId) {
   const url = config.get('portalBackendUrl') + `/test-run/${runId}`

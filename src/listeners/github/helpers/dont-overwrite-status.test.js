@@ -1,5 +1,5 @@
-import { dontOverwriteStatus } from '~/src/listeners/github/helpers/dont-overwrite-status'
-import { statuses } from '~/src/constants/statuses'
+import { dontOverwriteStatus } from '~/src/listeners/github/helpers/dont-overwrite-status.js'
+import { statuses } from '~/src/constants/statuses.js'
 
 describe('#dont-overwrite-status', () => {
   test('returns empty list when unknown status is given', () => {

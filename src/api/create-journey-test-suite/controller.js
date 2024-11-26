@@ -1,9 +1,9 @@
 import Boom from '@hapi/boom'
 
-import { config } from '~/src/config'
-import { creations } from '~/src/constants/creations'
-import { journeyTestSuiteValidation } from '~/src/api/create-journey-test-suite/helpers/schema/journey-test-suite-validation'
-import { createTestRunnerSuite } from '~/src/helpers/create/create-test-runner-suite'
+import { config } from '~/src/config/index.js'
+import { creations } from '~/src/constants/creations.js'
+import { journeyTestSuiteValidation } from '~/src/api/create-journey-test-suite/helpers/schema/journey-test-suite-validation.js'
+import { createTestRunnerSuite } from '~/src/helpers/create/create-test-runner-suite.js'
 
 const createJourneyTestSuiteController = {
   options: {

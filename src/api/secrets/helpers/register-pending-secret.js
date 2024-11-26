@@ -1,5 +1,5 @@
-import { config } from '~/src/config'
-import { fetcher } from '~/src/helpers/fetcher'
+import { config } from '~/src/config/index.js'
+import { fetcher } from '~/src/helpers/fetcher.js'
 
 async function registerPendingSecret({
   environment,

@@ -1,6 +1,6 @@
-import { config } from '~/src/config'
-import { workflowRunCreationHandlerV2 } from '~/src/listeners/github/handlers/workflow-run-creation-handler-v2'
-import { workflowRunNotificationHandler } from '~/src/listeners/github/handlers/workflow-run-notification-handler'
+import { config } from '~/src/config/index.js'
+import { workflowRunCreationHandlerV2 } from '~/src/listeners/github/handlers/workflow-run-creation-handler-v2.js'
+import { workflowRunNotificationHandler } from '~/src/listeners/github/handlers/workflow-run-notification-handler.js'
 
 const githubWebhooks = new Set([
   config.get('github.repos.appDeployments'),

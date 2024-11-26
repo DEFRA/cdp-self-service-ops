@@ -1,6 +1,6 @@
 import Joi from 'joi'
 
-import { repositoryVisibility } from '~/src/api/create-repository/constants/repository-visibility'
+import { repositoryVisibility } from '~/src/api/create-repository/constants/repository-visibility.js'
 
 const repositoryValidation = Joi.object({
   repositoryName: Joi.string()

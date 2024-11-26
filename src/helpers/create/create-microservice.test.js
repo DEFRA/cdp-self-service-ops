@@ -1,9 +1,10 @@
-import { config } from '~/src/config'
 import { MongoClient } from 'mongodb'
-import { fetchTeam } from '~/src/helpers/fetch-team'
-import { createMicroservice } from '~/src/helpers/create/create-microservice'
-import { statuses } from '~/src/constants/statuses'
-import { triggerWorkflow } from '~/src/helpers/create/workflows/trigger-workflow'
+
+import { config } from '~/src/config/index.js'
+import { fetchTeam } from '~/src/helpers/fetch-team.js'
+import { createMicroservice } from '~/src/helpers/create/create-microservice.js'
+import { statuses } from '~/src/constants/statuses.js'
+import { triggerWorkflow } from '~/src/helpers/create/workflows/trigger-workflow.js'
 
 jest.mock('~/src/helpers/fetch-team', () => ({
   fetchTeam: jest.fn()
@@ -27,7 +28,7 @@ beforeAll(async () => {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
-  db = await connection.db(globalThis.__MONGO_DB_NAME__)
+  db = connection.db(globalThis.__MONGO_DB_NAME__)
 })
 
 afterAll(async () => {

@@ -1,4 +1,4 @@
-import { deployWebShellValidation } from '~/src/api/deploy-webshell/helpers/deploy-webshell-validation'
+import { deployWebShellValidation } from '~/src/api/deploy-webshell/helpers/deploy-webshell-validation.js'
 
 describe('#deployWebShellValidation', () => {
   test('should pass a valid payload', () => {
@@ -14,6 +14,6 @@ describe('#deployWebShellValidation', () => {
       service: 'foo',
       environment: 'test-incorrect'
     })
-    expect(res.error).not.toBeUndefined()
+    expect(res.error).toBeDefined()
   })
 })

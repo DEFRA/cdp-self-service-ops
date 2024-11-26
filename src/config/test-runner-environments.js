@@ -1,4 +1,4 @@
-import { environments } from '~/src/config/environments'
+import { environments } from '~/src/config/environments.js'
 
 const testRunnerEnvironments = {
   smoke: [

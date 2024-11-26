@@ -1,8 +1,8 @@
-import { bulkUpdateTfSvcInfra } from '~/src/listeners/github/helpers/bulk-update-tf-svc-infra'
-import { normalizeStatus } from '~/src/listeners/github/helpers/normalize-status'
-import { trimWorkflowRun } from '~/src/listeners/github/helpers/trim-workflow-run'
-import { handleTriggeredWorkflow } from '~/src/listeners/github/handlers/handle-triggered-workflow'
-import { config } from '~/src/config'
+import { config } from '~/src/config/index.js'
+import { bulkUpdateTfSvcInfra } from '~/src/listeners/github/helpers/bulk-update-tf-svc-infra.js'
+import { normalizeStatus } from '~/src/listeners/github/helpers/normalize-status.js'
+import { trimWorkflowRun } from '~/src/listeners/github/helpers/trim-workflow-run.js'
+import { handleTriggeredWorkflow } from '~/src/listeners/github/handlers/handle-triggered-workflow.js'
 
 /**
  * Specific handler for tf-svc-infra create-service calls. On completion, it triggers bulkUpdateTfSvcInfra
@@ -10,7 +10,7 @@ import { config } from '~/src/config'
  * On other statuses it just hands off to handleTriggeredWorkflow
  * @param { import('mongodb').Db } db
  * @param { import('pino').Logger } logger
- * @param {Object} message
+ * @param {object} message
  * @param {string} workflowFile
  * @returns {Promise<void>}
  */

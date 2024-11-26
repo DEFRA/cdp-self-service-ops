@@ -1,12 +1,11 @@
-import { config } from '~/src/config'
-import { commitFiles } from '~/src/api/deploy/helpers/github/commit-github-files'
+import { config } from '~/src/config/index.js'
+import { commitFiles } from '~/src/api/deploy/helpers/github/commit-github-files.js'
 
 const deploymentRepo = config.get('github.repos.appDeployments')
 const gitHubOwner = config.get('github.org')
 
 /**
  * @typedef {import("pino").Logger} Logger
- *
  * @param {string} deploymentId
  * @param {{imageName: string, version:string, environment: string, instanceCount: number, cpu: number, memory: number}} payload
  * @param {string} zone

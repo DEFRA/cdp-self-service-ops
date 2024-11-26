@@ -1,2 +1,2 @@
-import { secureContext } from '~/src/plugins/secure-context'
+import { secureContext } from '~/src/plugins/secure-context.js'
 export { secureContext }

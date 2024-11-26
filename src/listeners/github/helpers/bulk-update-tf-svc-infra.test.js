@@ -1,13 +1,13 @@
-import { bulkUpdateTfSvcInfra } from '~/src/listeners/github/helpers/bulk-update-tf-svc-infra'
+import { bulkUpdateTfSvcInfra } from '~/src/listeners/github/helpers/bulk-update-tf-svc-infra.js'
 import {
   findAllInProgressOrFailed,
   updateWorkflowStatus
-} from '~/src/listeners/github/status-repo'
+} from '~/src/listeners/github/status-repo.js'
 
-import { createPlaceholderArtifact } from '~/src/listeners/github/helpers/create-placeholder-artifact'
-import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service'
-import { updateOverallStatus } from '~/src/helpers/create/init-creation-status'
-import { statuses } from '~/src/constants/statuses'
+import { createPlaceholderArtifact } from '~/src/listeners/github/helpers/create-placeholder-artifact.js'
+import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service.js'
+import { updateOverallStatus } from '~/src/helpers/create/init-creation-status.js'
+import { statuses } from '~/src/constants/statuses.js'
 
 jest.mock('~/src/helpers/create/init-creation-status', () => ({
   updateOverallStatus: jest.fn()

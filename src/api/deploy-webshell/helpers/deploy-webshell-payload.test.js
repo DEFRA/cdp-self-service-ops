@@ -1,4 +1,4 @@
-import { deployWebShellPayload } from '~/src/api/deploy-webshell/helpers/deploy-webshell-payload'
+import { deployWebShellPayload } from '~/src/api/deploy-webshell/helpers/deploy-webshell-payload.js'
 
 describe('#deployWebShellPayload', () => {
   test('should generate a valid payload', () => {

@@ -1,8 +1,9 @@
-import { createLogger } from '~/src/helpers/logging/logger'
-import { config } from '~/src/config'
 import path from 'path'
-import { handleTriggeredWorkflow } from '~/src/listeners/github/handlers/handle-triggered-workflow'
-import { handleTfSvcInfraWorkflow } from '~/src/listeners/github/handlers/handle-tf-svc-infra-workflow'
+
+import { config } from '~/src/config/index.js'
+import { createLogger } from '~/src/helpers/logging/logger.js'
+import { handleTriggeredWorkflow } from '~/src/listeners/github/handlers/handle-triggered-workflow.js'
+import { handleTfSvcInfraWorkflow } from '~/src/listeners/github/handlers/handle-tf-svc-infra-workflow.js'
 
 const logger = createLogger()
 const cfg = config.getProperties()

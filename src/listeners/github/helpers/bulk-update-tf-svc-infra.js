@@ -1,19 +1,19 @@
-import { config } from '~/src/config'
+import { config } from '~/src/config/index.js'
 import {
   findAllInProgressOrFailed,
   updateWorkflowStatus
-} from '~/src/listeners/github/status-repo'
-import { updateOverallStatus } from '~/src/helpers/create/init-creation-status'
-import { createPlaceholderArtifact } from '~/src/listeners/github/helpers/create-placeholder-artifact'
-import { createLogger } from '~/src/helpers/logging/logger'
-import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service'
+} from '~/src/listeners/github/status-repo.js'
+import { updateOverallStatus } from '~/src/helpers/create/init-creation-status.js'
+import { createPlaceholderArtifact } from '~/src/listeners/github/helpers/create-placeholder-artifact.js'
+import { createLogger } from '~/src/helpers/logging/logger.js'
+import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service.js'
 
 /**
  * given a list of services, update the tf-svc-infra status for all of them to success
  * and create the placeholder artifact
- * @param db
- * @param trimmedWorkflow
- * @param status
+ * @param {object} db
+ * @param {object} trimmedWorkflow
+ * @param {string} status
  * @returns {Promise<void>}
  */
 const bulkUpdateTfSvcInfra = async (db, trimmedWorkflow, status) => {
@@ -42,11 +42,11 @@ const bulkUpdateTfSvcInfra = async (db, trimmedWorkflow, status) => {
     `Updating ${servicesToUpdate.length} ${tfSvcInfra} statuses to success`
   )
 
-  for (let i = 0; i < servicesToUpdate.length; i++) {
-    const serviceName = servicesToUpdate[i].name
+  for (const serviceToUpdate of servicesToUpdate) {
+    const serviceName = serviceToUpdate.name
 
     let runMode = 'Service'
-    if (servicesToUpdate[i]?.tenantConfig?.test_suite) {
+    if (serviceToUpdate?.tenantConfig?.test_suite) {
       runMode = 'Job'
     }
 

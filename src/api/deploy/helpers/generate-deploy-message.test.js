@@ -1,10 +1,10 @@
-import { generateDeployMessage } from '~/src/api/deploy/helpers/generate-deploy-message'
+import { generateDeployMessage } from '~/src/api/deploy/helpers/generate-deploy-message.js'
 
 describe('#generateDeployMessage', () => {
-  test('should prefix deployments with sha and use global_fixed', async () => {
+  test('should prefix deployments with sha and use global_fixed', () => {
     const configSha = '6d96270004515a0486bb7f76196a72b40c55a47f'
     const env = 'test'
-    const msg = await generateDeployMessage(
+    const msg = generateDeployMessage(
       '1234',
       'foo-backend',
       '0.1.0',
@@ -30,10 +30,10 @@ describe('#generateDeployMessage', () => {
     )
   })
 
-  test('should add service code if present', async () => {
+  test('should add service code if present', () => {
     const configSha = '6d96270004515a0486bb7f76196a72b40c55a47f'
     const env = 'test'
-    const msg = await generateDeployMessage(
+    const msg = generateDeployMessage(
       '1234',
       'foo-backend',
       '0.1.0',
@@ -49,10 +49,10 @@ describe('#generateDeployMessage', () => {
     expect(msg.service_code).toBe('CDP')
   })
 
-  test('should not add service code if missing', async () => {
+  test('should not add service code if missing', () => {
     const configSha = '6d96270004515a0486bb7f76196a72b40c55a47f'
     const env = 'test'
-    const msg = await generateDeployMessage(
+    const msg = generateDeployMessage(
       '1234',
       'foo-backend',
       '0.1.0',

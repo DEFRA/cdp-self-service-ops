@@ -1,4 +1,4 @@
-import { octokit } from '~/src/helpers/oktokit'
+import { octokit } from '~/src/helpers/oktokit.js'
 
 async function getContent(owner, repo, filePath, ref = 'main') {
   const { data } = await octokit.rest.repos.getContent({

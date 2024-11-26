@@ -1,10 +1,10 @@
 import { Octokit } from '@octokit/core'
 import { createAppAuth } from '@octokit/auth-app'
-
-import { config } from '~/src/config'
 import { restEndpointMethods } from '@octokit/plugin-rest-endpoint-methods'
 import { createPullRequest } from 'octokit-plugin-create-pull-request'
-import { proxyFetch } from '~/src/helpers/proxy/proxy-fetch'
+
+import { config } from '~/src/config/index.js'
+import { proxyFetch } from '~/src/helpers/proxy/proxy-fetch.js'
 
 const OctokitExtra = Octokit.plugin(restEndpointMethods, createPullRequest)
 

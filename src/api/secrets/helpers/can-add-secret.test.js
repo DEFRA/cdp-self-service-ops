@@ -1,5 +1,5 @@
-import { canAddSecretInEnv } from '~/src/api/secrets/helpers/can-add-secret'
-import { config } from '~/src/config'
+import { config } from '~/src/config/index.js'
+import { canAddSecretInEnv } from '~/src/api/secrets/helpers/can-add-secret.js'
 
 jest.mock('~/src/api/deploy/helpers/get-repo-teams', () => ({
   getRepoTeams: jest

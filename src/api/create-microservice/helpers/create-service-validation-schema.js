@@ -1,12 +1,12 @@
 import Joi from 'joi'
 import Boom from '@hapi/boom'
 
-import { serviceTemplates } from '~/src/api/create-microservice/helpers/service-templates'
+import { serviceTemplates } from '~/src/api/create-microservice/helpers/service-templates.js'
 
 function createServiceValidationSchema() {
   const serviceTypeTemplates = Object.keys(serviceTemplates)
 
-  return async (value, options) => {
+  return (value, options) => {
     const validationResult = Joi.object({
       repositoryName: Joi.string()
         .pattern(/^[\w-]*$/)

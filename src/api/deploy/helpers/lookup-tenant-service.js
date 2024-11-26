@@ -1,7 +1,8 @@
-import { getContent } from '~/src/helpers/github/get-content'
-import { config } from '~/src/config'
-import { createLogger } from '~/src/helpers/logging/logger'
 import Joi from 'joi'
+
+import { config } from '~/src/config/index.js'
+import { getContent } from '~/src/helpers/github/get-content.js'
+import { createLogger } from '~/src/helpers/logging/logger.js'
 
 const logger = createLogger()
 

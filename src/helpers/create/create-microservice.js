@@ -1,12 +1,13 @@
-import { config } from '~/src/config'
-import { serviceTemplates } from '~/src/api/create-microservice/helpers/service-templates'
 import Boom from '@hapi/boom'
-import { fetchTeam } from '~/src/helpers/fetch-team'
+
+import { config } from '~/src/config/index.js'
+import { serviceTemplates } from '~/src/api/create-microservice/helpers/service-templates.js'
+import { fetchTeam } from '~/src/helpers/fetch-team.js'
 import {
   initCreationStatus,
   updateOverallStatus
-} from '~/src/helpers/create/init-creation-status'
-import { creations } from '~/src/constants/creations'
+} from '~/src/helpers/create/init-creation-status.js'
+import { creations } from '~/src/constants/creations.js'
 import {
   createAppConfig,
   createDashboard,
@@ -14,7 +15,7 @@ import {
   createSquidConfig,
   createTemplatedRepo,
   createTenantInfrastructure
-} from '~/src/helpers/create/workflows'
+} from '~/src/helpers/create/workflows/index.js'
 
 /**
  * @param {{db: import('mongodb').Db, logger: import('pino').Logger}} request
