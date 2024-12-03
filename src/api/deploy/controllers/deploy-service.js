@@ -26,19 +26,18 @@ const deployServiceController = {
     }
   },
   handler: async (request, h) => {
-    const payload = request.payload
+    const startTime = Date.now()
+    const { payload, logger, auth } = request
     const imageName = payload.imageName
     const environment = payload.environment
 
-    request.logger.info(
-      `Deployment of ${imageName} to ${environment} in progress`
-    )
+    logger.info(`Deployment of ${imageName} to ${environment} in progress`)
 
     const user = {
-      id: request.auth?.credentials?.id,
-      displayName: request.auth?.credentials?.displayName
+      id: auth?.credentials?.id,
+      displayName: auth?.credentials?.displayName
     }
-    const scope = request.auth?.credentials?.scope
+    const scope = auth?.credentials?.scope
 
     const isAdmin = scope.includes(config.get('oidc.adminGroupId'))
     if (!isAdmin) {
@@ -49,8 +48,17 @@ const deployServiceController = {
       }
     }
 
-    const configLatestCommitSha = await getLatestAppConfigCommitSha(environment)
-    request.logger.info(`Config commit sha ${configLatestCommitSha}`)
+    const configLatestCommitSha = await getLatestAppConfigCommitSha(
+      environment,
+      logger
+    )
+    if (!configLatestCommitSha) {
+      const message =
+        'Error encountered whilst attempting to get latest cdp-app-config sha'
+      return h.response({ message }).code(500)
+    }
+    logger.info(`Config commit sha ${configLatestCommitSha}`)
+    logger.info(`getLatestAppConfigCommitSha: ${Date.now() - startTime}ms`)
 
     const deploymentId = crypto.randomUUID()
 
@@ -65,9 +73,10 @@ const deployServiceController = {
       deploymentId,
       configLatestCommitSha
     )
-    request.logger.info('Deployment registered')
+    logger.info('Deployment registered')
+    logger.info(`registerDeployment: ${Date.now() - startTime}ms`)
 
-    const service = await lookupTenantService(imageName, environment)
+    const service = await lookupTenantService(imageName, environment, logger)
 
     if (!service) {
       const message =
@@ -75,7 +84,7 @@ const deployServiceController = {
       return h.response({ message }).code(500)
     }
 
-    request.logger.info(
+    logger.info(
       `Service ${imageName} in ${environment} should be deployed to ${service.zone}`
     )
 
@@ -90,9 +99,10 @@ const deployServiceController = {
         service.service_code,
         request
       )
-      request.logger.info('Deployment sns event sent')
+      logger.info('Deployment sns event sent')
+      logger.info(`sendSnsDeploymentMessage: ${Date.now() - startTime}ms`)
     } else {
-      request.logger.info(
+      logger.info(
         'Deployment sns event not sent - deploying via deployment file'
       )
     }
@@ -105,9 +115,10 @@ const deployServiceController = {
       configLatestCommitSha,
       service.service_code,
       shouldDeployByFile,
-      request.logger
+      logger
     )
-    request.logger.info('Deployment commit file created')
+    logger.info('Deployment commit file created')
+    logger.info(`commitDeploymentFile: ${Date.now() - startTime}ms`)
     return h.response({ message: 'success', deploymentId }).code(200)
   }
 }

@@ -1,8 +1,7 @@
-import Boom from '@hapi/boom'
 import { config } from '~/src/config/index.js'
 import { fetcher } from '~/src/helpers/fetcher.js'
 
-async function getLatestAppConfigCommitSha(environment) {
+async function getLatestAppConfigCommitSha(environment, logger) {
   const url = `${config.get('portalBackendUrl')}/config/latest/${environment}`
   const response = await fetcher(url, {
     method: 'get',
@@ -14,7 +13,9 @@ async function getLatestAppConfigCommitSha(environment) {
     return json?.commitSha
   }
 
-  throw Boom.boomify(new Error(json.message), { statusCode: response.status })
+  logger.error(
+    `Error attempting to retrieve latest cdp-app-config sha - message: '${json.message}' statusCode: '${response.status}'`
+  )
 }
 
 export { getLatestAppConfigCommitSha }

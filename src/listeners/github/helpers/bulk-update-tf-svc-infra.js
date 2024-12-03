@@ -32,7 +32,7 @@ const bulkUpdateTfSvcInfra = async (db, trimmedWorkflow, status) => {
     const name = service.repositoryName
 
     // TODO: maybe use exact commit ref of workflow
-    const tenantConfig = await lookupTenantService(name, 'management')
+    const tenantConfig = await lookupTenantService(name, 'management', logger)
     if (tenantConfig) {
       servicesToUpdate.push({ name, tenantConfig })
     }

@@ -1,11 +1,13 @@
-import { config } from '~/src/config/index.js'
 import { getContent } from '~/src/helpers/github/get-content.js'
+import { config } from '~/src/config/index.js'
 import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service.js'
+import { createLogger } from '~/src/helpers/logging/logger.js'
 
 jest.mock('~/src/helpers/github/get-content', () => ({
   getContent: jest.fn()
 }))
 const mockGetContent = getContent
+const logger = createLogger()
 
 describe('lookupTenantService', () => {
   const org = config.get('github.org')
@@ -25,7 +27,7 @@ describe('lookupTenantService', () => {
 
     getContent.mockResolvedValue(JSON.stringify(tenant))
 
-    const result = await lookupTenantService('someService', 'dev')
+    const result = await lookupTenantService('someService', 'dev', logger)
 
     expect(mockGetContent).toHaveBeenCalledWith(
       org,
@@ -39,7 +41,7 @@ describe('lookupTenantService', () => {
   test('should return nothing when the service doesnt exist', async () => {
     getContent.mockResolvedValue(null)
 
-    const result = await lookupTenantService('someService', 'dev')
+    const result = await lookupTenantService('someService', 'dev', logger)
 
     expect(mockGetContent).toHaveBeenCalledTimes(1)
     expect(result).toBeUndefined()
@@ -61,7 +63,7 @@ describe('lookupTenantService', () => {
       .mockReturnValueOnce(null)
       .mockResolvedValue(JSON.stringify(tenants))
 
-    await lookupTenantService('someService', 'dev', '87428fc5')
+    await lookupTenantService('someService', 'dev', logger, '87428fc5')
 
     expect(mockGetContent).toHaveBeenNthCalledWith(
       1,
@@ -83,7 +85,7 @@ describe('lookupTenantService', () => {
 
     getContent.mockResolvedValue(JSON.stringify(tenant))
 
-    const result = await lookupTenantService('someService', 'dev')
+    const result = await lookupTenantService('someService', 'dev', logger)
 
     expect(mockGetContent).toHaveBeenCalledWith(
       org,
