@@ -23,14 +23,14 @@ const deployWebShellController = {
     }
   },
   handler: async (request, h) => {
-    const payload = request.payload
+    const { payload, logger, auth, snsClient } = request.payload
 
     const user = {
-      id: request.auth?.credentials?.id,
-      displayName: request.auth?.credentials?.displayName
+      id: auth?.credentials?.id,
+      displayName: auth?.credentials?.displayName
     }
 
-    const scope = request.auth?.credentials?.scope
+    const scope = auth?.credentials?.scope
 
     if (!canRunShellInEnvironment(payload.environment, scope)) {
       throw Boom.forbidden(
@@ -40,17 +40,18 @@ const deployWebShellController = {
 
     const tenant = await lookupTenantService(
       payload.service,
-      payload.environment
+      payload.environment,
+      logger
     )
 
     if (!tenant?.zone) {
-      request.logger.error(
+      logger.error(
         `failed to find zone for ${payload.service} in ${payload.environment}`
       )
       throw Boom.forbidden('Failed to lookup service in this environment')
     }
 
-    request.logger.info(
+    logger.info(
       `WebShell requested ${JSON.stringify(payload)} by ${user.displayName}`
     )
 
@@ -65,13 +66,13 @@ const deployWebShellController = {
     })
 
     const snsResponse = await sendSnsMessage({
-      snsClient: request.snsClient,
+      snsClient,
       topic: config.get('snsRunWebShellTopicArn'),
       message: runMessage,
-      logger: request.logger
+      logger
     })
 
-    request.logger.info(
+    logger.info(
       `SNS Deploy WebShell response: ${JSON.stringify(snsResponse, null, 2)}`
     )
 
