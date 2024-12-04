@@ -23,7 +23,7 @@ const deployWebShellController = {
     }
   },
   handler: async (request, h) => {
-    const { payload, logger, auth, snsClient } = request.payload
+    const { payload, logger, auth, snsClient } = request
 
     const user = {
       id: auth?.credentials?.id,
