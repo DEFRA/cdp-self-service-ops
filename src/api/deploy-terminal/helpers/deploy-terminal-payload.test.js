@@ -1,8 +1,8 @@
-import { deployWebShellPayload } from '~/src/api/deploy-webshell/helpers/deploy-webshell-payload.js'
+import { deployTerminalPayload } from '~/src/api/deploy-terminal/helpers/deploy-terminal-payload.js'
 
-describe('#deployWebShellPayload', () => {
+describe('#deployTerminalPayload', () => {
   test('should generate a valid payload', () => {
-    const payload = deployWebShellPayload({
+    const payload = deployTerminalPayload({
       environment: 'test',
       zone: 'public',
       service: 'service-name',

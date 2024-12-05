@@ -1,8 +1,8 @@
-import { deployWebShellValidation } from '~/src/api/deploy-webshell/helpers/deploy-webshell-validation.js'
+import { deployTerminalValidation } from '~/src/api/deploy-terminal/helpers/deploy-terminal-validation.js'
 
-describe('#deployWebShellValidation', () => {
+describe('#deployTerminalValidation', () => {
   test('should pass a valid payload', () => {
-    const res = deployWebShellValidation().validate({
+    const res = deployTerminalValidation().validate({
       service: 'foo',
       environment: 'test'
     })
@@ -10,7 +10,7 @@ describe('#deployWebShellValidation', () => {
   })
 
   test('should reject an invalid environment', () => {
-    const res = deployWebShellValidation().validate({
+    const res = deployTerminalValidation().validate({
       service: 'foo',
       environment: 'test-incorrect'
     })

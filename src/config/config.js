@@ -119,33 +119,27 @@ const config = convict({
       format: String,
       env: 'OIDC_WELL_KNOWN_CONFIGURATION_URL',
       default:
-        'https://login.microsoftonline.com/6f504113-6b64-43f2-ade9-242e05780007/v2.0/.well-known/openid-configuration'
+        'http://cdp.127.0.0.1.sslip.io:3939/63983fc2-cfff-45bb-8ec2-959e21062b9a/v2.0/.well-known/openid-configuration'
     },
     audience: {
       doc: 'OIDC Audience for verification',
       format: String,
       env: 'OIDC_AUDIENCE',
       default: '63983fc2-cfff-45bb-8ec2-959e21062b9a'
-    },
-    adminGroupId: {
-      doc: 'OIDC Admin Group ID',
-      format: String,
-      env: 'OIDC_ADMIN_GROUP_ID',
-      default: 'aabe63e7-87ef-4beb-a596-c810631fc474'
     }
   },
   isProduction: {
-    doc: 'If this application running in the production environment',
+    doc: 'Is this application running in the production environment',
     format: Boolean,
     default: isProduction
   },
   isDevelopment: {
-    doc: 'If this application running in the development environment',
+    doc: 'Is this application running in the development environment',
     format: Boolean,
     default: isDevelopment
   },
   isTest: {
-    doc: 'If this application running in the test environment',
+    doc: 'Is this application running in the test environment',
     format: Boolean,
     default: isTest
   },
@@ -191,8 +185,8 @@ const config = convict({
     default: 'arn:aws:sns:eu-west-2:000000000000:secret_management',
     env: 'SNS_SECRETS_MANAGEMENT_TOPIC_ARN'
   },
-  snsRunWebShellTopicArn: {
-    doc: 'SNS Run WebShell Topic ARN',
+  snsRunTerminalTopicArn: {
+    doc: 'SNS Run Terminal Topic ARN',
     format: String,
     default: 'arn:aws:sns:eu-west-2:000000000000:run-webshell-topic',
     env: 'SNS_RUN_WEBSHELL_TOPIC_ARN'

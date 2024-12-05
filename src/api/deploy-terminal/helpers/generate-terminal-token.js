@@ -1,6 +1,6 @@
 import crypto from 'crypto'
 
-export function generateWebShellToken(length) {
+export function generateTerminalToken(length) {
   return crypto
     .randomBytes(Math.ceil(length / 2))
     .toString('hex')

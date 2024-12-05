@@ -4,7 +4,7 @@ import { createPerfTestSuite } from '~/src/api/create-perf-test-suite/index.js'
 import { createRepository } from '~/src/api/create-repository/index.js'
 import { deploy } from '~/src/api/deploy/index.js'
 import { deployTestSuite } from '~/src/api/deploy-test-suite/index.js'
-import { deployWebShell } from '~/src/api/deploy-webshell/index.js'
+import { deployTerminal } from '~/src/api/deploy-terminal/index.js'
 import { health } from '~/src/api/health/index.js'
 import { queuedEvents } from '~/src/api/queued-events/index.js'
 import { secrets } from '~/src/api/secrets/index.js'
@@ -22,7 +22,7 @@ const router = {
         createPerfTestSuite,
         deploy,
         deployTestSuite,
-        deployWebShell,
+        deployTerminal,
         status,
         queuedEvents,
         secrets
