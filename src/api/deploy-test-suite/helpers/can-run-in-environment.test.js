@@ -4,7 +4,7 @@ import { environments } from '~/src/config/index.js'
 describe('#can-run-in-environment', () => {
   test('Admin can run everywhere', () => {
     Object.values(environments).forEach((env) => {
-      expect(canRunInEnvironment(env, ['1234'], '1234')).toBe(true)
+      expect(canRunInEnvironment(env, ['admin'])).toBe(true)
     })
   })
 
@@ -18,11 +18,11 @@ describe('#can-run-in-environment', () => {
     const admin = [environments.infraDev, environments.management]
 
     nonAdmin.forEach((env) => {
-      expect(canRunInEnvironment(env, ['0000'], '1234')).toBe(true)
+      expect(canRunInEnvironment(env, ['not-admin'])).toBe(true)
     })
 
     admin.forEach((env) => {
-      expect(canRunInEnvironment(env, ['0000'], '1234')).toBe(false)
+      expect(canRunInEnvironment(env, ['not-admin'])).toBe(false)
     })
   })
 })

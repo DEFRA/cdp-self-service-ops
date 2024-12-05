@@ -1,4 +1,3 @@
-import { config } from '~/src/config/index.js'
 import { canAddSecretInEnv } from '~/src/api/secrets/helpers/can-add-secret.js'
 
 jest.mock('~/src/api/deploy/helpers/get-repo-teams', () => ({
@@ -11,12 +10,10 @@ jest.mock('~/src/api/deploy/helpers/get-repo-teams', () => ({
 
 describe('#canAddSecret', () => {
   it('should return true when user is admin', async () => {
-    config.get = jest.fn().mockReturnValue('admin-scope')
-    expect(await canAddSecretInEnv('foo', 'dev', ['admin-scope'])).toBe(true)
+    expect(await canAddSecretInEnv('foo', 'dev', ['admin'])).toBe(true)
   })
 
   test('should return false if no-admin deploys to admin envs', async () => {
-    config.get = jest.fn().mockReturnValue('admin-scope')
     expect(await canAddSecretInEnv('foo', 'management', ['tenant-scope'])).toBe(
       false
     )

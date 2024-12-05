@@ -10,7 +10,7 @@ const createJourneyTestSuiteController = {
     auth: {
       strategy: 'azure-oidc',
       access: {
-        scope: [config.get('oidc.adminGroupId'), '{payload.teamId}']
+        scope: ['admin', '{payload.teamId}']
       }
     },
     validate: {

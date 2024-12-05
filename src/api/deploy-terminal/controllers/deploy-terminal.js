@@ -1,20 +1,20 @@
 import Boom from '@hapi/boom'
 
 import { config } from '~/src/config/index.js'
-import { deployWebShellValidation } from '~/src/api/deploy-webshell/helpers/deploy-webshell-validation.js'
+import { deployTerminalValidation } from '~/src/api/deploy-terminal/helpers/deploy-terminal-validation.js'
 import { sendSnsMessage } from '~/src/helpers/sns/send-sns-message.js'
-import { canRunShellInEnvironment } from '~/src/api/deploy-webshell/helpers/can-run-shell-in-environment.js'
-import { generateWebShellToken } from '~/src/api/deploy-webshell/helpers/generate-webshell-token.js'
-import { deployWebShellPayload } from '~/src/api/deploy-webshell/helpers/deploy-webshell-payload.js'
+import { canRunTerminalInEnvironment } from '~/src/api/deploy-terminal/helpers/can-run-terminal-in-environment.js'
+import { generateTerminalToken } from '~/src/api/deploy-terminal/helpers/generate-terminal-token.js'
+import { deployTerminalPayload } from '~/src/api/deploy-terminal/helpers/deploy-terminal-payload.js'
 import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service.js'
 
-const deployWebShellController = {
+const deployTerminalController = {
   options: {
     auth: {
       strategy: 'azure-oidc'
     },
     validate: {
-      payload: deployWebShellValidation()
+      payload: deployTerminalValidation()
     },
     payload: {
       output: 'data',
@@ -30,11 +30,11 @@ const deployWebShellController = {
       displayName: auth?.credentials?.displayName
     }
 
-    const scope = auth?.credentials?.scope
+    const scope = auth?.credentials?.scope ?? []
 
-    if (!canRunShellInEnvironment(payload.environment, scope)) {
+    if (!canRunTerminalInEnvironment(payload.environment, scope)) {
       throw Boom.forbidden(
-        'Insufficient permissions to launch a web-shell in this environment'
+        'Insufficient permissions to launch a terminal in this environment'
       )
     }
 
@@ -52,12 +52,12 @@ const deployWebShellController = {
     }
 
     logger.info(
-      `WebShell requested ${JSON.stringify(payload)} by ${user.displayName}`
+      `Terminal requested ${JSON.stringify(payload)} by ${user.displayName}`
     )
 
-    const token = generateWebShellToken(64)
+    const token = generateTerminalToken(64)
 
-    const runMessage = deployWebShellPayload({
+    const runMessage = deployTerminalPayload({
       user,
       token,
       environment: payload.environment,
@@ -67,13 +67,13 @@ const deployWebShellController = {
 
     const snsResponse = await sendSnsMessage({
       snsClient,
-      topic: config.get('snsRunWebShellTopicArn'),
+      topic: config.get('snsRunTerminalTopicArn'),
       message: runMessage,
       logger
     })
 
     logger.info(
-      `SNS Deploy WebShell response: ${JSON.stringify(snsResponse, null, 2)}`
+      `SNS Deploy Terminal response: ${JSON.stringify(snsResponse, null, 2)}`
     )
 
     const responsePayload = {
@@ -87,4 +87,4 @@ const deployWebShellController = {
   }
 }
 
-export { deployWebShellController }
+export { deployTerminalController }

@@ -1,6 +1,5 @@
 import Boom from '@hapi/boom'
 
-import { config } from '~/src/config/index.js'
 import { createServiceValidationSchema } from '~/src/api/create-microservice/helpers/create-service-validation-schema.js'
 import { createMicroservice } from '~/src/helpers/create/create-microservice.js'
 import { serviceTemplates } from '~/src/api/create-microservice/helpers/service-templates.js'
@@ -10,7 +9,7 @@ const createMicroserviceController = {
     auth: {
       strategy: 'azure-oidc',
       access: {
-        scope: [config.get('oidc.adminGroupId'), '{payload.teamId}']
+        scope: ['admin', '{payload.teamId}']
       }
     },
     validate: {

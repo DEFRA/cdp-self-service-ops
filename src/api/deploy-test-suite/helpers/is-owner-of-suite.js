@@ -1,4 +1,3 @@
-import { config } from '~/src/config/index.js'
 import { getRepoTeams } from '~/src/api/deploy/helpers/get-repo-teams.js'
 
 /**
@@ -8,7 +7,7 @@ import { getRepoTeams } from '~/src/api/deploy/helpers/get-repo-teams.js'
  * @returns {Promise<boolean>}
  */
 async function isOwnerOfSuite(testSuite, scope) {
-  if (scope.includes(config.get('oidc.adminGroupId'))) return true
+  if (scope.includes('admin')) return true
   const repoTeams = await getRepoTeams(testSuite)
   return repoTeams.some((team) => scope.includes(team.teamId))
 }

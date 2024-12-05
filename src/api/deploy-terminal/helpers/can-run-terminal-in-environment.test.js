@@ -1,19 +1,22 @@
 import { environments } from '~/src/config/index.js'
-import { canRunShellInEnvironment } from '~/src/api/deploy-webshell/helpers/can-run-shell-in-environment.js'
+import { canRunTerminalInEnvironment } from '~/src/api/deploy-terminal/helpers/can-run-terminal-in-environment.js'
 
-describe('#canRunShellInEnvironment', () => {
+describe('#canRunTerminalInEnvironment', () => {
   test('admins can run in all environments except prod', () => {
-    const adminGroup = 'admin-group'
-    const scope = [adminGroup, 'other-group']
+    const scope = ['admin', 'other-group']
     Object.values(environments).forEach((env) => {
-      expect(canRunShellInEnvironment(env, scope, adminGroup)).toBe(
+      expect(canRunTerminalInEnvironment(env, scope)).toBe(
         env !== environments.prod
       )
     })
   })
 
+  test('users with breakglass can run in prod', () => {
+    const scope = ['breakglass', 'other-group']
+    expect(canRunTerminalInEnvironment(environments.prod, scope)).toBe(true)
+  })
+
   test('non-admins cannot run shells in prod, infra-dev or management', () => {
-    const adminGroup = 'admin-group'
     const nonAdmin = ['other-group']
 
     const restricted = [
@@ -24,11 +27,11 @@ describe('#canRunShellInEnvironment', () => {
     const allowed = [environments.test, environments.dev, environments.perfTest]
 
     restricted.forEach((env) => {
-      expect(canRunShellInEnvironment(env, nonAdmin, adminGroup)).toBe(false)
+      expect(canRunTerminalInEnvironment(env, nonAdmin)).toBe(false)
     })
 
     allowed.forEach((env) => {
-      expect(canRunShellInEnvironment(env, nonAdmin, adminGroup)).toBe(true)
+      expect(canRunTerminalInEnvironment(env, nonAdmin)).toBe(true)
     })
   })
 })

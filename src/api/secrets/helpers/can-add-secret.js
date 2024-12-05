@@ -1,4 +1,4 @@
-import { config, environments } from '~/src/config/index.js'
+import { environments } from '~/src/config/index.js'
 import { getRepoTeams } from '~/src/api/deploy/helpers/get-repo-teams.js'
 
 /**
@@ -9,7 +9,7 @@ import { getRepoTeams } from '~/src/api/deploy/helpers/get-repo-teams.js'
  * @returns {Promise<boolean>}
  */
 export async function canAddSecretInEnv(service, env, scope) {
-  if (scope.includes(config.get('oidc.adminGroupId'))) return true
+  if (scope.includes('admin')) return true
   if ([environments.infraDev, environments.management].includes(env))
     return false
   const repoTeams = await getRepoTeams(service)

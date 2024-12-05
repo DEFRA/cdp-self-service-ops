@@ -1,5 +1,6 @@
-import jwt from '@hapi/jwt'
+import fetch from 'node-fetch'
 
+import jwt from '@hapi/jwt'
 import { config } from '~/src/config/index.js'
 import { proxyFetch } from '~/src/helpers/proxy/proxy-fetch.js'
 
@@ -26,15 +27,28 @@ const azureOidc = {
           maxAgeSec: 5400, // 90 minutes
           timeSkewSec: 15
         },
-        validate: (artifacts) => {
+        validate: async (artifacts) => {
           const payload = artifacts.decoded.payload
+
+          const endpoint = config.get('userServiceBackendUrl') + `/scopes`
+
+          const scopeResponse = await fetch(endpoint, {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${artifacts.token}`
+            }
+          })
+
+          const { scopes, scopeFlags } = await scopeResponse.json()
+
           return {
             isValid: true,
             credentials: {
               id: payload.oid,
               displayName: payload.name,
               email: payload.upn ?? payload.preferred_username,
-              scope: [...payload.groups, payload.oid]
+              scope: scopes,
+              scopeFlags
             }
           }
         }

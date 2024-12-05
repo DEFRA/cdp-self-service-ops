@@ -39,7 +39,7 @@ const deployServiceController = {
     }
     const scope = auth?.credentials?.scope
 
-    const isAdmin = scope.includes(config.get('oidc.adminGroupId'))
+    const isAdmin = scope.includes('admin')
     if (!isAdmin) {
       startTime = Date.now()
       const repoTeams = await getRepoTeams(imageName)
