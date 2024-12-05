@@ -7,12 +7,26 @@ async function commitFiles(
   repo,
   branch = `main`,
   commitMessage,
-  content
+  content,
+  logger
 ) {
+  let startTime = Date.now()
   const commitSha = await getLatestCommitSha(owner, repo, branch)
+  logger.info(`getLatestCommitSha: ${Date.now() - startTime}ms`)
+
+  startTime = Date.now()
   const commitTreeSha = await getCommitTreeSha(owner, repo, commitSha)
+  logger.info(`getCommitTreeSha: ${Date.now() - startTime}ms`)
+
+  startTime = Date.now()
   const tree = await createDeploymentBlobTree(owner, repo, content)
+  logger.info(`createDeploymentBlobTree: ${Date.now() - startTime}ms`)
+
+  startTime = Date.now()
   const gitCommitTree = await createCommitTree(owner, repo, commitTreeSha, tree)
+  logger.info(`createCommitTree: ${Date.now() - startTime}ms`)
+
+  startTime = Date.now()
   const newCommit = await createNewCommit(
     owner,
     repo,
@@ -20,7 +34,13 @@ async function commitFiles(
     gitCommitTree.sha,
     commitSha
   )
-  return await setBranchToCommit(owner, repo, branch, newCommit.sha)
+  logger.info(`createNewCommit: ${Date.now() - startTime}ms`)
+
+  startTime = Date.now()
+  const response = await setBranchToCommit(owner, repo, branch, newCommit.sha)
+  logger.info(`setBranchToCommit: ${Date.now() - startTime}ms`)
+
+  return response
 }
 
 async function getCommitTreeSha(owner, repo, commitSha) {
