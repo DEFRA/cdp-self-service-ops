@@ -26,7 +26,6 @@ const deployServiceController = {
     }
   },
   handler: async (request, h) => {
-    let startTime
     const { payload, logger, auth } = request
     const imageName = payload.imageName
     const environment = payload.environment
@@ -41,22 +40,17 @@ const deployServiceController = {
 
     const isAdmin = scope.includes('admin')
     if (!isAdmin) {
-      startTime = Date.now()
       const repoTeams = await getRepoTeams(imageName)
-      logger.info(`getRepoTeams: ${Date.now() - startTime}ms`)
-
       const isTeamMember = repoTeams.some((team) => scope.includes(team.teamId))
       if (!isTeamMember) {
         throw Boom.forbidden('Insufficient scope')
       }
     }
 
-    startTime = Date.now()
     const configLatestCommitSha = await getLatestAppConfigCommitSha(
       environment,
       logger
     )
-    logger.info(`getLatestAppConfigCommitSha: ${Date.now() - startTime}ms`)
     if (!configLatestCommitSha) {
       const message =
         'Error encountered whilst attempting to get latest cdp-app-config sha'
@@ -66,7 +60,6 @@ const deployServiceController = {
 
     const deploymentId = crypto.randomUUID()
 
-    startTime = Date.now()
     await registerDeployment(
       imageName,
       payload.version,
@@ -78,13 +71,10 @@ const deployServiceController = {
       deploymentId,
       configLatestCommitSha
     )
-    logger.info(`registerDeployment: ${Date.now() - startTime}ms`)
 
     logger.info('Deployment registered')
 
-    startTime = Date.now()
     const service = await lookupTenantService(imageName, environment, logger)
-    logger.info(`lookupTenantService: ${Date.now() - startTime}ms`)
 
     if (!service) {
       const message =
@@ -97,7 +87,6 @@ const deployServiceController = {
     )
     const shouldDeployByFile = deployFromFileEnvironments.includes(environment)
     if (!shouldDeployByFile) {
-      startTime = Date.now()
       await sendSnsDeploymentMessage(
         deploymentId,
         payload,
@@ -107,7 +96,6 @@ const deployServiceController = {
         service.service_code,
         request
       )
-      logger.info(`sendSnsDeploymentMessage: ${Date.now() - startTime}ms`)
 
       logger.info('Deployment sns event sent')
     } else {
@@ -115,7 +103,6 @@ const deployServiceController = {
         'Deployment sns event not sent - deploying via deployment file'
       )
     }
-    startTime = Date.now()
     await commitDeploymentFile(
       deploymentId,
       payload,
@@ -126,7 +113,6 @@ const deployServiceController = {
       shouldDeployByFile,
       logger
     )
-    logger.info(`commitDeploymentFile: ${Date.now() - startTime}ms`)
 
     logger.info('Deployment commit file created')
     return h.response({ message: 'success', deploymentId }).code(200)
