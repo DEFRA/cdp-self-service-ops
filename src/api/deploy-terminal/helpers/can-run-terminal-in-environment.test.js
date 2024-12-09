@@ -3,7 +3,7 @@ import { canRunTerminalInEnvironment } from '~/src/api/deploy-terminal/helpers/c
 
 describe('#canRunTerminalInEnvironment', () => {
   test('admins can run in all environments except prod', () => {
-    const scope = ['admin', 'other-group']
+    const scope = ['admin', 'otherGroup']
     Object.values(environments).forEach((env) => {
       expect(canRunTerminalInEnvironment(env, scope)).toBe(
         env !== environments.prod
@@ -11,13 +11,13 @@ describe('#canRunTerminalInEnvironment', () => {
     })
   })
 
-  test('users with breakglass can run in prod', () => {
-    const scope = ['breakglass', 'other-group']
+  test('users with break glass can run in prod', () => {
+    const scope = ['breakGlass', 'otherGroup']
     expect(canRunTerminalInEnvironment(environments.prod, scope)).toBe(true)
   })
 
   test('non-admins cannot run shells in prod, infra-dev or management', () => {
-    const nonAdmin = ['other-group']
+    const nonAdmin = ['otherGroup']
 
     const restricted = [
       environments.prod,
