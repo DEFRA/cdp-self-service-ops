@@ -1,7 +1,7 @@
 import { environments } from '~/src/config/index.js'
 
 export function canRunTerminalInEnvironment(environment, scope) {
-  if (!scope.includes('breakglass') && environment === environments.prod) {
+  if (!scope.includes('breakGlass') && environment === environments.prod) {
     return false
   }
 
