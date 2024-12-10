@@ -21,6 +21,7 @@ import {
  * @param {{db: import('mongodb').Db, logger: import('pino').Logger}} request
  * @param {string} repositoryName
  * @param {string} serviceTypeTemplate
+ * @param {string} templateTag
  * @param {'public'|'protected'} zone
  * @param {string} teamId
  * @param {{id: string, displayName: string}} user
@@ -30,6 +31,7 @@ async function createMicroservice(
   request,
   repositoryName,
   serviceTypeTemplate,
+  templateTag,
   zone,
   teamId,
   user
@@ -87,7 +89,8 @@ async function createMicroservice(
       team.github,
       topics,
       {
-        serviceTypeTemplate
+        serviceTypeTemplate,
+        templateTag
       }
     ),
     createTenantInfrastructure(request, repositoryName, {

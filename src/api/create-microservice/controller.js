@@ -22,6 +22,7 @@ const createMicroserviceController = {
     const serviceTypeTemplate = payload?.serviceTypeTemplate
     const repositoryName = payload?.repositoryName
     const teamId = payload.teamId
+    const templateTag = payload.templateTag
     const zone = serviceTemplates[serviceTypeTemplate]?.zone
     if (!zone) {
       throw Boom.badData(`Invalid service template: '${serviceTypeTemplate}'`)
@@ -32,6 +33,7 @@ const createMicroserviceController = {
       request,
       repositoryName,
       serviceTypeTemplate,
+      templateTag,
       zone,
       teamId,
       user

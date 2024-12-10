@@ -64,6 +64,7 @@ describe('#create-test-runner-suite', () => {
       { id: '123', displayName: 'test user' },
       createJourneyTestSuiteWorkflow,
       'cdp-node-env-test-suite-template',
+      'main',
       ['journey']
     )
 
@@ -75,7 +76,8 @@ describe('#create-test-runner-suite', () => {
       {
         repositoryName: service,
         team: 'test',
-        additionalGitHubTopics: 'cdp,test,test-suite,journey'
+        additionalGitHubTopics: 'cdp,test,test-suite,journey',
+        templateTag: 'main'
       }
     )
 
