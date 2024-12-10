@@ -17,7 +17,13 @@ export default {
     '<rootDir>/src/__fixtures__',
     '<rootDir>/src/server/common/test-helpers'
   ],
-  coverageDirectory: '<rootDir>/coverage'
+  coverageDirectory: '<rootDir>/coverage',
+  transform: {
+    '^.+\\.js$': 'babel-jest'
+  },
+
+  // @octokit/graphql is ESM only, ignore related ESM imports
+  transformIgnorePatterns: ['/node_modules(?!/(@octokit|universal-user-agent))']
 }
 /**
  * @import { Config } from 'jest'
