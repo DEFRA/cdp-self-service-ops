@@ -20,7 +20,7 @@ const handleTriggeredWorkflow = async (db, logger, message) => {
     const workflowRepo = message.repository?.name
     const headBranch = message.workflow_run?.head_branch
     const serviceRepo = message.workflow_run?.name // we repurpose the name to track name of repo its creating
-    const status = findByRepoName(db, serviceRepo)
+    const status = await findByRepoName(db, serviceRepo)
 
     if (status === null) {
       return
