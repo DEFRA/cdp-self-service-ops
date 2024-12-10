@@ -1,4 +1,5 @@
 const statuses = {
+  cancelled: 'cancelled',
   notRequested: 'not-requested',
   requested: 'requested',
   completed: 'completed',
@@ -6,6 +7,7 @@ const statuses = {
   queued: 'queued',
   merged: 'merged',
   inProgress: 'in-progress',
+  skipped: 'skipped',
   success: 'success',
   failure: 'failure'
 }
