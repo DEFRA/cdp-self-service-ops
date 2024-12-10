@@ -20,6 +20,7 @@ import { createTenantInfrastructure } from '~/src/helpers/create/workflows/creat
  * @param {{id: string, displayName: string}} user
  * @param {string} templateWorkflow
  * @param {string} serviceTypeTemplate
+ * @param {string} templateTag
  * @param {string[]} extraTopics
  * @returns {Promise<void>}
  */
@@ -31,6 +32,7 @@ export async function createTestRunnerSuite(
   user,
   templateWorkflow,
   serviceTypeTemplate,
+  templateTag,
   extraTopics = []
 ) {
   const { team } = await fetchTeam(teamId)
@@ -65,7 +67,8 @@ export async function createTestRunnerSuite(
       templateWorkflow,
       repositoryName,
       team.github,
-      topics
+      topics,
+      { templateTag }
     ),
     createSquidConfig(request, repositoryName),
     createTenantInfrastructure(request, repositoryName, {

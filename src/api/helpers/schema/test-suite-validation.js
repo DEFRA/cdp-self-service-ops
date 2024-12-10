@@ -1,6 +1,6 @@
 import Joi from 'joi'
 
-const perfTestSuiteValidation = Joi.object({
+const testSuiteValidation = Joi.object({
   repositoryName: Joi.string()
     .pattern(/^[\w-]*$/)
     .pattern(/^[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]$/, {
@@ -20,7 +20,15 @@ const perfTestSuiteValidation = Joi.object({
     .messages({
       'any.required': 'Choose owning team'
     })
-    .required()
+    .required(),
+  templateTag: Joi.string()
+    .pattern(/^[a-zA-Z0-9][a-zA-Z0-9-_\\.]*[a-zA-Z0-9]$/)
+    .allow('')
+    .messages({
+      'string.pattern.base':
+        'Branch or tag name: Alphanumeric characters, fullstops, underscores & hyphens only'
+    })
+    .optional()
 })
 
-export { perfTestSuiteValidation }
+export { testSuiteValidation }

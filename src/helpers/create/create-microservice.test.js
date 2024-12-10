@@ -55,6 +55,7 @@ describe('#create-test-runner-suite', () => {
       request,
       service,
       'cdp-node-frontend-template',
+      'main',
       'public',
       'team',
       { id: '123', displayName: 'test user' }
@@ -70,7 +71,8 @@ describe('#create-test-runner-suite', () => {
         serviceTypeTemplate: 'cdp-node-frontend-template',
         repositoryName: service,
         team: 'test',
-        additionalGitHubTopics: 'cdp,service,node,frontend'
+        additionalGitHubTopics: 'cdp,service,node,frontend',
+        templateTag: 'main'
       }
     )
 
