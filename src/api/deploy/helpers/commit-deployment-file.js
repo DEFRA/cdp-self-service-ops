@@ -1,5 +1,5 @@
 import { config } from '~/src/config/index.js'
-import { commitFiles } from '~/src/api/deploy/helpers/github/commit-github-files.js'
+import { commitFile } from '~/src/api/deploy/helpers/github/commit-github-file.js'
 
 const deploymentRepo = config.get('github.repos.appDeployments')
 const gitHubOwner = config.get('github.org')
@@ -35,17 +35,17 @@ async function commitDeploymentFile(
     deploy
   )
   const filePath = `environments/${payload.environment}/${zone}/${deployment.service.name}.json`
-  const content = [{ path: filePath, obj: deployment }]
   const commitMessage = `${deployment.service.name} ${payload.version} to ${payload.environment}\nInitiated by ${user.displayName}`
 
   logger.info(`Deployment file ${filePath}`)
 
-  return await commitFiles(
+  return await commitFile(
     gitHubOwner,
     deploymentRepo,
     'main',
     commitMessage,
-    content,
+    filePath,
+    deployment,
     logger
   )
 }
