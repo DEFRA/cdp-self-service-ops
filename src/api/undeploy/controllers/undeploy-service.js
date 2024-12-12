@@ -1,7 +1,7 @@
 import Boom from '@hapi/boom'
 
 import { undeployServiceValidation } from '~/src/api/undeploy/helpers/schema/undeploy-service-validation.js'
-import { undeployServiceFromEnvironment } from '../helpers/undeploy-service-from-environment.js'
+import { undeployServiceFromEnvironment } from '~/src/api/undeploy/helpers/undeploy-service-from-environment.js'
 import { getRepoTeams } from '~/src/api/deploy/helpers/get-repo-teams.js'
 
 const undeployServiceController = {

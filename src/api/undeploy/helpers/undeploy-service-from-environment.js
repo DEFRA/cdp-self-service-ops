@@ -2,6 +2,7 @@ import { config } from '~/src/config/index.js'
 import { registerUndeployment } from '~/src/api/undeploy/helpers/register-undeployment.js'
 import { removeDeploymentFile } from '~/src/api/undeploy/helpers/remove-deployment-file.js'
 import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service.js'
+import { isFeatureEnabled } from '~/src/helpers/feature-toggle/is-feature-enabled.js'
 
 const deployFromFileEnvironments = config.get('deployFromFileEnvironments')
 
@@ -22,9 +23,12 @@ async function undeployServiceFromEnvironment(
 
   const undeploymentId = crypto.randomUUID()
 
-  await registerUndeployment(imageName, environment, user, undeploymentId)
-
-  logger.info('Undeployment registered')
+  if (isFeatureEnabled('undeploy.register')) {
+    await registerUndeployment(imageName, environment, user, undeploymentId)
+    logger.info('Undeployment registered')
+  } else {
+    logger.info('Undeployment registration feature is disabled')
+  }
 
   const service = await lookupTenantService(imageName, environment, logger)
 
@@ -40,15 +44,20 @@ async function undeployServiceFromEnvironment(
       `Undeploying ${imageName} from ${environment} is not file based`
     )
   }
-  await removeDeploymentFile(
-    undeploymentId,
-    imageName,
-    environment,
-    service.zone,
-    user,
-    logger
-  )
-  logger.info('Deployment file removed')
+
+  if (isFeatureEnabled('undeploy.deleteDeploymentFile')) {
+    await removeDeploymentFile(
+      undeploymentId,
+      imageName,
+      environment,
+      service.zone,
+      user,
+      logger
+    )
+    logger.info('Deployment file removed')
+  } else {
+    logger.info('Deployment file remove feature is disabled')
+  }
   return undeploymentId
 }
 
