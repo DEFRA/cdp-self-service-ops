@@ -9,6 +9,7 @@ import { health } from '~/src/api/health/index.js'
 import { queuedEvents } from '~/src/api/queued-events/index.js'
 import { secrets } from '~/src/api/secrets/index.js'
 import { status } from '~/src/api/status/index.js'
+import { undeploy } from '~/src/api/undeploy/index.js'
 
 const router = {
   plugin: {
@@ -25,7 +26,8 @@ const router = {
         deployTerminal,
         status,
         queuedEvents,
-        secrets
+        secrets,
+        undeploy
       ])
     }
   }
