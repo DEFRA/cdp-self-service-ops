@@ -19,9 +19,24 @@ async function undeployServiceFromEnvironment(
   user,
   logger
 ) {
-  logger.info(`Undeploying ${imageName} from ${environment} in progress`)
-
   const undeploymentId = crypto.randomUUID()
+  return await undeployServiceFromEnvironmentWithId(
+    undeploymentId,
+    imageName,
+    environment,
+    user,
+    logger
+  )
+}
+
+async function undeployServiceFromEnvironmentWithId(
+  undeploymentId,
+  imageName,
+  environment,
+  user,
+  logger
+) {
+  logger.info(`Undeploying ${imageName} from ${environment} in progress`)
 
   if (isFeatureEnabled('undeploy.register')) {
     await registerUndeployment(imageName, environment, user, undeploymentId)
@@ -61,4 +76,4 @@ async function undeployServiceFromEnvironment(
   return undeploymentId
 }
 
-export { undeployServiceFromEnvironment }
+export { undeployServiceFromEnvironment, undeployServiceFromEnvironmentWithId }

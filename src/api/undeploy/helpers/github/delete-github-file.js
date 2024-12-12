@@ -1,6 +1,15 @@
 import { getLatestCommitSha } from '~/src/helpers/github/get-latest-commit-sha.js'
 import { graphql } from '~/src/helpers/oktokit-graphql.js'
 
+/**
+ * @typedef {import("pino").Logger} Logger
+ * @param {string} owner
+ * @param {string} repo
+ * @param {string} branch
+ * @param {string} commitMessage
+ * @param {string} filePath
+ * @param {Logger} logger
+ */
 async function deleteGithubFile(
   owner,
   repo,
