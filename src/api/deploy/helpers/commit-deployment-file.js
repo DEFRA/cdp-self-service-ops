@@ -1,12 +1,11 @@
-import { config } from '~/src/config'
-import { commitFiles } from '~/src/api/deploy/helpers/github/commit-github-files'
+import { config } from '~/src/config/index.js'
+import { commitFile } from '~/src/api/deploy/helpers/github/commit-github-file.js'
 
 const deploymentRepo = config.get('github.repos.appDeployments')
 const gitHubOwner = config.get('github.org')
 
 /**
  * @typedef {import("pino").Logger} Logger
- *
  * @param {string} deploymentId
  * @param {{imageName: string, version:string, environment: string, instanceCount: number, cpu: number, memory: number}} payload
  * @param {string} zone
@@ -36,17 +35,18 @@ async function commitDeploymentFile(
     deploy
   )
   const filePath = `environments/${payload.environment}/${zone}/${deployment.service.name}.json`
-  const content = [{ path: filePath, obj: deployment }]
   const commitMessage = `${deployment.service.name} ${payload.version} to ${payload.environment}\nInitiated by ${user.displayName}`
 
   logger.info(`Deployment file ${filePath}`)
 
-  return await commitFiles(
+  return await commitFile(
     gitHubOwner,
     deploymentRepo,
     'main',
     commitMessage,
-    content
+    filePath,
+    deployment,
+    logger
   )
 }
 

@@ -1,4 +1,5 @@
-import { config } from '~/src/config'
+import { config } from '~/src/config/index.js'
+import { fetcher } from '~/src/helpers/fetcher.js'
 
 async function registerDeployment(
   imageName,
@@ -12,7 +13,7 @@ async function registerDeployment(
   latestConfigCommitSha
 ) {
   const url = `${config.get('portalBackendUrl')}/v2/deployments`
-  await fetch(url, {
+  await fetcher(url, {
     method: 'post',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({

@@ -9,8 +9,8 @@ const generateTestRunMessage = (imageName, environment, runId, user) => {
     image: imageName,
     image_version: 'latest',
     port: 80,
-    task_cpu: 1024,
-    task_memory: 2048,
+    task_cpu: 4096,
+    task_memory: 8192,
     webdriver_sidecar: {
       browser: 'chrome',
       version: 'latest'

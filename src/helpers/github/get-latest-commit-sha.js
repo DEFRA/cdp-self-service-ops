@@ -1,4 +1,4 @@
-import { octokit } from '~/src/helpers/oktokit'
+import { octokit } from '~/src/helpers/oktokit.js'
 
 async function getLatestCommitSha(owner, repo, branch = 'main') {
   const { data } = await octokit.rest.git.getRef({

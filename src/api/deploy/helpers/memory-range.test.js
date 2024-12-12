@@ -1,4 +1,4 @@
-import { memoryRange } from '~/src/api/deploy/helpers/memory-range'
+import { memoryRange } from '~/src/api/deploy/helpers/memory-range.js'
 
 describe('#memoryRange', () => {
   test('Memory range should be as expected', () => {

@@ -1,10 +1,10 @@
-import { updateOverallStatus } from '~/src/helpers/create/init-creation-status'
-import { trimWorkflowRun } from '~/src/listeners/github/helpers/trim-workflow-run'
+import { updateOverallStatus } from '~/src/helpers/create/init-creation-status.js'
+import { trimWorkflowRun } from '~/src/listeners/github/helpers/trim-workflow-run.js'
 import {
   findByRepoName,
   updateWorkflowStatus
-} from '~/src/listeners/github/status-repo'
-import { normalizeStatus } from '~/src/listeners/github/helpers/normalize-status'
+} from '~/src/listeners/github/status-repo.js'
+import { normalizeStatus } from '~/src/listeners/github/helpers/normalize-status.js'
 
 /**
  * Generic handler for any workflow messages that are triggered directly via workflow-dispatch.
@@ -12,7 +12,7 @@ import { normalizeStatus } from '~/src/listeners/github/helpers/normalize-status
  * link to the status record.
  * @param { import('mongodb').Db } db
  * @param { import('pino').Logger } logger
- * @param {Object} message
+ * @param {object} message
  * @returns {Promise<void>}
  */
 const handleTriggeredWorkflow = async (db, logger, message) => {
@@ -20,7 +20,7 @@ const handleTriggeredWorkflow = async (db, logger, message) => {
     const workflowRepo = message.repository?.name
     const headBranch = message.workflow_run?.head_branch
     const serviceRepo = message.workflow_run?.name // we repurpose the name to track name of repo its creating
-    const status = findByRepoName(db, serviceRepo)
+    const status = await findByRepoName(db, serviceRepo)
 
     if (status === null) {
       return
@@ -32,7 +32,7 @@ const handleTriggeredWorkflow = async (db, logger, message) => {
     )
 
     logger.info(
-      `attempting to update ${message.repository?.name} status for ${serviceRepo} to ${workflowStatus}`
+      `Creation handler: Attempting to update ${message.repository?.name} status for ${serviceRepo} to ${workflowStatus}`
     )
 
     await updateWorkflowStatus(

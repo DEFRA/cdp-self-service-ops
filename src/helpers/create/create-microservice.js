@@ -1,12 +1,13 @@
-import { config } from '~/src/config'
-import { serviceTemplates } from '~/src/api/create-microservice/helpers/service-templates'
 import Boom from '@hapi/boom'
-import { fetchTeam } from '~/src/helpers/fetch-team'
+
+import { config } from '~/src/config/index.js'
+import { serviceTemplates } from '~/src/api/create-microservice/helpers/service-templates.js'
+import { fetchTeam } from '~/src/helpers/fetch-team.js'
 import {
   initCreationStatus,
   updateOverallStatus
-} from '~/src/helpers/create/init-creation-status'
-import { creations } from '~/src/constants/creations'
+} from '~/src/helpers/create/init-creation-status.js'
+import { creations } from '~/src/constants/creations.js'
 import {
   createAppConfig,
   createDashboard,
@@ -14,12 +15,13 @@ import {
   createSquidConfig,
   createTemplatedRepo,
   createTenantInfrastructure
-} from '~/src/helpers/create/workflows'
+} from '~/src/helpers/create/workflows/index.js'
 
 /**
  * @param {{db: import('mongodb').Db, logger: import('pino').Logger}} request
  * @param {string} repositoryName
  * @param {string} serviceTypeTemplate
+ * @param {string} templateTag
  * @param {'public'|'protected'} zone
  * @param {string} teamId
  * @param {{id: string, displayName: string}} user
@@ -29,6 +31,7 @@ async function createMicroservice(
   request,
   repositoryName,
   serviceTypeTemplate,
+  templateTag,
   zone,
   teamId,
   user
@@ -83,10 +86,11 @@ async function createMicroservice(
       request,
       config.get('workflows.createMicroService'),
       repositoryName,
-      team,
+      team.github,
       topics,
       {
-        serviceTypeTemplate
+        serviceTypeTemplate,
+        templateTag
       }
     ),
     createTenantInfrastructure(request, repositoryName, {
@@ -96,7 +100,7 @@ async function createMicroservice(
       redis_enabled: zone === 'public' ? 'true' : 'false',
       service_code: team.serviceCodes?.at(0) ?? ''
     }),
-    createAppConfig(request, repositoryName),
+    createAppConfig(request, repositoryName, team.github),
     createNginxUpstreams(request, repositoryName, zone),
     createSquidConfig(request, repositoryName),
     createDashboard(request, repositoryName, zone)

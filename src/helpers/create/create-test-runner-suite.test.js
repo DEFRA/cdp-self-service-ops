@@ -1,12 +1,12 @@
 import { MongoClient } from 'mongodb'
-import { createLogger } from '~/src/helpers/logging/logger'
 
-import { creations } from '~/src/constants/creations'
-import { fetchTeam } from '~/src/helpers/fetch-team'
-import { createTestRunnerSuite } from '~/src/helpers/create/create-test-runner-suite'
-import { triggerWorkflow } from '~/src/helpers/create/workflows/trigger-workflow'
-import { config } from '~/src/config'
-import { statuses } from '~/src/constants/statuses'
+import { config } from '~/src/config/index.js'
+import { createLogger } from '~/src/helpers/logging/logger.js'
+import { creations } from '~/src/constants/creations.js'
+import { fetchTeam } from '~/src/helpers/fetch-team.js'
+import { createTestRunnerSuite } from '~/src/helpers/create/create-test-runner-suite.js'
+import { triggerWorkflow } from '~/src/helpers/create/workflows/trigger-workflow.js'
+import { statuses } from '~/src/constants/statuses.js'
 
 jest.mock('~/src/helpers/fetch-team', () => ({
   fetchTeam: jest.fn()
@@ -30,7 +30,7 @@ beforeAll(async () => {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
-  db = await connection.db(globalThis.__MONGO_DB_NAME__)
+  db = connection.db(globalThis.__MONGO_DB_NAME__)
 })
 
 afterAll(async () => {
@@ -52,26 +52,32 @@ describe('#create-test-runner-suite', () => {
       db,
       logger
     }
+    const createJourneyTestSuiteWorkflow = config.get(
+      'workflows.createJourneyTestSuite'
+    )
 
     await createTestRunnerSuite(
       request,
       service,
-      creations.smokeTestSuite,
+      creations.journeyTestsuite,
       'team',
       { id: '123', displayName: 'test user' },
-      'create-smoke-test.yml',
-      ['smoke']
+      createJourneyTestSuiteWorkflow,
+      'cdp-node-env-test-suite-template',
+      'main',
+      ['journey']
     )
 
     // Create repo
     expect(triggerWorkflow).toHaveBeenCalledWith(
       config.get('github.org'),
       config.get('github.repos.createWorkflows'),
-      'create-smoke-test.yml',
+      'create_journey_test_suite.yml',
       {
         repositoryName: service,
         team: 'test',
-        additionalGitHubTopics: 'cdp,test,test-suite,smoke'
+        additionalGitHubTopics: 'cdp,test,test-suite,journey',
+        templateTag: 'main'
       }
     )
 

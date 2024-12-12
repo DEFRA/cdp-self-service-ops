@@ -1,11 +1,12 @@
 import { SQSClient } from '@aws-sdk/client-sqs'
-import { config } from '~/src/config'
+
+import { config } from '~/src/config/index.js'
 
 const sqsClient = {
   plugin: {
     name: 'sqsClient',
     version: '0.1.0',
-    register: async (server, options) => {
+    register: (server) => {
       const client = new SQSClient({
         region: config.get('awsRegion'),
         endpoint: config.get('sqsEndpoint')

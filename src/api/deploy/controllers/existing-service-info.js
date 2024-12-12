@@ -1,6 +1,6 @@
-import { config } from '~/src/config'
-import { getContent } from '~/src/helpers/github/get-content'
-import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service'
+import { config } from '~/src/config/index.js'
+import { getContent } from '~/src/helpers/github/get-content.js'
+import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service.js'
 
 const deploymentRepo = config.get('github.repos.appDeployments')
 const gitHubOwner = config.get('github.org')

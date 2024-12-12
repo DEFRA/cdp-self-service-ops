@@ -1,12 +1,11 @@
-import { generateDeployMessage } from '~/src/api/deploy/helpers/generate-deploy-message'
-import { config } from '~/src/config'
-import { sendSnsMessage } from '~/src/helpers/sns/send-sns-message'
+import { config } from '~/src/config/index.js'
+import { generateDeployMessage } from '~/src/api/deploy/helpers/generate-deploy-message.js'
+import { sendSnsMessage } from '~/src/helpers/sns/send-sns-message.js'
 
 /**
  * @typedef {import("@hapi/hapi").Request} Request
  * @typedef {import("@aws-sdk/client-sns").SNSClient} SNSClient
  * @typedef {import("pino").Logger} Logger
- *
  * @param {string} deploymentId
  * @param {{imageName: string, version:string, environment: string, instanceCount: number, cpu: number, memory: number}} payload
  * @param {string} zone
@@ -14,7 +13,7 @@ import { sendSnsMessage } from '~/src/helpers/sns/send-sns-message'
  * @param {string} configCommitSha
  * @param {string} serviceCode
  * @param {Request & {snsClient: SNSClient, logger: Logger}} request
- * @return {Promise<void>}
+ * @returns {Promise<void>}
  */
 async function sendSnsDeploymentMessage(
   deploymentId,
@@ -25,7 +24,8 @@ async function sendSnsDeploymentMessage(
   serviceCode,
   request
 ) {
-  const deployMessage = await generateDeployMessage(
+  const { snsClient, logger } = request
+  const message = generateDeployMessage(
     deploymentId,
     payload.imageName,
     payload.version,
@@ -41,11 +41,11 @@ async function sendSnsDeploymentMessage(
 
   const topic = config.get('snsDeployTopicArn')
   const snsResponse = await sendSnsMessage({
-    request,
+    snsClient,
     topic,
-    message: deployMessage
+    message,
+    logger
   })
-  const { logger } = request
 
   logger.info(`SNS Deploy response: ${JSON.stringify(snsResponse, null, 2)}`)
 }

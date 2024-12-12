@@ -1,10 +1,10 @@
-import { addSecretController } from '~/src/api/secrets/controllers/add-secret'
+import { addSecretController } from '~/src/api/secrets/controllers/add-secret.js'
 
 const secrets = {
   plugin: {
     name: 'secrets',
     register: async (server) => {
-      server.route([
+      await server.route([
         {
           method: 'POST',
           path: '/secrets/add/{serviceName}/{environment}',

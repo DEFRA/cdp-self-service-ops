@@ -1,9 +1,10 @@
-import { config } from '~/src/config'
 import { MongoClient } from 'mongodb'
-import { fetchTeam } from '~/src/helpers/fetch-team'
-import { createMicroservice } from '~/src/helpers/create/create-microservice'
-import { statuses } from '~/src/constants/statuses'
-import { triggerWorkflow } from '~/src/helpers/create/workflows/trigger-workflow'
+
+import { config } from '~/src/config/index.js'
+import { fetchTeam } from '~/src/helpers/fetch-team.js'
+import { createMicroservice } from '~/src/helpers/create/create-microservice.js'
+import { statuses } from '~/src/constants/statuses.js'
+import { triggerWorkflow } from '~/src/helpers/create/workflows/trigger-workflow.js'
 
 jest.mock('~/src/helpers/fetch-team', () => ({
   fetchTeam: jest.fn()
@@ -27,7 +28,7 @@ beforeAll(async () => {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
-  db = await connection.db(globalThis.__MONGO_DB_NAME__)
+  db = connection.db(globalThis.__MONGO_DB_NAME__)
 })
 
 afterAll(async () => {
@@ -54,6 +55,7 @@ describe('#create-test-runner-suite', () => {
       request,
       service,
       'cdp-node-frontend-template',
+      'main',
       'public',
       'team',
       { id: '123', displayName: 'test user' }
@@ -69,7 +71,8 @@ describe('#create-test-runner-suite', () => {
         serviceTypeTemplate: 'cdp-node-frontend-template',
         repositoryName: service,
         team: 'test',
-        additionalGitHubTopics: 'cdp,service,node,frontend'
+        additionalGitHubTopics: 'cdp,service,node,frontend',
+        templateTag: 'main'
       }
     )
 
@@ -93,7 +96,8 @@ describe('#create-test-runner-suite', () => {
       config.get('github.repos.cdpAppConfig'),
       config.get('workflows.createAppConfig'),
       {
-        service
+        service,
+        team: 'test'
       }
     )
 

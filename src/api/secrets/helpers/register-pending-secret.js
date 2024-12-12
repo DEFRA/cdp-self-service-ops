@@ -1,4 +1,5 @@
-import { config } from '~/src/config'
+import { config } from '~/src/config/index.js'
+import { fetcher } from '~/src/helpers/fetcher.js'
 
 async function registerPendingSecret({
   environment,
@@ -7,7 +8,7 @@ async function registerPendingSecret({
   action
 }) {
   const url = config.get('portalBackendUrl') + '/secrets/register/pending'
-  await fetch(url, {
+  await fetcher(url, {
     method: 'post',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({

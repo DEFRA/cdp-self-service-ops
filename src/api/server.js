@@ -1,22 +1,22 @@
 import path from 'path'
 import hapi from '@hapi/hapi'
 
-import { config } from '~/src/config'
-import { router } from '~/src/plugins/router'
-import { failAction } from '~/src/helpers/fail-action'
-import { requestLogger } from '~/src/plugins/request-logger'
-import { azureOidc } from '~/src/plugins/azure-oidc'
-import { mongoDb } from '~/src/plugins/mongodb'
-import { snsClientPlugin } from '~/src/plugins/sns-client'
-import { secureContext } from '~/src/helpers/secure-context'
-import { setupWreckAgents } from '~/src/helpers/proxy/setup-wreck-agents'
-import { proxyAgent } from '~/src/helpers/proxy/proxy-agent'
-import { gitHubEventsListener } from '~/src/plugins/sqs-listener'
-import { sqsClient } from '~/src/plugins/sqs-client'
-import { pulse } from '~/src/plugins/pulse'
+import { config } from '~/src/config/index.js'
+import { router } from '~/src/plugins/router.js'
+import { failAction } from '~/src/helpers/fail-action.js'
+import { requestLogger } from '~/src/plugins/request-logger.js'
+import { azureOidc } from '~/src/plugins/azure-oidc.js'
+import { mongoDb } from '~/src/plugins/mongodb.js'
+import { snsClientPlugin } from '~/src/plugins/sns-client.js'
+import { secureContext } from '~/src/helpers/secure-context/index.js'
+import { setupWreckAgents } from '~/src/helpers/proxy/setup-wreck-agents.js'
+import { proxyAgent } from '~/src/helpers/proxy/proxy-agent.js'
+import { gitHubEventsListener } from '~/src/plugins/sqs-listener.js'
+import { sqsClient } from '~/src/plugins/sqs-client.js'
+import { pulse } from '~/src/plugins/pulse.js'
+import { tracing } from '~/src/helpers/tracing/tracing.js'
 
 const enableSecureContext = config.get('enableSecureContext')
-const enablePulse = config.get('enablePulse')
 
 async function createServer() {
   setupWreckAgents(proxyAgent())
@@ -49,14 +49,15 @@ async function createServer() {
     }
   })
 
-  await server.register(requestLogger)
+  // Add tracer and request logger before all other plugins
+  await server.register([tracing, requestLogger])
 
   if (enableSecureContext) {
     await server.register(secureContext)
   }
 
   await server.register([
-    ...(enablePulse ? pulse : []),
+    pulse,
     azureOidc,
     sqsClient,
     mongoDb,

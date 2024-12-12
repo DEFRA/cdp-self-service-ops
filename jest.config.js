@@ -1,4 +1,7 @@
-module.exports = {
+/**
+ * @type {Config}
+ */
+export default {
   rootDir: '.',
   verbose: true,
   resetModules: true,
@@ -12,7 +15,16 @@ module.exports = {
     '<rootDir>/node_modules/',
     '<rootDir>/.server',
     '<rootDir>/src/__fixtures__',
-    'index.js'
+    '<rootDir>/src/server/common/test-helpers'
   ],
-  coverageDirectory: '<rootDir>/coverage'
+  coverageDirectory: '<rootDir>/coverage',
+  transform: {
+    '^.+\\.js$': 'babel-jest'
+  },
+
+  // @octokit/graphql is ESM only, ignore related ESM imports
+  transformIgnorePatterns: ['/node_modules(?!/(@octokit|universal-user-agent))']
 }
+/**
+ * @import { Config } from 'jest'
+ */

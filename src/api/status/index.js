@@ -1,13 +1,13 @@
 import {
   inProgressController,
   repositoryStatusController
-} from '~/src/api/status/controllers'
+} from '~/src/api/status/controllers/index.js'
 
 const status = {
   plugin: {
     name: 'status',
     register: async (server) => {
-      server.route([
+      await server.route([
         {
           method: 'GET',
           path: '/status/in-progress',

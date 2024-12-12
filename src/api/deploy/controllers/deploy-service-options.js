@@ -1,4 +1,4 @@
-import { ecsCpuToMemoryOptionsMap } from '~/src/api/deploy/helpers/ecs-cpu-to-memory-options-map'
+import { ecsCpuToMemoryOptionsMap } from '~/src/api/deploy/helpers/ecs-cpu-to-memory-options-map.js'
 
 const deployServiceOptionsController = {
   handler: (request, h) => {

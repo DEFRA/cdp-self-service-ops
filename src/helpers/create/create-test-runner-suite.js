@@ -1,25 +1,26 @@
 import Boom from '@hapi/boom'
-import { config } from '~/src/config'
+import { config } from '~/src/config/index.js'
 import {
   initCreationStatus,
   updateOverallStatus
-} from '~/src/helpers/create/init-creation-status'
+} from '~/src/helpers/create/init-creation-status.js'
 import {
   createTemplatedRepo,
   createSquidConfig
-} from '~/src/helpers/create/workflows'
-import { fetchTeam } from '~/src/helpers/fetch-team'
-import { createTenantInfrastructure } from '~/src/helpers/create/workflows/create-tenant-infrastructure'
+} from '~/src/helpers/create/workflows/index.js'
+import { fetchTeam } from '~/src/helpers/fetch-team.js'
+import { createTenantInfrastructure } from '~/src/helpers/create/workflows/create-tenant-infrastructure.js'
 
 /**
  * Helper to create test suites that run on the platform (rather than GitHub).
- *
  * @param {{db: import('mongodb').Db, logger: import('pino').Logger}} request
  * @param {string} repositoryName
  * @param {string} kind
  * @param {string} teamId
  * @param {{id: string, displayName: string}} user
  * @param {string} templateWorkflow
+ * @param {string} serviceTypeTemplate
+ * @param {string} templateTag
  * @param {string[]} extraTopics
  * @returns {Promise<void>}
  */
@@ -30,6 +31,8 @@ export async function createTestRunnerSuite(
   teamId,
   user,
   templateWorkflow,
+  serviceTypeTemplate,
+  templateTag,
   extraTopics = []
 ) {
   const { team } = await fetchTeam(teamId)
@@ -45,7 +48,7 @@ export async function createTestRunnerSuite(
     org,
     kind,
     repositoryName,
-    templateWorkflow,
+    serviceTypeTemplate,
     zone,
     team,
     user,
@@ -63,8 +66,9 @@ export async function createTestRunnerSuite(
       request,
       templateWorkflow,
       repositoryName,
-      team,
-      topics
+      team.github,
+      topics,
+      { templateTag }
     ),
     createSquidConfig(request, repositoryName),
     createTenantInfrastructure(request, repositoryName, {

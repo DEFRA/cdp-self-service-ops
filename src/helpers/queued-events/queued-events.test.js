@@ -1,15 +1,16 @@
-import { createIndexes } from '~/src/plugins/mongodb'
+import { MongoClient } from 'mongodb'
+import timeunit from 'timeunit'
+import { setTimeout } from 'timers/promises'
+
+import { config } from '~/src/config/index.js'
+import { createIndexes } from '~/src/plugins/mongodb.js'
 import {
   ackEvent,
   findAll,
   getNextQueuedEvent,
   queueEvent
-} from '~/src/helpers/queued-events/queued-events'
-import { MongoClient } from 'mongodb'
-import timeunit from 'timeunit'
-import { setTimeout } from 'timers/promises'
-import { config } from '~/src/config'
-import { createLogger } from '~/src/helpers/logging/logger'
+} from '~/src/helpers/queued-events/queued-events.js'
+import { createLogger } from '~/src/helpers/logging/logger.js'
 
 const eventType = config.get('serviceInfraCreateEvent')
 const logger = createLogger()
@@ -25,7 +26,7 @@ beforeAll(async () => {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
-  db = await connection.db(globalThis.__MONGO_DB_NAME__)
+  db = connection.db(globalThis.__MONGO_DB_NAME__)
   await createIndexes(db)
 })
 
@@ -64,7 +65,7 @@ describe('#queueEvent', () => {
 })
 
 describe('#getNextQueuedEvent', () => {
-  test('should retrieve the oldest ', async () => {
+  test('should retrieve the oldest', async () => {
     const repositoryName = crypto.randomUUID()
 
     await queueEvent(db, repositoryName, eventType, { zone: 'public' }, logger)
@@ -92,6 +93,7 @@ describe('#getNextQueuedEvent', () => {
       retryCount: 1
     })
   })
+
   test('should not return an event if one is currently being processed', async () => {
     const repositoryName = crypto.randomUUID()
 
@@ -116,6 +118,7 @@ describe('#getNextQueuedEvent', () => {
 
     expect(event2).toBeUndefined()
   })
+
   test('should return same event and increment retryCount if ttl has expired', async () => {
     const repositoryName = crypto.randomUUID()
     await queueEvent(db, repositoryName, eventType, { zone: 'public' })
@@ -146,6 +149,7 @@ describe('#getNextQueuedEvent', () => {
       retryCount: 3
     })
   })
+
   test('should return next event if retryCount has been reached (maxRetries 1 means we try twice)', async () => {
     const repository1 = crypto.randomUUID()
     await queueEvent(db, repository1, eventType, { zone: 'public' }, logger)
@@ -193,6 +197,7 @@ describe('#getNextQueuedEvent', () => {
     })
   })
 })
+
 describe('#ackEvent', () => {
   test('should mark acknowledged event as processed', async () => {
     const repository1 = crypto.randomUUID()
@@ -239,6 +244,7 @@ describe('#ackEvent', () => {
       retryCount: 1
     })
   })
+
   test('should return next event if previous event is acknowledged before dequeued', async () => {
     const repository1 = crypto.randomUUID()
     await queueEvent(db, repository1, eventType, { zone: 'public' }, logger)
@@ -261,6 +267,7 @@ describe('#ackEvent', () => {
       retryCount: 1
     })
   })
+
   test('should return nothing if all events are acknowledged', async () => {
     const repository1 = crypto.randomUUID()
     await queueEvent(db, repository1, eventType, { zone: 'public' }, logger)

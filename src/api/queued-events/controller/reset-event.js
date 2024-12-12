@@ -1,5 +1,5 @@
-import { resetEvent } from '~/src/helpers/queued-events/queued-events'
-import { config } from '~/src/config'
+import { config } from '~/src/config/index.js'
+import { resetEvent } from '~/src/helpers/queued-events/queued-events.js'
 
 const resetEventController = {
   handler: async (request, h) => {

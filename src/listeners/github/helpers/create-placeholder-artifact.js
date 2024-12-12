@@ -1,6 +1,8 @@
-import { config } from '~/src/config'
 import qs from 'qs'
-import { createLogger } from '~/src/helpers/logging/logger'
+
+import { config } from '~/src/config/index.js'
+import { createLogger } from '~/src/helpers/logging/logger.js'
+import { fetcher } from '~/src/helpers/fetcher.js'
 
 async function createPlaceholderArtifact({ service, gitHubUrl, runMode }) {
   const logger = createLogger()
@@ -21,7 +23,7 @@ async function createPlaceholderArtifact({ service, gitHubUrl, runMode }) {
   logger.info(
     `Calling create ${runMode} placeholder with ${service} ${gitHubUrl}`
   )
-  return await fetch(url, {
+  return await fetcher(url, {
     method: 'post'
   })
 }

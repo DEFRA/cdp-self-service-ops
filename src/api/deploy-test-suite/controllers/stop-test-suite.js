@@ -1,10 +1,10 @@
 import Boom from '@hapi/boom'
 import Joi from 'joi'
 
-import { config } from '~/src/config'
-import { fetchTestRun } from '~/src/api/deploy-test-suite/helpers/fetch-test-run'
-import { isOwnerOfSuite } from '~/src/api/deploy-test-suite/helpers/is-owner-of-suite'
-import { sendSnsMessage } from '~/src/helpers/sns/send-sns-message'
+import { config } from '~/src/config/index.js'
+import { fetchTestRun } from '~/src/api/deploy-test-suite/helpers/fetch-test-run.js'
+import { isOwnerOfSuite } from '~/src/api/deploy-test-suite/helpers/is-owner-of-suite.js'
+import { sendSnsMessage } from '~/src/helpers/sns/send-sns-message.js'
 
 const stopTestSuiteController = {
   options: {
@@ -31,7 +31,9 @@ const stopTestSuiteController = {
     }
     const scope = request.auth?.credentials?.scope
 
-    if (!isOwnerOfSuite(testRun.testSuite, scope)) {
+    const isOwner = await isOwnerOfSuite(testRun.testSuite, scope)
+
+    if (!isOwner) {
       throw Boom.forbidden(
         `Insufficient permissions to stop test-suite ${testRun.runId}`
       )
@@ -48,9 +50,10 @@ const stopTestSuiteController = {
     request.logger.info(`Stopping task ${taskId} in ${testRun.environment}`)
 
     const snsResponse = await sendSnsMessage({
-      request,
+      snsClient: request.snsClient,
       topic,
       message,
+      logger: request.logger,
       environment: testRun.environment,
       deduplicationId: taskId
     })
@@ -64,9 +67,8 @@ const stopTestSuiteController = {
 
 /**
  * Split a full task ARN into just the task ID.
- *
  * @param {string} taskArn
- * @return {string}
+ * @returns {string}
  */
 function getTaskId(taskArn) {
   const parts = taskArn.split('/')

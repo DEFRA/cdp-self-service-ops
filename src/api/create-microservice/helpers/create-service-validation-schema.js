@@ -1,12 +1,12 @@
 import Joi from 'joi'
 import Boom from '@hapi/boom'
 
-import { serviceTemplates } from '~/src/api/create-microservice/helpers/service-templates'
+import { serviceTemplates } from '~/src/api/create-microservice/helpers/service-templates.js'
 
 function createServiceValidationSchema() {
   const serviceTypeTemplates = Object.keys(serviceTemplates)
 
-  return async (value, options) => {
+  return (value, options) => {
     const validationResult = Joi.object({
       repositoryName: Joi.string()
         .pattern(/^[\w-]*$/)
@@ -30,7 +30,15 @@ function createServiceValidationSchema() {
         .messages({
           'any.only': 'Choose a service type'
         }),
-      teamId: Joi.string().required()
+      teamId: Joi.string().required(),
+      templateTag: Joi.string()
+        .pattern(/^[a-zA-Z0-9][a-zA-Z0-9-_\\.]*[a-zA-Z0-9]$/)
+        .allow('')
+        .messages({
+          'string.pattern.base':
+            'Branch or tag name: Alphanumeric characters, fullstops, underscores & hyphens only'
+        })
+        .optional()
     }).validate(value, options)
 
     if (validationResult?.error) {

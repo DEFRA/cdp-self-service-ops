@@ -1,6 +1,6 @@
-import { statuses } from '~/src/constants/statuses'
-import { updateCreationStatus } from '~/src/helpers/create/init-creation-status'
-import { triggerWorkflow } from '~/src/helpers/create/workflows/trigger-workflow'
+import { statuses } from '~/src/constants/statuses.js'
+import { updateCreationStatus } from '~/src/helpers/create/init-creation-status.js'
+import { triggerWorkflow } from '~/src/helpers/create/workflows/trigger-workflow.js'
 
 /**
  * Triggers a given workflow and updates the status record
@@ -9,7 +9,7 @@ import { triggerWorkflow } from '~/src/helpers/create/workflows/trigger-workflow
  * @param {string} org      - GitHub org
  * @param {string} repo     - repo the workflow is in
  * @param {string} workflow - name of the workflow file
- * @param {Object} inputs   - input params to pass to workflow
+ * @param {object} inputs   - input params to pass to workflow
  * @returns {Promise<void>}
  */
 const createResourceFromWorkflow = async (
@@ -20,24 +20,28 @@ const createResourceFromWorkflow = async (
   workflow,
   inputs
 ) => {
+  request.logger.info(
+    `Workflow ${repo}/${workflow} triggered for ${service} with inputs ${JSON.stringify(inputs)}`
+  )
+  const trigger = {
+    org,
+    repo,
+    workflow,
+    inputs
+  }
+
   try {
-    request.logger.info(
-      `Workflow ${repo}/${workflow} triggered for ${service} with inputs ${JSON.stringify(inputs)}`
-    )
     await triggerWorkflow(org, repo, workflow, inputs)
 
     await updateCreationStatus(request.db, service, repo, {
       status: statuses.requested,
-      trigger: {
-        org,
-        repo,
-        workflow,
-        inputs
-      }
+      trigger,
+      result: 'ok'
     })
   } catch (e) {
     await updateCreationStatus(request.db, service, repo, {
       status: statuses.failure,
+      trigger,
       result: e?.response ?? 'see cdp-self-service-ops logs'
     })
     request.logger.error(

@@ -1,4 +1,4 @@
-import { deployServiceValidation } from '~/src/api/deploy/helpers/schema/deploy-service-validation'
+import { deployServiceValidation } from '~/src/api/deploy/helpers/schema/deploy-service-validation.js'
 
 describe('#deployServiceValidation', () => {
   test('Schema should pass validation without errors', () => {
@@ -36,7 +36,7 @@ describe('#deployServiceValidation', () => {
     expect(
       deployServiceValidation().validate(payload).error.details.at(0).message
     ).toContain(
-      '"environment" must be one of [management, infra-dev, dev, test, perf-test, prod]'
+      '"environment" must be one of [management, infra-dev, dev, test, perf-test, ext-test, prod]'
     )
   })
 

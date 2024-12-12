@@ -1,54 +1,52 @@
-import { lookupTenantServicesForCommit } from '~/src/listeners/github/helpers/lookup-tenant-service-for-commit'
-import { config, environments } from '~/src/config'
+import { config } from '~/src/config/index.js'
 import {
   findAllInProgressOrFailed,
   updateWorkflowStatus
-} from '~/src/listeners/github/status-repo'
-import { updateOverallStatus } from '~/src/helpers/create/init-creation-status'
-import { createPlaceholderArtifact } from '~/src/listeners/github/helpers/create-placeholder-artifact'
-import { createLogger } from '~/src/helpers/logging/logger'
-import { ackEvent } from '~/src/helpers/queued-events/queued-events'
+} from '~/src/listeners/github/status-repo.js'
+import { updateOverallStatus } from '~/src/helpers/create/init-creation-status.js'
+import { createPlaceholderArtifact } from '~/src/listeners/github/helpers/create-placeholder-artifact.js'
+import { createLogger } from '~/src/helpers/logging/logger.js'
+import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service.js'
 
-// given a list of services, update the tf-svc-infra status for all of them to success
-// and create the placeholder artifact
+/**
+ * given a list of services, update the tf-svc-infra status for all of them to success
+ * and create the placeholder artifact
+ * @param {object} db
+ * @param {object} trimmedWorkflow
+ * @param {string} status
+ * @returns {Promise<void>}
+ */
 const bulkUpdateTfSvcInfra = async (db, trimmedWorkflow, status) => {
   const logger = createLogger()
   const org = config.get('github.org')
   const tfSvcInfra = config.get('github.repos.cdpTfSvcInfra')
-  const eventType = config.get('serviceInfraCreateEvent')
 
-  const tenants = await lookupTenantServicesForCommit(environments.management)
-
-  logger.info(tenants)
-
-  if (tenants === undefined) {
-    // TODO: handle error
-    logger.error('Failed to lookup tenant services')
-    throw new Error('Failed to lookup tenant services')
-  }
-  const tenantNames = new Set(Object.keys(tenants))
   const inProgressOrFailed = await findAllInProgressOrFailed(db)
 
   // anything that's in-progress/failed and now exists in tenant-services
   // exists, so should be updated
-  const servicesToUpdate = inProgressOrFailed
-    .filter((s) => tenantNames.has(s.repositoryName))
-    .map((s) => {
-      return { name: s.repositoryName, tenantConfig: tenants[s.repositoryName] }
-    })
+
+  const servicesToUpdate = []
+
+  for (const service of inProgressOrFailed) {
+    const name = service.repositoryName
+
+    // TODO: maybe use exact commit ref of workflow
+    const tenantConfig = await lookupTenantService(name, 'management', logger)
+    if (tenantConfig) {
+      servicesToUpdate.push({ name, tenantConfig })
+    }
+  }
 
   logger.info(
     `Updating ${servicesToUpdate.length} ${tfSvcInfra} statuses to success`
   )
 
-  for (let i = 0; i < servicesToUpdate.length; i++) {
-    const serviceName = servicesToUpdate[i].name
+  for (const serviceToUpdate of servicesToUpdate) {
+    const serviceName = serviceToUpdate.name
 
     let runMode = 'Service'
-    if (
-      servicesToUpdate[i].tenantConfig?.testSuite &&
-      servicesToUpdate[i].tenantConfig?.testSuite !== ''
-    ) {
+    if (serviceToUpdate?.tenantConfig?.test_suite) {
       runMode = 'Job'
     }
 
@@ -74,8 +72,6 @@ const bulkUpdateTfSvcInfra = async (db, trimmedWorkflow, status) => {
       gitHubUrl: `https://github.com/${org}/${serviceName}`,
       runMode
     })
-
-    await ackEvent(db, serviceName, eventType)
   }
 }
 

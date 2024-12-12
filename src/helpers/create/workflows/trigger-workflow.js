@@ -1,11 +1,11 @@
-import { octokit } from '~/src/helpers/oktokit'
+import { octokit } from '~/src/helpers/oktokit.js'
 
-import { config } from '~/src/config'
+import { config } from '~/src/config/index.js'
 
 /**
- * Trigger a given github workflow
- * @param {string} org        - github org the workflow is in
- * @param {string} repo       - name of the github repo the workflow is in
+ * Trigger a given GitHub workflow
+ * @param {string} org        - GitHub org the workflow is in
+ * @param {string} repo       - name of the GitHub repo the workflow is in
  * @param {string} workflowId - name of the workflow file to trigger
  * @param {object} inputs     - input params to pass to the workflow
  */
@@ -19,7 +19,7 @@ function triggerWorkflow(org, repo, workflowId, inputs) {
       ref: 'main',
       inputs,
       headers: {
-        'X-GitHub-Api-Version': config.get('gitHubApiVersion')
+        'X-GitHub-Api-Version': config.get('github.apiVersion')
       }
     }
   )

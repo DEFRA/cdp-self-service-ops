@@ -1,6 +1,6 @@
-import { config } from '~/src/config'
-import { statuses } from '~/src/constants/statuses'
-import { creations } from '~/src/constants/creations'
+import { config } from '~/src/config/index.js'
+import { statuses } from '~/src/constants/statuses.js'
+import { creations } from '~/src/constants/creations.js'
 
 const cdpTfSvcInfra = config.get('github.repos.cdpTfSvcInfra')
 const cdpAppConfig = config.get('github.repos.cdpAppConfig')
@@ -12,11 +12,9 @@ const cdpCreateWorkflows = config.get('github.repos.createWorkflows')
 function getStatusKeys(statusRecord) {
   switch (statusRecord?.kind) {
     case creations.repository:
-    case creations.testsuite:
       return [cdpCreateWorkflows]
 
-    case creations.envTestsuite:
-    case creations.smokeTestSuite:
+    case creations.journeyTestsuite:
     case creations.perfTestsuite:
       return [cdpCreateWorkflows, cdpTfSvcInfra, cdpSquidConfig]
 
@@ -107,10 +105,25 @@ async function initCreationStatus(
   return status
 }
 
+/**
+ *
+ * @param {object} db
+ * @param {string} repo
+ * @param {string} field - The name of the field/workflow being updated
+ * @param {{status: string, trigger: {org: string, repo: string, workflow: string, inputs: object}, result: object|undefined }} status
+ * @returns {Promise<*>}
+ */
 async function updateCreationStatus(db, repo, field, status) {
-  return await db
-    .collection('status')
-    .updateOne({ repositoryName: repo }, { $set: { [field]: status } })
+  return await db.collection('status').updateOne(
+    { repositoryName: repo },
+    {
+      $set: {
+        [`${field}.status`]: status.status,
+        [`${field}.trigger`]: status.trigger,
+        [`${field}.result`]: status.result
+      }
+    }
+  )
 }
 
 async function updateOverallStatus(db, repositoryName) {

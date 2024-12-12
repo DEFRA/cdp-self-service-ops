@@ -1,21 +1,19 @@
 import Boom from '@hapi/boom'
 
-import { config } from '~/src/config'
-import { sendSnsMessage } from '~/src/helpers/sns/send-sns-message'
+import { config } from '~/src/config/index.js'
+import { sendSnsMessage } from '~/src/helpers/sns/send-sns-message.js'
 import {
   secretParamsValidation,
   secretPayloadValidation
-} from '~/src/api/secrets/helpers/schema/secret-validation'
-import { sanitize } from '~/src/helpers/sanitize'
-import { registerPendingSecret } from '~/src/api/secrets/helpers/register-pending-secret'
+} from '~/src/api/secrets/helpers/schema/secret-validation.js'
+import { sanitize } from '~/src/helpers/sanitize.js'
+import { registerPendingSecret } from '~/src/api/secrets/helpers/register-pending-secret.js'
+import { canAddSecretInEnv } from '~/src/api/secrets/helpers/can-add-secret.js'
 
 const addSecretController = {
   options: {
     auth: {
-      strategy: 'azure-oidc',
-      access: {
-        scope: [config.get('oidcAdminGroupId'), '{payload.teamId}']
-      }
+      strategy: 'azure-oidc'
     },
     validate: {
       params: secretParamsValidation(),
@@ -34,10 +32,20 @@ const addSecretController = {
     const { secretValue, secretKey } = request.payload
     const description = `Secret ${secretKey} pending for ${serviceName}`
     const topic = config.get('snsSecretsManagementTopicArn')
+    const scope = request.auth?.credentials?.scope
+
+    const canAddSecret = await canAddSecretInEnv(
+      serviceName,
+      environment,
+      scope
+    )
+    if (!canAddSecret) {
+      throw Boom.forbidden('Insufficient permissions to update this secret')
+    }
 
     try {
       await sendSnsMessage({
-        request,
+        snsClient: request.snsClient,
         topic,
         message: {
           environment,
@@ -46,7 +54,8 @@ const addSecretController = {
           secret_key: secretKey,
           secret_value: secretValue,
           action: 'add_secret'
-        }
+        },
+        logger: request.logger
       })
 
       await registerPendingSecret({

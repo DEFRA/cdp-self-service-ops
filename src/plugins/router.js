@@ -1,15 +1,14 @@
-import { health } from '~/src/api/health'
-import { deploy } from '~/src/api/deploy'
-import { status } from '~/src/api/status'
-import { createMicroservice } from '~/src/api/create-microservice'
-import { createRepository } from '~/src/api/create-repository'
-import { createTestSuite } from '~/src/api/create-test-suite'
-import { createEnvTestSuite } from '~/src/api/create-env-test-suite'
-import { deployTestSuite } from '~/src/api/deploy-test-suite'
-import { createPerfTestSuite } from '~/src/api/create-perf-test-suite'
-import { createSmokeTestSuite } from '~/src/api/create-smoke-test-suite'
-import { queuedEvents } from '~/src/api/queued-events'
-import { secrets } from '~/src/api/secrets'
+import { createJourneyTestSuite } from '~/src/api/create-journey-test-suite/index.js'
+import { createMicroservice } from '~/src/api/create-microservice/index.js'
+import { createPerfTestSuite } from '~/src/api/create-perf-test-suite/index.js'
+import { createRepository } from '~/src/api/create-repository/index.js'
+import { deploy } from '~/src/api/deploy/index.js'
+import { deployTestSuite } from '~/src/api/deploy-test-suite/index.js'
+import { deployTerminal } from '~/src/api/deploy-terminal/index.js'
+import { health } from '~/src/api/health/index.js'
+import { queuedEvents } from '~/src/api/queued-events/index.js'
+import { secrets } from '~/src/api/secrets/index.js'
+import { status } from '~/src/api/status/index.js'
 
 const router = {
   plugin: {
@@ -19,12 +18,11 @@ const router = {
         health,
         createMicroservice,
         createRepository,
-        createTestSuite,
-        createEnvTestSuite,
+        createJourneyTestSuite,
         createPerfTestSuite,
-        createSmokeTestSuite,
         deploy,
         deployTestSuite,
+        deployTerminal,
         status,
         queuedEvents,
         secrets

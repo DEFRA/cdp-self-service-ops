@@ -1,5 +1,5 @@
-import { statuses } from '~/src/constants/statuses'
-import { getStatus } from '~/src/api/status/helpers/get-status'
+import { statuses } from '~/src/constants/statuses.js'
+import { getStatus } from '~/src/api/status/helpers/get-status.js'
 
 const inProgressController = {
   options: {},

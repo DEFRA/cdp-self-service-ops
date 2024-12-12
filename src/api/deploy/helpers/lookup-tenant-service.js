@@ -1,47 +1,36 @@
-import { getContent } from '~/src/helpers/github/get-content'
-import { config } from '~/src/config'
+import Joi from 'joi'
 
-async function lookupTenantService(service, environment, logger) {
+import { getContent } from '~/src/helpers/github/get-content.js'
+import { config } from '~/src/config/index.js'
+
+const org = config.get('github.org')
+const repo = config.get('github.repos.cdpTfSvcInfra')
+
+const schema = Joi.object({
+  zone: Joi.string().valid('public', 'protected').required(),
+  service_code: Joi.any(),
+  mongo: Joi.boolean(),
+  redis: Joi.boolean(),
+  test_suite: Joi.string()
+}).unknown(true)
+
+/**
+ * Get service from the multi-file version of tenants.json
+ * @param {string} service
+ * @param {string} environment
+ * @param {Logger} logger
+ * @param {string} ref
+ * @returns {Promise<undefined|*>}
+ */
+async function lookupTenantService(service, environment, logger, ref = 'main') {
   const filePath = `environments/${environment}/tenants/${service}.json`
-  const owner = config.get('github.org')
-  const repo = config.get('github.repos.cdpTfSvcInfra')
-
   try {
-    const data = await getContent(owner, repo, filePath)
+    const data = await getContent(org, repo, filePath, ref)
     const service = JSON.parse(data)
-
-    if (service?.zone && service?.service_code) {
-      return service
-    } else {
-      logger.warn(
-        `${service}.json did not contain zone and service_code - Falling back to tenant_services.json`
-      )
-      return await lookupTenantServices(
-        service,
-        environment,
-        owner,
-        repo,
-        logger
-      )
-    }
-  } catch (error) {
-    logger.error(
-      error,
-      `Error attempting to retrieve ${filePath} from GitHub - Falling back to tenant_services.json`
-    )
-    return await lookupTenantServices(service, environment, owner, repo, logger)
-  }
-}
-
-async function lookupTenantServices(service, environment, owner, repo, logger) {
-  const filePath = `environments/${environment}/resources/tenant_services.json`
-  try {
-    const data = await getContent(owner, repo, filePath)
-    const services = JSON.parse(data)
-    return services[0][service]
+    Joi.assert(service, schema) // Check file in correct format
+    return service
   } catch (error) {
     logger.error(error, `Error attempting to retrieve ${filePath} from GitHub`)
-    return undefined
   }
 }
 

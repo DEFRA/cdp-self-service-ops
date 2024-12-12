@@ -1,12 +1,14 @@
-import { statuses } from '~/src/constants/statuses'
+import { statuses } from '~/src/constants/statuses.js'
 
 const normalizeStatus = (action, conclusion) => {
   switch (action) {
     case statuses.completed:
       switch (conclusion) {
         case statuses.success:
-        case 'skipped':
+        case statuses.skipped:
           return statuses.success
+        case statuses.cancelled:
+          return statuses.inProgress
         default:
           return statuses.failure
       }
