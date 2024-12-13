@@ -1,5 +1,5 @@
-import { getTraceId } from '~/src/helpers/tracing/async-local-storage.js'
 import { config } from '~/src/config/index.js'
+import { getTraceId } from '@defra/hapi-tracing'
 
 /**
  * @param {string} url
