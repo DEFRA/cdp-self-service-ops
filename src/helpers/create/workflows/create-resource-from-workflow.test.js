@@ -1,7 +1,7 @@
 import { MongoClient } from 'mongodb'
 
 import { createLogger } from '~/src/helpers/logging/logger.js'
-import { triggerWorkflow } from '~/src/helpers/create/workflows/trigger-workflow.js'
+import { triggerWorkflow } from '~/src/helpers/github/trigger-workflow.js'
 import { createResourceFromWorkflow } from '~/src/helpers/create/workflows/create-resource-from-workflow.js'
 import { initCreationStatus } from '~/src/helpers/create/init-creation-status.js'
 import { creations } from '~/src/constants/creations.js'
@@ -27,7 +27,7 @@ afterAll(async () => {
   await connection.close()
 })
 
-jest.mock('~/src/helpers/create/workflows/trigger-workflow')
+jest.mock('~/src/helpers/github/trigger-workflow')
 
 describe('#createResourceFromWorkflow', () => {
   test('Should create a resource', async () => {
