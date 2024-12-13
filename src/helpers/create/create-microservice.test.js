@@ -4,13 +4,13 @@ import { config } from '~/src/config/index.js'
 import { fetchTeam } from '~/src/helpers/fetch-team.js'
 import { createMicroservice } from '~/src/helpers/create/create-microservice.js'
 import { statuses } from '~/src/constants/statuses.js'
-import { triggerWorkflow } from '~/src/helpers/create/workflows/trigger-workflow.js'
+import { triggerWorkflow } from '~/src/helpers/github/trigger-workflow.js'
 
 jest.mock('~/src/helpers/fetch-team', () => ({
   fetchTeam: jest.fn()
 }))
 
-jest.mock('~/src/helpers/create/workflows/trigger-workflow', () => ({
+jest.mock('~/src/helpers/github/trigger-workflow', () => ({
   triggerWorkflow: jest.fn()
 }))
 
@@ -73,7 +73,9 @@ describe('#create-test-runner-suite', () => {
         team: 'test',
         additionalGitHubTopics: 'cdp,service,node,frontend',
         templateTag: 'main'
-      }
+      },
+      service,
+      request.logger
     )
 
     // Create infrastructure
@@ -87,7 +89,9 @@ describe('#create-test-runner-suite', () => {
         mongo_enabled: 'false',
         redis_enabled: 'true',
         service_code: 'TST'
-      }
+      },
+      service,
+      request.logger
     )
 
     // Create App Config
@@ -98,7 +102,9 @@ describe('#create-test-runner-suite', () => {
       {
         service,
         team: 'test'
-      }
+      },
+      service,
+      request.logger
     )
 
     // Create Nginx
@@ -109,7 +115,9 @@ describe('#create-test-runner-suite', () => {
       {
         service,
         zone: 'public'
-      }
+      },
+      service,
+      request.logger
     )
 
     // Create Squid
@@ -119,7 +127,9 @@ describe('#create-test-runner-suite', () => {
       config.get('workflows.createSquidConfig'),
       {
         service
-      }
+      },
+      service,
+      request.logger
     )
 
     // Create Dashboard
@@ -130,7 +140,9 @@ describe('#create-test-runner-suite', () => {
       {
         service,
         service_zone: 'public'
-      }
+      },
+      service,
+      request.logger
     )
 
     const status = await db

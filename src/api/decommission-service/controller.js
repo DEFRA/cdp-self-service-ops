@@ -1,8 +1,8 @@
-import Boom from '@hapi/boom'
-
 import Joi from 'joi'
 import { removeStatus } from '~/src/api/status/helpers/remove-status.js'
 import { portalBackEndDecommissionService } from '~/src/api/decommission-service/helpers/decommission-portal-backend.js'
+import { triggerRemoveWorkflows } from '~/src/api/decommission-service/helpers/trigger-remove-workflows.js'
+import { getRepositoryInfo } from '~/src/helpers/portal-backend/get-repository-info.js'
 
 const decommissionServiceController = {
   options: {
@@ -15,15 +15,20 @@ const decommissionServiceController = {
     validate: {
       params: Joi.object({
         serviceName: Joi.string().required()
-      }),
-      failAction: () => Boom.boomify(Boom.badRequest())
+      })
     }
   },
   handler: async (request, h) => {
     const serviceName = request.params.serviceName
+    const response = await getRepositoryInfo(serviceName)
 
-    await removeStatus(request.db, serviceName)
+    await triggerRemoveWorkflows(
+      serviceName,
+      response.repository,
+      request.logger
+    )
     await portalBackEndDecommissionService(serviceName)
+    await removeStatus(request.db, serviceName)
 
     return h
       .response({

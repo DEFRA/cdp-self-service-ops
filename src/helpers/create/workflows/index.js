@@ -5,7 +5,7 @@ import { createResourceFromWorkflow } from '~/src/helpers/create/workflows/creat
 import { createSquidConfig } from '~/src/helpers/create/workflows/create-squid-config.js'
 import { createTenantInfrastructure } from '~/src/helpers/create/workflows/create-tenant-infrastructure.js'
 import { createTemplatedRepo } from '~/src/helpers/create/workflows/create-templated-repo.js'
-import { triggerWorkflow } from '~/src/helpers/create/workflows/trigger-workflow.js'
+import { triggerWorkflow } from '~/src/helpers/github/trigger-workflow.js'
 
 export {
   createAppConfig,

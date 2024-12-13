@@ -371,10 +371,40 @@ const config = convict({
       env: 'WORKFLOWS_CREATE_NGINX_UPSTREAMS'
     },
     createTenantService: {
-      doc: 'Github workflow to trigger when tenant service infrastructure',
+      doc: 'Github workflow to trigger when creating tenant service infrastructure',
       format: String,
       default: 'create-service.yml',
       env: 'WORKFLOWS_CREATE_TENANT_SERVICE'
+    },
+    removeAppConfig: {
+      doc: 'Github workflow to trigger when removing placeholder config',
+      format: String,
+      default: 'remove-service.yml',
+      env: 'WORKFLOWS_REMOVE_APP_CONFIG'
+    },
+    removeNginxUpstreams: {
+      doc: 'Github workflow to trigger when removing nginx upstream config',
+      format: String,
+      default: 'remove-service.yml',
+      env: 'WORKFLOWS_REMOVE_NGINX_UPSTREAMS'
+    },
+    removeTenantService: {
+      doc: 'Github workflow to trigger when removing tenant service infrastructure',
+      format: String,
+      default: 'remove-service.yml',
+      env: 'WORKFLOWS_CREATE_TENANT_SERVICE'
+    },
+    removeDashboard: {
+      doc: 'Github workflow to trigger when removing dashboard',
+      format: String,
+      default: 'remove-service.yml',
+      env: 'WORKFLOWS_REMOVE_DASHBOARDS'
+    },
+    removeSquidConfig: {
+      doc: 'Name of workflow to trigger when removing squid config',
+      format: String,
+      default: 'remove-service.yml',
+      env: 'WORKFLOWS_REMOVE_SQUID_CONFIG'
     },
     applyTenantService: {
       doc: 'Github workflow triggered by merges to cdp-tf-svc-infra. Used for recovering failed create runs.',
