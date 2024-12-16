@@ -3,38 +3,38 @@ import { registerUndeployment } from '~/src/api/undeploy/helpers/register-undepl
 import { removeDeploymentFile } from '~/src/api/undeploy/helpers/remove-deployment-file.js'
 import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service.js'
 import { isFeatureEnabled } from '~/src/helpers/feature-toggle/is-feature-enabled.js'
+import { createLogger } from '~/src/helpers/logging/logger.js'
+
+const logger = createLogger()
 
 const deployFromFileEnvironments = config.get('deployFromFileEnvironments')
 
 /**
- * @typedef {import("pino").Logger} Logger
  * @param {string} imageName
  * @param {string} environment
  * @param {{id: string, displayName: string}} user
- * @param {Logger} logger
  */
-async function undeployServiceFromEnvironment(
-  imageName,
-  environment,
-  user,
-  logger
-) {
+async function undeployServiceFromEnvironment(imageName, environment, user) {
   const undeploymentId = crypto.randomUUID()
-  return await undeployServiceFromEnvironmentWithId(
+  return undeployServiceFromEnvironmentWithId(
     undeploymentId,
     imageName,
     environment,
-    user,
-    logger
+    user
   )
 }
 
+/**
+ * @param {string} undeploymentId
+ * @param {string} imageName
+ * @param {string} environment
+ * @param {{id: string, displayName: string}} user
+ */
 async function undeployServiceFromEnvironmentWithId(
   undeploymentId,
   imageName,
   environment,
-  user,
-  logger
+  user
 ) {
   logger.info(`Undeploying ${imageName} from ${environment} in progress`)
 
@@ -66,8 +66,7 @@ async function undeployServiceFromEnvironmentWithId(
       imageName,
       environment,
       service.zone,
-      user,
-      logger
+      user
     )
     logger.info('Deployment file removed')
   } else {
