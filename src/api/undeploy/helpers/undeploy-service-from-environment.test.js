@@ -4,11 +4,6 @@ import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-serv
 import { isFeatureEnabled } from '~/src/helpers/feature-toggle/is-feature-enabled.js'
 import { undeployServiceFromEnvironmentWithId } from '~/src/api/undeploy/helpers/undeploy-service-from-environment.js'
 
-const logger = {
-  info: jest.fn(),
-  error: jest.fn()
-}
-
 jest.mock('~/src/helpers/feature-toggle/is-feature-enabled', () => {
   return {
     isFeatureEnabled: jest.fn()
@@ -44,8 +39,7 @@ async function callUndeployServiceFromEnvironment() {
     undeploymentId,
     imageName,
     environment,
-    user,
-    logger
+    user
   )
 }
 
@@ -89,8 +83,7 @@ describe('#undeployServiceFromEnvironment', () => {
       imageName,
       environment,
       'some-zone',
-      user,
-      logger
+      user
     )
   })
 })

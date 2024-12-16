@@ -5,14 +5,29 @@ import { createLogger } from '~/src/helpers/logging/logger.js'
 const logger = createLogger()
 
 /**
- * @typedef {import("pino").Logger} Logger
  * @param {string} imageName
  * @param {{id: string, displayName: string}} user
  */
 async function undeployServiceFromAllEnvironments(imageName, user) {
+  await undeployServiceFromAllEnvironmentsWithId(
+    crypto.randomUUID(),
+    imageName,
+    user
+  )
+}
+
+/**
+ * @param {string} undeploymentId
+ * @param {string} imageName
+ * @param {{id: string, displayName: string}} user
+ */
+async function undeployServiceFromAllEnvironmentsWithId(
+  undeploymentId,
+  imageName,
+  user
+) {
   logger.info(`Undeploying ${imageName} from all environments in progress`)
-  const undeploymentId = crypto.randomUUID()
-  await orderedEnvironments.array.forEach(async (element) => {
+  await orderedEnvironments.forEach(async (element) => {
     await undeployServiceFromEnvironmentWithId(
       undeploymentId,
       imageName,
@@ -22,4 +37,7 @@ async function undeployServiceFromAllEnvironments(imageName, user) {
   })
 }
 
-export { undeployServiceFromAllEnvironments }
+export {
+  undeployServiceFromAllEnvironments,
+  undeployServiceFromAllEnvironmentsWithId
+}
