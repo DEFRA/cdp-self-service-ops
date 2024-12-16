@@ -5,6 +5,7 @@ import { restEndpointMethods } from '@octokit/plugin-rest-endpoint-methods'
 import { createPullRequest } from 'octokit-plugin-create-pull-request'
 import { config } from '~/src/config/index.js'
 import { proxyFetch } from '~/src/helpers/proxy/proxy-fetch.js'
+import { graphql as octokitGraphql } from '@octokit/graphql'
 
 const auth = {
   appId: config.get('github.app.id'),
@@ -14,6 +15,8 @@ const auth = {
 
 const OctokitExtra = Octokit.plugin(restEndpointMethods, createPullRequest)
 const baseUrl = config.get('github.baseUrl')
+
+const authApp = createAppAuth(auth)
 
 const octokit = new OctokitExtra(
   baseUrl == null
@@ -25,8 +28,26 @@ const octokit = new OctokitExtra(
     : // Test Mode, for use with cdp-portal-stubs
       {
         auth: 'test-value',
-        baseUrl: config.get('github.baseUrl')
+        baseUrl
       }
 )
 
-export { octokit }
+const graphql = octokitGraphql.defaults(
+  baseUrl == null
+    ? {
+        request: {
+          // eslint-disable-next-line @typescript-eslint/unbound-method
+          hook: authApp.hook,
+          fetch: proxyFetch
+        }
+      }
+    : // Test Mode, for use with cdp-portal-stubs
+      {
+        headers: {
+          authorization: 'test-value'
+        },
+        baseUrl
+      }
+)
+
+export { octokit, graphql }
