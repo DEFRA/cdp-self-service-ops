@@ -12,7 +12,7 @@ const removeTenantInfrastructure = async (service, logger) => {
   const repo = config.get('github.repos.cdpTfSvcInfra')
   const workflow = config.get('workflows.removeTenantService')
 
-  await triggerWorkflow(org, repo, workflow, {}, service, logger)
+  await triggerWorkflow(org, repo, workflow, { service }, service, logger)
 }
 
 export { removeTenantInfrastructure }

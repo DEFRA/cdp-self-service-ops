@@ -12,7 +12,7 @@ const removeSquidConfig = async (service, logger) => {
   const repo = config.get('github.repos.cdpSquidProxy')
   const workflow = config.get('workflows.removeSquidConfig')
 
-  await triggerWorkflow(org, repo, workflow, {}, service, logger)
+  await triggerWorkflow(org, repo, workflow, { service }, service, logger)
 }
 
 export { removeSquidConfig }
