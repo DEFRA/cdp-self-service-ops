@@ -1,5 +1,5 @@
 import { undeployServiceFromEnvironmentWithId } from '~/src/api/undeploy/helpers/undeploy-service-from-environment.js'
-import { undeployWithId } from '~/src/api/undeploy/helpers/undeploy-service-from-all-environment.js'
+import { undeployWithId } from '~/src/api/undeploy/helpers/undeploy-service-from-all-environments.js'
 
 jest.mock(
   '~/src/api/undeploy/helpers/undeploy-service-from-environment',

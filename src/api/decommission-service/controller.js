@@ -3,6 +3,7 @@ import { removeStatus } from '~/src/api/status/helpers/remove-status.js'
 import { portalBackEndDecommissionService } from '~/src/api/decommission-service/helpers/decommission-portal-backend.js'
 import { triggerRemoveWorkflows } from '~/src/api/decommission-service/helpers/trigger-remove-workflows.js'
 import { getRepositoryInfo } from '~/src/helpers/portal-backend/get-repository-info.js'
+import { undeployServiceFromAllEnvironments } from '~/src/api/undeploy/helpers/undeploy-service-from-all-environments.js'
 
 const decommissionServiceController = {
   options: {
@@ -21,6 +22,11 @@ const decommissionServiceController = {
   handler: async (request, h) => {
     const serviceName = request.params.serviceName
     const response = await getRepositoryInfo(serviceName)
+
+    await undeployServiceFromAllEnvironments(
+      serviceName,
+      request.auth.credentials
+    )
 
     await triggerRemoveWorkflows(
       serviceName,
