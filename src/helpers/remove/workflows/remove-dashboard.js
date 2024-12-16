@@ -12,7 +12,7 @@ const removeDashboard = async (service, logger) => {
   const repo = config.get('github.repos.cdpGrafanaSvc')
   const workflow = config.get('workflows.removeDashboard')
 
-  await triggerWorkflow(org, repo, workflow, {}, service, logger)
+  await triggerWorkflow(org, repo, workflow, { service }, service, logger)
 }
 
 export { removeDashboard }

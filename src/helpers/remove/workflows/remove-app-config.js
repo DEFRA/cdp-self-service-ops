@@ -12,7 +12,7 @@ const removeAppConfig = async (service, logger) => {
   const repo = config.get('github.repos.cdpAppConfig')
   const workflow = config.get('workflows.removeAppConfig')
 
-  await triggerWorkflow(org, repo, workflow, {}, service, logger)
+  await triggerWorkflow(org, repo, workflow, { service }, service, logger)
 }
 
 export { removeAppConfig }

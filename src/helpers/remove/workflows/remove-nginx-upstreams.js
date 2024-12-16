@@ -13,7 +13,7 @@ const removeNginxUpstreams = async (service, zone, logger) => {
   const repo = config.get('github.repos.cdpNginxUpstreams')
   const workflow = config.get('workflows.removeNginxUpstreams')
 
-  await triggerWorkflow(org, repo, workflow, { zone }, service, logger)
+  await triggerWorkflow(org, repo, workflow, { service, zone }, service, logger)
 }
 
 export { removeNginxUpstreams }
