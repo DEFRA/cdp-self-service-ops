@@ -1,6 +1,6 @@
 import Joi from 'joi'
 
-import { environments } from '~/src/config/index.js'
+import { environments } from '~/src/config/environments.js'
 
 function undeployServiceValidation() {
   return Joi.object({

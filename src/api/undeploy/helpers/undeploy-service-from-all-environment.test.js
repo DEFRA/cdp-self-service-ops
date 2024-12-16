@@ -1,6 +1,5 @@
 import { undeployServiceFromEnvironmentWithId } from '~/src/api/undeploy/helpers/undeploy-service-from-environment.js'
-import { undeployServiceFromAllEnvironmentsWithId } from '~/src/api/undeploy/helpers/undeploy-service-from-all-environment.js'
-import { environments } from '~/src/config/environments.js'
+import { undeployWithId } from '~/src/api/undeploy/helpers/undeploy-service-from-all-environment.js'
 
 jest.mock(
   '~/src/api/undeploy/helpers/undeploy-service-from-environment',
@@ -24,16 +23,8 @@ const user = { id: 'some-user-id', displayName: 'some-name' }
 const numberOfEnvironments = 3
 
 describe('#undeployServiceFromAllEnvironments', () => {
-  beforeEach(() => {
-    jest.clearAllMocks()
-  })
-
   test('Should call undeployServiceFromEnvironment', async () => {
-    await undeployServiceFromAllEnvironmentsWithId(
-      undeploymentId,
-      imageName,
-      user
-    )
+    await undeployWithId(undeploymentId, imageName, user)
 
     expect(undeployServiceFromEnvironmentWithId).toHaveBeenCalledTimes(
       numberOfEnvironments

@@ -44,10 +44,6 @@ async function callUndeployServiceFromEnvironment() {
 }
 
 describe('#undeployServiceFromEnvironment', () => {
-  beforeEach(() => {
-    jest.clearAllMocks()
-  })
-
   test('if not enabled should not call undeploy registration', async () => {
     isFeatureEnabled.mockReturnValueOnce(false).mockReturnValue(true)
 

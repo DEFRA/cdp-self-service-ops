@@ -1,4 +1,4 @@
-import { undeployServiceController } from '~/src/api/undeploy/controllers/index.js'
+import { undeployServiceController } from '~/src/api/undeploy/controllers/undeploy-service.js'
 
 const undeploy = {
   plugin: {
