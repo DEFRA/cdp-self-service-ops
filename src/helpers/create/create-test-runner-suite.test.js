@@ -5,14 +5,14 @@ import { createLogger } from '~/src/helpers/logging/logger.js'
 import { creations } from '~/src/constants/creations.js'
 import { fetchTeam } from '~/src/helpers/fetch-team.js'
 import { createTestRunnerSuite } from '~/src/helpers/create/create-test-runner-suite.js'
-import { triggerWorkflow } from '~/src/helpers/create/workflows/trigger-workflow.js'
+import { triggerWorkflow } from '~/src/helpers/github/trigger-workflow.js'
 import { statuses } from '~/src/constants/statuses.js'
 
 jest.mock('~/src/helpers/fetch-team', () => ({
   fetchTeam: jest.fn()
 }))
 
-jest.mock('~/src/helpers/create/workflows/trigger-workflow', () => ({
+jest.mock('~/src/helpers/github/trigger-workflow', () => ({
   triggerWorkflow: jest.fn()
 }))
 
@@ -78,7 +78,9 @@ describe('#create-test-runner-suite', () => {
         team: 'test',
         additionalGitHubTopics: 'cdp,test,test-suite,journey',
         templateTag: 'main'
-      }
+      },
+      service,
+      request.logger
     )
 
     // Create Squid
@@ -88,7 +90,9 @@ describe('#create-test-runner-suite', () => {
       config.get('workflows.createSquidConfig'),
       {
         service
-      }
+      },
+      service,
+      request.logger
     )
 
     // Create infrastructure
@@ -103,7 +107,9 @@ describe('#create-test-runner-suite', () => {
         redis_enabled: 'false',
         service_code: 'TST',
         test_suite: service
-      }
+      },
+      service,
+      request.logger
     )
 
     const status = await db

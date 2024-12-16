@@ -23,7 +23,9 @@ export default {
   },
 
   // @octokit/graphql is ESM only, ignore related ESM imports
-  transformIgnorePatterns: ['/node_modules(?!/(@octokit|universal-user-agent))']
+  transformIgnorePatterns: [
+    '/node_modules(?!/(@octokit|universal-user-agent|@defra/hapi-tracing))'
+  ]
 }
 /**
  * @import { Config } from 'jest'

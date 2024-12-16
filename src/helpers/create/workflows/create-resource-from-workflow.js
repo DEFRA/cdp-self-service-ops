@@ -1,6 +1,6 @@
 import { statuses } from '~/src/constants/statuses.js'
 import { updateCreationStatus } from '~/src/helpers/create/init-creation-status.js'
-import { triggerWorkflow } from '~/src/helpers/create/workflows/trigger-workflow.js'
+import { triggerWorkflow } from '~/src/helpers/github/trigger-workflow.js'
 
 /**
  * Triggers a given workflow and updates the status record
@@ -20,9 +20,6 @@ const createResourceFromWorkflow = async (
   workflow,
   inputs
 ) => {
-  request.logger.info(
-    `Workflow ${repo}/${workflow} triggered for ${service} with inputs ${JSON.stringify(inputs)}`
-  )
   const trigger = {
     org,
     repo,
@@ -31,7 +28,7 @@ const createResourceFromWorkflow = async (
   }
 
   try {
-    await triggerWorkflow(org, repo, workflow, inputs)
+    await triggerWorkflow(org, repo, workflow, inputs, service, request.logger)
 
     await updateCreationStatus(request.db, service, repo, {
       status: statuses.requested,

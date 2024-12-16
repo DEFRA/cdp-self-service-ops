@@ -9,6 +9,7 @@ import { health } from '~/src/api/health/index.js'
 import { queuedEvents } from '~/src/api/queued-events/index.js'
 import { secrets } from '~/src/api/secrets/index.js'
 import { status } from '~/src/api/status/index.js'
+import { decommissionService } from '~/src/api/decommission-service/index.js'
 import { undeploy } from '~/src/api/undeploy/index.js'
 
 const router = {
@@ -21,6 +22,7 @@ const router = {
         createRepository,
         createJourneyTestSuite,
         createPerfTestSuite,
+        decommissionService,
         deploy,
         deployTestSuite,
         deployTerminal,
