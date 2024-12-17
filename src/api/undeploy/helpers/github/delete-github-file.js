@@ -1,5 +1,5 @@
 import { getLatestCommitSha } from '~/src/helpers/github/get-latest-commit-sha.js'
-import { graphql } from '~/src/helpers/oktokit-graphql.js'
+import { graphql } from '~/src/helpers/oktokit.js'
 import { createLogger } from '~/src/helpers/logging/logger.js'
 
 const logger = createLogger()
