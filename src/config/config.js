@@ -470,6 +470,22 @@ const config = convict({
     format: String,
     default: 'cdp-platform-alerts',
     env: 'PLATFORM_ALERT_SLACK_CHANNEL'
+  },
+  features: {
+    undeploy: {
+      register: {
+        doc: 'Temporary Feature flag for register undeploy',
+        format: Boolean,
+        default: false,
+        env: 'FEATURE_UNDEPLOY_REGISTER'
+      },
+      deleteDeploymentFile: {
+        doc: 'Temporary Feature flag for delete deployment file',
+        format: Boolean,
+        default: false,
+        env: 'FEATURE_UNDEPLOY_DELETE_DEPLOYMENT_FILE'
+      }
+    }
   }
 })
 

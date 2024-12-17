@@ -7,5 +7,14 @@ const environments = {
   extTest: 'ext-test',
   prod: 'prod'
 }
+const orderedEnvironments = [
+  environments.infraDev,
+  environments.management,
+  environments.dev,
+  environments.test,
+  environments.perfTest,
+  environments.extTest,
+  environments.prod
+]
 
-export { environments }
+export { environments, orderedEnvironments }
