@@ -3,6 +3,7 @@ import { registerUndeployment } from '~/src/api/undeploy/helpers/register-undepl
 import { removeDeploymentFile } from '~/src/api/undeploy/helpers/remove-deployment-file.js'
 import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service.js'
 import { isFeatureEnabled } from '~/src/helpers/feature-toggle/is-feature-enabled.js'
+import { featureToggles } from '~/src/helpers/feature-toggle/feature-toggles.js'
 import { createLogger } from '~/src/helpers/logging/logger.js'
 
 const logger = createLogger()
@@ -38,7 +39,7 @@ async function undeployServiceFromEnvironmentWithId(
 ) {
   logger.info(`Undeploying ${imageName} from ${environment} in progress`)
 
-  if (isFeatureEnabled('undeploy.register')) {
+  if (isFeatureEnabled(featureToggles.undeploy.register)) {
     await registerUndeployment(imageName, environment, user, undeploymentId)
     logger.info('Undeployment registered')
   } else {
@@ -60,7 +61,7 @@ async function undeployServiceFromEnvironmentWithId(
     )
   }
 
-  if (isFeatureEnabled('undeploy.deleteDeploymentFile')) {
+  if (isFeatureEnabled(featureToggles.undeploy.deleteDeploymentFile)) {
     await removeDeploymentFile(
       undeploymentId,
       imageName,

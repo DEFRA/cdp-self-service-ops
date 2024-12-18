@@ -1,9 +1,7 @@
 import Joi from 'joi'
 
-import { deleteDockerImagesValidation } from '~/src/api/delete-docker-images/helpers/schema/delete-docker-images-validation.js'
-import { deleteDockerhubImages } from '~/src/api/delete-docker-images/helpers/delete-dockerhub-images.js'
-import { deleteEcrImages } from '~/src/api/delete-docker-images/helpers/delete-ecr-images.js'
-import { getScopedUser } from '~/src/api/common/helpers/get-scoped-user.js'
+import { deleteDockerImages } from '~/src/api/decommission-service/helpers/delete-docker-images.js'
+import { getScopedUser } from '~/src/helpers/user/get-scoped-user.js'
 
 const deleteDockerImagesController = {
   options: {
@@ -11,7 +9,9 @@ const deleteDockerImagesController = {
       strategy: 'azure-oidc'
     },
     validate: {
-      params: deleteDockerImagesValidation()
+      params: Joi.object({
+        imageName: Joi.string().min(1).required()
+      })
     },
     payload: {
       output: 'data',
@@ -23,9 +23,7 @@ const deleteDockerImagesController = {
     const { imageName } = request.params
     const user = await getScopedUser(imageName, request.auth, 'admin')
 
-    await deleteEcrImages(imageName, user)
-
-    await deleteDockerhubImages(imageName, user)
+    await deleteDockerImages(imageName, user, request.logger)
 
     return h.response({ message: 'success' }).code(204)
   }

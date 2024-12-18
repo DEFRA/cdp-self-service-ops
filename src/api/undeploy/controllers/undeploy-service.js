@@ -3,7 +3,7 @@ import Joi from 'joi'
 import { undeployServiceValidation } from '~/src/api/undeploy/helpers/schema/undeploy-service-validation.js'
 import { undeployServiceFromEnvironment } from '~/src/api/undeploy/helpers/undeploy-service-from-environment.js'
 import { undeployServiceFromAllEnvironments } from '~/src/api/undeploy/helpers/undeploy-service-from-all-environments.js'
-import { getScopedUser } from '~/src/api/undeploy/helpers/get-scoped-user.js'
+import { getScopedUser } from '~/src/helpers/user/get-scoped-user.js'
 
 const undeployServiceController = {
   options: {
