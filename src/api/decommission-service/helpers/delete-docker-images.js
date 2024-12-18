@@ -3,6 +3,13 @@ import { deleteEcrImages } from '~/src/helpers/remove/workflows/delete-ecr-image
 import { isFeatureEnabled } from '~/src/helpers/feature-toggle/is-feature-enabled.js'
 import { featureToggles } from '~/src/helpers/feature-toggle/feature-toggles.js'
 
+/**
+ * Delete docker images
+ * @param {string} serviceName
+ * @param {{id: string, displayName: string}} user
+ * @param {Logger} logger
+ * @returns {Promise<undefined|*>}
+ */
 export async function deleteDockerImages(serviceName, user, logger) {
   logger.info(`Deleting docker images for service: ${serviceName}`)
 
