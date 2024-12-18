@@ -11,6 +11,7 @@ import { secrets } from '~/src/api/secrets/index.js'
 import { status } from '~/src/api/status/index.js'
 import { decommissionService } from '~/src/api/decommission-service/index.js'
 import { undeploy } from '~/src/api/undeploy/index.js'
+import { deleteDockerImages } from '~/src/api/delete-docker-images/index.js'
 
 const router = {
   plugin: {
@@ -23,6 +24,7 @@ const router = {
         createJourneyTestSuite,
         createPerfTestSuite,
         decommissionService,
+        deleteDockerImages,
         deploy,
         deployTestSuite,
         deployTerminal,

@@ -1,6 +1,8 @@
+import { deleteDockerImagesController } from '~/src/api/delete-docker-images/controllers/delete-docker-images.js'
+
 const deleteDockerImages = {
   plugin: {
-    name: 'undeploy',
+    name: 'delete-docker-images',
     register: async (server) => {
       await server.route([
         {
@@ -12,3 +14,5 @@ const deleteDockerImages = {
     }
   }
 }
+
+export { deleteDockerImages }
