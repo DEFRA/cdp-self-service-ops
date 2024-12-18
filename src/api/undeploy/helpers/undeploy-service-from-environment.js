@@ -49,19 +49,19 @@ async function undeployServiceFromEnvironmentWithId(
   const service = await lookupTenantService(imageName, environment, logger)
 
   if (!service) {
-    const message =
-      'Error encountered whilst attempting to find deployment zone information'
-    throw new Error(message)
-  }
-
-  const shouldDeployByFile = deployFromFileEnvironments.includes(environment)
-  if (!shouldDeployByFile) {
-    logger.info(
-      `Undeploying ${imageName} from ${environment} is not file based`
-    )
+    const message = `Unable to find deployment zone for [${imageName}] in environment [${environment}].`
+    logger.warn(message)
+    return
   }
 
   if (isFeatureEnabled(featureToggles.undeploy.deleteDeploymentFile)) {
+    const shouldDeployByFile = deployFromFileEnvironments.includes(environment)
+    if (!shouldDeployByFile) {
+      logger.info(
+        `Undeploying ${imageName} from ${environment} is not file based`
+      )
+    }
+
     await removeDeploymentFile(
       undeploymentId,
       imageName,

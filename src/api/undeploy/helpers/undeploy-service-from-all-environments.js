@@ -1,4 +1,4 @@
-import { environments, orderedEnvironments } from '~/src/config/environments.js'
+import { orderedEnvironments } from '~/src/config/environments.js'
 import { undeployServiceFromEnvironmentWithId } from '~/src/api/undeploy/helpers/undeploy-service-from-environment.js'
 import { createLogger } from '~/src/helpers/logging/logger.js'
 
@@ -23,7 +23,7 @@ async function undeployWithId(undeploymentId, imageName, user) {
     await undeployServiceFromEnvironmentWithId(
       undeploymentId,
       imageName,
-      environments[environment],
+      environment,
       user
     )
   }
