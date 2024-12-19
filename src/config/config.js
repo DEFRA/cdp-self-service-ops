@@ -376,6 +376,18 @@ const config = convict({
       default: 'create-service.yml',
       env: 'WORKFLOWS_CREATE_TENANT_SERVICE'
     },
+    deleteEcrImages: {
+      doc: 'Github workflow to trigger when deleting ECR images',
+      format: String,
+      default: 'remove-ecr.yml',
+      env: 'WORKFLOWS_DELETE_ECR_IMAGES'
+    },
+    deleteDockerHubImages: {
+      doc: 'Github workflow to trigger when deleting DockerHub images',
+      format: String,
+      default: 'remove-dockerhub.yml',
+      env: 'WORKFLOWS_DELETE_DOCKERHUB_IMAGES'
+    },
     removeAppConfig: {
       doc: 'Github workflow to trigger when removing placeholder config',
       format: String,

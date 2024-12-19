@@ -9,7 +9,7 @@ import { triggerWorkflow } from '~/src/helpers/github/trigger-workflow.js'
  */
 const deleteDockerHubImages = async (service, logger) => {
   const org = config.get('github.org')
-  const repo = config.get('github.repos.cdpDockerHubImages')
+  const repo = config.get('github.repos.cdpTfSvcInfra')
   const workflow = config.get('workflows.deleteDockerHubImages')
 
   await triggerWorkflow(org, repo, workflow, { service }, service, logger)
