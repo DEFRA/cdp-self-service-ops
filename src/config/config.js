@@ -485,6 +485,20 @@ const config = convict({
         default: false,
         env: 'FEATURE_UNDEPLOY_DELETE_DEPLOYMENT_FILE'
       }
+    },
+    dockerImages: {
+      deleteEcr: {
+        doc: 'Feature flag for deleting ECR images',
+        format: Boolean,
+        default: false,
+        env: 'FEATURE_DELETE_ECR_IMAGES'
+      },
+      deleteDockerHub: {
+        doc: 'Feature flag for deleting DockerHub images',
+        format: Boolean,
+        default: false,
+        env: 'FEATURE_DELETE_DOCKERHUB_IMAGES'
+      }
     }
   }
 })

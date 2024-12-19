@@ -26,6 +26,10 @@ async function lookupTenantService(service, environment, logger, ref = 'main') {
   const filePath = `environments/${environment}/tenants/${service}.json`
   try {
     const data = await getContent(org, repo, filePath, ref)
+    if (!data) {
+      logger.warn(`Tenant environment file ${filePath} from GitHub not found`)
+      return undefined
+    }
     const service = JSON.parse(data)
     Joi.assert(service, schema) // Check file in correct format
     return service

@@ -8,7 +8,9 @@ export async function getScopedUser(imageName, auth, targetScope) {
     displayName: auth?.credentials?.displayName
   }
   const scope = auth?.credentials?.scope
-
+  if (!scope) {
+    throw Boom.forbidden('No scope found')
+  }
   const isAdmin = scope.includes(targetScope)
   if (!isAdmin) {
     const repoTeams = await getRepoTeams(imageName)

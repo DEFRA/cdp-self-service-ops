@@ -4,6 +4,7 @@ import { portalBackEndDecommissionService } from '~/src/api/decommission-service
 import { triggerRemoveWorkflows } from '~/src/api/decommission-service/helpers/trigger-remove-workflows.js'
 import { getRepositoryInfo } from '~/src/helpers/portal-backend/get-repository-info.js'
 import { undeployServiceFromAllEnvironments } from '~/src/api/undeploy/helpers/undeploy-service-from-all-environments.js'
+import { deleteDockerImages } from '~/src/api/decommission-service/helpers/delete-docker-images.js'
 
 const decommissionServiceController = {
   options: {
@@ -21,18 +22,13 @@ const decommissionServiceController = {
   },
   handler: async (request, h) => {
     const serviceName = request.params.serviceName
+    const logger = request.logger
+    const user = request.auth.credentials
     const response = await getRepositoryInfo(serviceName)
 
-    await undeployServiceFromAllEnvironments(
-      serviceName,
-      request.auth.credentials
-    )
-
-    await triggerRemoveWorkflows(
-      serviceName,
-      response.repository,
-      request.logger
-    )
+    await undeployServiceFromAllEnvironments(serviceName, user)
+    await deleteDockerImages(serviceName, user, logger)
+    await triggerRemoveWorkflows(serviceName, response.repository, logger)
     await portalBackEndDecommissionService(serviceName)
     await removeStatus(request.db, serviceName)
 
