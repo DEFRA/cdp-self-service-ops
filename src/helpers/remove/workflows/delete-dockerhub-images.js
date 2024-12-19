@@ -12,7 +12,14 @@ const deleteDockerHubImages = async (service, logger) => {
   const repo = config.get('github.repos.cdpTfSvcInfra')
   const workflow = config.get('workflows.deleteDockerHubImages')
 
-  await triggerWorkflow(org, repo, workflow, { service }, service, logger)
+  await triggerWorkflow(
+    org,
+    repo,
+    workflow,
+    { service_name: service },
+    service,
+    logger
+  )
 }
 
 export { deleteDockerHubImages }

@@ -12,7 +12,14 @@ const deleteEcrImages = async (service, logger) => {
   const repo = config.get('github.repos.cdpTfSvcInfra')
   const workflow = config.get('workflows.deleteEcrImages')
 
-  await triggerWorkflow(org, repo, workflow, { service }, service, logger)
+  await triggerWorkflow(
+    org,
+    repo,
+    workflow,
+    { service_name: service },
+    service,
+    logger
+  )
 }
 
 export { deleteEcrImages }
