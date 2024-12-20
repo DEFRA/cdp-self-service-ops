@@ -511,6 +511,12 @@ const config = convict({
         default: false,
         env: 'FEATURE_DELETE_DOCKERHUB_IMAGES'
       }
+    },
+    removeServiceWorkflows: {
+      doc: 'Feature flag for removing a service workflows',
+      format: Boolean,
+      default: false,
+      env: 'FEATURE_REMOVE_SERVICE_WORKFLOWS'
     }
   }
 })

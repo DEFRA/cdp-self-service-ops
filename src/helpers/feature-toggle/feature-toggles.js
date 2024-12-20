@@ -3,6 +3,7 @@ export const featureToggles = {
     deleteEcr: 'dockerImages.deleteEcr',
     deleteDockerHub: 'dockerImages.deleteDockerHub'
   },
+  removeServiceWorkflows: 'removeServiceWorkflows',
   undeploy: {
     register: 'undeploy.register',
     deleteDeploymentFile: 'undeploy.deleteDeploymentFile'
