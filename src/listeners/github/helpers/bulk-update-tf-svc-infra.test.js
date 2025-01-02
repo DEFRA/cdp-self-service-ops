@@ -93,10 +93,8 @@ describe('bulkUpdateTtfSvcInfra', () => {
       }
     ])
     lookupTenantService.mockResolvedValue({
-      test_suite: 'test1',
+      testSuite: 'test1',
       zone: 'public',
-      mongo: false,
-      redis: false,
       service_code: 'TST'
     })
 

@@ -46,7 +46,7 @@ const bulkUpdateTfSvcInfra = async (db, trimmedWorkflow, status) => {
     const serviceName = serviceToUpdate.name
 
     let runMode = 'Service'
-    if (serviceToUpdate?.tenantConfig?.test_suite) {
+    if (serviceToUpdate?.tenantConfig?.testSuite) {
       runMode = 'Job'
     }
 

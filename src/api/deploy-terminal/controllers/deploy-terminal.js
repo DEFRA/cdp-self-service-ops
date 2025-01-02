@@ -38,13 +38,13 @@ const deployTerminalController = {
       )
     }
 
-    const tenant = await lookupTenantService(
+    const service = await lookupTenantService(
       payload.service,
       payload.environment,
       logger
     )
 
-    if (!tenant?.zone) {
+    if (!service?.zone) {
       logger.error(
         `failed to find zone for ${payload.service} in ${payload.environment}`
       )
@@ -61,7 +61,7 @@ const deployTerminalController = {
       user,
       token,
       environment: payload.environment,
-      zone: tenant.zone,
+      zone: service.zone,
       service: payload.service
     })
 

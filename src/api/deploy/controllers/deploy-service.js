@@ -93,7 +93,7 @@ const deployServiceController = {
         service.zone,
         user,
         configLatestCommitSha,
-        service.service_code,
+        service.serviceCode,
         request
       )
 
@@ -109,7 +109,7 @@ const deployServiceController = {
       service.zone,
       user,
       configLatestCommitSha,
-      service.service_code,
+      service.serviceCode,
       shouldDeployByFile,
       logger
     )
