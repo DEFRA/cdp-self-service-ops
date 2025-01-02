@@ -5,7 +5,7 @@ import {
 } from '~/src/listeners/github/status-repo.js'
 
 import { createPlaceholderArtifact } from '~/src/listeners/github/helpers/create-placeholder-artifact.js'
-import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service.js'
+import { lookupTenantServiceFromGitHub } from '~/src/api/deploy/helpers/lookup-tenant-service.js'
 import { updateOverallStatus } from '~/src/helpers/create/init-creation-status.js'
 import { statuses } from '~/src/constants/statuses.js'
 
@@ -18,7 +18,7 @@ jest.mock('~/src/listeners/github/helpers/create-placeholder-artifact', () => ({
 }))
 
 jest.mock('~/src/api/deploy/helpers/lookup-tenant-service', () => ({
-  lookupTenantService: jest.fn()
+  lookupTenantServiceFromGitHub: jest.fn()
 }))
 
 jest.mock('~/src/listeners/github/status-repo', () => ({
@@ -33,7 +33,7 @@ describe('bulkUpdateTtfSvcInfra', () => {
         repositoryName: 'test1'
       }
     ])
-    lookupTenantService.mockResolvedValue({})
+    lookupTenantServiceFromGitHub.mockResolvedValue({})
 
     const db = {}
     const workflow = {
@@ -68,7 +68,7 @@ describe('bulkUpdateTtfSvcInfra', () => {
         repositoryName: 'test1'
       }
     ])
-    lookupTenantService.mockResolvedValue(null)
+    lookupTenantServiceFromGitHub.mockResolvedValue(null)
 
     const db = {}
     const workflow = {
@@ -92,7 +92,7 @@ describe('bulkUpdateTtfSvcInfra', () => {
         repositoryName: 'test1'
       }
     ])
-    lookupTenantService.mockResolvedValue({
+    lookupTenantServiceFromGitHub.mockResolvedValue({
       testSuite: 'test1',
       zone: 'public',
       service_code: 'TST'
