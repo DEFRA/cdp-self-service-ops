@@ -6,7 +6,7 @@ import {
 import { updateOverallStatus } from '~/src/helpers/create/init-creation-status.js'
 import { createPlaceholderArtifact } from '~/src/listeners/github/helpers/create-placeholder-artifact.js'
 import { createLogger } from '~/src/helpers/logging/logger.js'
-import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service.js'
+import { lookupTenantServiceFromGitHub } from '~/src/api/deploy/helpers/lookup-tenant-service.js'
 
 /**
  * given a list of services, update the tf-svc-infra status for all of them to success
@@ -32,7 +32,11 @@ const bulkUpdateTfSvcInfra = async (db, trimmedWorkflow, status) => {
     const name = service.repositoryName
 
     // TODO: maybe use exact commit ref of workflow
-    const tenantConfig = await lookupTenantService(name, 'management', logger)
+    const tenantConfig = await lookupTenantServiceFromGitHub(
+      name,
+      'management',
+      logger
+    )
     if (tenantConfig) {
       servicesToUpdate.push({ name, tenantConfig })
     }
