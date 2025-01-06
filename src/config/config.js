@@ -463,6 +463,12 @@ const config = convict({
       format: String,
       default: 'create_perf_test_suite.yml',
       env: 'CREATE_PERF_TEST_SUITE_WORKFLOW'
+    },
+    archiveGithubRepoWorkflow: {
+      doc: 'Name of workflow to trigger when archiving a GitHub repository',
+      format: String,
+      default: 'archive_repository.yml',
+      env: 'ARCHIVE_GITHUB_REPOSITORY_WORKFLOW'
     }
   },
   deployFromFileEnvironments: {
@@ -517,6 +523,12 @@ const config = convict({
       format: Boolean,
       default: false,
       env: 'FEATURE_REMOVE_SERVICE_WORKFLOWS'
+    },
+    archiveGitHubWorkflow: {
+      doc: 'Feature flag for archiving github repo on decommission',
+      format: Boolean,
+      default: false,
+      env: 'FEATURE_ARCHIVE_GITHUB_WORKFLOW'
     }
   }
 })

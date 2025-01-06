@@ -5,6 +5,7 @@ import { triggerRemoveWorkflows } from '~/src/api/decommission-service/helpers/t
 import { getRepositoryInfo } from '~/src/helpers/portal-backend/get-repository-info.js'
 import { undeployServiceFromAllEnvironments } from '~/src/api/undeploy/helpers/undeploy-service-from-all-environments.js'
 import { deleteDockerImages } from '~/src/api/decommission-service/helpers/delete-docker-images.js'
+import { triggerArchiveGithubWorkflow } from '~/src/api/decommission-service/helpers/archive-github-workflow.js'
 
 const decommissionServiceController = {
   options: {
@@ -31,6 +32,8 @@ const decommissionServiceController = {
     await triggerRemoveWorkflows(serviceName, response.repository, logger)
     await portalBackEndDecommissionService(serviceName)
     await removeStatus(request.db, serviceName)
+
+    await triggerArchiveGithubWorkflow(serviceName, logger)
 
     return h
       .response({
