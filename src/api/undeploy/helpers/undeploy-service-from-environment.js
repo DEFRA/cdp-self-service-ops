@@ -1,6 +1,6 @@
 import { config } from '~/src/config/index.js'
 import { registerUndeployment } from '~/src/api/undeploy/helpers/register-undeployment.js'
-import { removeDeploymentFile } from '~/src/api/undeploy/helpers/remove-deployment-file.js'
+import { scaleEcsToZero } from '~/src/api/undeploy/helpers/scale-ecs-to-zero.js'
 import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service.js'
 import { isFeatureEnabled } from '~/src/helpers/feature-toggle/is-feature-enabled.js'
 import { featureToggles } from '~/src/helpers/feature-toggle/feature-toggles.js'
@@ -49,29 +49,30 @@ async function undeployServiceFromEnvironmentWithId(
   const service = await lookupTenantService(imageName, environment, logger)
 
   if (!service) {
-    const message = `Unable to find deployment zone for [${imageName}] in environment [${environment}].`
-    logger.warn(message)
+    logger.warn(
+      `Unable to find deployment zone for [${imageName}] in environment [${environment}].`
+    )
     return
   }
 
-  if (isFeatureEnabled(featureToggles.undeploy.deleteDeploymentFile)) {
+  if (isFeatureEnabled(featureToggles.undeploy.scaleEcsToZero)) {
     const shouldDeployByFile = deployFromFileEnvironments.includes(environment)
     if (!shouldDeployByFile) {
-      logger.info(
+      logger.warn(
         `Undeploying ${imageName} from ${environment} is not file based`
       )
     }
 
-    await removeDeploymentFile(
+    await scaleEcsToZero(
       undeploymentId,
       imageName,
       environment,
       service.zone,
       user
     )
-    logger.info('Deployment file removed')
+    logger.info('ECS Service scaled to 0')
   } else {
-    logger.info('Deployment file remove feature is disabled')
+    logger.info('Scale ECS Service to 0 feature is disabled')
   }
   return undeploymentId
 }

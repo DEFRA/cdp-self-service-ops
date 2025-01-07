@@ -7,6 +7,6 @@ export const featureToggles = {
   removeServiceWorkflows: 'removeServiceWorkflows',
   undeploy: {
     register: 'undeploy.register',
-    deleteDeploymentFile: 'undeploy.deleteDeploymentFile'
+    scaleEcsToZero: 'undeploy.scaleEcsToZero'
   }
 }
