@@ -1,5 +1,5 @@
 import { orderedEnvironments } from '~/src/config/environments.js'
-import { undeployServiceFromEnvironmentWithId } from '~/src/api/undeploy/helpers/undeploy-service-from-environment.js'
+import { undeployService } from '~/src/api/undeploy/helpers/undeploy-service-from-environment.js'
 import { createLogger } from '~/src/helpers/logging/logger.js'
 
 const logger = createLogger()
@@ -9,23 +9,32 @@ const logger = createLogger()
  * @param {{id: string, displayName: string}} user
  */
 async function undeployServiceFromAllEnvironments(imageName, user) {
-  await undeployWithId(crypto.randomUUID(), imageName, user)
+  await undeployWithId(
+    crypto.randomUUID(),
+    imageName,
+    user,
+    orderedEnvironments,
+    logger
+  )
 }
 
 /**
  * @param {string} undeploymentId
  * @param {string} imageName
  * @param {{id: string, displayName: string}} user
+ * @param {string[]} orderedEnvironments
+ * @param {import("pino").Logger} logger
  */
-async function undeployWithId(undeploymentId, imageName, user) {
+async function undeployWithId(
+  undeploymentId,
+  imageName,
+  user,
+  orderedEnvironments,
+  logger
+) {
   logger.info(`Undeploying ${imageName} from all environments in progress`)
   for (const environment of orderedEnvironments) {
-    await undeployServiceFromEnvironmentWithId(
-      undeploymentId,
-      imageName,
-      environment,
-      user
-    )
+    await undeployService(undeploymentId, imageName, environment, user, logger)
   }
 }
 

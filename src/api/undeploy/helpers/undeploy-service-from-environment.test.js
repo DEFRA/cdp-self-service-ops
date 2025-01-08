@@ -2,7 +2,7 @@ import { registerUndeployment } from '~/src/api/undeploy/helpers/register-undepl
 import { scaleEcsToZero } from '~/src/api/undeploy/helpers/scale-ecs-to-zero.js'
 import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service.js'
 import { isFeatureEnabled } from '~/src/helpers/feature-toggle/is-feature-enabled.js'
-import { undeployServiceFromEnvironmentWithId } from '~/src/api/undeploy/helpers/undeploy-service-from-environment.js'
+import { undeployService } from '~/src/api/undeploy/helpers/undeploy-service-from-environment.js'
 
 jest.mock('~/src/helpers/feature-toggle/is-feature-enabled', () => {
   return {
@@ -24,22 +24,25 @@ jest.mock('~/src/api/deploy/helpers/lookup-tenant-service', () => {
     lookupTenantService: jest.fn()
   }
 })
-
+const mockLogger = { info: jest.fn() }
 registerUndeployment.mockResolvedValue()
 scaleEcsToZero.mockResolvedValue()
 lookupTenantService.mockResolvedValue({ zone: 'some-zone' })
 
 const undeploymentId = crypto.randomUUID()
 const imageName = 'some-service'
-const environment = 'some-environment'
+const environment = 'dev'
 const user = { id: 'some-user-id', displayName: 'some-name' }
+const deployFromFileEnvironments = 'dev'
 
 async function callUndeployServiceFromEnvironment() {
-  return await undeployServiceFromEnvironmentWithId(
+  return await undeployService(
     undeploymentId,
     imageName,
     environment,
-    user
+    user,
+    deployFromFileEnvironments,
+    mockLogger
   )
 }
 
@@ -60,7 +63,7 @@ describe('#undeployServiceFromEnvironment', () => {
     expect(registerUndeployment).toHaveBeenCalledTimes(1)
   })
 
-  test('if not enabled should not call removeDeploymentFile', async () => {
+  test('if not enabled should not call scaleEcsToZero', async () => {
     isFeatureEnabled.mockReturnValue(false)
 
     await callUndeployServiceFromEnvironment()
@@ -68,7 +71,7 @@ describe('#undeployServiceFromEnvironment', () => {
     expect(scaleEcsToZero).toHaveBeenCalledTimes(0)
   })
 
-  test('if enabled should call removeDeploymentFile', async () => {
+  test('if enabled should call scaleEcsToZero', async () => {
     isFeatureEnabled.mockReturnValue(true)
 
     await callUndeployServiceFromEnvironment()
@@ -79,7 +82,8 @@ describe('#undeployServiceFromEnvironment', () => {
       imageName,
       environment,
       'some-zone',
-      user
+      user,
+      mockLogger
     )
   })
 })

@@ -45,7 +45,8 @@ async function commitDeploymentFile(
     'main',
     commitMessage,
     filePath,
-    deployment
+    deployment,
+    logger
   )
 }
 

@@ -7,8 +7,7 @@ import { featureToggles } from '~/src/helpers/feature-toggle/feature-toggles.js'
 import { createLogger } from '~/src/helpers/logging/logger.js'
 
 const logger = createLogger()
-
-const deployFromFileEnvironments = config.get('deployFromFileEnvironments')
+const deployFromFileConfig = config.get('deployFromFileEnvironments')
 
 /**
  * @param {string} imageName
@@ -17,11 +16,13 @@ const deployFromFileEnvironments = config.get('deployFromFileEnvironments')
  */
 async function undeployServiceFromEnvironment(imageName, environment, user) {
   const undeploymentId = crypto.randomUUID()
-  return undeployServiceFromEnvironmentWithId(
+  return undeployService(
     undeploymentId,
     imageName,
     environment,
-    user
+    user,
+    deployFromFileConfig,
+    logger
   )
 }
 
@@ -30,12 +31,16 @@ async function undeployServiceFromEnvironment(imageName, environment, user) {
  * @param {string} imageName
  * @param {string} environment
  * @param {{id: string, displayName: string}} user
+ * @param {string[]} deployFromFileEnvironments
+ * @param {import('pino').Logger} logger
  */
-async function undeployServiceFromEnvironmentWithId(
+async function undeployService(
   undeploymentId,
   imageName,
   environment,
-  user
+  user,
+  deployFromFileEnvironments,
+  logger
 ) {
   logger.info(`Undeploying ${imageName} from ${environment} in progress`)
 
@@ -61,20 +66,20 @@ async function undeployServiceFromEnvironmentWithId(
       logger.warn(
         `Undeploying ${imageName} from ${environment} is not file based`
       )
+    } else {
+      await scaleEcsToZero(
+        undeploymentId,
+        imageName,
+        environment,
+        service.zone,
+        user,
+        logger
+      )
     }
-
-    await scaleEcsToZero(
-      undeploymentId,
-      imageName,
-      environment,
-      service.zone,
-      user
-    )
-    logger.info('ECS Service scaled to 0')
   } else {
     logger.info('Scale ECS Service to 0 feature is disabled')
   }
   return undeploymentId
 }
 
-export { undeployServiceFromEnvironment, undeployServiceFromEnvironmentWithId }
+export { undeployServiceFromEnvironment, undeployService }

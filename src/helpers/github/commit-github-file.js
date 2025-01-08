@@ -1,8 +1,5 @@
 import { getLatestCommitSha } from '~/src/helpers/github/get-latest-commit-sha.js'
 import { graphql } from '~/src/helpers/oktokit.js'
-import { createLogger } from '~/src/helpers/logging/logger.js'
-
-const logger = createLogger()
 
 async function commitFile(
   owner,
@@ -10,7 +7,8 @@ async function commitFile(
   branch = `main`,
   commitMessage,
   filePath,
-  content
+  content,
+  logger
 ) {
   let startTime = Date.now()
   const commitSha = await getLatestCommitSha(owner, repo, branch)
