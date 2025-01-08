@@ -1,5 +1,5 @@
 import { registerUndeployment } from '~/src/api/undeploy/helpers/register-undeployment.js'
-import { removeDeploymentFile } from '~/src/api/undeploy/helpers/remove-deployment-file.js'
+import { scaleEcsToZero } from '~/src/api/undeploy/helpers/scale-ecs-to-zero.js'
 import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service.js'
 import { isFeatureEnabled } from '~/src/helpers/feature-toggle/is-feature-enabled.js'
 import { undeployServiceFromEnvironmentWithId } from '~/src/api/undeploy/helpers/undeploy-service-from-environment.js'
@@ -14,9 +14,9 @@ jest.mock('~/src/api/undeploy/helpers/register-undeployment', () => {
     registerUndeployment: jest.fn()
   }
 })
-jest.mock('~/src/api/undeploy/helpers/remove-deployment-file', () => {
+jest.mock('~/src/api/undeploy/helpers/scale-ecs-to-zero', () => {
   return {
-    removeDeploymentFile: jest.fn()
+    scaleEcsToZero: jest.fn()
   }
 })
 jest.mock('~/src/api/deploy/helpers/lookup-tenant-service', () => {
@@ -26,7 +26,7 @@ jest.mock('~/src/api/deploy/helpers/lookup-tenant-service', () => {
 })
 
 registerUndeployment.mockResolvedValue()
-removeDeploymentFile.mockResolvedValue()
+scaleEcsToZero.mockResolvedValue()
 lookupTenantService.mockResolvedValue({ zone: 'some-zone' })
 
 const undeploymentId = crypto.randomUUID()
@@ -65,7 +65,7 @@ describe('#undeployServiceFromEnvironment', () => {
 
     await callUndeployServiceFromEnvironment()
 
-    expect(removeDeploymentFile).toHaveBeenCalledTimes(0)
+    expect(scaleEcsToZero).toHaveBeenCalledTimes(0)
   })
 
   test('if enabled should call removeDeploymentFile', async () => {
@@ -73,8 +73,8 @@ describe('#undeployServiceFromEnvironment', () => {
 
     await callUndeployServiceFromEnvironment()
 
-    expect(removeDeploymentFile).toHaveBeenCalledTimes(1)
-    expect(removeDeploymentFile).toHaveBeenCalledWith(
+    expect(scaleEcsToZero).toHaveBeenCalledTimes(1)
+    expect(scaleEcsToZero).toHaveBeenCalledWith(
       undeploymentId,
       imageName,
       environment,

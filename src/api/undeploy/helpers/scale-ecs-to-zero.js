@@ -53,6 +53,11 @@ async function scaleEcsToZero(
   )
 }
 
+/**
+ * @param {{id: string, displayName: string}} user
+ * @param {string} undeploymentId
+ * @param {object} existingDeployment
+ */
 function changeDeploymentToZeroInstances(
   user,
   undeploymentId,
