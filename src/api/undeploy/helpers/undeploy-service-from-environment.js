@@ -44,13 +44,6 @@ async function undeployService(
 ) {
   logger.info(`Undeploying ${imageName} from ${environment} in progress`)
 
-  if (isFeatureEnabled(featureToggles.undeploy.register)) {
-    await registerUndeployment(imageName, environment, user, undeploymentId)
-    logger.info('Undeployment registered')
-  } else {
-    logger.info('Undeployment registration feature is disabled')
-  }
-
   const service = await lookupTenantService(imageName, environment, logger)
 
   if (!service) {
@@ -60,11 +53,18 @@ async function undeployService(
     return
   }
 
+  if (isFeatureEnabled(featureToggles.undeploy.register)) {
+    await registerUndeployment(imageName, environment, user, undeploymentId)
+    logger.info('Undeployment registered')
+  } else {
+    logger.info('Undeployment registration feature is disabled')
+  }
+
   if (isFeatureEnabled(featureToggles.undeploy.scaleEcsToZero)) {
     const shouldDeployByFile = deployFromFileEnvironments.includes(environment)
     if (!shouldDeployByFile) {
       logger.warn(
-        `Undeploying ${imageName} from ${environment} is not file based`
+        `Scaling ${imageName} to zero in ${environment} not possible as env is not file based`
       )
     } else {
       await scaleEcsToZero(

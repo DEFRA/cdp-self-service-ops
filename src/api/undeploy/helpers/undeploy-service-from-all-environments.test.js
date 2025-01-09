@@ -9,18 +9,9 @@ jest.mock(
     }
   }
 )
-
-const orderedEnvironments = ['dev', 'test']
-
-jest.mock('~/src/config/environments', () => {
-  return {
-    environments: { dev: 'dev', test: 'test' },
-    orderedEnvironments
-  }
-})
-
 const mockLogger = { info: jest.fn() }
 
+const orderedEnvironments = ['dev', 'test']
 const undeploymentId = crypto.randomUUID()
 const imageName = 'some-service'
 const user = { id: 'some-user-id', displayName: 'some-name' }

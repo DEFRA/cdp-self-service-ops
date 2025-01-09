@@ -1,9 +1,10 @@
 import { config } from '~/src/config/index.js'
 import { commitFile } from '~/src//helpers/github/commit-github-file.js'
-import { getExistingDeployment } from '~/src/api/deploy/helpers/get-existing-deployment.js'
+import { findRunningDetails } from '~/src/helpers/deployments/find-running-details.js'
 
 const deploymentRepo = config.get('github.repos.appDeployments')
 const gitHubOwner = config.get('github.org')
+const currentEnvironment = config.get('environment')
 
 /**
  * @param {string} undeploymentId
@@ -24,21 +25,22 @@ async function scaleEcsToZero(
   logger.info(`Scaling ECS to ZERO for ${imageName} in env ${environment}`)
   const filePath = `environments/${environment}/${zone}/${imageName}.json`
 
-  const existingDeployment = await getExistingDeployment(
-    gitHubOwner,
-    deploymentRepo,
-    filePath
-  )
+  const runningDetails = await findRunningDetails(imageName, environment)
 
-  if (!existingDeployment) {
-    logger.info(`Deployment file not found for ${imageName} in ${environment}`)
+  if (!runningDetails) {
+    logger.info(
+      `Deployment details not found for ${imageName} in ${environment}, may not be running`
+    )
     return
   }
 
   const undeployment = changeDeploymentToZeroInstances(
-    user,
     undeploymentId,
-    existingDeployment
+    runningDetails,
+    imageName,
+    environment,
+    zone,
+    user
   )
 
   const commitMessage = `Scaling to 0 ${imageName} from ${environment}\nInitiated by ${user.displayName}`
@@ -57,28 +59,44 @@ async function scaleEcsToZero(
 }
 
 /**
- * @param {{id: string, displayName: string}} user
  * @param {string} undeploymentId
  * @param {object} existingDeployment
+ * @param {string} imageName
+ * @param {string} environment
+ * @param {string} zone
+ * @param {{id: string, displayName: string}} user
  */
 function changeDeploymentToZeroInstances(
-  user,
   undeploymentId,
-  existingDeployment
+  existingDeployment,
+  imageName,
+  environment,
+  zone,
+  user
 ) {
   return {
-    ...existingDeployment,
     deploymentId: undeploymentId,
+    deploy: true,
+    service: {
+      name: imageName,
+      image: imageName,
+      version: existingDeployment.version,
+      configuration: {
+        commitSha: existingDeployment.configVersion
+      }
+    },
+    cluster: {
+      environment,
+      zone
+    },
     resources: {
-      ...existingDeployment.resources,
+      memory: existingDeployment.memory,
+      cpu: existingDeployment.cpu,
       instanceCount: 0
     },
     metadata: {
-      ...existingDeployment.metadata,
-      user: {
-        userId: user.id,
-        displayName: user.displayName
-      }
+      deploymentEnvironment: currentEnvironment,
+      user
     }
   }
 }

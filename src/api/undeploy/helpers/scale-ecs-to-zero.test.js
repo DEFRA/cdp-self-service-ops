@@ -1,5 +1,5 @@
 import { commitFile } from '~/src//helpers/github/commit-github-file.js'
-import { getExistingDeployment } from '~/src/api/deploy/helpers/get-existing-deployment.js'
+import { findRunningDetails } from '~/src/helpers/deployments/find-running-details.js'
 import { scaleEcsToZero } from '~/src/api/undeploy/helpers/scale-ecs-to-zero.js'
 
 jest.mock('~/src/helpers/github/commit-github-file', () => {
@@ -8,9 +8,9 @@ jest.mock('~/src/helpers/github/commit-github-file', () => {
   }
 })
 
-jest.mock('~/src/api/deploy/helpers/get-existing-deployment', () => {
+jest.mock('~/src/helpers/deployments/find-running-details', () => {
   return {
-    getExistingDeployment: jest.fn()
+    findRunningDetails: jest.fn()
   }
 })
 
@@ -20,22 +20,22 @@ const logger = {
 const someUndeploymentId = 'some-undeployment-id'
 const serviceName = 'some-service-name'
 const someUser = { id: 'some-user-id', displayName: 'some-name' }
-const existingDeployment = {
-  name: 'some-service-name',
-  resources: {
-    instanceCount: 2,
-    cpu: 1024,
-    memory: 2048
-  },
-  cluster: {
-    environment: 'infra-dev',
-    zone: 'public'
-  }
+const runningDetails = {
+  cdpDeploymentId: 'some-cdp-deployment-id',
+  environment: 'infra-dev',
+  service: serviceName,
+  version: '1.2.3',
+  instanceCount: 2,
+  cpu: 1024,
+  memory: 2048,
+  configVersion: 'some-config-version',
+  user: { userId: 'some-user-id', displayName: 'some-name' },
+  status: 'running'
 }
 
 describe('#scaleEcsToZero', () => {
   test('If no existing deployment should not proceed with scale to 0', async () => {
-    getExistingDeployment.mockReturnValue(null)
+    findRunningDetails.mockReturnValue(null)
 
     await scaleEcsToZero(
       someUndeploymentId,
@@ -46,12 +46,12 @@ describe('#scaleEcsToZero', () => {
       logger
     )
 
-    expect(getExistingDeployment).toHaveBeenCalledTimes(1)
+    expect(findRunningDetails).toHaveBeenCalledTimes(1)
     expect(commitFile).toHaveBeenCalledTimes(0)
   })
 
   test('With existing deployment should proceed with scale to 0', async () => {
-    getExistingDeployment.mockReturnValue({})
+    findRunningDetails.mockReturnValue({})
 
     await scaleEcsToZero(
       someUndeploymentId,
@@ -62,12 +62,12 @@ describe('#scaleEcsToZero', () => {
       logger
     )
 
-    expect(getExistingDeployment).toHaveBeenCalledTimes(1)
+    expect(findRunningDetails).toHaveBeenCalledTimes(1)
     expect(commitFile).toHaveBeenCalledTimes(1)
   })
 
   test('Check deployment instance count is ZERO', async () => {
-    getExistingDeployment.mockReturnValue(existingDeployment)
+    findRunningDetails.mockReturnValue(runningDetails)
 
     await scaleEcsToZero(
       someUndeploymentId,
@@ -85,14 +85,20 @@ describe('#scaleEcsToZero', () => {
       expect.any(String),
       expect.any(String),
       expect.objectContaining({
-        name: 'some-service-name',
         deploymentId: expect.any(String),
+        deploy: expect.any(Boolean),
+        service: {
+          name: serviceName,
+          image: serviceName,
+          version: expect.any(String),
+          configuration: expect.any(Object)
+        },
+        cluster: expect.any(Object),
         resources: {
           instanceCount: 0,
           cpu: 1024,
           memory: 2048
         },
-        cluster: existingDeployment.cluster,
         metadata: expect.any(Object)
       }),
       logger
@@ -100,7 +106,7 @@ describe('#scaleEcsToZero', () => {
   })
 
   test('Check deployment file contains user', async () => {
-    getExistingDeployment.mockReturnValue(existingDeployment)
+    findRunningDetails.mockReturnValue(runningDetails)
 
     await scaleEcsToZero(
       someUndeploymentId,
@@ -118,13 +124,15 @@ describe('#scaleEcsToZero', () => {
       expect.any(String),
       expect.any(String),
       expect.objectContaining({
-        name: 'some-service-name',
         deploymentId: expect.any(String),
+        deploy: expect.any(Boolean),
+        service: expect.any(Object),
+        cluster: expect.any(Object),
         resources: expect.any(Object),
-        cluster: existingDeployment.cluster,
         metadata: {
+          deploymentEnvironment: expect.any(String),
           user: {
-            userId: someUser.id,
+            id: someUser.id,
             displayName: someUser.displayName
           }
         }
@@ -134,7 +142,7 @@ describe('#scaleEcsToZero', () => {
   })
 
   test('Check deployment file is correct path', async () => {
-    getExistingDeployment.mockReturnValue(existingDeployment)
+    findRunningDetails.mockReturnValue(runningDetails)
 
     await scaleEcsToZero(
       someUndeploymentId,
