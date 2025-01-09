@@ -21,10 +21,16 @@ export default {
   transform: {
     '^.+\\.js$': 'babel-jest'
   },
-
-  // @octokit/graphql is ESM only, ignore related ESM imports
   transformIgnorePatterns: [
-    '/node_modules(?!/(@octokit|universal-user-agent|@defra/hapi-tracing))'
+    `node_modules/(?!${[
+      '@defra/hapi-tracing', // Supports ESM only
+      'node-fetch', // Supports ESM only
+      'universal-user-agent',
+      'universal-github-app-jwt',
+      '@octokit',
+      'octokit-plugin-create-pull-request',
+      'before-after-hook'
+    ].join('|')}/)`
   ]
 }
 /**
