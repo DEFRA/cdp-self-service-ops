@@ -14,14 +14,14 @@ const currentEnvironment = config.get('environment')
  * @param {{id: string, displayName: string}} user
  * @param {import('pino').Logger} logger
  */
-async function scaleEcsToZero(
-  undeploymentId,
+async function scaleEcsToZero({
   imageName,
   environment,
   zone,
   user,
+  undeploymentId,
   logger
-) {
+}) {
   logger.info(`Scaling ECS to ZERO for ${imageName} in env ${environment}`)
   const filePath = `environments/${environment}/${zone}/${imageName}.json`
 

@@ -23,7 +23,12 @@ const undeployServiceController = {
     const { imageName, environment } = request.payload
     const user = await getScopedUser(imageName, request.auth, 'admin')
 
-    await undeployServiceFromEnvironment(imageName, environment, user)
+    await undeployServiceFromEnvironment({
+      imageName,
+      environment,
+      user,
+      logger: request.logger
+    })
     return h.response({ message: 'success' }).code(204)
   }
 }
@@ -41,7 +46,12 @@ const undeployServiceFromEnvironmentController = {
     const { imageName, environment } = request.params
     const user = await getScopedUser(imageName, request.auth, 'admin')
 
-    await undeployServiceFromEnvironment(imageName, environment, user)
+    await undeployServiceFromEnvironment({
+      imageName,
+      environment,
+      user,
+      logger: request.logger
+    })
     return h.response({ message: 'success' }).code(204)
   }
 }
@@ -61,7 +71,11 @@ const undeployServiceFromAllEnvironmentController = {
     const imageName = request.params.imageName
     const user = await getScopedUser(imageName, request.auth, 'admin')
 
-    await undeployServiceFromAllEnvironments(imageName, user)
+    await undeployServiceFromAllEnvironments({
+      imageName,
+      user,
+      logger: request.logger
+    })
     return h.response({ message: 'success' }).code(204)
   }
 }

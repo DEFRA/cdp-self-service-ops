@@ -6,42 +6,24 @@ import { isFeatureEnabled } from '~/src/helpers/feature-toggle/is-feature-enable
 import { featureToggles } from '~/src/helpers/feature-toggle/feature-toggles.js'
 import { createLogger } from '~/src/helpers/logging/logger.js'
 
-const logger = createLogger()
 const deployFromFileConfig = config.get('deployFromFileEnvironments')
 
 /**
  * @param {string} imageName
  * @param {string} environment
  * @param {{id: string, displayName: string}} user
- */
-async function undeployServiceFromEnvironment(imageName, environment, user) {
-  const undeploymentId = crypto.randomUUID()
-  return undeployService(
-    undeploymentId,
-    imageName,
-    environment,
-    user,
-    deployFromFileConfig,
-    logger
-  )
-}
-
-/**
  * @param {string} undeploymentId
- * @param {string} imageName
- * @param {string} environment
- * @param {{id: string, displayName: string}} user
  * @param {string[]} deployFromFileEnvironments
  * @param {import('pino').Logger} logger
  */
-async function undeployService(
-  undeploymentId,
+export async function undeployServiceFromEnvironment({
   imageName,
   environment,
   user,
-  deployFromFileEnvironments,
-  logger
-) {
+  undeploymentId = crypto.randomUUID(),
+  deployFromFileEnvironments = deployFromFileConfig,
+  logger = createLogger()
+}) {
   logger.info(`Undeploying ${imageName} from ${environment} in progress`)
 
   const service = await lookupTenantService(imageName, environment, logger)
@@ -81,5 +63,3 @@ async function undeployService(
   }
   return undeploymentId
 }
-
-export { undeployServiceFromEnvironment, undeployService }

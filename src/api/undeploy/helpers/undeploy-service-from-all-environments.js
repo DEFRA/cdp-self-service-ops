@@ -1,41 +1,29 @@
 import { orderedEnvironments } from '~/src/config/environments.js'
-import { undeployService } from '~/src/api/undeploy/helpers/undeploy-service-from-environment.js'
+import { undeployServiceFromEnvironment } from '~/src/api/undeploy/helpers/undeploy-service-from-environment.js'
 import { createLogger } from '~/src/helpers/logging/logger.js'
 
-const logger = createLogger()
-
 /**
  * @param {string} imageName
  * @param {{id: string, displayName: string}} user
- */
-async function undeployServiceFromAllEnvironments(imageName, user) {
-  await undeployWithId(
-    crypto.randomUUID(),
-    imageName,
-    user,
-    orderedEnvironments,
-    logger
-  )
-}
-
-/**
  * @param {string} undeploymentId
- * @param {string} imageName
- * @param {{id: string, displayName: string}} user
- * @param {string[]} orderedEnvironments
+ * @param {string[]} environments
  * @param {import("pino").Logger} logger
  */
-async function undeployWithId(
-  undeploymentId,
+export async function undeployServiceFromAllEnvironments({
   imageName,
   user,
-  orderedEnvironments,
-  logger
-) {
+  undeploymentId = crypto.randomUUID(),
+  environments = orderedEnvironments,
+  logger = createLogger()
+}) {
   logger.info(`Undeploying ${imageName} from all environments in progress`)
-  for (const environment of orderedEnvironments) {
-    await undeployService(undeploymentId, imageName, environment, user, logger)
+  for (const environment of environments) {
+    await undeployServiceFromEnvironment({
+      imageName,
+      environment,
+      user,
+      undeploymentId,
+      logger
+    })
   }
 }
-
-export { undeployServiceFromAllEnvironments, undeployWithId }

@@ -2,7 +2,7 @@ import { registerUndeployment } from '~/src/api/undeploy/helpers/register-undepl
 import { scaleEcsToZero } from '~/src/api/undeploy/helpers/scale-ecs-to-zero.js'
 import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service.js'
 import { isFeatureEnabled } from '~/src/helpers/feature-toggle/is-feature-enabled.js'
-import { undeployService } from '~/src/api/undeploy/helpers/undeploy-service-from-environment.js'
+import { undeployServiceFromEnvironment } from '~/src/api/undeploy/helpers/undeploy-service-from-environment.js'
 
 jest.mock('~/src/helpers/feature-toggle/is-feature-enabled', () => {
   return {
@@ -36,14 +36,14 @@ const user = { id: 'some-user-id', displayName: 'some-name' }
 const deployFromFileEnvironments = 'dev'
 
 async function callUndeployServiceFromEnvironment() {
-  return await undeployService(
-    undeploymentId,
+  return await undeployServiceFromEnvironment({
     imageName,
     environment,
     user,
+    undeploymentId,
     deployFromFileEnvironments,
-    mockLogger
-  )
+    logger: mockLogger
+  })
 }
 
 describe('#undeployServiceFromEnvironment', () => {

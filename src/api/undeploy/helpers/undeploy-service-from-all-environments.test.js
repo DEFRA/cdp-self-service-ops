@@ -1,11 +1,11 @@
-import { undeployService } from '~/src/api/undeploy/helpers/undeploy-service-from-environment.js'
-import { undeployWithId } from '~/src/api/undeploy/helpers/undeploy-service-from-all-environments.js'
+import { undeployServiceFromEnvironment } from '~/src/api/undeploy/helpers/undeploy-service-from-environment.js'
+import { undeployServiceFromAllEnvironments } from '~/src/api/undeploy/helpers/undeploy-service-from-all-environments.js'
 
 jest.mock(
   '~/src/api/undeploy/helpers/undeploy-service-from-environment',
   () => {
     return {
-      undeployService: jest.fn()
+      undeployServiceFromEnvironment: jest.fn()
     }
   }
 )
@@ -18,28 +18,28 @@ const user = { id: 'some-user-id', displayName: 'some-name' }
 
 describe('#undeployServiceFromAllEnvironments', () => {
   test('Should call undeployServiceFromEnvironment', async () => {
-    await undeployWithId(
-      undeploymentId,
+    await undeployServiceFromAllEnvironments({
       imageName,
       user,
-      orderedEnvironments,
-      mockLogger
-    )
+      undeploymentId,
+      environments: orderedEnvironments,
+      logger: mockLogger
+    })
 
-    expect(undeployService).toHaveBeenCalledTimes(2)
-    expect(undeployService).toHaveBeenCalledWith(
-      undeploymentId,
+    expect(undeployServiceFromEnvironment).toHaveBeenCalledTimes(2)
+    expect(undeployServiceFromEnvironment).toHaveBeenCalledWith({
       imageName,
-      'dev',
+      environment: 'dev',
       user,
-      mockLogger
-    )
-    expect(undeployService).toHaveBeenCalledWith(
       undeploymentId,
+      logger: mockLogger
+    })
+    expect(undeployServiceFromEnvironment).toHaveBeenCalledWith({
       imageName,
-      'test',
+      environment: 'test',
       user,
-      mockLogger
-    )
+      undeploymentId,
+      logger: mockLogger
+    })
   })
 })
