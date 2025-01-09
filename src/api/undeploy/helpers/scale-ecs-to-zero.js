@@ -7,82 +7,82 @@ const gitHubOwner = config.get('github.org')
 const currentEnvironment = config.get('environment')
 
 /**
- * @param {string} undeploymentId
- * @param {string} imageName
+ * @param {string} serviceName
  * @param {string} environment
  * @param {string} zone
  * @param {{id: string, displayName: string}} user
+ * @param {string} undeploymentId
  * @param {import('pino').Logger} logger
  */
 async function scaleEcsToZero({
-  imageName,
+  serviceName,
   environment,
   zone,
   user,
   undeploymentId,
   logger
 }) {
-  logger.info(`Scaling ECS to ZERO for ${imageName} in env ${environment}`)
-  const filePath = `environments/${environment}/${zone}/${imageName}.json`
+  logger.info(`Scaling ECS to ZERO for ${serviceName} in env ${environment}`)
+  const filePath = `environments/${environment}/${zone}/${serviceName}.json`
 
-  const runningDetails = await findRunningDetails(imageName, environment)
+  const runningDetails = await findRunningDetails(serviceName, environment)
 
   if (!runningDetails) {
     logger.info(
-      `Deployment details not found for ${imageName} in ${environment}, may not be running`
+      `Deployment details not found for ${serviceName} in ${environment}, may not be running`
     )
     return
   }
 
   const undeployment = changeDeploymentToZeroInstances(
-    undeploymentId,
     runningDetails,
-    imageName,
+    serviceName,
     environment,
     zone,
-    user
+    user,
+    undeploymentId
   )
 
-  const commitMessage = `Scaling to 0 ${imageName} from ${environment}\nInitiated by ${user.displayName}`
+  const commitMessage = `Scaling to 0 ${serviceName} from ${environment}\nInitiated by ${user.displayName}`
 
-  await commitFile(
-    gitHubOwner,
-    deploymentRepo,
-    'main',
+  await commitFile({
+    owner: gitHubOwner,
+    repo: deploymentRepo,
+    branch: 'main',
     commitMessage,
     filePath,
-    undeployment,
+    content: undeployment,
     logger
-  )
+  })
 
   logger.info('ECS Service scaled to 0')
 }
 
 /**
- * @param {string} undeploymentId
- * @param {object} existingDeployment
- * @param {string} imageName
+ * @param {object} runningDetails
+ * @param {string} serviceName
  * @param {string} environment
  * @param {string} zone
  * @param {{id: string, displayName: string}} user
+ * @param {string} undeploymentId
  */
 function changeDeploymentToZeroInstances(
-  undeploymentId,
-  existingDeployment,
-  imageName,
+  runningDetails,
+  serviceName,
   environment,
   zone,
-  user
+  user,
+  undeploymentId
 ) {
   return {
     deploymentId: undeploymentId,
     deploy: true,
     service: {
-      name: imageName,
-      image: imageName,
-      version: existingDeployment.version,
+      name: serviceName,
+      image: serviceName,
+      version: runningDetails.version,
       configuration: {
-        commitSha: existingDeployment.configVersion
+        commitSha: runningDetails.configVersion
       }
     },
     cluster: {
@@ -90,8 +90,8 @@ function changeDeploymentToZeroInstances(
       zone
     },
     resources: {
-      memory: existingDeployment.memory,
-      cpu: existingDeployment.cpu,
+      memory: runningDetails.memory,
+      cpu: runningDetails.cpu,
       instanceCount: 0
     },
     metadata: {

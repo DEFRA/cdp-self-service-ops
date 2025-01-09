@@ -39,15 +39,15 @@ async function commitDeploymentFile(
 
   logger.info(`Deployment file ${filePath}`)
 
-  return await commitFile(
-    gitHubOwner,
-    deploymentRepo,
-    'main',
+  return await commitFile({
+    owner: gitHubOwner,
+    repo: deploymentRepo,
+    branch: 'main',
     commitMessage,
     filePath,
-    deployment,
+    content: deployment,
     logger
-  )
+  })
 }
 
 function generateDeployment(

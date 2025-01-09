@@ -9,7 +9,7 @@ import { createLogger } from '~/src/helpers/logging/logger.js'
 const deployFromFileConfig = config.get('deployFromFileEnvironments')
 
 /**
- * @param {string} imageName
+ * @param {string} serviceName
  * @param {string} environment
  * @param {{id: string, displayName: string}} user
  * @param {string} undeploymentId
@@ -17,26 +17,26 @@ const deployFromFileConfig = config.get('deployFromFileEnvironments')
  * @param {import('pino').Logger} logger
  */
 export async function undeployServiceFromEnvironment({
-  imageName,
+  serviceName,
   environment,
   user,
   undeploymentId = crypto.randomUUID(),
   deployFromFileEnvironments = deployFromFileConfig,
   logger = createLogger()
 }) {
-  logger.info(`Undeploying ${imageName} from ${environment} in progress`)
+  logger.info(`Undeploying ${serviceName} from ${environment} in progress`)
 
-  const service = await lookupTenantService(imageName, environment, logger)
+  const service = await lookupTenantService(serviceName, environment, logger)
 
   if (!service) {
     logger.warn(
-      `Unable to find deployment zone for [${imageName}] in environment [${environment}].`
+      `Unable to find deployment zone for [${serviceName}] in environment [${environment}].`
     )
     return
   }
 
   if (isFeatureEnabled(featureToggles.undeploy.register)) {
-    await registerUndeployment(imageName, environment, user, undeploymentId)
+    await registerUndeployment(serviceName, environment, user, undeploymentId)
     logger.info('Undeployment registered')
   } else {
     logger.info('Undeployment registration feature is disabled')
@@ -46,17 +46,17 @@ export async function undeployServiceFromEnvironment({
     const shouldDeployByFile = deployFromFileEnvironments.includes(environment)
     if (!shouldDeployByFile) {
       logger.warn(
-        `Scaling ${imageName} to zero in ${environment} not possible as env is not file based`
+        `Scaling ${serviceName} to zero in ${environment} not possible as env is not file based`
       )
     } else {
-      await scaleEcsToZero(
-        undeploymentId,
-        imageName,
+      await scaleEcsToZero({
+        serviceName,
         environment,
-        service.zone,
+        zone: service.zone,
         user,
+        undeploymentId,
         logger
-      )
+      })
     }
   } else {
     logger.info('Scale ECS Service to 0 feature is disabled')

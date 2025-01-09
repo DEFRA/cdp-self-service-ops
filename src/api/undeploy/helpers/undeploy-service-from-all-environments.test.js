@@ -13,13 +13,13 @@ const mockLogger = { info: jest.fn() }
 
 const orderedEnvironments = ['dev', 'test']
 const undeploymentId = crypto.randomUUID()
-const imageName = 'some-service'
+const serviceName = 'some-service'
 const user = { id: 'some-user-id', displayName: 'some-name' }
 
 describe('#undeployServiceFromAllEnvironments', () => {
   test('Should call undeployServiceFromEnvironment', async () => {
     await undeployServiceFromAllEnvironments({
-      imageName,
+      serviceName,
       user,
       undeploymentId,
       environments: orderedEnvironments,
@@ -28,14 +28,14 @@ describe('#undeployServiceFromAllEnvironments', () => {
 
     expect(undeployServiceFromEnvironment).toHaveBeenCalledTimes(2)
     expect(undeployServiceFromEnvironment).toHaveBeenCalledWith({
-      imageName,
+      serviceName,
       environment: 'dev',
       user,
       undeploymentId,
       logger: mockLogger
     })
     expect(undeployServiceFromEnvironment).toHaveBeenCalledWith({
-      imageName,
+      serviceName,
       environment: 'test',
       user,
       undeploymentId,

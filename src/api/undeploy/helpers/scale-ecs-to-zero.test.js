@@ -18,12 +18,12 @@ const logger = {
   info: jest.fn()
 }
 const someUndeploymentId = 'some-undeployment-id'
-const imageName = 'some-service-name'
+const serviceName = 'some-service-name'
 const someUser = { id: 'some-user-id', displayName: 'some-name' }
 const runningDetails = {
   cdpDeploymentId: 'some-cdp-deployment-id',
   environment: 'infra-dev',
-  service: imageName,
+  service: serviceName,
   version: '1.2.3',
   instanceCount: 2,
   cpu: 1024,
@@ -33,7 +33,7 @@ const runningDetails = {
   status: 'running'
 }
 const scaleDetails = {
-  imageName,
+  serviceName,
   environment: 'dev',
   zone: 'public',
   user: someUser,
@@ -66,29 +66,15 @@ describe('#scaleEcsToZero', () => {
     await scaleEcsToZero(scaleDetails)
 
     expect(commitFile).toHaveBeenCalledWith(
-      expect.any(String),
-      expect.any(String),
-      expect.any(String),
-      expect.any(String),
-      expect.any(String),
       expect.objectContaining({
-        deploymentId: expect.any(String),
-        deploy: expect.any(Boolean),
-        service: {
-          name: imageName,
-          image: imageName,
-          version: expect.any(String),
-          configuration: expect.any(Object)
-        },
-        cluster: expect.any(Object),
-        resources: {
-          instanceCount: 0,
-          cpu: 1024,
-          memory: 2048
-        },
-        metadata: expect.any(Object)
-      }),
-      logger
+        content: expect.objectContaining({
+          resources: {
+            instanceCount: 0,
+            cpu: expect.any(Number),
+            memory: expect.any(Number)
+          }
+        })
+      })
     )
   })
 
@@ -98,26 +84,17 @@ describe('#scaleEcsToZero', () => {
     await scaleEcsToZero({ ...scaleDetails, user: someUser })
 
     expect(commitFile).toHaveBeenCalledWith(
-      expect.any(String),
-      expect.any(String),
-      expect.any(String),
-      expect.any(String),
-      expect.any(String),
       expect.objectContaining({
-        deploymentId: expect.any(String),
-        deploy: expect.any(Boolean),
-        service: expect.any(Object),
-        cluster: expect.any(Object),
-        resources: expect.any(Object),
-        metadata: {
-          deploymentEnvironment: expect.any(String),
-          user: {
-            id: someUser.id,
-            displayName: someUser.displayName
+        content: expect.objectContaining({
+          metadata: {
+            deploymentEnvironment: expect.any(String),
+            user: {
+              id: someUser.id,
+              displayName: someUser.displayName
+            }
           }
-        }
-      }),
-      logger
+        })
+      })
     )
   })
 
@@ -127,13 +104,9 @@ describe('#scaleEcsToZero', () => {
     await scaleEcsToZero({ ...scaleDetails, environment: 'infra-dev' })
 
     expect(commitFile).toHaveBeenCalledWith(
-      expect.any(String),
-      expect.any(String),
-      expect.any(String),
-      expect.any(String),
-      `environments/infra-dev/public/${imageName}.json`,
-      expect.any(Object),
-      logger
+      expect.objectContaining({
+        filePath: `environments/infra-dev/public/${serviceName}.json`
+      })
     )
   })
 })

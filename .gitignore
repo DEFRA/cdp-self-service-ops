@@ -12,3 +12,5 @@ coverage
 .eslintcache
 
 globalConfig.json
+
+tsconfig.tsbuildinfo

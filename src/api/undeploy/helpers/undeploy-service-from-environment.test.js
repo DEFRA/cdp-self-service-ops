@@ -30,14 +30,14 @@ scaleEcsToZero.mockResolvedValue()
 lookupTenantService.mockResolvedValue({ zone: 'some-zone' })
 
 const undeploymentId = crypto.randomUUID()
-const imageName = 'some-service'
+const serviceName = 'some-service'
 const environment = 'dev'
 const user = { id: 'some-user-id', displayName: 'some-name' }
-const deployFromFileEnvironments = 'dev'
+const deployFromFileEnvironments = ['dev']
 
 async function callUndeployServiceFromEnvironment() {
   return await undeployServiceFromEnvironment({
-    imageName,
+    serviceName,
     environment,
     user,
     undeploymentId,
@@ -77,13 +77,13 @@ describe('#undeployServiceFromEnvironment', () => {
     await callUndeployServiceFromEnvironment()
 
     expect(scaleEcsToZero).toHaveBeenCalledTimes(1)
-    expect(scaleEcsToZero).toHaveBeenCalledWith(
-      undeploymentId,
-      imageName,
+    expect(scaleEcsToZero).toHaveBeenCalledWith({
+      serviceName,
       environment,
-      'some-zone',
+      zone: 'some-zone',
       user,
-      mockLogger
-    )
+      undeploymentId,
+      logger: mockLogger
+    })
   })
 })
