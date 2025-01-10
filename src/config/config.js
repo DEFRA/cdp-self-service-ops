@@ -474,16 +474,16 @@ const config = convict({
   features: {
     undeploy: {
       register: {
-        doc: 'Temporary Feature flag for register undeploy',
+        doc: 'Feature flag for register undeploy',
         format: Boolean,
         default: false,
         env: 'FEATURE_UNDEPLOY_REGISTER'
       },
-      deleteDeploymentFile: {
-        doc: 'Temporary Feature flag for delete deployment file',
+      scaleEcsToZero: {
+        doc: 'Feature flag for scaling ECS instances to 0',
         format: Boolean,
         default: false,
-        env: 'FEATURE_UNDEPLOY_DELETE_DEPLOYMENT_FILE'
+        env: 'FEATURE_SCALE_ECS_TO_0'
       }
     },
     dockerImages: {

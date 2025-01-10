@@ -27,7 +27,7 @@ const decommissionServiceController = {
     const user = request.auth.credentials
     const response = await getRepositoryInfo(serviceName)
 
-    await undeployServiceFromAllEnvironments(serviceName, user)
+    await undeployServiceFromAllEnvironments({ serviceName, user, logger })
     await deleteDockerImages(serviceName, user, logger)
     await triggerRemoveWorkflows(serviceName, response.repository, logger)
     await portalBackEndDecommissionService(serviceName)

@@ -1,7 +1,11 @@
 import { getLatestCommitSha } from '~/src/helpers/github/get-latest-commit-sha.js'
 import { graphql } from '~/src/helpers/oktokit.js'
 
-async function commitFile(
+/**
+ * @param {{owner: string, repo: string, branch: string, commitMessage: string, filePath: string, content: object, logger: import('pino').Logger}} options
+ * @returns {Promise<{object}>}
+ */
+async function commitFile({
   owner,
   repo,
   branch = `main`,
@@ -9,7 +13,7 @@ async function commitFile(
   filePath,
   content,
   logger
-) {
+}) {
   let startTime = Date.now()
   const commitSha = await getLatestCommitSha(owner, repo, branch)
   logger.info(`getLatestCommitSha: ${Date.now() - startTime}ms`)

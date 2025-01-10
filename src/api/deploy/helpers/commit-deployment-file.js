@@ -1,5 +1,5 @@
 import { config } from '~/src/config/index.js'
-import { commitFile } from '~/src/api/deploy/helpers/github/commit-github-file.js'
+import { commitFile } from '~/src/helpers/github/commit-github-file.js'
 
 const deploymentRepo = config.get('github.repos.appDeployments')
 const gitHubOwner = config.get('github.org')
@@ -39,15 +39,15 @@ async function commitDeploymentFile(
 
   logger.info(`Deployment file ${filePath}`)
 
-  return await commitFile(
-    gitHubOwner,
-    deploymentRepo,
-    'main',
+  return await commitFile({
+    owner: gitHubOwner,
+    repo: deploymentRepo,
+    branch: 'main',
     commitMessage,
     filePath,
-    deployment,
+    content: deployment,
     logger
-  )
+  })
 }
 
 function generateDeployment(

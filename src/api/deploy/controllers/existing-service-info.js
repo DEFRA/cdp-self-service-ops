@@ -1,6 +1,6 @@
 import { config } from '~/src/config/index.js'
-import { getContent } from '~/src/helpers/github/get-content.js'
 import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service.js'
+import { getExistingDeployment } from '~/src/api/deploy/helpers/get-existing-deployment.js'
 
 const deploymentRepo = config.get('github.repos.appDeployments')
 const gitHubOwner = config.get('github.org')
@@ -32,18 +32,6 @@ const existingServiceInfoController = {
         ...(deployment && { deployment })
       })
       .code(responseCode)
-  }
-}
-
-async function getExistingDeployment(owner, repo, filePath) {
-  try {
-    const data = await getContent(owner, repo, filePath)
-    return JSON.parse(data)
-  } catch (error) {
-    if (error.status === 404) {
-      return null
-    }
-    throw error
   }
 }
 

@@ -1,51 +1,45 @@
-import { undeployServiceFromEnvironmentWithId } from '~/src/api/undeploy/helpers/undeploy-service-from-environment.js'
-import { undeployWithId } from '~/src/api/undeploy/helpers/undeploy-service-from-all-environments.js'
+import { undeployServiceFromEnvironment } from '~/src/api/undeploy/helpers/undeploy-service-from-environment.js'
+import { undeployServiceFromAllEnvironments } from '~/src/api/undeploy/helpers/undeploy-service-from-all-environments.js'
 
 jest.mock(
   '~/src/api/undeploy/helpers/undeploy-service-from-environment',
   () => {
     return {
-      undeployServiceFromEnvironmentWithId: jest.fn()
+      undeployServiceFromEnvironment: jest.fn()
     }
   }
 )
+const mockLogger = { info: jest.fn() }
 
-jest.mock('~/src/config/environments', () => {
-  return {
-    environments: { env1: 'env1', env2: 'env2', env3: 'env3' },
-    orderedEnvironments: ['env1', 'env2', 'env3']
-  }
-})
-
+const orderedEnvironments = ['dev', 'test']
 const undeploymentId = crypto.randomUUID()
-const imageName = 'some-service'
+const serviceName = 'some-service'
 const user = { id: 'some-user-id', displayName: 'some-name' }
-const numberOfEnvironments = 3
 
 describe('#undeployServiceFromAllEnvironments', () => {
   test('Should call undeployServiceFromEnvironment', async () => {
-    await undeployWithId(undeploymentId, imageName, user)
+    await undeployServiceFromAllEnvironments({
+      serviceName,
+      user,
+      undeploymentId,
+      environments: orderedEnvironments,
+      logger: mockLogger
+    })
 
-    expect(undeployServiceFromEnvironmentWithId).toHaveBeenCalledTimes(
-      numberOfEnvironments
-    )
-    expect(undeployServiceFromEnvironmentWithId).toHaveBeenCalledWith(
+    expect(undeployServiceFromEnvironment).toHaveBeenCalledTimes(2)
+    expect(undeployServiceFromEnvironment).toHaveBeenCalledWith({
+      serviceName,
+      environment: 'dev',
+      user,
       undeploymentId,
-      imageName,
-      'env1',
-      user
-    )
-    expect(undeployServiceFromEnvironmentWithId).toHaveBeenCalledWith(
+      logger: mockLogger
+    })
+    expect(undeployServiceFromEnvironment).toHaveBeenCalledWith({
+      serviceName,
+      environment: 'test',
+      user,
       undeploymentId,
-      imageName,
-      'env2',
-      user
-    )
-    expect(undeployServiceFromEnvironmentWithId).toHaveBeenCalledWith(
-      undeploymentId,
-      imageName,
-      'env3',
-      user
-    )
+      logger: mockLogger
+    })
   })
 })
