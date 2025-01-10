@@ -9,12 +9,8 @@ import { createLogger } from '~/src/helpers/logging/logger.js'
 const deployFromFileConfig = config.get('deployFromFileEnvironments')
 
 /**
- * @param {string} serviceName
- * @param {string} environment
- * @param {{id: string, displayName: string}} user
- * @param {string} undeploymentId
- * @param {string[]} deployFromFileEnvironments
- * @param {import('pino').Logger} logger
+ * @param {{serviceName: string, environment: string, user: {id: string, displayName: string}, undeploymentId: string, deployFromFileEnvironments: string[], logger: import('pino').Logger}} options
+ * @returns {Promise<string>}
  */
 export async function undeployServiceFromEnvironment({
   serviceName,

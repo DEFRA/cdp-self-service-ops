@@ -3,11 +3,7 @@ import { undeployServiceFromEnvironment } from '~/src/api/undeploy/helpers/undep
 import { createLogger } from '~/src/helpers/logging/logger.js'
 
 /**
- * @param {string} serviceName
- * @param {{id: string, displayName: string}} user
- * @param {string} undeploymentId
- * @param {string[]} environments
- * @param {import("pino").Logger} logger
+ * @param {{serviceName: string, user: {id: string, displayName: string}, undeploymentId: string, environments: string[], logger: import('pino').Logger}} options
  */
 export async function undeployServiceFromAllEnvironments({
   serviceName,

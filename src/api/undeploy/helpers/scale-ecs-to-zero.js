@@ -7,12 +7,7 @@ const gitHubOwner = config.get('github.org')
 const currentEnvironment = config.get('environment')
 
 /**
- * @param {string} serviceName
- * @param {string} environment
- * @param {string} zone
- * @param {{id: string, displayName: string}} user
- * @param {string} undeploymentId
- * @param {import('pino').Logger} logger
+ * @param {{serviceName: string, environment: string, zone: string, user: {id: string, displayName: string}, undeploymentId: string, logger: import('pino').Logger}} options
  */
 async function scaleEcsToZero({
   serviceName,
