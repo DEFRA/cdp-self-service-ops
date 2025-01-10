@@ -12,11 +12,16 @@ const inProgressFiltersController = {
     }
   },
   handler: async (request, h) => {
-    const filters = await getStatusFilters(
+    const filterResult = await getStatusFilters(
       request.db,
       [statuses.inProgress, statuses.failure],
       request.query
     )
+
+    const filters = {
+      services: filterResult?.services ?? [],
+      teams: filterResult?.teams ?? []
+    }
 
     return h.response({ message: 'success', filters })
   }
