@@ -1,18 +1,9 @@
-import { commitFile } from '~/src//helpers/github/commit-github-file.js'
 import { findRunningDetails } from '~/src/helpers/deployments/find-running-details.js'
+import { commitDeploymentFile } from '~/src/helpers/deployments/commit-deployment-file.js'
 import { scaleEcsToZero } from '~/src/api/undeploy/helpers/scale-ecs-to-zero.js'
 
-jest.mock('~/src/helpers/github/commit-github-file', () => {
-  return {
-    commitFile: jest.fn()
-  }
-})
-
-jest.mock('~/src/helpers/deployments/find-running-details', () => {
-  return {
-    findRunningDetails: jest.fn()
-  }
-})
+jest.mock('~/src/helpers/deployments/find-running-details.js')
+jest.mock('~/src/helpers/deployments/commit-deployment-file')
 
 const logger = {
   info: jest.fn()
@@ -48,7 +39,7 @@ describe('#scaleEcsToZero', () => {
     await scaleEcsToZero(scaleDetails)
 
     expect(findRunningDetails).toHaveBeenCalledTimes(1)
-    expect(commitFile).toHaveBeenCalledTimes(0)
+    expect(commitDeploymentFile).toHaveBeenCalledTimes(0)
   })
 
   test('With existing deployment should proceed with scale to 0', async () => {
@@ -57,7 +48,7 @@ describe('#scaleEcsToZero', () => {
     await scaleEcsToZero(scaleDetails)
 
     expect(findRunningDetails).toHaveBeenCalledTimes(1)
-    expect(commitFile).toHaveBeenCalledTimes(1)
+    expect(commitDeploymentFile).toHaveBeenCalledTimes(1)
   })
 
   test('Check deployment instance count is ZERO', async () => {
@@ -65,9 +56,9 @@ describe('#scaleEcsToZero', () => {
 
     await scaleEcsToZero(scaleDetails)
 
-    expect(commitFile).toHaveBeenCalledWith(
+    expect(commitDeploymentFile).toHaveBeenCalledWith(
       expect.objectContaining({
-        content: expect.objectContaining({
+        deployment: expect.objectContaining({
           resources: {
             instanceCount: 0,
             cpu: expect.any(Number),
@@ -83,29 +74,17 @@ describe('#scaleEcsToZero', () => {
 
     await scaleEcsToZero({ ...scaleDetails, user: someUser })
 
-    expect(commitFile).toHaveBeenCalledWith(
+    expect(commitDeploymentFile).toHaveBeenCalledWith(
       expect.objectContaining({
-        content: expect.objectContaining({
+        deployment: expect.objectContaining({
           metadata: {
             deploymentEnvironment: expect.any(String),
             user: {
-              id: someUser.id,
+              userId: someUser.id,
               displayName: someUser.displayName
             }
           }
         })
-      })
-    )
-  })
-
-  test('Check deployment file is correct path', async () => {
-    findRunningDetails.mockReturnValue(runningDetails)
-
-    await scaleEcsToZero({ ...scaleDetails, environment: 'infra-dev' })
-
-    expect(commitFile).toHaveBeenCalledWith(
-      expect.objectContaining({
-        filePath: `environments/infra-dev/public/${serviceName}.json`
       })
     )
   })

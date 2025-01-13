@@ -1,15 +1,12 @@
-import { config } from '~/src/config/index.js'
-import { commitFile } from '~/src//helpers/github/commit-github-file.js'
 import { findRunningDetails } from '~/src/helpers/deployments/find-running-details.js'
-
-const deploymentRepo = config.get('github.repos.appDeployments')
-const gitHubOwner = config.get('github.org')
-const currentEnvironment = config.get('environment')
+import { commitDeploymentFile } from '~/src/helpers/deployments/commit-deployment-file.js'
+import { transformRunningDetailsToDeployment } from '~/src/helpers/deployments/transform-running-details-to-deployment.js'
+import { scaleDeploymentToZeroInstances } from '~/src/api/undeploy/helpers/scale-deployment-to-zero-instances.js'
 
 /**
  * @param {{serviceName: string, environment: string, zone: string, user: {id: string, displayName: string}, undeploymentId: string, logger: import('pino').Logger}} options
  */
-async function scaleEcsToZero({
+export async function scaleEcsToZero({
   serviceName,
   environment,
   zone,
@@ -18,7 +15,6 @@ async function scaleEcsToZero({
   logger
 }) {
   logger.info(`Scaling ECS to ZERO for ${serviceName} in env ${environment}`)
-  const filePath = `environments/${environment}/${zone}/${serviceName}.json`
 
   const runningDetails = await findRunningDetails(serviceName, environment)
 
@@ -29,71 +25,13 @@ async function scaleEcsToZero({
     return
   }
 
-  const undeployment = changeDeploymentToZeroInstances(
-    runningDetails,
-    serviceName,
-    environment,
-    zone,
+  const deployment = transformRunningDetailsToDeployment(runningDetails, zone)
+  const undeployment = scaleDeploymentToZeroInstances({
+    deployment,
     user,
     undeploymentId
-  )
-
-  const commitMessage = `Scaling to 0 ${serviceName} from ${environment}\nInitiated by ${user.displayName}`
-
-  await commitFile({
-    owner: gitHubOwner,
-    repo: deploymentRepo,
-    branch: 'main',
-    commitMessage,
-    filePath,
-    content: undeployment,
-    logger
   })
+  await commitDeploymentFile({ deployment: undeployment, logger })
 
   logger.info('ECS Service scaled to 0')
 }
-
-/**
- * @param {object} runningDetails
- * @param {string} serviceName
- * @param {string} environment
- * @param {string} zone
- * @param {{id: string, displayName: string}} user
- * @param {string} undeploymentId
- */
-function changeDeploymentToZeroInstances(
-  runningDetails,
-  serviceName,
-  environment,
-  zone,
-  user,
-  undeploymentId
-) {
-  return {
-    deploymentId: undeploymentId,
-    deploy: true,
-    service: {
-      name: serviceName,
-      image: serviceName,
-      version: runningDetails.version,
-      configuration: {
-        commitSha: runningDetails.configVersion
-      }
-    },
-    cluster: {
-      environment,
-      zone
-    },
-    resources: {
-      memory: runningDetails.memory,
-      cpu: runningDetails.cpu,
-      instanceCount: 0
-    },
-    metadata: {
-      deploymentEnvironment: currentEnvironment,
-      user
-    }
-  }
-}
-
-export { scaleEcsToZero }
