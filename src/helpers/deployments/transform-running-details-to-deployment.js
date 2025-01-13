@@ -1,3 +1,5 @@
+import { generateDeployment } from '~/src/helpers/deployments/generate-deployment.js'
+
 /**
  * @param {{cdpDeploymentId: string, status: string, service: string, version:string, configVersion: string, environment: string, memory: number, cpu: number, instanceCount: number, user: object}} runningDetails
  * @param {string} zone
@@ -18,27 +20,19 @@ export function transformRunningDetailsToDeployment(
   },
   zone
 ) {
-  return {
-    deploymentId: cdpDeploymentId,
-    deploy: status === 'running',
-    service: {
-      name: service,
+  return generateDeployment({
+    payload: {
+      imageName: service,
       version,
-      configuration: {
-        commitSha: configVersion
-      }
-    },
-    cluster: {
       environment,
-      zone
-    },
-    resources: {
-      memory,
+      instanceCount,
       cpu,
-      instanceCount
+      memory
     },
-    metadata: {
-      user
-    }
-  }
+    zone,
+    deploymentId: cdpDeploymentId,
+    commitSha: configVersion,
+    deploy: status === 'running',
+    user
+  })
 }

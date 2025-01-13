@@ -9,35 +9,19 @@ const gitHubOwner = config.get('github.org')
  * @param {{deployment: {deploymentId: string, deploy: boolean, service: {name: string, version: string, configuration: {commitSha: string}}, cluster: {environment: string, zone: string}, resources: {memory: number, cpu: number, instanceCount: number}, metadata: {user: {userId: string, displayName: string}, deploymentEnvironment: ?string}}, owner: string, repo: string, logger: import('pino').Logger}} options
  */
 export async function commitDeploymentFile({
-  deployment: {
-    deploymentId,
-    deploy,
-    service,
-    resources,
-    cluster,
-    metadata: { user, deploymentEnvironment = process.env.ENVIRONMENT }
-  },
+  deployment,
   owner = gitHubOwner,
   repo = deploymentRepo,
   logger = createLogger()
 }) {
-  const filePath = `environments/${cluster.environment}/${cluster.zone}/${service.name}.json`
-  const commitMessage = `${service.name} ${service.version} to ${cluster.environment}\nInitiated by ${user.displayName}`
+  const {
+    service: { name, version },
+    cluster: { environment, zone },
+    metadata: { user }
+  } = deployment
 
-  const content = {
-    deploymentId,
-    deploy,
-    service: {
-      ...service,
-      image: service.name
-    },
-    resources,
-    cluster,
-    metadata: {
-      user,
-      deploymentEnvironment
-    }
-  }
+  const filePath = `environments/${environment}/${zone}/${name}.json`
+  const commitMessage = `${name} ${version} to ${environment}\nInitiated by ${user.displayName}`
 
   return await commitFile({
     owner,
@@ -45,7 +29,7 @@ export async function commitDeploymentFile({
     branch: 'main',
     commitMessage,
     filePath,
-    content,
+    content: deployment,
     logger
   })
 }

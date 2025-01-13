@@ -20,7 +20,7 @@ const runningDetails = {
   cpu: 1024,
   memory: 2048,
   configVersion: 'some-config-version',
-  user: { userId: 'other-user-id', displayName: 'other-name' },
+  user: { id: 'other-user-id', displayName: 'other-name' },
   status: 'running'
 }
 const scaleDetails = {
@@ -33,7 +33,7 @@ const scaleDetails = {
 }
 
 describe('#scaleEcsToZero', () => {
-  test('If no existing deployment should not proceed with scale to 0', async () => {
+  test('If no data (null) should not proceed with scale to 0', async () => {
     findRunningDetails.mockReturnValue(null)
 
     await scaleEcsToZero(scaleDetails)
@@ -42,8 +42,17 @@ describe('#scaleEcsToZero', () => {
     expect(commitDeploymentFile).toHaveBeenCalledTimes(0)
   })
 
-  test('With existing deployment should proceed with scale to 0', async () => {
+  test('If no existing deployment should not proceed with scale to 0', async () => {
     findRunningDetails.mockReturnValue({})
+
+    await scaleEcsToZero(scaleDetails)
+
+    expect(findRunningDetails).toHaveBeenCalledTimes(1)
+    expect(commitDeploymentFile).toHaveBeenCalledTimes(0)
+  })
+
+  test('With existing deployment should proceed with scale to 0', async () => {
+    findRunningDetails.mockReturnValue(runningDetails)
 
     await scaleEcsToZero(scaleDetails)
 

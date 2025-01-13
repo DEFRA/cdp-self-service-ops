@@ -21,7 +21,7 @@ export function scaleDeploymentToZeroInstances({
     metadata: {
       ...deployment.metadata,
       user: {
-        userId: user.userId ?? user.id,
+        userId: user.id,
         displayName: user.displayName
       },
       deploymentEnvironment

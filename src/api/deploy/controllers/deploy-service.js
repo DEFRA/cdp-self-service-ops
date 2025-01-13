@@ -109,7 +109,7 @@ const deployServiceController = {
       deploymentId,
       payload,
       zone: service.zone,
-      configLatestCommitSha,
+      commitSha: configLatestCommitSha,
       serviceCode: service.serviceCode,
       deploy: shouldDeployByFile,
       user

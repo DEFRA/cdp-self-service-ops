@@ -1,3 +1,5 @@
+import { isEmpty } from 'lodash'
+
 import { findRunningDetails } from '~/src/helpers/deployments/find-running-details.js'
 import { commitDeploymentFile } from '~/src/helpers/deployments/commit-deployment-file.js'
 import { transformRunningDetailsToDeployment } from '~/src/helpers/deployments/transform-running-details-to-deployment.js'
@@ -18,7 +20,7 @@ export async function scaleEcsToZero({
 
   const runningDetails = await findRunningDetails(serviceName, environment)
 
-  if (!runningDetails) {
+  if (!runningDetails || isEmpty(runningDetails)) {
     logger.info(
       `Deployment details not found for ${serviceName} in ${environment}, may not be running`
     )

@@ -1,21 +1,20 @@
+import { config } from '~/src/config/index.js'
+
+const currentEnvironment = config.get('environment')
+
 /**
- * @param {{imageName: string, version:string, environment: string, instanceCount: number, cpu: number, memory: number}} payload
- * @param {string} zone
- * @param {string} deploymentId
- * @param {string} commitSha
- * @param {?string} serviceCode
- * @param {?boolean} deploy
- * @param {{id: string, displayName: string}} user
+ * @param {{payload: {imageName: string, version:string, environment: string, instanceCount: number, cpu: number, memory: number}, zone: string, deploymentId: string, commitSha: string, serviceCode: ?string, deploy: ?boolean, user: {id: string, displayName: string}, deploymentEnvironment: ?string}} options
  */
-export function generateDeployment(
-  { imageName, version, environment, instanceCount, cpu, memory },
+export function generateDeployment({
+  payload: { imageName, version, environment, instanceCount, cpu, memory },
   zone,
   deploymentId,
   commitSha,
   serviceCode,
   deploy,
-  user
-) {
+  user,
+  deploymentEnvironment = currentEnvironment
+}) {
   return {
     deploymentId,
     deploy,
@@ -39,9 +38,10 @@ export function generateDeployment(
     },
     metadata: {
       user: {
-        userId: user.userId ?? user.id,
+        userId: user.id,
         displayName: user.displayName
-      }
+      },
+      deploymentEnvironment
     }
   }
 }
