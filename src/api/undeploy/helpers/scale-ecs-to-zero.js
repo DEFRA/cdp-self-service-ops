@@ -1,4 +1,4 @@
-import { isEmpty } from 'lodash'
+import isEmpty from 'lodash/isEmpty.js'
 
 import { findRunningDetails } from '~/src/helpers/deployments/find-running-details.js'
 import { commitDeploymentFile } from '~/src/helpers/deployments/commit-deployment-file.js'

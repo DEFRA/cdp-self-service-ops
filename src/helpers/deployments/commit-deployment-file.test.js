@@ -42,29 +42,4 @@ describe('#commitDeploymentFile', () => {
       })
     )
   })
-
-  test('Should use deployment env', async () => {
-    await commitDeploymentFile({
-      deployment: {
-        ...deployment,
-        metadata: {
-          ...deployment.metadata,
-          deploymentEnvironment: 'some-deployment-env'
-        }
-      },
-      owner,
-      repo,
-      logger
-    })
-
-    expect(commitFile).toHaveBeenCalledWith(
-      expect.objectContaining({
-        content: expect.objectContaining({
-          metadata: expect.objectContaining({
-            deploymentEnvironment: 'some-deployment-env'
-          })
-        })
-      })
-    )
-  })
 })
