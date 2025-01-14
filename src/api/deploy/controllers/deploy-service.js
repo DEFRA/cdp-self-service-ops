@@ -5,7 +5,8 @@ import { deployServiceValidation } from '~/src/api/deploy/helpers/schema/deploy-
 import { registerDeployment } from '~/src/api/deploy/helpers/register-deployment.js'
 import { getRepoTeams } from '~/src/api/deploy/helpers/get-repo-teams.js'
 import { sendSnsDeploymentMessage } from '~/src/api/deploy/helpers/send-sns-deployment-message.js'
-import { commitDeploymentFile } from '~/src/api/deploy/helpers/commit-deployment-file.js'
+import { generateDeployment } from '~/src/helpers/deployments/generate-deployment.js'
+import { commitDeploymentFile } from '~/src/helpers/deployments/commit-deployment-file.js'
 import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service.js'
 import { getLatestAppConfigCommitSha } from '~/src/helpers/portal-backend/get-latest-app-config-commit-sha.js'
 
@@ -103,16 +104,18 @@ const deployServiceController = {
         'Deployment sns event not sent - deploying via deployment file'
       )
     }
-    await commitDeploymentFile(
+
+    const deployment = generateDeployment({
       deploymentId,
       payload,
-      service.zone,
-      user,
-      configLatestCommitSha,
-      service.serviceCode,
-      shouldDeployByFile,
-      logger
-    )
+      zone: service.zone,
+      commitSha: configLatestCommitSha,
+      serviceCode: service.serviceCode,
+      deploy: shouldDeployByFile,
+      user
+    })
+
+    await commitDeploymentFile({ deployment, logger })
 
     logger.info('Deployment commit file created')
     return h.response({ message: 'success', deploymentId }).code(200)

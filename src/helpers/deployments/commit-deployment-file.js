@@ -1,0 +1,35 @@
+import { config } from '~/src/config/index.js'
+import { createLogger } from '~/src/helpers/logging/logger.js'
+import { commitFile } from '~/src/helpers/github/commit-github-file.js'
+
+const deploymentRepo = config.get('github.repos.appDeployments')
+const gitHubOwner = config.get('github.org')
+
+/**
+ * @param {{deployment: {deploymentId: string, deploy: boolean, service: {name: string, version: string, configuration: {commitSha: string}}, cluster: {environment: string, zone: string}, resources: {memory: number, cpu: number, instanceCount: number}, metadata: {user: {userId: string, displayName: string}, deploymentEnvironment: ?string}}, owner: string, repo: string, logger: import('pino').Logger}} options
+ */
+export async function commitDeploymentFile({
+  deployment,
+  owner = gitHubOwner,
+  repo = deploymentRepo,
+  logger = createLogger()
+}) {
+  const {
+    service: { name, version },
+    cluster: { environment, zone },
+    metadata: { user }
+  } = deployment
+
+  const filePath = `environments/${environment}/${zone}/${name}.json`
+  const commitMessage = `${name} ${version} to ${environment}\nInitiated by ${user.displayName}`
+
+  return await commitFile({
+    owner,
+    repo,
+    branch: 'main',
+    commitMessage,
+    filePath,
+    content: deployment,
+    logger
+  })
+}
