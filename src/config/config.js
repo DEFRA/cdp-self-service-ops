@@ -240,13 +240,7 @@ const config = convict({
     doc: 'HTTP Proxy',
     format: String,
     default: '',
-    env: 'CDP_HTTP_PROXY'
-  },
-  httpsProxy: {
-    doc: 'HTTPS Proxy',
-    format: String,
-    default: '',
-    env: 'CDP_HTTPS_PROXY'
+    env: 'HTTP_PROXY'
   },
   serviceInfraCreateEvent: {
     doc: 'Event for service infra create',

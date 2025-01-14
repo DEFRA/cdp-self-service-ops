@@ -9,17 +9,16 @@ import { azureOidc } from '~/src/plugins/azure-oidc.js'
 import { mongoDb } from '~/src/plugins/mongodb.js'
 import { snsClientPlugin } from '~/src/plugins/sns-client.js'
 import { secureContext } from '~/src/helpers/secure-context/index.js'
-import { setupWreckAgents } from '~/src/helpers/proxy/setup-wreck-agents.js'
-import { proxyAgent } from '~/src/helpers/proxy/proxy-agent.js'
 import { gitHubEventsListener } from '~/src/plugins/sqs-listener.js'
 import { sqsClient } from '~/src/plugins/sqs-client.js'
 import { pulse } from '~/src/plugins/pulse.js'
 import { requestTracing } from '~/src/plugins/request-tracing.js'
+import { setupProxy } from '~/src/helpers/proxy/setup-proxy.js'
 
 const enableSecureContext = config.get('enableSecureContext')
 
 async function createServer() {
-  setupWreckAgents(proxyAgent())
+  setupProxy()
 
   const server = hapi.server({
     port: config.get('port'),
