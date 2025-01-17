@@ -1,7 +1,8 @@
-import { removeAppConfig } from '~/src/helpers/remove/workflows/remove-app-config.js'
-import { removeDashboard } from '~/src/helpers/remove/workflows/remove-dashboard.js'
-import { removeNginxUpstreams } from '~/src/helpers/remove/workflows/remove-nginx-upstreams.js'
 import {
+  removeAppConfig,
+  removeDashboard,
+  removeDeployment,
+  removeNginxUpstreams,
   removeSquidConfig,
   removeTenantInfrastructure
 } from '~/src/helpers/remove/workflows/index.js'
@@ -31,6 +32,7 @@ async function triggerRemoveWorkflows(serviceName, repository, logger) {
     await removeAppConfig(serviceName, logger)
     await removeSquidConfig(serviceName, logger)
     await removeTenantInfrastructure(serviceName, logger)
+    await removeDeployment(serviceName, logger)
   } else {
     logger.info('Remove service workflows feature is disabled')
   }
