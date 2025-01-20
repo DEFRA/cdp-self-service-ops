@@ -16,7 +16,7 @@ async function deleteEcsTask({
   logger.info(`Deleting ECS task for ${serviceName} in env ${environment}`)
 
   if (!isFeatureEnabled(featureToggles.deleteEcsTask)) {
-    logger.info('Undeployment registration feature is disabled')
+    logger.info('Deleting ECS Task feature is disabled')
     return
   }
 

@@ -1,3 +1,5 @@
+import Joi from 'joi'
+
 import { undeployServiceValidation } from '~/src/api/undeploy/helpers/schema/undeploy-service-validation.js'
 import {
   deleteEcsTask,
@@ -37,7 +39,9 @@ const deleteAllEcsTasksController = {
       }
     },
     validate: {
-      params: undeployServiceValidation()
+      params: Joi.object({
+        imageName: Joi.string().min(1).required()
+      })
     }
   },
   handler: async (request, h) => {
