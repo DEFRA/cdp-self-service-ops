@@ -1,4 +1,8 @@
 import {
+  deleteEcsTaskController,
+  deleteAllEcsTasksController
+} from '~/src/api/undeploy/controllers/delete-ecs-task.js'
+import {
   undeployServiceController,
   undeployServiceFromAllEnvironmentController,
   undeployServiceFromEnvironmentController
@@ -9,6 +13,16 @@ const undeploy = {
     name: 'undeploy',
     register: async (server) => {
       await server.route([
+        {
+          method: 'DELETE',
+          path: '/delete-ecs/{imageName}/{environment}',
+          ...deleteEcsTaskController
+        },
+        {
+          method: 'DELETE',
+          path: '/delete-ecs/{imageName}',
+          ...deleteAllEcsTasksController
+        },
         {
           method: 'DELETE',
           path: '/undeploy-service/{imageName}/all',
