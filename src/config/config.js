@@ -376,6 +376,12 @@ const config = convict({
       default: 'remove-service.yml',
       env: 'WORKFLOWS_REMOVE_APP_CONFIG'
     },
+    removeEcsTask: {
+      doc: 'Github workflow to trigger when removing ECS tasks',
+      format: String,
+      default: 'remove-ecs-task.yml',
+      env: 'WORKFLOWS_REMOVE_ECS_TASK'
+    },
     removeNginxUpstreams: {
       doc: 'Github workflow to trigger when removing nginx upstream config',
       format: String,
