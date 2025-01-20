@@ -5,34 +5,6 @@ import { undeployServiceFromEnvironment } from '~/src/api/undeploy/helpers/undep
 import { undeployServiceFromAllEnvironments } from '~/src/api/undeploy/helpers/undeploy-service-from-all-environments.js'
 import { getScopedUser } from '~/src/helpers/user/get-scoped-user.js'
 
-const undeployServiceController = {
-  options: {
-    auth: {
-      strategy: 'azure-oidc'
-    },
-    validate: {
-      payload: undeployServiceValidation()
-    },
-    payload: {
-      output: 'data',
-      parse: true,
-      allow: 'application/json'
-    }
-  },
-  handler: async (request, h) => {
-    const { imageName, environment } = request.payload
-    const user = await getScopedUser(imageName, request.auth, 'admin')
-
-    await undeployServiceFromEnvironment({
-      imageName,
-      environment,
-      user,
-      logger: request.logger
-    })
-    return h.response({ message: 'success' }).code(204)
-  }
-}
-
 const undeployServiceFromEnvironmentController = {
   options: {
     auth: {
@@ -81,7 +53,6 @@ const undeployServiceFromAllEnvironmentController = {
 }
 
 export {
-  undeployServiceController,
   undeployServiceFromAllEnvironmentController,
   undeployServiceFromEnvironmentController
 }

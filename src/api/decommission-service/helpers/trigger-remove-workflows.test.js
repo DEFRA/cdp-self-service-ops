@@ -2,7 +2,6 @@ import { triggerRemoveWorkflows } from './trigger-remove-workflows.js'
 import {
   removeAppConfig,
   removeDashboard,
-  removeDeployment,
   removeNginxUpstreams,
   removeSquidConfig,
   removeTenantInfrastructure
@@ -43,12 +42,6 @@ describe('#triggerRemoveWorkflows', () => {
     await triggerRemoveWorkflows(serviceName, backendRepository, logger)
 
     expect(removeTenantInfrastructure).toHaveBeenCalledWith(serviceName, logger)
-  })
-
-  test('Should trigger remove deployment workflow', async () => {
-    await triggerRemoveWorkflows(serviceName, backendRepository, logger)
-
-    expect(removeDeployment).toHaveBeenCalledWith(serviceName, logger)
   })
 
   test('Should trigger remove dashboard workflow if not test suite', async () => {

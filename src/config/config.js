@@ -376,6 +376,12 @@ const config = convict({
       default: 'remove-service.yml',
       env: 'WORKFLOWS_REMOVE_APP_CONFIG'
     },
+    removeDeploymentFiles: {
+      doc: 'Github workflow to trigger when removing deployment files',
+      format: String,
+      default: 'remove-service.yml',
+      env: 'WORKFLOWS_REMOVE_DEPLOYMENT_FILES'
+    },
     removeEcsTask: {
       doc: 'Github workflow to trigger when removing ECS tasks',
       format: String,
@@ -472,13 +478,19 @@ const config = convict({
     env: 'ENABLE_SECURE_CONTEXT'
   },
   features: {
-    deleteEcsTask: {
-      doc: 'Feature flag for deleting ecs task',
-      format: Boolean,
-      default: false,
-      env: 'FEATURE_DELETE_ECS_TASK'
-    },
     undeploy: {
+      deleteDeploymentFiles: {
+        doc: 'Feature flag for deleting deployment files',
+        format: Boolean,
+        default: false,
+        env: 'FEATURE_DELETE_DEPLOYMENT_FILES'
+      },
+      deleteEcsTask: {
+        doc: 'Feature flag for deleting ecs task',
+        format: Boolean,
+        default: false,
+        env: 'FEATURE_DELETE_ECS_TASK'
+      },
       register: {
         doc: 'Feature flag for register undeploy',
         format: Boolean,
