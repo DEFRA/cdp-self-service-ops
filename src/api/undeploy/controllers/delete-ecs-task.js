@@ -1,7 +1,7 @@
 import { undeployServiceValidation } from '~/src/api/undeploy/helpers/schema/undeploy-service-validation.js'
 import {
   deleteEcsTask,
-  deleteAllEcsTask
+  deleteAllEcsTasks
 } from '~/src/api/undeploy/helpers/delete-ecs-task.js'
 
 const deleteEcsTaskController = {
@@ -43,7 +43,7 @@ const deleteAllEcsTasksController = {
   handler: async (request, h) => {
     const { imageName } = request.params
 
-    await deleteAllEcsTask({
+    await deleteAllEcsTasks({
       serviceName: imageName,
       logger: request.logger
     })

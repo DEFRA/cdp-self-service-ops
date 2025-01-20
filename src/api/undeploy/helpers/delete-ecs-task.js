@@ -15,7 +15,7 @@ async function deleteEcsTask({
 }) {
   logger.info(`Deleting ECS task for ${serviceName} in env ${environment}`)
 
-  if (!isFeatureEnabled(featureToggles.undeploy.deleteEcsTask)) {
+  if (!isFeatureEnabled(featureToggles.deleteEcsTask)) {
     logger.info('Undeployment registration feature is disabled')
     return
   }
@@ -35,7 +35,7 @@ async function deleteEcsTask({
 /**
  * @param {{serviceName: string, environments: [string[]], logger: [import('pino').Logger]}} options
  */
-async function deleteAllEcsTask({
+async function deleteAllEcsTasks({
   serviceName,
   environments = orderedEnvironments,
   logger = createLogger()
@@ -45,4 +45,4 @@ async function deleteAllEcsTask({
   }
 }
 
-export { deleteEcsTask, deleteAllEcsTask }
+export { deleteEcsTask, deleteAllEcsTasks }

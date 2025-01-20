@@ -466,6 +466,12 @@ const config = convict({
     env: 'ENABLE_SECURE_CONTEXT'
   },
   features: {
+    deleteEcsTask: {
+      doc: 'Feature flag for deleting ecs task',
+      format: Boolean,
+      default: false,
+      env: 'FEATURE_DELETE_ECS_TASK'
+    },
     undeploy: {
       register: {
         doc: 'Feature flag for register undeploy',

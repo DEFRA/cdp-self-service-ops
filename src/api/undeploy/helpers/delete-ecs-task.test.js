@@ -1,10 +1,11 @@
 import {
   deleteEcsTask,
-  deleteAllEcsTask
+  deleteAllEcsTasks
 } from '~/src/api/undeploy/helpers/delete-ecs-task.js'
 import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service.js'
 import { isFeatureEnabled } from '~/src/helpers/feature-toggle/is-feature-enabled.js'
 import { removeEcsTask } from '~/src/helpers/remove/workflows/remove-ecs-task.js'
+import { featureToggles } from '~/src/helpers/feature-toggle/feature-toggles.js'
 
 jest.mock('~/src/api/deploy/helpers/lookup-tenant-service')
 jest.mock('~/src/helpers/feature-toggle/is-feature-enabled')
@@ -23,6 +24,7 @@ describe('#deleteEcsTask', () => {
 
     await deleteEcsTask({ serviceName, environment, logger })
 
+    expect(isFeatureEnabled).toHaveBeenCalledWith(featureToggles.deleteEcsTask)
     expect(lookupTenantService).toHaveBeenCalledTimes(1)
     expect(removeEcsTask).toHaveBeenCalledWith(serviceName, environment, logger)
   })
@@ -52,7 +54,7 @@ describe('#deleteAllEcsTasks', () => {
     isFeatureEnabled.mockReturnValue(true)
     lookupTenantService.mockResolvedValue(service)
 
-    await deleteAllEcsTask({ serviceName, environments, logger })
+    await deleteAllEcsTasks({ serviceName, environments, logger })
 
     expect(lookupTenantService).toHaveBeenCalledTimes(2)
     expect(removeEcsTask).toHaveBeenCalledTimes(2)
