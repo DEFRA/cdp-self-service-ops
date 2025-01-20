@@ -9,8 +9,8 @@ import { triggerWorkflow } from '~/src/helpers/github/trigger-workflow.js'
  */
 export const removeDeployment = async (service, logger) => {
   const org = config.get('github.org')
-  const repo = config.get('github.repos.cdpAppDeployments')
-  const workflow = config.get('workflows.removeService')
+  const repo = config.get('github.repos.appDeployments')
+  const workflow = config.get('workflows.removeDeploymentFiles')
 
   await triggerWorkflow(org, repo, workflow, { service }, service, logger)
 }

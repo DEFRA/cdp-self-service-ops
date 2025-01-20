@@ -4,7 +4,6 @@ import { removeDeployment } from '~/src/helpers/remove/workflows/remove-deployme
 import { deleteDeploymentFiles } from '~/src/api/undeploy/helpers/delete-deployment-file.js'
 
 jest.mock('~/src/helpers/feature-toggle/is-feature-enabled')
-jest.mock('~/src/helpers/deployments/find-running-details')
 jest.mock('~/src/helpers/remove/workflows/remove-deployment')
 
 const serviceName = 'some-service'
