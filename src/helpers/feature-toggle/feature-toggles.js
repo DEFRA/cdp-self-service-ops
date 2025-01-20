@@ -1,5 +1,6 @@
 export const featureToggles = {
   archiveGitHubWorkflow: 'archiveGitHubWorkflow',
+  deleteEcsTask: 'deleteEcsTask',
   dockerImages: {
     deleteEcr: 'dockerImages.deleteEcr',
     deleteDockerHub: 'dockerImages.deleteDockerHub'
