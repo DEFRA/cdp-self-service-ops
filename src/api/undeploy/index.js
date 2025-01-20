@@ -1,4 +1,7 @@
-import { deleteEcsTaskController } from '~/src/api/undeploy/controllers/delete-ecs-task.js'
+import {
+  deleteEcsTaskController,
+  deleteAllEcsTasksController
+} from '~/src/api/undeploy/controllers/delete-ecs-task.js'
 import {
   undeployServiceController,
   undeployServiceFromAllEnvironmentController,
@@ -14,6 +17,11 @@ const undeploy = {
           method: 'DELETE',
           path: '/delete-ecs/{imageName}/{environment}',
           ...deleteEcsTaskController
+        },
+        {
+          method: 'DELETE',
+          path: '/delete-ecs/{imageName}',
+          ...deleteAllEcsTasksController
         },
         {
           method: 'DELETE',

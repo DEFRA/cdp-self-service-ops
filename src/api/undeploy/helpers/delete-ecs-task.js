@@ -1,13 +1,14 @@
 import { createLogger } from '~/src/helpers/logging/logger.js'
+import { orderedEnvironments } from '~/src/config/environments.js'
 import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service.js'
 import { featureToggles } from '~/src/helpers/feature-toggle/feature-toggles.js'
 import { isFeatureEnabled } from '~/src/helpers/feature-toggle/is-feature-enabled.js'
 import { removeEcsTask } from '~/src/helpers/remove/workflows/remove-ecs-task.js'
 
 /**
- * @param {{serviceName: string, environment: string, user: {id: string, displayName: string}, logger: ?import('pino').Logger}} options
+ * @param {{serviceName: string, environment: string, logger: [import('pino').Logger]}} options
  */
-export async function deleteEcsTask({
+async function deleteEcsTask({
   serviceName,
   environment,
   logger = createLogger()
@@ -30,3 +31,18 @@ export async function deleteEcsTask({
 
   await removeEcsTask(serviceName, environment, logger)
 }
+
+/**
+ * @param {{serviceName: string, environments: [string[]], logger: [import('pino').Logger]}} options
+ */
+async function deleteAllEcsTask({
+  serviceName,
+  environments = orderedEnvironments,
+  logger = createLogger()
+}) {
+  for (const environment of environments) {
+    await deleteEcsTask({ serviceName, environment, logger })
+  }
+}
+
+export { deleteEcsTask, deleteAllEcsTask }

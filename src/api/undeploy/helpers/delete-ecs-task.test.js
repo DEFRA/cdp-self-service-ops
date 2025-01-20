@@ -1,4 +1,7 @@
-import { deleteEcsTask } from '~/src/api/undeploy/helpers/delete-ecs-task.js'
+import {
+  deleteEcsTask,
+  deleteAllEcsTask
+} from '~/src/api/undeploy/helpers/delete-ecs-task.js'
 import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service.js'
 import { isFeatureEnabled } from '~/src/helpers/feature-toggle/is-feature-enabled.js'
 import { removeEcsTask } from '~/src/helpers/remove/workflows/remove-ecs-task.js'
@@ -11,6 +14,7 @@ const serviceName = 'some-service'
 const environment = 'some-environment'
 const logger = { info: jest.fn(), warn: jest.fn() }
 const service = { serviceName, zone: 'some-zone' }
+const environments = ['dev', 'test']
 
 describe('#deleteEcsTask', () => {
   test('should remove ECS task if feature enabled', async () => {
@@ -40,5 +44,19 @@ describe('#deleteEcsTask', () => {
 
     expect(lookupTenantService).toHaveBeenCalledTimes(1)
     expect(removeEcsTask).toHaveBeenCalledTimes(0)
+  })
+})
+
+describe('#deleteAllEcsTasks', () => {
+  test('should call deleteEcsTask for each environment', async () => {
+    isFeatureEnabled.mockReturnValue(true)
+    lookupTenantService.mockResolvedValue(service)
+
+    await deleteAllEcsTask({ serviceName, environments, logger })
+
+    expect(lookupTenantService).toHaveBeenCalledTimes(2)
+    expect(removeEcsTask).toHaveBeenCalledTimes(2)
+    expect(removeEcsTask).toHaveBeenCalledWith(serviceName, 'dev', logger)
+    expect(removeEcsTask).toHaveBeenCalledWith(serviceName, 'test', logger)
   })
 })
