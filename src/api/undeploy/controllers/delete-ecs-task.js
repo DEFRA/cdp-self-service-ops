@@ -26,7 +26,7 @@ const deleteEcsTaskController = {
       environment,
       logger: request.logger
     })
-    return h.response({ message: 'success' }).code(204)
+    return h.response().code(204)
   }
 }
 
@@ -51,7 +51,7 @@ const deleteAllEcsTasksController = {
       serviceName: imageName,
       logger: request.logger
     })
-    return h.response({ message: 'success' }).code(204)
+    return h.response().code(204)
   }
 }
 

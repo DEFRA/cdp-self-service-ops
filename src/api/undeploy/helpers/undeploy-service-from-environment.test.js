@@ -2,32 +2,20 @@ import { registerUndeployment } from '~/src/api/undeploy/helpers/register-undepl
 import { scaleEcsToZero } from '~/src/api/undeploy/helpers/scale-ecs-to-zero.js'
 import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service.js'
 import { isFeatureEnabled } from '~/src/helpers/feature-toggle/is-feature-enabled.js'
+import { getRepositoryInfo } from '~/src/helpers/portal-backend/get-repository-info.js'
 import { undeployServiceFromEnvironment } from '~/src/api/undeploy/helpers/undeploy-service-from-environment.js'
 
-jest.mock('~/src/helpers/feature-toggle/is-feature-enabled', () => {
-  return {
-    isFeatureEnabled: jest.fn()
-  }
-})
-jest.mock('~/src/api/undeploy/helpers/register-undeployment', () => {
-  return {
-    registerUndeployment: jest.fn()
-  }
-})
-jest.mock('~/src/api/undeploy/helpers/scale-ecs-to-zero', () => {
-  return {
-    scaleEcsToZero: jest.fn()
-  }
-})
-jest.mock('~/src/api/deploy/helpers/lookup-tenant-service', () => {
-  return {
-    lookupTenantService: jest.fn()
-  }
-})
-const mockLogger = { info: jest.fn() }
+jest.mock('~/src/helpers/feature-toggle/is-feature-enabled')
+jest.mock('~/src/api/undeploy/helpers/register-undeployment')
+jest.mock('~/src/api/undeploy/helpers/scale-ecs-to-zero')
+jest.mock('~/src/api/deploy/helpers/lookup-tenant-service')
+jest.mock('~/src/helpers/portal-backend/get-repository-info')
+
+const logger = { info: jest.fn(), warn: jest.fn() }
 registerUndeployment.mockResolvedValue()
 scaleEcsToZero.mockResolvedValue()
 lookupTenantService.mockResolvedValue({ zone: 'some-zone' })
+getRepositoryInfo.mockResolvedValue({ repository: { topics: [] } })
 
 const undeploymentId = crypto.randomUUID()
 const serviceName = 'some-service'
@@ -42,7 +30,7 @@ async function callUndeployServiceFromEnvironment() {
     user,
     undeploymentId,
     deployFromFileEnvironments,
-    logger: mockLogger
+    logger
   })
 }
 
@@ -83,7 +71,20 @@ describe('#undeployServiceFromEnvironment', () => {
       zone: 'some-zone',
       user,
       undeploymentId,
-      logger: mockLogger
+      logger
     })
+  })
+
+  test('if test suite should not call anything', async () => {
+    getRepositoryInfo.mockResolvedValue({
+      repository: { topics: ['test-suite'] }
+    })
+
+    await callUndeployServiceFromEnvironment()
+
+    expect(getRepositoryInfo).toHaveBeenCalledTimes(1)
+    expect(lookupTenantService).toHaveBeenCalledTimes(0)
+    expect(registerUndeployment).toHaveBeenCalledTimes(0)
+    expect(scaleEcsToZero).toHaveBeenCalledTimes(0)
   })
 })

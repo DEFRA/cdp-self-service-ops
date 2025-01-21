@@ -24,13 +24,13 @@ const undeploy = {
           ...deleteAllEcsTasksController
         },
         {
-          method: 'DELETE',
-          path: '/scale-to-0/{imageName}',
+          method: 'POST',
+          path: '/scale-to-zero/{serviceName}',
           ...undeployServiceFromAllEnvironmentController
         },
         {
-          method: 'DELETE',
-          path: '/scale-to-0/{imageName}/{environment}',
+          method: 'POST',
+          path: '/scale-to-zero/{serviceName}/{environment}',
           ...undeployServiceFromEnvironmentController
         },
         {
