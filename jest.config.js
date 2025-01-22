@@ -8,6 +8,7 @@ export default {
   clearMocks: true,
   silent: false,
   preset: '@shelf/jest-mongodb',
+  setupFiles: ['<rootDir>/.jest/setup-env-vars.js'],
   testMatch: ['**/src/**/*.test.js'],
   reporters: ['default', ['github-actions', { silent: false }], 'summary'],
   collectCoverageFrom: ['src/**/*.js'],

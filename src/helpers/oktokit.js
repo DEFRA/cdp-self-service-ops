@@ -9,7 +9,10 @@ import { graphql as octokitGraphql } from '@octokit/graphql'
 
 const auth = {
   appId: config.get('github.app.id'),
-  privateKey: Buffer.from(config.get('github.app.privateKey'), 'base64'),
+  privateKey: Buffer.from(
+    config.get('github.app.privateKey'),
+    'base64'
+  ).toString('utf8'),
   installationId: config.get('github.app.installationId')
 }
 
