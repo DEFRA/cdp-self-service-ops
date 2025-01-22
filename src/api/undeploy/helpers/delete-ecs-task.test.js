@@ -24,7 +24,9 @@ describe('#deleteEcsTask', () => {
 
     await deleteEcsTask({ serviceName, environment, logger })
 
-    expect(isFeatureEnabled).toHaveBeenCalledWith(featureToggles.deleteEcsTask)
+    expect(isFeatureEnabled).toHaveBeenCalledWith(
+      featureToggles.undeploy.deleteEcsTask
+    )
     expect(lookupTenantService).toHaveBeenCalledTimes(1)
     expect(removeEcsTask).toHaveBeenCalledWith(serviceName, environment, logger)
   })

@@ -5,34 +5,6 @@ import { undeployServiceFromEnvironment } from '~/src/api/undeploy/helpers/undep
 import { undeployServiceFromAllEnvironments } from '~/src/api/undeploy/helpers/undeploy-service-from-all-environments.js'
 import { getScopedUser } from '~/src/helpers/user/get-scoped-user.js'
 
-const undeployServiceController = {
-  options: {
-    auth: {
-      strategy: 'azure-oidc'
-    },
-    validate: {
-      payload: undeployServiceValidation()
-    },
-    payload: {
-      output: 'data',
-      parse: true,
-      allow: 'application/json'
-    }
-  },
-  handler: async (request, h) => {
-    const { imageName, environment } = request.payload
-    const user = await getScopedUser(imageName, request.auth, 'admin')
-
-    await undeployServiceFromEnvironment({
-      imageName,
-      environment,
-      user,
-      logger: request.logger
-    })
-    return h.response({ message: 'success' }).code(204)
-  }
-}
-
 const undeployServiceFromEnvironmentController = {
   options: {
     auth: {
@@ -43,16 +15,16 @@ const undeployServiceFromEnvironmentController = {
     }
   },
   handler: async (request, h) => {
-    const { imageName, environment } = request.params
-    const user = await getScopedUser(imageName, request.auth, 'admin')
+    const { serviceName, environment } = request.params
+    const user = await getScopedUser(serviceName, request.auth, 'admin')
 
     await undeployServiceFromEnvironment({
-      imageName,
+      serviceName,
       environment,
       user,
       logger: request.logger
     })
-    return h.response({ message: 'success' }).code(204)
+    return h.response({ message: 'success' }).code(200)
   }
 }
 
@@ -63,25 +35,24 @@ const undeployServiceFromAllEnvironmentController = {
     },
     validate: {
       params: Joi.object({
-        imageName: Joi.string().min(1).required()
+        serviceName: Joi.string().min(1).required()
       })
     }
   },
   handler: async (request, h) => {
-    const imageName = request.params.imageName
-    const user = await getScopedUser(imageName, request.auth, 'admin')
+    const serviceName = request.params.serviceName
+    const user = await getScopedUser(serviceName, request.auth, 'admin')
 
     await undeployServiceFromAllEnvironments({
-      imageName,
+      serviceName,
       user,
       logger: request.logger
     })
-    return h.response({ message: 'success' }).code(204)
+    return h.response({ message: 'success' }).code(200)
   }
 }
 
 export {
-  undeployServiceController,
   undeployServiceFromAllEnvironmentController,
   undeployServiceFromEnvironmentController
 }

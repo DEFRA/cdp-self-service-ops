@@ -1,9 +1,9 @@
+import { deleteDeploymentFilesController } from '~/src/api/undeploy/controllers/delete-deployment-file.js'
 import {
   deleteEcsTaskController,
   deleteAllEcsTasksController
 } from '~/src/api/undeploy/controllers/delete-ecs-task.js'
 import {
-  undeployServiceController,
   undeployServiceFromAllEnvironmentController,
   undeployServiceFromEnvironmentController
 } from '~/src/api/undeploy/controllers/undeploy-service.js'
@@ -24,19 +24,19 @@ const undeploy = {
           ...deleteAllEcsTasksController
         },
         {
-          method: 'DELETE',
-          path: '/undeploy-service/{imageName}/all',
+          method: 'POST',
+          path: '/scale-to-zero/{serviceName}',
           ...undeployServiceFromAllEnvironmentController
         },
         {
-          method: 'DELETE',
-          path: '/undeploy-service/{imageName}/{environment}',
+          method: 'POST',
+          path: '/scale-to-zero/{serviceName}/{environment}',
           ...undeployServiceFromEnvironmentController
         },
         {
           method: 'DELETE',
-          path: '/undeploy-service',
-          ...undeployServiceController
+          path: '/delete-deployment-files/{serviceName}',
+          ...deleteDeploymentFilesController
         }
       ])
     }

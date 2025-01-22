@@ -1,7 +1,7 @@
-import { removeAppConfig } from '~/src/helpers/remove/workflows/remove-app-config.js'
-import { removeDashboard } from '~/src/helpers/remove/workflows/remove-dashboard.js'
-import { removeNginxUpstreams } from '~/src/helpers/remove/workflows/remove-nginx-upstreams.js'
 import {
+  removeAppConfig,
+  removeDashboard,
+  removeNginxUpstreams,
   removeSquidConfig,
   removeTenantInfrastructure
 } from '~/src/helpers/remove/workflows/index.js'
@@ -18,22 +18,21 @@ async function triggerRemoveWorkflows(serviceName, repository, logger) {
   logger.info(`Triggering remove workflows service: ${serviceName}`)
   const isTestSuite = repository.topics.includes('test-suite')
 
-  if (isFeatureEnabled(featureToggles.removeServiceWorkflows)) {
-    if (!isTestSuite) {
-      const zone = repository.topics.includes('backend')
-        ? 'Protected'
-        : 'Public'
-
-      await removeDashboard(serviceName, logger)
-      await removeNginxUpstreams(serviceName, zone, logger)
-    }
-
-    await removeAppConfig(serviceName, logger)
-    await removeSquidConfig(serviceName, logger)
-    await removeTenantInfrastructure(serviceName, logger)
-  } else {
+  if (!isFeatureEnabled(featureToggles.removeServiceWorkflows)) {
     logger.info('Remove service workflows feature is disabled')
+    return
   }
+
+  if (!isTestSuite) {
+    const zone = repository.topics.includes('backend') ? 'Protected' : 'Public'
+
+    await removeDashboard(serviceName, logger)
+    await removeNginxUpstreams(serviceName, zone, logger)
+  }
+
+  await removeAppConfig(serviceName, logger)
+  await removeSquidConfig(serviceName, logger)
+  await removeTenantInfrastructure(serviceName, logger)
 }
 
 export { triggerRemoveWorkflows }

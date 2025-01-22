@@ -15,7 +15,7 @@ async function deleteEcsTask({
 }) {
   logger.info(`Deleting ECS task for ${serviceName} in env ${environment}`)
 
-  if (!isFeatureEnabled(featureToggles.deleteEcsTask)) {
+  if (!isFeatureEnabled(featureToggles.undeploy.deleteEcsTask)) {
     logger.info('Deleting ECS Task feature is disabled')
     return
   }
