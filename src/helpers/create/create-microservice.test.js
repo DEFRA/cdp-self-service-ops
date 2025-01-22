@@ -5,9 +5,14 @@ import { fetchTeam } from '~/src/helpers/fetch-team.js'
 import { createMicroservice } from '~/src/helpers/create/create-microservice.js'
 import { statuses } from '~/src/constants/statuses.js'
 import { triggerWorkflow } from '~/src/helpers/github/trigger-workflow.js'
+import { serviceTemplates } from '~/src/api/create-microservice/helpers/service-templates.js'
 
 jest.mock('~/src/helpers/fetch-team', () => ({
   fetchTeam: jest.fn()
+}))
+
+jest.mock('~/src/api/create-microservice/helpers/service-templates', () => ({
+  serviceTemplates: jest.fn()
 }))
 
 jest.mock('~/src/helpers/github/trigger-workflow', () => ({
@@ -43,6 +48,16 @@ describe('#create-test-runner-suite', () => {
         name: 'test',
         github: 'test',
         serviceCodes: ['TST']
+      }
+    })
+
+    serviceTemplates.mockResolvedValue({
+      'cdp-node-frontend-template': {
+        name: 'Node.js Frontend',
+        language: 'node',
+        requiredScope: '',
+        type: 'frontend',
+        zone: 'public'
       }
     })
 

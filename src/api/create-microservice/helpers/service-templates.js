@@ -1,22 +1,17 @@
-const serviceTemplates = {
-  'cdp-node-frontend-template': {
-    zone: 'public',
-    templateName: 'CDP Node.js Frontend Template',
-    language: 'node',
-    type: 'frontend'
-  },
-  'cdp-node-backend-template': {
-    zone: 'protected',
-    templateName: 'CDP Node.js Backend Template',
-    language: 'node',
-    type: 'backend'
-  },
-  'cdp-dotnet-backend-template': {
-    zone: 'protected',
-    templateName: 'CDP C# ASP.NET Backend Template',
-    language: 'dotnet',
-    type: 'backend'
+import { config } from '~/src/config/index.js'
+import { fetcher } from '~/src/helpers/fetcher.js'
+import Boom from '@hapi/boom'
+
+async function serviceTemplates() {
+  const url = config.get('portalBackendUrl') + '/service-templates'
+  const response = await fetcher(url, { method: 'get' })
+  const json = await response.json()
+
+  if (response.ok) {
+    return json.serviceTypes
   }
+
+  throw Boom.boomify(new Error(json.message), { statusCode: response.status })
 }
 
 export { serviceTemplates }

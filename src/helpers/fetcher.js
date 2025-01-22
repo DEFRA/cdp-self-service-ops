@@ -3,7 +3,7 @@ import { getTraceId } from '@defra/hapi-tracing'
 
 /**
  * @param {string} url
- * @param {RequestOptions} options
+ * @param {{method: string}} options
  * @returns {Promise<{Response}> | Response}
  */
 export async function fetcher(url, options = {}) {

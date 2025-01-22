@@ -74,11 +74,12 @@ async function createMicroservice(
     )
   }
 
+  const templates = await serviceTemplates()
   const topics = [
     'cdp',
     'service',
-    serviceTemplates[serviceTypeTemplate]?.language,
-    serviceTemplates[serviceTypeTemplate]?.type
+    templates[serviceTypeTemplate]?.language,
+    templates[serviceTypeTemplate]?.type
   ]
 
   const promises = [
