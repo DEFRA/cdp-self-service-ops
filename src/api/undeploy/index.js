@@ -1,8 +1,8 @@
 import { deleteDeploymentFilesController } from '~/src/api/undeploy/controllers/delete-deployment-file.js'
 import {
-  deleteEcsTaskController,
-  deleteAllEcsTasksController
-} from '~/src/api/undeploy/controllers/delete-ecs-task.js'
+  deleteEcsServiceController,
+  deleteAllEcsServicesController
+} from '~/src/api/undeploy/controllers/delete-ecs-service.js'
 import {
   undeployServiceFromAllEnvironmentController,
   undeployServiceFromEnvironmentController
@@ -16,12 +16,12 @@ const undeploy = {
         {
           method: 'DELETE',
           path: '/delete-ecs/{imageName}/{environment}',
-          ...deleteEcsTaskController
+          ...deleteEcsServiceController
         },
         {
           method: 'DELETE',
           path: '/delete-ecs/{imageName}',
-          ...deleteAllEcsTasksController
+          ...deleteAllEcsServicesController
         },
         {
           method: 'POST',

@@ -485,11 +485,11 @@ const config = convict({
         default: false,
         env: 'FEATURE_DELETE_DEPLOYMENT_FILES'
       },
-      deleteEcsTask: {
-        doc: 'Feature flag for deleting ecs task',
+      deleteEcsService: {
+        doc: 'Feature flag for deleting ecs service',
         format: Boolean,
         default: false,
-        env: 'FEATURE_DELETE_ECS_TASK'
+        env: 'FEATURE_DELETE_ECS_SERVICE'
       },
       register: {
         doc: 'Feature flag for register undeploy',

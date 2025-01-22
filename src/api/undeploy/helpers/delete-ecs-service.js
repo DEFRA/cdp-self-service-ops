@@ -3,19 +3,19 @@ import { orderedEnvironments } from '~/src/config/environments.js'
 import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service.js'
 import { featureToggles } from '~/src/helpers/feature-toggle/feature-toggles.js'
 import { isFeatureEnabled } from '~/src/helpers/feature-toggle/is-feature-enabled.js'
-import { removeEcsTask } from '~/src/helpers/remove/workflows/remove-ecs-task.js'
+import { removeEcsService } from '~/src/helpers/remove/workflows/remove-ecs-service.js'
 
 /**
  * @param {{serviceName: string, environment: string, logger: [import('pino').Logger]}} options
  */
-async function deleteEcsTask({
+async function deleteEcsService({
   serviceName,
   environment,
   logger = createLogger()
 }) {
   logger.info(`Deleting ECS task for ${serviceName} in env ${environment}`)
 
-  if (!isFeatureEnabled(featureToggles.undeploy.deleteEcsTask)) {
+  if (!isFeatureEnabled(featureToggles.undeploy.deleteEcsService)) {
     logger.info('Deleting ECS Task feature is disabled')
     return
   }
@@ -29,20 +29,20 @@ async function deleteEcsTask({
     return
   }
 
-  await removeEcsTask(serviceName, environment, logger)
+  await removeEcsService(serviceName, environment, service.zone, logger)
 }
 
 /**
  * @param {{serviceName: string, environments: [string[]], logger: [import('pino').Logger]}} options
  */
-async function deleteAllEcsTasks({
+async function deleteAllEcsServices({
   serviceName,
   environments = orderedEnvironments,
   logger = createLogger()
 }) {
   for (const environment of environments) {
-    await deleteEcsTask({ serviceName, environment, logger })
+    await deleteEcsService({ serviceName, environment, logger })
   }
 }
 
-export { deleteEcsTask, deleteAllEcsTasks }
+export { deleteEcsService, deleteAllEcsServices }
