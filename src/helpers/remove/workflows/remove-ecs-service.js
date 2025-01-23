@@ -12,7 +12,7 @@ import { triggerWorkflow } from '~/src/helpers/github/trigger-workflow.js'
 export const removeEcsService = async (service, environments, zone, logger) => {
   const org = config.get('github.org')
   const repo = config.get('github.repos.cdpTfSvcInfra')
-  const workflow = config.get('workflows.removeEcsTask')
+  const workflow = config.get('workflows.removeEcsService')
 
   await triggerWorkflow(
     org,
