@@ -1,14 +1,12 @@
-import Boom from '@hapi/boom'
-
 import { config } from '~/src/config/index.js'
 import { deployServiceValidation } from '~/src/api/deploy/helpers/schema/deploy-service-validation.js'
 import { registerDeployment } from '~/src/api/deploy/helpers/register-deployment.js'
-import { getRepoTeams } from '~/src/api/deploy/helpers/get-repo-teams.js'
 import { sendSnsDeploymentMessage } from '~/src/api/deploy/helpers/send-sns-deployment-message.js'
 import { generateDeployment } from '~/src/helpers/deployments/generate-deployment.js'
 import { commitDeploymentFile } from '~/src/helpers/deployments/commit-deployment-file.js'
 import { lookupTenantService } from '~/src/helpers/portal-backend/lookup-tenant-service.js'
 import { getLatestAppConfigCommitSha } from '~/src/helpers/portal-backend/get-latest-app-config-commit-sha.js'
+import { getScopedUser } from '~/src/helpers/user/get-scoped-user.js'
 
 const deployFromFileEnvironments = config.get('deployFromFileEnvironments')
 
@@ -33,20 +31,7 @@ const deployServiceController = {
 
     logger.info(`Deployment of ${imageName} to ${environment} in progress`)
 
-    const user = {
-      id: auth?.credentials?.id,
-      displayName: auth?.credentials?.displayName
-    }
-    const scope = auth?.credentials?.scope
-
-    const isAdmin = scope.includes('admin')
-    if (!isAdmin) {
-      const repoTeams = await getRepoTeams(imageName)
-      const isTeamMember = repoTeams.some((team) => scope.includes(team.teamId))
-      if (!isTeamMember) {
-        throw Boom.forbidden('Insufficient scope')
-      }
-    }
+    const user = getScopedUser(imageName, auth)
 
     const configLatestCommitSha = await getLatestAppConfigCommitSha(
       environment,
