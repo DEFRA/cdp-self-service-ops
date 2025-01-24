@@ -39,26 +39,31 @@ export async function undeployServiceFromEnvironment({
     return
   }
 
-  await registerUndeployment(serviceName, environment, user, undeploymentId)
+  if (isFeatureEnabled(featureToggles.decommissionService)) {
+    await registerUndeployment(serviceName, environment, user, undeploymentId)
 
-  if (isFeatureEnabled(featureToggles.scaleEcsToZero)) {
-    const shouldDeployByFile = deployFromFileEnvironments.includes(environment)
-    if (!shouldDeployByFile) {
-      logger.warn(
-        `Scaling ${serviceName} to zero in ${environment} not possible as env is not file based`
-      )
+    if (isFeatureEnabled(featureToggles.scaleEcsToZero)) {
+      const shouldDeployByFile =
+        deployFromFileEnvironments.includes(environment)
+      if (!shouldDeployByFile) {
+        logger.warn(
+          `Scaling ${serviceName} to zero in ${environment} not possible as env is not file based`
+        )
+      } else {
+        await scaleEcsToZero({
+          serviceName,
+          environment,
+          zone,
+          user,
+          undeploymentId,
+          logger
+        })
+      }
     } else {
-      await scaleEcsToZero({
-        serviceName,
-        environment,
-        zone,
-        user,
-        undeploymentId,
-        logger
-      })
+      logger.info('Scale ECS Service to 0 feature is disabled')
     }
   } else {
-    logger.info('Scale ECS Service to 0 feature is disabled')
+    logger.info('Decommission feature is disabled')
   }
   return undeploymentId
 }

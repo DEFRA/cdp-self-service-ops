@@ -37,7 +37,37 @@ describe('#deleteEcsService', () => {
     )
   })
 
-  test('should not remove ECS service if feature disabled', async () => {
+  test('should not remove ECS service if decommission is enabled but feature is disabled', async () => {
+    isFeatureEnabled.mockReturnValueOnce(true).mockReturnValue(false)
+
+    await deleteEcsService({ serviceName, environment, logger })
+
+    expect(isFeatureEnabled).toHaveBeenCalledTimes(2)
+    expect(isFeatureEnabled).toHaveBeenNthCalledWith(
+      1,
+      featureToggles.decommissionService
+    )
+    expect(isFeatureEnabled).toHaveBeenLastCalledWith(
+      featureToggles.undeploy.deleteEcsService
+    )
+    expect(lookupTenantService).toHaveBeenCalledTimes(0)
+    expect(removeEcsService).toHaveBeenCalledTimes(0)
+  })
+
+  test('should not remove ECS service if decommission feature is disabled', async () => {
+    isFeatureEnabled.mockReturnValueOnce(false).mockReturnValue(true)
+
+    await deleteEcsService({ serviceName, environment, logger })
+
+    expect(isFeatureEnabled).toHaveBeenCalledTimes(1)
+    expect(isFeatureEnabled).toHaveBeenLastCalledWith(
+      featureToggles.decommissionService
+    )
+    expect(lookupTenantService).toHaveBeenCalledTimes(0)
+    expect(removeEcsService).toHaveBeenCalledTimes(0)
+  })
+
+  test('should not remove ECS service if both features are disabled', async () => {
     isFeatureEnabled.mockReturnValue(false)
 
     await deleteEcsService({ serviceName, environment, logger })

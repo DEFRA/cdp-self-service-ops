@@ -39,17 +39,32 @@ async function callUndeployServiceFromEnvironment() {
 
 describe('#undeployServiceFromEnvironment', () => {
   test('should register undeployment', async () => {
+    isFeatureEnabled.mockReturnValue(true)
+
     await callUndeployServiceFromEnvironment()
 
     expect(registerUndeployment).toHaveBeenCalledTimes(1)
   })
 
   test('if not enabled should not call scaleEcsToZero', async () => {
-    isFeatureEnabled.mockReturnValue(false)
+    isFeatureEnabled.mockReturnValueOnce(true).mockReturnValue(false)
 
     await callUndeployServiceFromEnvironment()
 
-    expect(isFeatureEnabled).toHaveBeenCalledWith(featureToggles.scaleEcsToZero)
+    expect(isFeatureEnabled).toHaveBeenLastCalledWith(
+      featureToggles.scaleEcsToZero
+    )
+    expect(scaleEcsToZero).toHaveBeenCalledTimes(0)
+  })
+
+  test('if decommission is not enabled should not call scaleEcsToZero', async () => {
+    isFeatureEnabled.mockReturnValueOnce(false).mockReturnValue(true)
+
+    await callUndeployServiceFromEnvironment()
+
+    expect(isFeatureEnabled).toHaveBeenLastCalledWith(
+      featureToggles.decommissionService
+    )
     expect(scaleEcsToZero).toHaveBeenCalledTimes(0)
   })
 
@@ -59,6 +74,7 @@ describe('#undeployServiceFromEnvironment', () => {
     await callUndeployServiceFromEnvironment()
 
     expect(isFeatureEnabled).toHaveBeenCalledWith(featureToggles.scaleEcsToZero)
+    expect(lookupServiceInEnvironment).toHaveBeenCalledTimes(1)
     expect(scaleEcsToZero).toHaveBeenCalledTimes(1)
     expect(scaleEcsToZero).toHaveBeenCalledWith({
       serviceName,
