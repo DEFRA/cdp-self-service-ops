@@ -47,23 +47,12 @@ describe('#undeployServiceFromEnvironment', () => {
   })
 
   test('if not enabled should not call scaleEcsToZero', async () => {
-    isFeatureEnabled.mockReturnValueOnce(true).mockReturnValue(false)
+    isFeatureEnabled.mockReturnValue(false)
 
     await callUndeployServiceFromEnvironment()
 
     expect(isFeatureEnabled).toHaveBeenLastCalledWith(
       featureToggles.scaleEcsToZero
-    )
-    expect(scaleEcsToZero).toHaveBeenCalledTimes(0)
-  })
-
-  test('if decommission is not enabled should not call scaleEcsToZero', async () => {
-    isFeatureEnabled.mockReturnValueOnce(false).mockReturnValue(true)
-
-    await callUndeployServiceFromEnvironment()
-
-    expect(isFeatureEnabled).toHaveBeenLastCalledWith(
-      featureToggles.decommissionService
     )
     expect(scaleEcsToZero).toHaveBeenCalledTimes(0)
   })

@@ -3,7 +3,6 @@ import { removeStatus } from '~/src/api/status/helpers/remove-status.js'
 import { portalBackEndDecommissionService } from '~/src/api/decommission-service/helpers/decommission-portal-backend.js'
 import { triggerRemoveWorkflows } from '~/src/api/decommission-service/helpers/trigger-remove-workflows.js'
 import { getRepositoryInfo } from '~/src/helpers/portal-backend/get-repository-info.js'
-import { undeployServiceFromAllEnvironments } from '~/src/api/undeploy/helpers/undeploy-service-from-all-environments.js'
 import { deleteDockerImages } from '~/src/api/decommission-service/helpers/delete-docker-images.js'
 import { triggerArchiveGithubWorkflow } from '~/src/api/decommission-service/helpers/archive-github-workflow.js'
 import { featureToggles } from '~/src/helpers/feature-toggle/feature-toggles.js'
@@ -39,7 +38,6 @@ const decommissionServiceController = {
 
     const response = await getRepositoryInfo(serviceName)
 
-    await undeployServiceFromAllEnvironments({ serviceName, user, logger })
     await deleteDockerImages(serviceName, user, logger)
     await triggerRemoveWorkflows(serviceName, response.repository, logger)
     await portalBackEndDecommissionService(serviceName)

@@ -27,6 +27,11 @@ export async function scaleEcsToZero({
     return
   }
 
+  if (runningDetails.instanceCount === 0) {
+    logger.info('ECS Service already scaled to 0')
+    return
+  }
+
   const deployment = transformRunningDetailsToDeployment(runningDetails, zone)
   const undeployment = scaleDeploymentToZeroInstances({
     deployment,

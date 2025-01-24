@@ -51,6 +51,18 @@ describe('#scaleEcsToZero', () => {
     expect(commitDeploymentFile).toHaveBeenCalledTimes(0)
   })
 
+  test('If existing deployment is already scaled to 0 do nothing', async () => {
+    findRunningDetails.mockReturnValue({
+      ...runningDetails,
+      instanceCount: 0
+    })
+
+    await scaleEcsToZero(scaleDetails)
+
+    expect(findRunningDetails).toHaveBeenCalledTimes(1)
+    expect(commitDeploymentFile).toHaveBeenCalledTimes(0)
+  })
+
   test('With existing deployment should proceed with scale to 0', async () => {
     findRunningDetails.mockReturnValue(runningDetails)
 
