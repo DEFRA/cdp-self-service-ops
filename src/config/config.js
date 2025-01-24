@@ -505,20 +505,6 @@ const config = convict({
         env: 'FEATURE_DELETE_ECS_SERVICE'
       }
     },
-    dockerImages: {
-      deleteEcr: {
-        doc: 'Feature flag for deleting ECR images',
-        format: Boolean,
-        default: true,
-        env: 'FEATURE_DELETE_ECR_IMAGES'
-      },
-      deleteDockerHub: {
-        doc: 'Feature flag for deleting DockerHub images',
-        format: Boolean,
-        default: true,
-        env: 'FEATURE_DELETE_DOCKERHUB_IMAGES'
-      }
-    },
     removeServiceWorkflows: {
       doc: 'Feature flag for removing a service workflows',
       format: Boolean,
