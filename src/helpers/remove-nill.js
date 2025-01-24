@@ -1,4 +1,4 @@
-import isNil from 'lodash/isNil'
+import isNil from 'lodash/isNil.js'
 
 /**
  * Remove null and undefined values from an object
