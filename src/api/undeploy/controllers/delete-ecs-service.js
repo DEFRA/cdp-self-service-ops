@@ -2,11 +2,11 @@ import Joi from 'joi'
 
 import { undeployServiceValidation } from '~/src/api/undeploy/helpers/schema/undeploy-service-validation.js'
 import {
-  deleteEcsTask,
-  deleteAllEcsTasks
-} from '~/src/api/undeploy/helpers/delete-ecs-task.js'
+  deleteEcsService,
+  deleteAllEcsServices
+} from '~/src/api/undeploy/helpers/delete-ecs-service.js'
 
-const deleteEcsTaskController = {
+const deleteEcsServiceController = {
   options: {
     auth: {
       strategy: 'azure-oidc',
@@ -21,7 +21,7 @@ const deleteEcsTaskController = {
   handler: async (request, h) => {
     const { imageName, environment } = request.params
 
-    await deleteEcsTask({
+    await deleteEcsService({
       serviceName: imageName,
       environment,
       logger: request.logger
@@ -30,7 +30,7 @@ const deleteEcsTaskController = {
   }
 }
 
-const deleteAllEcsTasksController = {
+const deleteAllEcsServicesController = {
   options: {
     auth: {
       strategy: 'azure-oidc',
@@ -47,7 +47,7 @@ const deleteAllEcsTasksController = {
   handler: async (request, h) => {
     const { imageName } = request.params
 
-    await deleteAllEcsTasks({
+    await deleteAllEcsServices({
       serviceName: imageName,
       logger: request.logger
     })
@@ -55,4 +55,4 @@ const deleteAllEcsTasksController = {
   }
 }
 
-export { deleteEcsTaskController, deleteAllEcsTasksController }
+export { deleteEcsServiceController, deleteAllEcsServicesController }

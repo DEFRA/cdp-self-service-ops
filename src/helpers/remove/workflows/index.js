@@ -1,7 +1,7 @@
 import { removeAppConfig } from '~/src/helpers/remove/workflows/remove-app-config.js'
 import { removeDashboard } from '~/src/helpers/remove/workflows/remove-dashboard.js'
 import { removeDeployment } from '~/src/helpers/remove/workflows/remove-deployment.js'
-import { removeEcsTask } from '~/src/helpers/remove/workflows/remove-ecs-task.js'
+import { removeEcsService } from '~/src/helpers/remove/workflows/remove-ecs-service.js'
 import { removeNginxUpstreams } from '~/src/helpers/remove/workflows/remove-nginx-upstreams.js'
 import { removeSquidConfig } from '~/src/helpers/remove/workflows/remove-squid-config.js'
 import { removeTenantInfrastructure } from '~/src/helpers/remove/workflows/remove-tenant-infrastructure.js'
@@ -11,7 +11,7 @@ export {
   removeAppConfig,
   removeDashboard,
   removeDeployment,
-  removeEcsTask,
+  removeEcsService,
   removeNginxUpstreams,
   removeSquidConfig,
   removeTenantInfrastructure,
