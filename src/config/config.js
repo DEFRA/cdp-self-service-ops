@@ -283,9 +283,10 @@ const config = convict({
     },
     baseUrl: {
       doc: 'Override the gitHub base url for local testing',
-      format: '*',
-      env: 'GITHUB_BASE_URL',
-      default: null
+      format: String,
+      nullable: true,
+      default: null,
+      env: 'GITHUB_BASE_URL'
     },
     repos: {
       cdpAppConfig: {
