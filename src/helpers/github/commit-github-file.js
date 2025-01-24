@@ -1,5 +1,5 @@
 import { getLatestCommitSha } from '~/src/helpers/github/get-latest-commit-sha.js'
-import { graphql } from '~/src/helpers/oktokit.js'
+import { graphql } from '~/src/helpers/oktokit/oktokit.js'
 
 /**
  * @param {{owner: string, repo: string, branch: string, commitMessage: string, filePath: string, content: object, logger: import('pino').Logger}} options

@@ -1,4 +1,4 @@
-import { octokit } from '~/src/helpers/oktokit.js'
+import { octokit } from '~/src/helpers/oktokit/oktokit.js'
 
 import { config } from '~/src/config/index.js'
 
