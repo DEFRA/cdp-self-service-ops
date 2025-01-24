@@ -479,6 +479,18 @@ const config = convict({
     env: 'ENABLE_SECURE_CONTEXT'
   },
   features: {
+    decommissionService: {
+      doc: 'Feature flag for decommission service',
+      format: Boolean,
+      default: false,
+      env: 'FEATURE_DECOMMISSION_SERVICE'
+    },
+    scaleEcsToZero: {
+      doc: 'Feature flag for scaling ECS instances to 0',
+      format: Boolean,
+      default: false,
+      env: 'FEATURE_SCALE_ECS_TO_0'
+    },
     undeploy: {
       deleteDeploymentFiles: {
         doc: 'Feature flag for deleting deployment files',
@@ -491,18 +503,6 @@ const config = convict({
         format: Boolean,
         default: false,
         env: 'FEATURE_DELETE_ECS_SERVICE'
-      },
-      register: {
-        doc: 'Feature flag for register undeploy',
-        format: Boolean,
-        default: false,
-        env: 'FEATURE_UNDEPLOY_REGISTER'
-      },
-      scaleEcsToZero: {
-        doc: 'Feature flag for scaling ECS instances to 0',
-        format: Boolean,
-        default: false,
-        env: 'FEATURE_SCALE_ECS_TO_0'
       }
     },
     dockerImages: {

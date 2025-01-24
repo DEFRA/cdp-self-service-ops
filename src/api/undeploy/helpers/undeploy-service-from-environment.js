@@ -39,14 +39,9 @@ export async function undeployServiceFromEnvironment({
     return
   }
 
-  if (isFeatureEnabled(featureToggles.undeploy.register)) {
-    await registerUndeployment(serviceName, environment, user, undeploymentId)
-    logger.info('Undeployment registered')
-  } else {
-    logger.info('Undeployment registration feature is disabled')
-  }
+  await registerUndeployment(serviceName, environment, user, undeploymentId)
 
-  if (isFeatureEnabled(featureToggles.undeploy.scaleEcsToZero)) {
+  if (isFeatureEnabled(featureToggles.scaleEcsToZero)) {
     const shouldDeployByFile = deployFromFileEnvironments.includes(environment)
     if (!shouldDeployByFile) {
       logger.warn(

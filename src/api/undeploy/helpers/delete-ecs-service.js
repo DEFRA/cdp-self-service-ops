@@ -15,7 +15,10 @@ async function deleteEcsService({
 }) {
   logger.info(`Deleting ECS service for ${serviceName} in env ${environment}`)
 
-  if (!isFeatureEnabled(featureToggles.undeploy.deleteEcsService)) {
+  if (
+    !isFeatureEnabled(featureToggles.decommissionService) ||
+    !isFeatureEnabled(featureToggles.undeploy.deleteEcsService)
+  ) {
     logger.info('Deleting ECS service feature is disabled')
     return
   }

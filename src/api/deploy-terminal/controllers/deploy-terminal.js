@@ -6,7 +6,7 @@ import { sendSnsMessage } from '~/src/helpers/sns/send-sns-message.js'
 import { canRunTerminalInEnvironment } from '~/src/api/deploy-terminal/helpers/can-run-terminal-in-environment.js'
 import { generateTerminalToken } from '~/src/api/deploy-terminal/helpers/generate-terminal-token.js'
 import { deployTerminalPayload } from '~/src/api/deploy-terminal/helpers/deploy-terminal-payload.js'
-import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service.js'
+import { lookupTenantService } from '~/src/helpers/portal-backend/lookup-tenant-service.js'
 
 const deployTerminalController = {
   options: {
