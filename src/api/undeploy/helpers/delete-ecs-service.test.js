@@ -2,12 +2,12 @@ import {
   deleteEcsService,
   deleteAllEcsServices
 } from '~/src/api/undeploy/helpers/delete-ecs-service.js'
-import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service.js'
+import { lookupTenantService } from '~/src/helpers/portal-backend/lookup-tenant-service.js'
 import { isFeatureEnabled } from '~/src/helpers/feature-toggle/is-feature-enabled.js'
 import { removeEcsService } from '~/src/helpers/remove/workflows/remove-ecs-service.js'
 import { featureToggles } from '~/src/helpers/feature-toggle/feature-toggles.js'
 
-jest.mock('~/src/api/deploy/helpers/lookup-tenant-service')
+jest.mock('~/src/helpers/portal-backend/lookup-tenant-service')
 jest.mock('~/src/helpers/feature-toggle/is-feature-enabled')
 jest.mock('~/src/helpers/remove/workflows/remove-ecs-service')
 

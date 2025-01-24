@@ -6,7 +6,7 @@ import {
 import { updateOverallStatus } from '~/src/helpers/create/init-creation-status.js'
 import { createPlaceholderArtifact } from '~/src/listeners/github/helpers/create-placeholder-artifact.js'
 import { createLogger } from '~/src/helpers/logging/logger.js'
-import { lookupTenantServiceFromGitHub } from '~/src/api/deploy/helpers/lookup-tenant-service.js'
+import { lookupTenantServiceFromGitHub } from '~/src/helpers/portal-backend/lookup-tenant-service.js'
 
 /**
  * given a list of services, update the tf-svc-infra status for all of them to success

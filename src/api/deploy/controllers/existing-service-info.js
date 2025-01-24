@@ -1,5 +1,5 @@
 import { config } from '~/src/config/index.js'
-import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service.js'
+import { lookupTenantService } from '~/src/helpers/portal-backend/lookup-tenant-service.js'
 import { getExistingDeployment } from '~/src/api/deploy/helpers/get-existing-deployment.js'
 
 const deploymentRepo = config.get('github.repos.appDeployments')

@@ -1,6 +1,6 @@
 import { createLogger } from '~/src/helpers/logging/logger.js'
 import { orderedEnvironments } from '~/src/config/environments.js'
-import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service.js'
+import { lookupTenantService } from '~/src/helpers/portal-backend/lookup-tenant-service.js'
 import { featureToggles } from '~/src/helpers/feature-toggle/feature-toggles.js'
 import { isFeatureEnabled } from '~/src/helpers/feature-toggle/is-feature-enabled.js'
 import { removeEcsService } from '~/src/helpers/remove/workflows/remove-ecs-service.js'

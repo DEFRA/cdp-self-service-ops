@@ -53,18 +53,37 @@ async function lookupTenantServiceFromGitHub(
  * @returns {Promise<undefined|*>}
  */
 async function lookupTenantService(service, environment, logger) {
+  const { response, serviceJson } = await lookupServiceInEnvironment(
+    service,
+    environment
+  )
+  if (response.ok) {
+    return serviceJson
+  }
+  logger.error(`Service lookup failed: ${serviceJson.message}`)
+  throw Boom.boomify(new Error(serviceJson.message), {
+    statusCode: response.status
+  })
+}
+
+/**
+ * Get service from portal-backend
+ * @param {string} service
+ * @param {string} environment
+ * @returns {Promise<undefined|*>}
+ */
+async function lookupServiceInEnvironment(service, environment) {
   const url = `${config.get('portalBackendUrl')}/tenant-services/${service}/${environment}`
   const response = await fetcher(url, {
     method: 'get',
     headers: { 'Content-Type': 'application/json' }
   })
-  const json = await response.json()
-
-  if (response.ok) {
-    return json
-  }
-  logger.error(`Service lookup failed: ${json.message}`)
-  throw Boom.boomify(new Error(json.message), { statusCode: response.status })
+  const serviceJson = await response.json()
+  return { response, serviceJson }
 }
 
-export { lookupTenantService, lookupTenantServiceFromGitHub }
+export {
+  lookupServiceInEnvironment,
+  lookupTenantService,
+  lookupTenantServiceFromGitHub
+}
