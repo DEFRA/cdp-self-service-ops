@@ -482,13 +482,13 @@ const config = convict({
     decommissionService: {
       doc: 'Feature flag for decommission service',
       format: Boolean,
-      default: false,
+      default: true,
       env: 'FEATURE_DECOMMISSION_SERVICE'
     },
     scaleEcsToZero: {
       doc: 'Feature flag for scaling ECS instances to 0',
       format: Boolean,
-      default: false,
+      default: true,
       env: 'FEATURE_SCALE_ECS_TO_0'
     },
     undeploy: {
@@ -509,26 +509,26 @@ const config = convict({
       deleteEcr: {
         doc: 'Feature flag for deleting ECR images',
         format: Boolean,
-        default: false,
+        default: true,
         env: 'FEATURE_DELETE_ECR_IMAGES'
       },
       deleteDockerHub: {
         doc: 'Feature flag for deleting DockerHub images',
         format: Boolean,
-        default: false,
+        default: true,
         env: 'FEATURE_DELETE_DOCKERHUB_IMAGES'
       }
     },
     removeServiceWorkflows: {
       doc: 'Feature flag for removing a service workflows',
       format: Boolean,
-      default: false,
+      default: true,
       env: 'FEATURE_REMOVE_SERVICE_WORKFLOWS'
     },
     archiveGitHubWorkflow: {
       doc: 'Feature flag for archiving github repo on decommission',
       format: Boolean,
-      default: false,
+      default: true,
       env: 'FEATURE_ARCHIVE_GITHUB_WORKFLOW'
     }
   }
