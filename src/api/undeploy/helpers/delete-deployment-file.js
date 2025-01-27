@@ -12,7 +12,10 @@ export async function deleteDeploymentFiles({
 }) {
   logger.info(`Deleting deployment files for ${serviceName}`)
 
-  if (!isFeatureEnabled(featureToggles.undeploy.deleteDeploymentFiles)) {
+  if (
+    !isFeatureEnabled(featureToggles.decommissionService) ||
+    !isFeatureEnabled(featureToggles.undeploy.deleteDeploymentFiles)
+  ) {
     logger.info('Deleting deployment file feature is disabled')
     return
   }

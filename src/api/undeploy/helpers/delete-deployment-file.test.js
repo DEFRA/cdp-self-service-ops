@@ -21,8 +21,16 @@ describe('#deleteDeploymentFiles', () => {
     expect(removeDeployment).toHaveBeenCalledWith(serviceName, logger)
   })
 
+  test('should not delete deployment file if decommission is disabled', async () => {
+    isFeatureEnabled.mockReturnValueOnce(false).mockReturnValue(true)
+
+    await deleteDeploymentFiles({ serviceName, logger })
+
+    expect(removeDeployment).toHaveBeenCalledTimes(0)
+  })
+
   test('should not delete deployment file if feature disabled', async () => {
-    isFeatureEnabled.mockReturnValue(false)
+    isFeatureEnabled.mockReturnValueOnce(true).mockReturnValue(false)
 
     await deleteDeploymentFiles({ serviceName, logger })
 

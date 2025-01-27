@@ -7,7 +7,7 @@ import { getRepoTeams } from '~/src/api/deploy/helpers/get-repo-teams.js'
 import { sendSnsDeploymentMessage } from '~/src/api/deploy/helpers/send-sns-deployment-message.js'
 import { generateDeployment } from '~/src/helpers/deployments/generate-deployment.js'
 import { commitDeploymentFile } from '~/src/helpers/deployments/commit-deployment-file.js'
-import { lookupTenantService } from '~/src/api/deploy/helpers/lookup-tenant-service.js'
+import { lookupTenantService } from '~/src/helpers/portal-backend/lookup-tenant-service.js'
 import { getLatestAppConfigCommitSha } from '~/src/helpers/portal-backend/get-latest-app-config-commit-sha.js'
 
 const deployFromFileEnvironments = config.get('deployFromFileEnvironments')

@@ -5,7 +5,7 @@ import {
 } from '~/src/listeners/github/status-repo.js'
 
 import { createPlaceholderArtifact } from '~/src/listeners/github/helpers/create-placeholder-artifact.js'
-import { lookupTenantServiceFromGitHub } from '~/src/api/deploy/helpers/lookup-tenant-service.js'
+import { lookupTenantServiceFromGitHub } from '~/src/helpers/portal-backend/lookup-tenant-service.js'
 import { updateOverallStatus } from '~/src/helpers/create/init-creation-status.js'
 import { statuses } from '~/src/constants/statuses.js'
 
@@ -17,7 +17,7 @@ jest.mock('~/src/listeners/github/helpers/create-placeholder-artifact', () => ({
   createPlaceholderArtifact: jest.fn()
 }))
 
-jest.mock('~/src/api/deploy/helpers/lookup-tenant-service', () => ({
+jest.mock('~/src/helpers/portal-backend/lookup-tenant-service', () => ({
   lookupTenantServiceFromGitHub: jest.fn()
 }))
 
