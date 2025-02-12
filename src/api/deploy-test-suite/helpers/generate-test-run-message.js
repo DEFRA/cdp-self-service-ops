@@ -1,3 +1,5 @@
+import { config } from '~/src/config/index.js'
+
 const generateTestRunMessage = (imageName, environment, runId, user) => {
   return {
     environment,
@@ -18,7 +20,8 @@ const generateTestRunMessage = (imageName, environment, runId, user) => {
     deployed_by: user,
     environment_variables: {
       BASE_URL: `https://${environment}.cdp-int.defra.cloud/`,
-      ENVIRONMENT: environment
+      ENVIRONMENT: environment,
+      HTTP_PROXY: config.get('httpProxy') // Once we support cdp-app-config in test suites this can go
     }
   }
 }
