@@ -64,7 +64,7 @@
     "qs": "^6.13.1",
     "sqs-consumer": "^11.4.0",
     "timeunit": "^1.1.1",
-    "undici": "^7.2.0"
+    "undici": "^7.2.3"
   },
   "devDependencies": {
     "@babel/cli": "^7.26.4",
