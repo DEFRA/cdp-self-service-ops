@@ -466,12 +466,6 @@ const config = convict({
       env: 'ARCHIVE_GITHUB_REPOSITORY_WORKFLOW'
     }
   },
-  deployFromFileEnvironments: {
-    doc: 'list of environments where we should deploy from file',
-    format: 'environment-array',
-    default: [],
-    env: 'DEPLOY_FROM_FILE_ENVIRONMENTS'
-  },
   enableSecureContext: {
     doc: 'Enable Secure Context',
     format: Boolean,

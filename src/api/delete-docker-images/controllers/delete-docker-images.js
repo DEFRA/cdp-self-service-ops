@@ -21,7 +21,7 @@ const deleteDockerImagesController = {
   },
   handler: async (request, h) => {
     const { imageName } = request.params
-    const user = await getScopedUser(imageName, request.auth, 'admin')
+    const user = await getScopedUser(imageName, request.auth)
 
     await deleteDockerImages(imageName, user, request.logger)
 

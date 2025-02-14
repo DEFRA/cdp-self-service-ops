@@ -1,14 +1,10 @@
-import { config } from '~/src/config/index.js'
 import { deployServiceValidation } from '~/src/api/deploy/helpers/schema/deploy-service-validation.js'
 import { registerDeployment } from '~/src/api/deploy/helpers/register-deployment.js'
-import { sendSnsDeploymentMessage } from '~/src/api/deploy/helpers/send-sns-deployment-message.js'
 import { generateDeployment } from '~/src/helpers/deployments/generate-deployment.js'
 import { commitDeploymentFile } from '~/src/helpers/deployments/commit-deployment-file.js'
 import { lookupTenantService } from '~/src/helpers/portal-backend/lookup-tenant-service.js'
 import { getLatestAppConfigCommitSha } from '~/src/helpers/portal-backend/get-latest-app-config-commit-sha.js'
 import { getScopedUser } from '~/src/helpers/user/get-scoped-user.js'
-
-const deployFromFileEnvironments = config.get('deployFromFileEnvironments')
 
 const deployServiceController = {
   options: {
@@ -71,24 +67,6 @@ const deployServiceController = {
     logger.info(
       `Service ${imageName} in ${environment} should be deployed to ${service.zone}`
     )
-    const shouldDeployByFile = deployFromFileEnvironments.includes(environment)
-    if (!shouldDeployByFile) {
-      await sendSnsDeploymentMessage(
-        deploymentId,
-        payload,
-        service.zone,
-        user,
-        configLatestCommitSha,
-        service.serviceCode,
-        request
-      )
-
-      logger.info('Deployment sns event sent')
-    } else {
-      logger.info(
-        'Deployment sns event not sent - deploying via deployment file'
-      )
-    }
 
     const deployment = generateDeployment({
       deploymentId,
@@ -96,7 +74,7 @@ const deployServiceController = {
       zone: service.zone,
       commitSha: configLatestCommitSha,
       serviceCode: service.serviceCode,
-      deploy: shouldDeployByFile,
+      deploy: true,
       user
     })
 
