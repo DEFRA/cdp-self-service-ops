@@ -16,7 +16,7 @@ const undeployServiceFromEnvironmentController = {
   },
   handler: async (request, h) => {
     const { serviceName, environment } = request.params
-    const user = await getScopedUser(serviceName, request.auth, 'admin')
+    const user = await getScopedUser(serviceName, request.auth)
 
     await undeployServiceFromEnvironment({
       serviceName,
@@ -41,7 +41,7 @@ const undeployServiceFromAllEnvironmentController = {
   },
   handler: async (request, h) => {
     const serviceName = request.params.serviceName
-    const user = await getScopedUser(serviceName, request.auth, 'admin')
+    const user = await getScopedUser(serviceName, request.auth)
 
     await undeployServiceFromAllEnvironments({
       serviceName,
