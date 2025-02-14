@@ -27,7 +27,7 @@ const deployServiceController = {
 
     logger.info(`Deployment of ${imageName} to ${environment} in progress`)
 
-    const user = getScopedUser(imageName, auth)
+    const user = await getScopedUser(imageName, auth)
 
     const configLatestCommitSha = await getLatestAppConfigCommitSha(
       environment,
