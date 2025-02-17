@@ -1,4 +1,6 @@
 import { config } from '~/src/config/index.js'
+import Joi from 'joi'
+import { deploymentValidation } from '~/src/api/deploy/helpers/schema/deploy-service-validation.js'
 
 const currentEnvironment = config.get('environment')
 
@@ -15,7 +17,7 @@ export function generateDeployment({
   user,
   deploymentEnvironment = currentEnvironment
 }) {
-  return {
+  const deployment = {
     deploymentId,
     deploy,
     service: {
@@ -44,4 +46,8 @@ export function generateDeployment({
       deploymentEnvironment
     }
   }
+
+  Joi.assert(deployment, deploymentValidation)
+
+  return deployment
 }
