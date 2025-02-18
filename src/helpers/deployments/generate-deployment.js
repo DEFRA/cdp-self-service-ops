@@ -1,8 +1,46 @@
 import { config } from '~/src/config/index.js'
 import Joi from 'joi'
-import { deploymentValidation } from '~/src/api/deploy/helpers/schema/deploy-service-validation.js'
+import {
+  cpuValidation,
+  currentEnvironmentValidation,
+  deploymentIdValidation,
+  environmentValidation,
+  instanceCountValidation,
+  memoryValidation,
+  repositoryNameValidation,
+  userWithUserIdValidation,
+  versionValidation,
+  zoneValidation
+} from '~/src/api/helpers/schema/common-validations.js'
 
 const currentEnvironment = config.get('environment')
+
+const deploymentValidation = Joi.object({
+  deploymentId: deploymentIdValidation,
+  deploy: Joi.boolean().required(),
+  service: Joi.object({
+    name: repositoryNameValidation,
+    image: repositoryNameValidation,
+    version: versionValidation,
+    configuration: Joi.object({
+      commitSha: Joi.string().required()
+    }),
+    serviceCode: Joi.string()
+  }),
+  cluster: Joi.object({
+    environment: environmentValidation,
+    zone: zoneValidation
+  }),
+  resources: Joi.object({
+    instanceCount: instanceCountValidation,
+    cpu: cpuValidation,
+    memory: memoryValidation
+  }),
+  metadata: Joi.object({
+    user: userWithUserIdValidation,
+    deploymentEnvironment: currentEnvironmentValidation
+  })
+})
 
 /**
  * @param {{payload: {imageName: string, version:string, environment: string, instanceCount: number, cpu: number, memory: number}, zone: string, deploymentId: string, commitSha: string, serviceCode: ?string, deploy: ?boolean, user: {id: string, displayName: string}, deploymentEnvironment: ?string}} options

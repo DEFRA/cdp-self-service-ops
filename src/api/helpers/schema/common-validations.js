@@ -7,10 +7,9 @@ const environmentValidation = Joi.string()
   .valid(...Object.values(environments))
   .required()
 
-const currentEnvironmentValidation =
-  process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test'
-    ? Joi.string().valid('local').required()
-    : environmentValidation
+const currentEnvironmentValidation = Joi.string()
+  .valid('local', ...Object.values(environments))
+  .required()
 
 const zoneValidation = Joi.string().valid('public', 'protected').required()
 
