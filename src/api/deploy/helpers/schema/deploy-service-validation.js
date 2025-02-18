@@ -1,48 +1,32 @@
 import Joi from 'joi'
+import {
+  cpuValidation,
+  currentEnvironmentValidation,
+  deploymentIdValidation,
+  environmentValidation,
+  instanceCountValidation,
+  memoryValidation,
+  repositoryNameValidation,
+  userWithUserIdValidation,
+  versionValidation,
+  zoneValidation
+} from '~/src/api/helpers/schema/common-validations.js'
 
-import { environments } from '~/src/config/index.js'
-import { ecsCpuToMemoryOptionsMap } from '~/src/api/deploy/helpers/ecs-cpu-to-memory-options-map.js'
-import { buildMemoryValidation } from '~/src/api/deploy/helpers/schema/build-memory-validation.js'
-
-const validCpuValues = Object.keys(ecsCpuToMemoryOptionsMap).map((cpu) =>
-  Number.parseInt(cpu)
-)
-
-const memoryValidation = buildMemoryValidation().required()
-
-const imageNameValidation = Joi.string().min(1).required()
-
-const versionValidation = Joi.string()
-  .pattern(/^\d+\.\d+\.\d+$/)
-  .required()
-
-const environmentValidation = Joi.string()
-  .valid(...Object.values(environments))
-  .required()
-
-const instanceCountValidation = Joi.number().min(0).max(10).required()
-
-const cpuValidation = Joi.number()
-  .valid(...validCpuValues)
-  .required()
-
-function deployServiceValidation() {
-  return Joi.object({
-    imageName: imageNameValidation,
-    version: versionValidation,
-    environment: environmentValidation,
-    instanceCount: instanceCountValidation,
-    cpu: cpuValidation,
-    memory: memoryValidation
-  })
-}
+const deployServiceValidation = Joi.object({
+  imageName: repositoryNameValidation,
+  version: versionValidation,
+  environment: environmentValidation,
+  instanceCount: instanceCountValidation,
+  cpu: cpuValidation,
+  memory: memoryValidation
+})
 
 const deploymentValidation = Joi.object({
-  deploymentId: Joi.string().required(),
+  deploymentId: deploymentIdValidation,
   deploy: Joi.boolean().required(),
   service: Joi.object({
-    name: imageNameValidation,
-    image: imageNameValidation,
+    name: repositoryNameValidation,
+    image: repositoryNameValidation,
     version: versionValidation,
     configuration: Joi.object({
       commitSha: Joi.string().required()
@@ -51,7 +35,7 @@ const deploymentValidation = Joi.object({
   }),
   cluster: Joi.object({
     environment: environmentValidation,
-    zone: Joi.string().required()
+    zone: zoneValidation
   }),
   resources: Joi.object({
     instanceCount: instanceCountValidation,
@@ -59,11 +43,8 @@ const deploymentValidation = Joi.object({
     memory: memoryValidation
   }),
   metadata: Joi.object({
-    user: Joi.object({
-      userId: Joi.string().required(),
-      displayName: Joi.string().required()
-    }),
-    deploymentEnvironment: Joi.string().required()
+    user: userWithUserIdValidation,
+    deploymentEnvironment: currentEnvironmentValidation
   })
 })
 

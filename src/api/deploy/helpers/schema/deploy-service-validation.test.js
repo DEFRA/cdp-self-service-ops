@@ -11,7 +11,7 @@ describe('#deployServiceValidation', () => {
       memory: 2048
     }
 
-    expect(deployServiceValidation().validate(payload)).toEqual({
+    expect(deployServiceValidation.validate(payload)).toEqual({
       value: {
         imageName: 'cdp-portal-frontend',
         environment: 'infra-dev',
@@ -34,7 +34,7 @@ describe('#deployServiceValidation', () => {
     }
 
     expect(
-      deployServiceValidation().validate(payload).error.details.at(0).message
+      deployServiceValidation.validate(payload).error.details.at(0).message
     ).toContain(
       '"environment" must be one of [management, infra-dev, dev, test, perf-test, ext-test, prod]'
     )
@@ -51,7 +51,7 @@ describe('#deployServiceValidation', () => {
     }
 
     expect(
-      deployServiceValidation().validate(payload).error.details.at(0).message
+      deployServiceValidation.validate(payload).error.details.at(0).message
     ).toContain(
       '"version" with value "latest" fails to match the required pattern'
     )
@@ -68,7 +68,7 @@ describe('#deployServiceValidation', () => {
     }
 
     expect(
-      deployServiceValidation().validate(payload).error.details.at(0).message
+      deployServiceValidation.validate(payload).error.details.at(0).message
     ).toContain('"cpu" must be one of [512, 1024, 2048, 4096, 8192]')
   })
 
@@ -83,7 +83,7 @@ describe('#deployServiceValidation', () => {
     }
 
     expect(
-      deployServiceValidation().validate(payload).error.details.at(0).message
+      deployServiceValidation.validate(payload).error.details.at(0).message
     ).toContain(
       '"memory" must be one of [2048, 3072, 4096, 5120, 6144, 7168, 8192]'
     )
@@ -100,7 +100,7 @@ describe('#deployServiceValidation', () => {
     }
 
     expect(
-      deployServiceValidation().validate(payload).error.details.at(0).message
+      deployServiceValidation.validate(payload).error.details.at(0).message
     ).toContain('"instanceCount" must be less than or equal to 10')
   })
 
@@ -114,7 +114,7 @@ describe('#deployServiceValidation', () => {
       memory: 2048
     }
 
-    expect(deployServiceValidation().validate(payload)).toEqual({
+    expect(deployServiceValidation.validate(payload)).toEqual({
       value: {
         cpu: 1024,
         imageName: 'cdp-portal-frontend',

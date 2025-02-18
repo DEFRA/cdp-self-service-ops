@@ -11,7 +11,7 @@ const deployTestSuiteController = {
       strategy: 'azure-oidc'
     },
     validate: {
-      payload: deployTestSuiteValidation()
+      payload: deployTestSuiteValidation
     },
     payload: {
       output: 'data',

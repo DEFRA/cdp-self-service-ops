@@ -1,13 +1,12 @@
 import Joi from 'joi'
-import { environments } from '~/src/config/index.js'
+import {
+  environmentValidation,
+  repositoryNameValidation
+} from '~/src/api/helpers/schema/common-validations.js'
 
-const deployTestSuiteValidation = () => {
-  return Joi.object({
-    imageName: Joi.string().min(1).required(),
-    environment: Joi.string()
-      .valid(...Object.values(environments))
-      .required()
-  })
-}
+const deployTestSuiteValidation = Joi.object({
+  imageName: repositoryNameValidation,
+  environment: environmentValidation
+})
 
 export { deployTestSuiteValidation }

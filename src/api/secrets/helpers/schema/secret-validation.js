@@ -1,6 +1,10 @@
 import Joi from 'joi'
 
-import { config, environments } from '~/src/config/index.js'
+import { config } from '~/src/config/index.js'
+import {
+  environmentValidation,
+  repositoryNameValidation
+} from '~/src/api/helpers/schema/common-validations.js'
 
 /**
  * Validates the params for secrets.
@@ -8,10 +12,8 @@ import { config, environments } from '~/src/config/index.js'
  */
 const secretParamsValidation = () =>
   Joi.object({
-    serviceName: Joi.string().min(1).required(),
-    environment: Joi.string()
-      .valid(...Object.values(environments))
-      .required()
+    serviceName: repositoryNameValidation,
+    environment: environmentValidation
   })
 
 /**

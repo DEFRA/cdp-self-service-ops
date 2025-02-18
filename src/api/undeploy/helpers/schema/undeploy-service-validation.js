@@ -1,13 +1,13 @@
 import Joi from 'joi'
-
-import { environments } from '~/src/config/environments.js'
+import {
+  environmentValidation,
+  repositoryNameValidation
+} from '~/src/api/helpers/schema/common-validations.js'
 
 function undeployServiceValidation() {
   return Joi.object({
-    serviceName: Joi.string().min(1).required(),
-    environment: Joi.string()
-      .valid(...Object.values(environments))
-      .required()
+    serviceName: repositoryNameValidation,
+    environment: environmentValidation
   })
 }
 

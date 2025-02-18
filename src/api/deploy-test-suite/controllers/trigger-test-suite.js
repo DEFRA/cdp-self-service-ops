@@ -4,7 +4,7 @@ import { runTestSuite } from '~/src/api/deploy-test-suite/helpers/run-test-suite
 const triggerTestSuiteController = {
   options: {
     validate: {
-      payload: triggerTestSuiteValidation()
+      payload: triggerTestSuiteValidation
     },
     payload: {
       output: 'data',

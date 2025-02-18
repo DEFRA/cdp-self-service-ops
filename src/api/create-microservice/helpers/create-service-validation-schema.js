@@ -2,28 +2,14 @@ import Joi from 'joi'
 import Boom from '@hapi/boom'
 
 import { serviceTemplates } from '~/src/api/create-microservice/helpers/service-templates.js'
+import { repositoryNameValidation } from '~/src/api/helpers/schema/common-validations.js'
 
 function createServiceValidationSchema() {
   const serviceTypeTemplates = Object.keys(serviceTemplates)
 
   return (value, options) => {
     const validationResult = Joi.object({
-      repositoryName: Joi.string()
-        .pattern(/^[\w-]*$/)
-        .pattern(/^[a-zA-Z0-9][\w-]*[a-zA-Z0-9]$/, {
-          name: 'startAndEndWithCharacter'
-        })
-        .min(1)
-        .max(96)
-        .required()
-        .messages({
-          'string.empty': 'Enter a service name',
-          'string.pattern.base':
-            'Letters and numbers with hyphen or underscore separators',
-          'string.pattern.name': 'Start and end with a character',
-          'string.min': '1 character or more',
-          'string.max': '96 characters or less'
-        }),
+      repositoryName: repositoryNameValidation,
       serviceTypeTemplate: Joi.string()
         .valid(...serviceTypeTemplates)
         .required()

@@ -4,12 +4,13 @@ import isNull from 'lodash/isNull.js'
 
 import { statuses } from '~/src/constants/statuses.js'
 import { getRepositoryStatus } from '~/src/api/status/helpers/get-repository-status.js'
+import { repositoryNameValidation } from '~/src/api/helpers/schema/common-validations.js'
 
 const repositoryStatusController = {
   options: {
     validate: {
       params: Joi.object({
-        repositoryName: Joi.string()
+        repositoryName: repositoryNameValidation
       })
     }
   },
