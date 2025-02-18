@@ -1,7 +1,40 @@
 import { config } from '~/src/config/index.js'
+import {
+  cpuValidation,
+  environmentValidation,
+  memoryValidation,
+  repositoryNameValidation,
+  runIdValidation,
+  userWithUserIdValidation
+} from '~/src/api/helpers/schema/common-validations.js'
+import Joi from 'joi'
+
+const testRunMessageValidation = Joi.object({
+  environment: environmentValidation,
+  runId: runIdValidation,
+  zone: Joi.string().equal('public'),
+  desired_count: Joi.number().equal(1).required(),
+  cluster_name: Joi.string().equal('ecs-public'),
+  name: repositoryNameValidation,
+  image: repositoryNameValidation,
+  image_version: Joi.number().equal('latest'),
+  port: Joi.number().integer().equal(80).required(),
+  task_cpu: cpuValidation,
+  task_memory: memoryValidation,
+  webdriver_sidecar: Joi.object({
+    browser: Joi.string().equal('chrome'),
+    version: Joi.string().equal('latest')
+  }),
+  deployed_by: userWithUserIdValidation,
+  environment_variables: Joi.object({
+    BASE_URL: Joi.string().required(),
+    ENVIRONMENT: environmentValidation,
+    HTTP_PROXY: Joi.string().required()
+  })
+})
 
 const generateTestRunMessage = (imageName, environment, runId, user) => {
-  return {
+  const message = {
     environment,
     runId,
     zone: 'public',
@@ -24,6 +57,10 @@ const generateTestRunMessage = (imageName, environment, runId, user) => {
       HTTP_PROXY: config.get('httpProxy') // Once we support cdp-app-config in test suites this can go
     }
   }
+
+  Joi.assert(message, testRunMessageValidation)
+
+  return message
 }
 
 export { generateTestRunMessage }

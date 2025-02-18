@@ -13,12 +13,12 @@ describe('#generateDeployment', () => {
         cpu: 512,
         memory: 4096
       },
-      zone: 'Protected',
-      deploymentId: 'abc-123',
+      zone: 'protected',
+      deploymentId: crypto.randomUUID(),
       commitSha: 'sha123',
       deploy: true,
       user: { id: 'some-id', displayName: 'My Name' },
-      deploymentEnvironment: 'infra-dev'
+      deploymentEnvironment: 'local'
     })
 
     expect(deployment.metadata.user.userId).toBe('some-id')
@@ -44,12 +44,12 @@ describe('#generateDeployment', () => {
           cpu: 2048,
           memory: 8192
         },
-        zone: 'Protected',
-        deploymentId: 'abc-123',
+        zone: 'public',
+        deploymentId: crypto.randomUUID(),
         commitSha: 'sha123',
         deploy: true,
         user: unawaitedUser,
-        deploymentEnvironment: 'infra-dev'
+        deploymentEnvironment: 'local'
       })
     ).toThrow(ValidationError)
   })

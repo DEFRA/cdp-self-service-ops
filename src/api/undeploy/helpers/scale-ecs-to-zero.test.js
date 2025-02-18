@@ -12,7 +12,7 @@ const someUndeploymentId = 'some-undeployment-id'
 const serviceName = 'some-service-name'
 const someUser = { id: 'some-user-id', displayName: 'some-name' }
 const runningDetails = {
-  cdpDeploymentId: 'some-cdp-deployment-id',
+  cdpDeploymentId: crypto.randomUUID(),
   environment: 'infra-dev',
   service: serviceName,
   version: '1.2.3',

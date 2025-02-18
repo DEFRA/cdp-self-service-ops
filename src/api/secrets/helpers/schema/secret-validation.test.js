@@ -26,7 +26,7 @@ describe('#secretParamsValidation', () => {
     const params = { serviceName: '', environment: 'dev' }
     const { error } = secretParamsValidation().validate(params)
     expect(error).toBeInstanceOf(Joi.ValidationError)
-    expect(error.message).toBe('"serviceName" is not allowed to be empty')
+    expect(error.message).toBe('Enter repository name')
   })
 })
 

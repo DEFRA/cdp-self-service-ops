@@ -12,7 +12,7 @@ const deployServiceController = {
       strategy: 'azure-oidc'
     },
     validate: {
-      payload: deployServiceValidation()
+      payload: deployServiceValidation
     },
     payload: {
       output: 'data',
