@@ -4,10 +4,7 @@ import Boom from '@hapi/boom'
 
 import Joi from 'joi'
 import { getContent } from '~/src/helpers/github/get-content.js'
-import {
-  repositoryNameValidation,
-  zoneValidation
-} from '~/src/api/helpers/schema/common-validations.js'
+import { zoneValidation } from '~/src/api/helpers/schema/common-validations.js'
 
 const org = config.get('github.org')
 const repo = config.get('github.repos.cdpTfSvcInfra')
@@ -17,7 +14,7 @@ const schema = Joi.object({
   service_code: Joi.any(),
   mongo: Joi.boolean(),
   redis: Joi.boolean(),
-  test_suite: repositoryNameValidation
+  test_suite: Joi.string()
 }).unknown(true)
 
 /**
