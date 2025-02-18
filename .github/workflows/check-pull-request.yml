@@ -25,3 +25,12 @@ jobs:
       - run: npm run format:check
       - run: npm run lint
       - run: npm test
+  test:
+    name: Run Journey Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t defradigital/cdp-self-service-ops:${{github.sha}} .
+      - uses: DEFRA/cdp-portal-journey-tests/run-journey-tests@main
+        with:
+          self-service-ops: ${{github.sha}}
