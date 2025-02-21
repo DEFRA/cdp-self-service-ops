@@ -48,7 +48,28 @@ describe('#autoDeployServiceValidation', () => {
     expect(
       autoDeployServiceValidation.validate(payload).error.details.at(0).message
     ).toContain(
-      '"environment" must be one of [management, infra-dev, dev, test, perf-test, ext-test, prod]'
+      '"environment" must be one of [infra-dev, management, dev, test, perf-test, ext-test]'
+    )
+  })
+
+  test("Schema shouldn't allow prod environment", () => {
+    const payload = {
+      imageName: 'cdp-portal-frontend',
+      environment: 'prod',
+      version: '1.0.0',
+      instanceCount: 4,
+      cpu: 1024,
+      memory: 2048,
+      user: {
+        id: '00000000-0000-0000-0000-000000000000',
+        displayName: 'Auto-deployed'
+      }
+    }
+
+    expect(
+      autoDeployServiceValidation.validate(payload).error.details.at(0).message
+    ).toContain(
+      '"environment" must be one of [infra-dev, management, dev, test, perf-test, ext-test]'
     )
   })
 
