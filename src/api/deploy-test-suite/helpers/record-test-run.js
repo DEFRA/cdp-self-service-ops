@@ -7,14 +7,14 @@ import {
   environmentValidation,
   repositoryNameValidation,
   runIdValidation,
-  userWithUserIdValidation
+  userWithIdValidation
 } from '~/src/api/helpers/schema/common-validations.js'
 
 const createTestRunValidation = Joi.object({
   testSuite: repositoryNameValidation,
   runId: runIdValidation,
   environment: environmentValidation,
-  user: userWithUserIdValidation
+  user: userWithIdValidation
 })
 
 async function createRecordTestRun(imageName, runId, environment, user) {
