@@ -28,9 +28,8 @@ const testRunMessageValidation = Joi.object({
   deployed_by: userWithUserIdValidation,
   environment_variables: Joi.object({
     BASE_URL: Joi.string().required(),
-    ENVIRONMENT: environmentValidation,
-    HTTP_PROXY: Joi.string().required()
-  })
+    ENVIRONMENT: environmentValidation
+  }).unknown(true)
 })
 
 const generateTestRunMessage = (imageName, environment, runId, user) => {
