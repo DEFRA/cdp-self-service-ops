@@ -50,7 +50,10 @@ const generateTestRunMessage = (imageName, environment, runId, user) => {
       browser: 'chrome',
       version: 'latest'
     },
-    deployed_by: user,
+    deployed_by: {
+      userId: user.id,
+      displayName: user.displayName
+    },
     environment_variables: {
       BASE_URL: `https://${environment}.cdp-int.defra.cloud/`,
       ENVIRONMENT: environment,
