@@ -10,7 +10,7 @@ describe('#generateTestRunMessage', () => {
       'infra-dev',
       crypto.randomUUID(),
       {
-        userId: 'some-id',
+        id: 'some-id',
         displayName: 'My Name'
       }
     )
