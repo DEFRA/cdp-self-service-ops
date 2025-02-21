@@ -2,9 +2,14 @@ import Joi from 'joi'
 import { environments } from '~/src/config/index.js'
 import { ecsCpuToMemoryOptionsMap } from '~/src/api/deploy/helpers/ecs-cpu-to-memory-options-map.js'
 import { buildMemoryValidation } from '~/src/api/deploy/helpers/schema/build-memory-validation.js'
+import { environmentsExceptForProd } from '~/src/config/environments.js'
 
 const environmentValidation = Joi.string()
   .valid(...Object.values(environments))
+  .required()
+
+const environmentExceptForProdValidation = Joi.string()
+  .valid(...environmentsExceptForProd)
   .required()
 
 const currentEnvironmentValidation = Joi.string()
@@ -64,6 +69,7 @@ export {
   cpuValidation,
   currentEnvironmentValidation,
   deploymentIdValidation,
+  environmentExceptForProdValidation,
   environmentValidation,
   instanceCountValidation,
   memoryValidation,

@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import {
   cpuValidation,
-  environmentValidation,
+  environmentExceptForProdValidation,
   instanceCountValidation,
   memoryValidation,
   repositoryNameValidation,
@@ -12,7 +12,7 @@ import {
 const autoDeployServiceValidation = Joi.object({
   imageName: repositoryNameValidation,
   version: versionValidation,
-  environment: environmentValidation,
+  environment: environmentExceptForProdValidation,
   user: userWithIdValidation,
   instanceCount: instanceCountValidation,
   cpu: cpuValidation,
