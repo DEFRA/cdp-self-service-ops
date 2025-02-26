@@ -95,6 +95,19 @@ describe('#create-test-runner-suite', () => {
       request.logger
     )
 
+    // Create App Config
+    expect(triggerWorkflow).toHaveBeenCalledWith(
+      config.get('github.org'),
+      config.get('github.repos.cdpAppConfig'),
+      config.get('workflows.createAppConfig'),
+      {
+        service,
+        team: 'test'
+      },
+      service,
+      request.logger
+    )
+
     // Create infrastructure
     expect(triggerWorkflow).toHaveBeenCalledWith(
       config.get('github.org'),
@@ -121,6 +134,9 @@ describe('#create-test-runner-suite', () => {
       statuses.requested
     )
     expect(status[config.get('github.repos.cdpSquidProxy')]?.status).toEqual(
+      statuses.requested
+    )
+    expect(status[config.get('github.repos.cdpAppConfig')]?.status).toEqual(
       statuses.requested
     )
     expect(status[config.get('github.repos.createWorkflows')]?.status).toEqual(

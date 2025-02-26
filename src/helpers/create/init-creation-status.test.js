@@ -99,6 +99,44 @@ describe('#calculateOverallStatus', () => {
     })
   })
 
+  describe('When calculating a journey test suite status', () => {
+    test('Should provide a "Success" status', () => {
+      const result = calculateOverallStatus({
+        kind: creations.journeyTestsuite,
+        'cdp-create-workflows': { status: statuses.success },
+        'cdp-tf-svc-infra': { status: statuses.success },
+        'cdp-app-config': { status: statuses.success },
+        'cdp-squid-proxy': { status: statuses.success }
+      })
+
+      expect(result).toBe(statuses.success)
+    })
+
+    test('Should provide a "Failure" status', () => {
+      const result = calculateOverallStatus({
+        kind: creations.journeyTestsuite,
+        'cdp-create-workflows': { status: statuses.success },
+        'cdp-tf-svc-infra': { status: statuses.success },
+        'cdp-app-config': { status: statuses.failure },
+        'cdp-squid-proxy': { status: statuses.success }
+      })
+
+      expect(result).toBe(statuses.failure)
+    })
+
+    test('Should provide an "In Progress" status', () => {
+      const result = calculateOverallStatus({
+        kind: creations.journeyTestsuite,
+        'cdp-create-workflows': { status: statuses.success },
+        'cdp-tf-svc-infra': { status: statuses.success },
+        'cdp-app-config': { status: 'some-weird-setting' },
+        'cdp-squid-proxy': { status: statuses.success }
+      })
+
+      expect(result).toBe(statuses.inProgress)
+    })
+  })
+
   describe('When calculating a repository status', () => {
     test('Should provide a "Success" status', () => {
       const result = calculateOverallStatus({

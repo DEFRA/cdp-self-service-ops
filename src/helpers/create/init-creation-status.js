@@ -16,7 +16,7 @@ function getStatusKeys(statusRecord) {
 
     case creations.journeyTestsuite:
     case creations.perfTestsuite:
-      return [cdpCreateWorkflows, cdpTfSvcInfra, cdpSquidConfig]
+      return [cdpCreateWorkflows, cdpTfSvcInfra, cdpSquidConfig, cdpAppConfig]
 
     case creations.microservice:
       return [
