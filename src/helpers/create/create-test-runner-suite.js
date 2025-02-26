@@ -6,7 +6,8 @@ import {
 } from '~/src/helpers/create/init-creation-status.js'
 import {
   createTemplatedRepo,
-  createSquidConfig
+  createSquidConfig,
+  createAppConfig
 } from '~/src/helpers/create/workflows/index.js'
 import { fetchTeam } from '~/src/helpers/fetch-team.js'
 import { createTenantInfrastructure } from '~/src/helpers/create/workflows/create-tenant-infrastructure.js'
@@ -55,7 +56,8 @@ export async function createTestRunnerSuite(
     [
       config.get('github.repos.createWorkflows'),
       config.get('github.repos.cdpTfSvcInfra'),
-      config.get('github.repos.cdpSquidProxy')
+      config.get('github.repos.cdpSquidProxy'),
+      config.get('github.repos.cdpAppConfig')
     ]
   )
 
@@ -71,6 +73,7 @@ export async function createTestRunnerSuite(
       { templateTag }
     ),
     createSquidConfig(request, repositoryName),
+    createAppConfig(request, repositoryName, team.github),
     createTenantInfrastructure(request, repositoryName, {
       service: repositoryName,
       zone,
