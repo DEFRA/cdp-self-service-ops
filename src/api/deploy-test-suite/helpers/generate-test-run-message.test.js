@@ -12,7 +12,8 @@ describe('#generateTestRunMessage', () => {
       {
         id: 'some-id',
         displayName: 'My Name'
-      }
+      },
+      'f2ca1bb6c7e907d06dafe4687e579fce76b37e4e93b7605022da52e6ccc26fd2'
     )
 
     expect(message.deployed_by.userId).toBe('some-id')
