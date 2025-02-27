@@ -1,11 +1,14 @@
 import { createRecordTestRun } from '~/src/api/deploy-test-suite/helpers/record-test-run.js'
 import { randomUUID } from 'node:crypto'
+import { fetcher } from '~/src/helpers/fetcher.js'
+
+jest.mock('~/src/helpers/fetcher.js', () => ({
+  fetcher: jest.fn().mockResolvedValue({})
+}))
 
 describe('#recordTestRun', () => {
   test('Schema should pass validation without errors', async () => {
-    jest.mock('~/src/helpers/fetcher.js', () => ({
-      fetcher: jest.fn().mockResolvedValue({})
-    }))
+    fetcher.mockResolvedValue({})
 
     const res = await createRecordTestRun(
       'some-service',
