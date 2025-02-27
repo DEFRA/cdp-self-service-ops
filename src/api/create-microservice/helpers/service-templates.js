@@ -2,28 +2,28 @@ const serviceTemplates = {
   'cdp-node-frontend-template': {
     repositoryName: 'cdp-node-frontend-template',
     zone: 'public',
-    templateName: 'CDP Node.js Frontend Template',
+    templateName: 'Node.js Frontend',
     language: 'node',
     type: 'frontend'
   },
   'cdp-node-backend-template': {
     repositoryName: 'cdp-node-backend-template',
     zone: 'protected',
-    templateName: 'CDP Node.js Backend Template',
+    templateName: 'Node.js Backend',
     language: 'node',
     type: 'backend'
   },
   'cdp-dotnet-backend-template': {
     repositoryName: 'cdp-dotnet-backend-template',
     zone: 'protected',
-    templateName: 'CDP C# ASP.NET Backend Template',
+    templateName: 'DotNet Backend',
     language: 'dotnet',
     type: 'backend'
   },
   'cdp-python-backend-template': {
     repositoryName: 'cdp-python-backend-template',
     zone: 'protected',
-    templateName: 'CDP Python Backend Template',
+    templateName: 'Python Backend',
     language: 'python',
     type: 'backend',
     requiredScope: 'restrictedTechPython'

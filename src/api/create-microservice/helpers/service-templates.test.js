@@ -6,21 +6,21 @@ describe('#getServiceTemplates', () => {
       {
         language: 'node',
         repositoryName: 'cdp-node-frontend-template',
-        templateName: 'CDP Node.js Frontend Template',
+        templateName: 'Node.js Frontend',
         type: 'frontend',
         zone: 'public'
       },
       {
         language: 'node',
         repositoryName: 'cdp-node-backend-template',
-        templateName: 'CDP Node.js Backend Template',
+        templateName: 'Node.js Backend',
         type: 'backend',
         zone: 'protected'
       },
       {
         language: 'dotnet',
         repositoryName: 'cdp-dotnet-backend-template',
-        templateName: 'CDP C# ASP.NET Backend Template',
+        templateName: 'DotNet Backend',
         type: 'backend',
         zone: 'protected'
       },
@@ -28,7 +28,7 @@ describe('#getServiceTemplates', () => {
         language: 'python',
         repositoryName: 'cdp-python-backend-template',
         requiredScope: 'restrictedTechPython',
-        templateName: 'CDP Python Backend Template',
+        templateName: 'Python Backend',
         type: 'backend',
         zone: 'protected'
       }
@@ -41,21 +41,21 @@ test('Should not provide python template when python scope is not present', () =
     {
       language: 'node',
       repositoryName: 'cdp-node-frontend-template',
-      templateName: 'CDP Node.js Frontend Template',
+      templateName: 'Node.js Frontend',
       type: 'frontend',
       zone: 'public'
     },
     {
       language: 'node',
       repositoryName: 'cdp-node-backend-template',
-      templateName: 'CDP Node.js Backend Template',
+      templateName: 'Node.js Backend',
       type: 'backend',
       zone: 'protected'
     },
     {
       language: 'dotnet',
       repositoryName: 'cdp-dotnet-backend-template',
-      templateName: 'CDP C# ASP.NET Backend Template',
+      templateName: 'DotNet Backend',
       type: 'backend',
       zone: 'protected'
     }
