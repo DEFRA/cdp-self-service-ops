@@ -4,6 +4,7 @@ import { createLogger } from '~/src/helpers/logging/logger.js'
 import { fetcher } from '~/src/helpers/fetcher.js'
 import Joi from 'joi'
 import {
+  commitShaValidation,
   environmentValidation,
   repositoryNameValidation,
   runIdValidation,
@@ -14,10 +15,17 @@ const createTestRunValidation = Joi.object({
   testSuite: repositoryNameValidation,
   runId: runIdValidation,
   environment: environmentValidation,
-  user: userWithIdValidation
+  user: userWithIdValidation,
+  configVersion: commitShaValidation
 })
 
-async function createRecordTestRun(imageName, runId, environment, user) {
+async function createRecordTestRun(
+  imageName,
+  runId,
+  environment,
+  user,
+  configCommitSha
+) {
   const logger = createLogger()
 
   const url = `${config.get('portalBackendUrl')}/test-run`
@@ -29,7 +37,8 @@ async function createRecordTestRun(imageName, runId, environment, user) {
     testSuite: imageName,
     runId,
     environment,
-    user
+    user,
+    configVersion: configCommitSha
   }
 
   Joi.assert(body, createTestRunValidation)

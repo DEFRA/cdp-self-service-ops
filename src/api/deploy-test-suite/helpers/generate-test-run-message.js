@@ -29,10 +29,38 @@ const testRunMessageValidation = Joi.object({
   environment_variables: Joi.object({
     BASE_URL: Joi.string().required(),
     ENVIRONMENT: environmentValidation
-  }).unknown(true)
+  }).unknown(true),
+  env_files: Joi.array()
+    .items(
+      Joi.object({
+        value: Joi.string().required(),
+        type: Joi.string().equal('s3').required()
+      })
+    )
+    .length(4)
+    .required()
 })
 
-const generateTestRunMessage = (imageName, environment, runId, user) => {
+/**
+ *
+ * @param {string} imageName
+ * @param {string} environment
+ * @param {string} runId
+ * @param {{id:string, displayName: string}} user
+ * @param {string} configCommitSha
+ * @returns {{cluster_name: string, image, desired_count: number, webdriver_sidecar: {browser: string, version: string}, image_version: string, env_files: [{type: string, value: string},{type: string, value: string},{type: string, value: string},{type: string, value: string}], environment_variables: {ENVIRONMENT, BASE_URL: string, HTTP_PROXY: never}, environment, zone: string, port: number, name, task_memory: number, runId, deployed_by: {displayName, userId}, task_cpu: number}}
+ */
+const generateTestRunMessage = (
+  imageName,
+  environment,
+  runId,
+  user,
+  configCommitSha
+) => {
+  const basePath = configCommitSha
+    ? `arn:aws:s3:::cdp-${environment}-service-configs/${configCommitSha}`
+    : `arn:aws:s3:::cdp-${environment}-service-configs`
+
   const message = {
     environment,
     runId,
@@ -57,7 +85,25 @@ const generateTestRunMessage = (imageName, environment, runId, user) => {
       BASE_URL: `https://${environment}.cdp-int.defra.cloud/`,
       ENVIRONMENT: environment,
       HTTP_PROXY: config.get('httpProxy') // Once we support cdp-app-config in test suites this can go
-    }
+    },
+    env_files: [
+      {
+        value: `${basePath}/global/global_fixed.env`,
+        type: 's3'
+      },
+      {
+        value: `${basePath}/services/${imageName}/${environment}/${imageName}.env`,
+        type: 's3'
+      },
+      {
+        value: `${basePath}/services/${imageName}/defaults.env`,
+        type: 's3'
+      },
+      {
+        value: `${basePath}/environments/${environment}/defaults.env`,
+        type: 's3'
+      }
+    ]
   }
 
   Joi.assert(message, testRunMessageValidation)

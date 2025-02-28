@@ -48,7 +48,7 @@ const cpuValidation = Joi.number()
 
 const runIdValidation = Joi.string().guid().required()
 const deploymentIdValidation = Joi.string().guid().required()
-
+const commitShaValidation = Joi.string().required()
 const repositoryNameValidation = Joi.string()
   .pattern(/^[\w-]*$/)
   .pattern(/^[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]$/, {
@@ -66,6 +66,7 @@ const repositoryNameValidation = Joi.string()
   })
 
 export {
+  commitShaValidation,
   cpuValidation,
   currentEnvironmentValidation,
   deploymentIdValidation,
