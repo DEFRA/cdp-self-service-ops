@@ -17,13 +17,9 @@ export const deleteDeploymentFilesController = {
     }
   },
   handler: async (request, h) => {
-    const { serviceName, environment } = request.params
+    const { serviceName } = request.params
 
-    await deleteDeploymentFiles({
-      serviceName,
-      environment,
-      logger: request.logger
-    })
+    await deleteDeploymentFiles(serviceName, request.logger)
     return h.response().code(204)
   }
 }
