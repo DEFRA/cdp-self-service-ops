@@ -63,7 +63,7 @@ describe('#runTestSuite', () => {
           BASE_URL: `https://test.cdp-int.defra.cloud/`,
           ENVIRONMENT: 'test'
         }),
-        env_files: [
+        environment_files: [
           {
             value: `${basePath}/global/global_fixed.env`,
             type: 's3'

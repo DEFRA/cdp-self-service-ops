@@ -30,7 +30,7 @@ const testRunMessageValidation = Joi.object({
     BASE_URL: Joi.string().required(),
     ENVIRONMENT: environmentValidation
   }).unknown(true),
-  env_files: Joi.array()
+  environment_files: Joi.array()
     .items(
       Joi.object({
         value: Joi.string().required(),
@@ -48,7 +48,7 @@ const testRunMessageValidation = Joi.object({
  * @param {string} runId
  * @param {{id:string, displayName: string}} user
  * @param {string} configCommitSha
- * @returns {{cluster_name: string, image, desired_count: number, webdriver_sidecar: {browser: string, version: string}, image_version: string, env_files: [{type: string, value: string},{type: string, value: string},{type: string, value: string},{type: string, value: string}], environment_variables: {ENVIRONMENT, BASE_URL: string, HTTP_PROXY: never}, environment, zone: string, port: number, name, task_memory: number, runId, deployed_by: {displayName, userId}, task_cpu: number}}
+ * @returns {{cluster_name: string, image, desired_count: number, webdriver_sidecar: {browser: string, version: string}, image_version: string, environment_files: [{type: string, value: string},{type: string, value: string},{type: string, value: string},{type: string, value: string}], environment_variables: {ENVIRONMENT, BASE_URL: string, HTTP_PROXY: never}, environment, zone: string, port: number, name, task_memory: number, runId, deployed_by: {displayName, userId}, task_cpu: number}}
  */
 const generateTestRunMessage = (
   imageName,
@@ -86,7 +86,7 @@ const generateTestRunMessage = (
       ENVIRONMENT: environment,
       HTTP_PROXY: config.get('httpProxy') // Once we support cdp-app-config in test suites this can go
     },
-    env_files: [
+    environment_files: [
       {
         value: `${basePath}/global/global_fixed.env`,
         type: 's3'
