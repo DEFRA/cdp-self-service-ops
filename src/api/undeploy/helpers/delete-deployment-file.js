@@ -4,12 +4,13 @@ import { isFeatureEnabled } from '~/src/helpers/feature-toggle/is-feature-enable
 import { removeDeployment } from '~/src/helpers/remove/workflows/remove-deployment.js'
 
 /**
- * @param {{serviceName: string, logger: [import('pino').Logger]}} options
+ * @param {string} serviceName
+ * @param {import("pino").Logger} logger
  */
-export async function deleteDeploymentFiles({
+export async function deleteDeploymentFiles(
   serviceName,
   logger = createLogger()
-}) {
+) {
   logger.info(`Deleting deployment files for ${serviceName}`)
 
   if (

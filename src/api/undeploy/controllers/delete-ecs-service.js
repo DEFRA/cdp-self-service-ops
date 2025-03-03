@@ -21,11 +21,7 @@ const deleteEcsServiceController = {
   handler: async (request, h) => {
     const { imageName, environment } = request.params
 
-    await deleteEcsService({
-      serviceName: imageName,
-      environment,
-      logger: request.logger
-    })
+    await deleteEcsService(imageName, environment, request.logger)
     return h.response().code(204)
   }
 }
@@ -47,10 +43,7 @@ const deleteAllEcsServicesController = {
   handler: async (request, h) => {
     const { imageName } = request.params
 
-    await deleteAllEcsServices({
-      serviceName: imageName,
-      logger: request.logger
-    })
+    await deleteAllEcsServices(imageName, request.logger)
     return h.response().code(204)
   }
 }
