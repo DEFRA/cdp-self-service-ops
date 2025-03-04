@@ -39,10 +39,10 @@ describe('#runTestSuite', () => {
     )
 
     const basePath = `arn:aws:s3:::cdp-test-service-configs/${commit}`
-    expect(sendSnsMessage).toHaveBeenCalledWith({
-      snsClient: expect.anything(),
-      topic: config.get('snsRunTestTopicArn'),
-      message: expect.objectContaining({
+    expect(sendSnsMessage).toHaveBeenCalledWith(
+      expect.anything(),
+      config.get('snsRunTestTopicArn'),
+      expect.objectContaining({
         environment: 'test',
         zone: 'public',
         name: 'some-service',
@@ -82,8 +82,8 @@ describe('#runTestSuite', () => {
           }
         ]
       }),
-      logger: expect.anything()
-    })
+      expect.anything()
+    )
 
     expect(res).not.toBeNull()
   })

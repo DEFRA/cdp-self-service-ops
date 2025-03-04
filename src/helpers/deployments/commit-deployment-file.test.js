@@ -22,24 +22,19 @@ const deployment = {
     }
   }
 }
-const owner = 'some-org'
-const repo = 'some-repo'
 
 describe('#commitDeploymentFile', () => {
   test('Should commit with filePath', async () => {
-    await commitDeploymentFile({
-      deployment,
-      owner,
-      repo,
-      logger
-    })
+    await commitDeploymentFile(deployment, logger)
 
     expect(commitFile).toHaveBeenCalledWith(
-      expect.objectContaining({
-        owner: 'some-org',
-        repo: 'some-repo',
-        filePath: 'environments/some-env/some-zone/some-name.json'
-      })
+      'DEFRA',
+      'cdp-app-deployments',
+      'main',
+      'some-name some-version to some-env\nInitiated by some-name',
+      'environments/some-env/some-zone/some-name.json',
+      deployment,
+      logger
     )
   })
 })

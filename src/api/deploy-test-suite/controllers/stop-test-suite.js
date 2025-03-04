@@ -50,14 +50,14 @@ const stopTestSuiteController = {
 
     request.logger.info(`Stopping task ${taskId} in ${testRun.environment}`)
 
-    const snsResponse = await sendSnsMessage({
-      snsClient: request.snsClient,
+    const snsResponse = await sendSnsMessage(
+      request.snsClient,
       topic,
       message,
-      logger: request.logger,
-      environment: testRun.environment,
-      deduplicationId: taskId
-    })
+      request.logger,
+      testRun.environment,
+      taskId
+    )
     request.logger.info(
       `SNS Stop Test response: ${JSON.stringify(snsResponse, null, 2)}`
     )

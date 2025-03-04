@@ -64,7 +64,7 @@ async function deployService(payload, logger, h, user) {
     user
   })
 
-  await commitDeploymentFile({ deployment, logger })
+  await commitDeploymentFile(deployment, logger)
 
   logger.info('Deployment commit file created')
   return h.response({ message: 'success', deploymentId }).code(200)

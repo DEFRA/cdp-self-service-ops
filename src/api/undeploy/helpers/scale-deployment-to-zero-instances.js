@@ -1,16 +1,17 @@
 import { config } from '~/src/config/index.js'
 
-const currentEnvironment = config.get('environment')
+const deploymentEnvironment = config.get('environment')
 
 /**
- * @param {{deployment: object, user: {id: string, displayName: string}, undeploymentId: string, deploymentEnvironment: ?string}} options
+ * @param {object} deployment
+ * @param {{id: string, displayName: string}} user
+ * @param {string} undeploymentId
  */
-export function scaleDeploymentToZeroInstances({
+export function scaleDeploymentToZeroInstances(
   deployment,
   user,
-  undeploymentId,
-  deploymentEnvironment = currentEnvironment
-}) {
+  undeploymentId
+) {
   return {
     ...deployment,
     deploymentId: undeploymentId,

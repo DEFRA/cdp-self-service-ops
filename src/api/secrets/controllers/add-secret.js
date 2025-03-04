@@ -44,10 +44,10 @@ const addSecretController = {
     }
 
     try {
-      await sendSnsMessage({
-        snsClient: request.snsClient,
+      await sendSnsMessage(
+        request.snsClient,
         topic,
-        message: {
+        {
           environment,
           name: `cdp/services/${serviceName}`,
           description,
@@ -55,8 +55,8 @@ const addSecretController = {
           secret_value: secretValue,
           action: 'add_secret'
         },
-        logger: request.logger
-      })
+        request.logger
+      )
 
       await registerPendingSecret({
         environment,

@@ -1,8 +1,5 @@
 import { deleteDeploymentFilesController } from '~/src/api/undeploy/controllers/delete-deployment-file.js'
-import {
-  deleteEcsServiceController,
-  deleteAllEcsServicesController
-} from '~/src/api/undeploy/controllers/delete-ecs-service.js'
+import { deleteEcsServiceController } from '~/src/api/undeploy/controllers/delete-ecs-service.js'
 import {
   undeployServiceFromAllEnvironmentController,
   undeployServiceFromEnvironmentController
@@ -15,13 +12,8 @@ const undeploy = {
       await server.route([
         {
           method: 'DELETE',
-          path: '/delete-ecs/{imageName}/{environment}',
+          path: '/delete-ecs/{serviceName}',
           ...deleteEcsServiceController
-        },
-        {
-          method: 'DELETE',
-          path: '/delete-ecs/{imageName}',
-          ...deleteAllEcsServicesController
         },
         {
           method: 'POST',

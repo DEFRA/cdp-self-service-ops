@@ -1,21 +1,12 @@
-import { createLogger } from '~/src/helpers/logging/logger.js'
-import { orderedEnvironments } from '~/src/config/environments.js'
 import { featureToggles } from '~/src/helpers/feature-toggle/feature-toggles.js'
 import { isFeatureEnabled } from '~/src/helpers/feature-toggle/is-feature-enabled.js'
 import { removeEcsService } from '~/src/helpers/remove/workflows/remove-ecs-service.js'
 
 /**
  * @param {string} serviceName
- * @param {string} environment
  * @param {import("pino").Logger} logger
  */
-async function deleteEcsService(
-  serviceName,
-  environment,
-  logger = createLogger()
-) {
-  logger.info(`Deleting ECS service for ${serviceName} in env ${environment}`)
-
+async function deleteEcsService(serviceName, logger) {
   if (
     !isFeatureEnabled(featureToggles.decommissionService) ||
     !isFeatureEnabled(featureToggles.undeploy.deleteEcsService)
@@ -24,17 +15,7 @@ async function deleteEcsService(
     return
   }
 
-  await removeEcsService(serviceName, environment, logger)
+  await removeEcsService(serviceName, logger)
 }
 
-/**
- * @param {string} serviceName
- * @param {import("pino").Logger} logger
- */
-async function deleteAllEcsServices(serviceName, logger = createLogger()) {
-  for (const environment of orderedEnvironments) {
-    await deleteEcsService(serviceName, environment, logger)
-  }
-}
-
-export { deleteEcsService, deleteAllEcsServices }
+export { deleteEcsService }

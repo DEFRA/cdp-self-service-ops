@@ -1,14 +1,14 @@
 import crypto from 'node:crypto'
 import { PublishCommand } from '@aws-sdk/client-sns'
 
-async function sendSnsMessage({
+async function sendSnsMessage(
   snsClient,
   topic,
   message,
   logger,
   environment = message?.environment,
   deduplicationId = crypto.randomUUID()
-}) {
+) {
   const input = {
     TopicArn: topic,
     Message: JSON.stringify(message, null, 2),

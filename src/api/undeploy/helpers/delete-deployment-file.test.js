@@ -10,7 +10,7 @@ const serviceName = 'some-service'
 const logger = { info: jest.fn() }
 
 describe('#deleteDeploymentFiles', () => {
-  test('should delete all deployment files for a service', async () => {
+  test('should trigger workflow to delete all deployment files for a service', async () => {
     isFeatureEnabled.mockReturnValue(true)
 
     await deleteDeploymentFiles(serviceName, logger)
@@ -21,7 +21,7 @@ describe('#deleteDeploymentFiles', () => {
     expect(removeDeployment).toHaveBeenCalledWith(serviceName, logger)
   })
 
-  test('should not delete deployment file if decommission is disabled', async () => {
+  test('should not trigger workflow to delete deployment files if decommission is disabled', async () => {
     isFeatureEnabled.mockReturnValueOnce(false).mockReturnValue(true)
 
     await deleteDeploymentFiles(serviceName, logger)
@@ -29,7 +29,7 @@ describe('#deleteDeploymentFiles', () => {
     expect(removeDeployment).toHaveBeenCalledTimes(0)
   })
 
-  test('should not delete deployment file if feature disabled', async () => {
+  test('should not trigger workflow to delete deployment files if feature disabled', async () => {
     isFeatureEnabled.mockReturnValueOnce(true).mockReturnValue(false)
 
     await deleteDeploymentFiles(serviceName, logger)

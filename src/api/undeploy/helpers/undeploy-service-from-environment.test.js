@@ -20,21 +20,17 @@ lookupServiceInEnvironment.mockResolvedValue({
 })
 getRepositoryInfo.mockResolvedValue({ repository: { topics: [] } })
 
-const undeploymentId = crypto.randomUUID()
 const serviceName = 'some-service'
 const environment = 'dev'
 const user = { id: 'some-user-id', displayName: 'some-name' }
-const deployFromFileEnvironments = ['dev']
 
 async function callUndeployServiceFromEnvironment() {
-  return await undeployServiceFromEnvironment({
+  return await undeployServiceFromEnvironment(
     serviceName,
     environment,
     user,
-    undeploymentId,
-    deployFromFileEnvironments,
     logger
-  })
+  )
 }
 
 describe('#undeployServiceFromEnvironment', () => {
@@ -65,14 +61,14 @@ describe('#undeployServiceFromEnvironment', () => {
     expect(isFeatureEnabled).toHaveBeenCalledWith(featureToggles.scaleEcsToZero)
     expect(lookupServiceInEnvironment).toHaveBeenCalledTimes(1)
     expect(scaleEcsToZero).toHaveBeenCalledTimes(1)
-    expect(scaleEcsToZero).toHaveBeenCalledWith({
+    expect(scaleEcsToZero).toHaveBeenCalledWith(
       serviceName,
       environment,
-      zone: 'some-zone',
+      'some-zone',
       user,
-      undeploymentId,
+      expect.anything(),
       logger
-    })
+    )
   })
 
   test('if test suite should not call anything', async () => {
