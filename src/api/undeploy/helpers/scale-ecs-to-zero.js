@@ -6,16 +6,21 @@ import { transformRunningDetailsToDeployment } from '~/src/helpers/deployments/t
 import { scaleDeploymentToZeroInstances } from '~/src/api/undeploy/helpers/scale-deployment-to-zero-instances.js'
 
 /**
- * @param {{serviceName: string, environment: string, zone: string, user: {id: string, displayName: string}, undeploymentId: string, logger: import('pino').Logger}} options
+ * @param {string} serviceName
+ * @param {string} environment
+ * @param {string} zone
+ * @param {{id: string, displayName: string}} user
+ * @param {string} undeploymentId
+ * @param {import("pino").Logger} logger
  */
-export async function scaleEcsToZero({
+export async function scaleEcsToZero(
   serviceName,
   environment,
   zone,
   user,
   undeploymentId,
   logger
-}) {
+) {
   logger.info(`Scaling ECS to ZERO for ${serviceName} in env ${environment}`)
 
   const runningDetails = await findRunningDetails(serviceName, environment)
@@ -33,12 +38,12 @@ export async function scaleEcsToZero({
   }
 
   const deployment = transformRunningDetailsToDeployment(runningDetails, zone)
-  const undeployment = scaleDeploymentToZeroInstances({
+  const undeployment = scaleDeploymentToZeroInstances(
     deployment,
     user,
     undeploymentId
-  })
-  await commitDeploymentFile({ deployment: undeployment, logger })
+  )
+  await commitDeploymentFile(undeployment, logger)
 
   logger.info('ECS Service scaled to 0')
 }

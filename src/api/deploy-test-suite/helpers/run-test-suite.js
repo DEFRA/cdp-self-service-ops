@@ -32,12 +32,12 @@ async function runTestSuite(imageName, environment, user, snsClient, logger) {
     configLatestCommitSha
   )
 
-  const snsResponse = await sendSnsMessage({
+  const snsResponse = await sendSnsMessage(
     snsClient,
-    topic: snsRunTestTopic,
-    message: runMessage,
+    snsRunTestTopic,
+    runMessage,
     logger
-  })
+  )
 
   if (!snsResponse) {
     logger.error('Failed to send SNS message')

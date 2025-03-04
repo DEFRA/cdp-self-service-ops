@@ -7,7 +7,7 @@ const deleteDockerImages = {
       await server.route([
         {
           method: 'DELETE',
-          path: '/delete-docker-images/{imageName}',
+          path: '/delete-docker-images/{serviceName}',
           ...deleteDockerImagesController
         }
       ])

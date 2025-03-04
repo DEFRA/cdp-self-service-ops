@@ -23,20 +23,19 @@ const runningDetails = {
   user: { id: 'other-user-id', displayName: 'other-name' },
   status: 'running'
 }
-const scaleDetails = {
-  serviceName,
-  environment: 'dev',
-  zone: 'public',
-  user: someUser,
-  undeploymentId: someUndeploymentId,
-  logger
-}
 
 describe('#scaleEcsToZero', () => {
   test('If no data (null) should not proceed with scale to 0', async () => {
     findRunningDetails.mockReturnValue(null)
 
-    await scaleEcsToZero(scaleDetails)
+    await scaleEcsToZero(
+      serviceName,
+      'dev',
+      'public',
+      someUser,
+      someUndeploymentId,
+      logger
+    )
 
     expect(findRunningDetails).toHaveBeenCalledTimes(1)
     expect(commitDeploymentFile).toHaveBeenCalledTimes(0)
@@ -45,7 +44,14 @@ describe('#scaleEcsToZero', () => {
   test('If no existing deployment should not proceed with scale to 0', async () => {
     findRunningDetails.mockReturnValue({})
 
-    await scaleEcsToZero(scaleDetails)
+    await scaleEcsToZero(
+      serviceName,
+      'dev',
+      'public',
+      someUser,
+      someUndeploymentId,
+      logger
+    )
 
     expect(findRunningDetails).toHaveBeenCalledTimes(1)
     expect(commitDeploymentFile).toHaveBeenCalledTimes(0)
@@ -57,7 +63,14 @@ describe('#scaleEcsToZero', () => {
       instanceCount: 0
     })
 
-    await scaleEcsToZero(scaleDetails)
+    await scaleEcsToZero(
+      serviceName,
+      'dev',
+      'public',
+      someUser,
+      someUndeploymentId,
+      logger
+    )
 
     expect(findRunningDetails).toHaveBeenCalledTimes(1)
     expect(commitDeploymentFile).toHaveBeenCalledTimes(0)
@@ -66,7 +79,14 @@ describe('#scaleEcsToZero', () => {
   test('With existing deployment should proceed with scale to 0', async () => {
     findRunningDetails.mockReturnValue(runningDetails)
 
-    await scaleEcsToZero(scaleDetails)
+    await scaleEcsToZero(
+      serviceName,
+      'dev',
+      'public',
+      someUser,
+      someUndeploymentId,
+      logger
+    )
 
     expect(findRunningDetails).toHaveBeenCalledTimes(1)
     expect(commitDeploymentFile).toHaveBeenCalledTimes(1)
@@ -75,38 +95,50 @@ describe('#scaleEcsToZero', () => {
   test('Check deployment instance count is ZERO', async () => {
     findRunningDetails.mockReturnValue(runningDetails)
 
-    await scaleEcsToZero(scaleDetails)
+    await scaleEcsToZero(
+      serviceName,
+      'dev',
+      'public',
+      someUser,
+      someUndeploymentId,
+      logger
+    )
 
     expect(commitDeploymentFile).toHaveBeenCalledWith(
       expect.objectContaining({
-        deployment: expect.objectContaining({
-          resources: {
-            instanceCount: 0,
-            cpu: expect.any(Number),
-            memory: expect.any(Number)
-          }
-        })
-      })
+        resources: {
+          instanceCount: 0,
+          cpu: expect.any(Number),
+          memory: expect.any(Number)
+        }
+      }),
+      logger
     )
   })
 
   test('Check deployment file contains user', async () => {
     findRunningDetails.mockReturnValue(runningDetails)
 
-    await scaleEcsToZero({ ...scaleDetails, user: someUser })
+    await scaleEcsToZero(
+      serviceName,
+      'dev',
+      'public',
+      someUser,
+      someUndeploymentId,
+      logger
+    )
 
     expect(commitDeploymentFile).toHaveBeenCalledWith(
       expect.objectContaining({
-        deployment: expect.objectContaining({
-          metadata: {
-            deploymentEnvironment: expect.any(String),
-            user: {
-              userId: someUser.id,
-              displayName: someUser.displayName
-            }
+        metadata: {
+          deploymentEnvironment: expect.any(String),
+          user: {
+            userId: someUser.id,
+            displayName: someUser.displayName
           }
-        })
-      })
+        }
+      }),
+      logger
     )
   })
 })

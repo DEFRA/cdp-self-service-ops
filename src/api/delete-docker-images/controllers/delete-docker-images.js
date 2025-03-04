@@ -2,6 +2,7 @@ import Joi from 'joi'
 
 import { deleteDockerImages } from '~/src/api/decommission-service/helpers/delete-docker-images.js'
 import { getScopedUser } from '~/src/helpers/user/get-scoped-user.js'
+import { repositoryNameValidation } from '~/src/api/helpers/schema/common-validations.js'
 
 const deleteDockerImagesController = {
   options: {
@@ -10,7 +11,7 @@ const deleteDockerImagesController = {
     },
     validate: {
       params: Joi.object({
-        imageName: Joi.string().min(1).required()
+        serviceName: repositoryNameValidation
       })
     },
     payload: {
@@ -20,10 +21,10 @@ const deleteDockerImagesController = {
     }
   },
   handler: async (request, h) => {
-    const { imageName } = request.params
-    const user = await getScopedUser(imageName, request.auth)
+    const { serviceName } = request.params
+    const user = await getScopedUser(serviceName, request.auth)
 
-    await deleteDockerImages(imageName, user, request.logger)
+    await deleteDockerImages(serviceName, user, request.logger)
 
     return h.response({ message: 'success' }).code(204)
   }

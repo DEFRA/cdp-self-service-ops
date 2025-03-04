@@ -18,12 +18,12 @@ const undeployServiceFromEnvironmentController = {
     const { serviceName, environment } = request.params
     const user = await getScopedUser(serviceName, request.auth)
 
-    await undeployServiceFromEnvironment({
+    await undeployServiceFromEnvironment(
       serviceName,
       environment,
       user,
-      logger: request.logger
-    })
+      request.logger
+    )
     return h.response({ message: 'success' }).code(200)
   }
 }
@@ -43,11 +43,7 @@ const undeployServiceFromAllEnvironmentController = {
     const serviceName = request.params.serviceName
     const user = await getScopedUser(serviceName, request.auth)
 
-    await undeployServiceFromAllEnvironments({
-      serviceName,
-      user,
-      logger: request.logger
-    })
+    await undeployServiceFromAllEnvironments(serviceName, user, request.logger)
     return h.response({ message: 'success' }).code(200)
   }
 }

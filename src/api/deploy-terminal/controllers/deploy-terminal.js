@@ -65,12 +65,12 @@ const deployTerminalController = {
       service: payload.service
     })
 
-    const snsResponse = await sendSnsMessage({
+    const snsResponse = await sendSnsMessage(
       snsClient,
-      topic: config.get('snsRunTerminalTopicArn'),
-      message: runMessage,
+      config.get('snsRunTerminalTopicArn'),
+      runMessage,
       logger
-    })
+    )
 
     logger.info(
       `SNS Deploy Terminal response: ${JSON.stringify(snsResponse, null, 2)}`

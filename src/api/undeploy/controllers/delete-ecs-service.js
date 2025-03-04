@@ -1,10 +1,7 @@
 import Joi from 'joi'
 
-import { undeployServiceValidation } from '~/src/api/undeploy/helpers/schema/undeploy-service-validation.js'
-import {
-  deleteEcsService,
-  deleteAllEcsServices
-} from '~/src/api/undeploy/helpers/delete-ecs-service.js'
+import { deleteEcsService } from '~/src/api/undeploy/helpers/delete-ecs-service.js'
+import { repositoryNameValidation } from '~/src/api/helpers/schema/common-validations.js'
 
 const deleteEcsServiceController = {
   options: {
@@ -15,37 +12,17 @@ const deleteEcsServiceController = {
       }
     },
     validate: {
-      params: undeployServiceValidation()
-    }
-  },
-  handler: async (request, h) => {
-    const { imageName, environment } = request.params
-
-    await deleteEcsService(imageName, environment, request.logger)
-    return h.response().code(204)
-  }
-}
-
-const deleteAllEcsServicesController = {
-  options: {
-    auth: {
-      strategy: 'azure-oidc',
-      access: {
-        scope: ['admin']
-      }
-    },
-    validate: {
       params: Joi.object({
-        imageName: Joi.string().min(1).required()
+        serviceName: repositoryNameValidation
       })
     }
   },
   handler: async (request, h) => {
-    const { imageName } = request.params
+    const { serviceName } = request.params
 
-    await deleteAllEcsServices(imageName, request.logger)
+    await deleteEcsService(serviceName, request.logger)
     return h.response().code(204)
   }
 }
 
-export { deleteEcsServiceController, deleteAllEcsServicesController }
+export { deleteEcsServiceController }

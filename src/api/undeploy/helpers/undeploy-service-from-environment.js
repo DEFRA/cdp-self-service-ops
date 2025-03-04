@@ -3,21 +3,24 @@ import { scaleEcsToZero } from '~/src/api/undeploy/helpers/scale-ecs-to-zero.js'
 import { lookupServiceInEnvironment } from '~/src/helpers/portal-backend/lookup-tenant-service.js'
 import { isFeatureEnabled } from '~/src/helpers/feature-toggle/is-feature-enabled.js'
 import { featureToggles } from '~/src/helpers/feature-toggle/feature-toggles.js'
-import { createLogger } from '~/src/helpers/logging/logger.js'
 import { getRepositoryInfo } from '~/src/helpers/portal-backend/get-repository-info.js'
 
 /**
- * @param {{serviceName: string, environment: string, user: {id: string, displayName: string}, undeploymentId: string, logger: import('pino').Logger}} options
+ * @param {string} serviceName
+ * @param {string} environment
+ * @param {{id: string, displayName: string}} user
+ * @param {import("pino").Logger} logger
  * @returns {Promise<string>}
  */
-export async function undeployServiceFromEnvironment({
+export async function undeployServiceFromEnvironment(
   serviceName,
   environment,
   user,
-  undeploymentId = crypto.randomUUID(),
-  logger = createLogger()
-}) {
+  logger
+) {
   logger.info(`Undeploying ${serviceName} from ${environment} in progress`)
+
+  const undeploymentId = crypto.randomUUID()
 
   const repositoryInfo = await getRepositoryInfo(serviceName, logger)
   const isTestSuite = repositoryInfo?.repository?.topics?.includes('test-suite')
@@ -38,14 +41,14 @@ export async function undeployServiceFromEnvironment({
   await registerUndeployment(serviceName, environment, user, undeploymentId)
 
   if (isFeatureEnabled(featureToggles.scaleEcsToZero)) {
-    await scaleEcsToZero({
+    await scaleEcsToZero(
       serviceName,
       environment,
       zone,
       user,
       undeploymentId,
       logger
-    })
+    )
   } else {
     logger.info('Scale ECS Service to 0 feature is disabled')
   }
