@@ -16,7 +16,7 @@ jest.mock('~/src/helpers/sns/send-sns-message.js', () => ({
 }))
 
 jest.mock('~/src/api/deploy-test-suite/helpers/record-test-run.js', () => ({
-  createRecordTestRun: jest.fn().mockResolvedValue({})
+  recordTestRun: jest.fn().mockResolvedValue({})
 }))
 
 describe('#runTestSuite', () => {

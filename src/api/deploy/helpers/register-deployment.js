@@ -33,7 +33,7 @@ async function registerDeployment(
   memory,
   user,
   deploymentId,
-  latestConfigCommitSha
+  configVersion
 ) {
   const body = {
     service: imageName,
@@ -44,7 +44,7 @@ async function registerDeployment(
     memory: memory.toString(),
     user,
     deploymentId,
-    configVersion: latestConfigCommitSha
+    configVersion
   }
 
   Joi.assert(body, registerDeploymentValidation)

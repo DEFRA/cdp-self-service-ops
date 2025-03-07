@@ -3,7 +3,6 @@ import { registerDeployment } from '~/src/api/deploy/helpers/register-deployment
 import { generateDeployment } from '~/src/helpers/deployments/generate-deployment.js'
 import { commitDeploymentFile } from '~/src/helpers/deployments/commit-deployment-file.js'
 import { lookupTenantService } from '~/src/helpers/portal-backend/lookup-tenant-service.js'
-import { getLatestAppConfigCommitSha } from '~/src/helpers/portal-backend/get-latest-app-config-commit-sha.js'
 import { getScopedUser } from '~/src/helpers/user/get-scoped-user.js'
 
 async function deployService(payload, logger, h, user) {
@@ -15,18 +14,6 @@ async function deployService(payload, logger, h, user) {
     `Deployment of ${imageName} version ${version} to ${environment} in progress`
   )
 
-  const configLatestCommitSha = await getLatestAppConfigCommitSha(
-    environment,
-    logger
-  )
-  if (!configLatestCommitSha) {
-    const message =
-      'Error encountered whilst attempting to get latest cdp-app-config sha'
-    return h.response({ message }).code(500)
-  }
-
-  logger.info(`Config commit sha ${configLatestCommitSha}`)
-
   const deploymentId = crypto.randomUUID()
   await registerDeployment(
     imageName,
@@ -37,7 +24,7 @@ async function deployService(payload, logger, h, user) {
     payload.memory,
     user,
     deploymentId,
-    configLatestCommitSha
+    payload.configVersion
   )
 
   logger.info('Deployment registered')
@@ -58,7 +45,7 @@ async function deployService(payload, logger, h, user) {
     deploymentId,
     payload,
     zone: service.zone,
-    commitSha: configLatestCommitSha,
+    commitSha: payload.configVersion,
     serviceCode: service.serviceCode,
     deploy: true,
     user

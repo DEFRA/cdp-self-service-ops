@@ -11,7 +11,7 @@ import {
   userWithIdValidation
 } from '~/src/api/helpers/schema/common-validations.js'
 
-const createTestRunValidation = Joi.object({
+const recordTestRunValidation = Joi.object({
   testSuite: repositoryNameValidation,
   runId: runIdValidation,
   environment: environmentValidation,
@@ -19,7 +19,7 @@ const createTestRunValidation = Joi.object({
   configVersion: commitShaValidation
 })
 
-async function createRecordTestRun(
+async function recordTestRun(
   imageName,
   runId,
   environment,
@@ -31,7 +31,7 @@ async function createRecordTestRun(
   const url = `${config.get('portalBackendUrl')}/test-run`
 
   logger.info(
-    `Recording  test-run for ${imageName} run ${runId} by ${user.displayName}`
+    `Recording test-run for ${imageName} run ${runId} by ${user.displayName}`
   )
   const body = {
     testSuite: imageName,
@@ -41,7 +41,7 @@ async function createRecordTestRun(
     configVersion: configCommitSha
   }
 
-  Joi.assert(body, createTestRunValidation)
+  Joi.assert(body, recordTestRunValidation)
 
   return fetcher(url, {
     method: 'POST',
@@ -52,4 +52,4 @@ async function createRecordTestRun(
   })
 }
 
-export { createRecordTestRun }
+export { recordTestRun }

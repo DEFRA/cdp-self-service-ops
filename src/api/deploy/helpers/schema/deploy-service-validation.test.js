@@ -8,7 +8,8 @@ describe('#deployServiceValidation', () => {
       version: '1.0.0',
       instanceCount: 4,
       cpu: 1024,
-      memory: 2048
+      memory: 2048,
+      configVersion: 'abc123def'
     }
 
     expect(deployServiceValidation.validate(payload)).toEqual({
@@ -18,7 +19,8 @@ describe('#deployServiceValidation', () => {
         version: '1.0.0',
         instanceCount: 4,
         cpu: 1024,
-        memory: 2048
+        memory: 2048,
+        configVersion: 'abc123def'
       }
     })
   })
@@ -30,7 +32,8 @@ describe('#deployServiceValidation', () => {
       version: '1.0.0',
       instanceCount: 4,
       cpu: 1024,
-      memory: 2048
+      memory: 2048,
+      configVersion: 'abc123def'
     }
 
     expect(
@@ -47,7 +50,8 @@ describe('#deployServiceValidation', () => {
       version: 'latest',
       instanceCount: 4,
       cpu: 1024,
-      memory: 2048
+      memory: 2048,
+      configVersion: 'abc123def'
     }
 
     expect(
@@ -64,7 +68,8 @@ describe('#deployServiceValidation', () => {
       version: '1.0.1',
       instanceCount: 1,
       cpu: 1,
-      memory: 1024
+      memory: 1024,
+      configVersion: 'abc123def'
     }
 
     expect(
@@ -79,7 +84,8 @@ describe('#deployServiceValidation', () => {
       version: '1.0.1',
       instanceCount: 1,
       cpu: 1024,
-      memory: 256
+      memory: 256,
+      configVersion: 'abc123def'
     }
 
     expect(
@@ -96,7 +102,8 @@ describe('#deployServiceValidation', () => {
       version: '1.0.1',
       instanceCount: 999,
       cpu: 1024,
-      memory: 2048
+      memory: 2048,
+      configVersion: 'abc123def'
     }
 
     expect(
@@ -111,7 +118,8 @@ describe('#deployServiceValidation', () => {
       version: '1.0.1',
       instanceCount: 0,
       cpu: 1024,
-      memory: 2048
+      memory: 2048,
+      configVersion: 'abc123def'
     }
 
     expect(deployServiceValidation.validate(payload)).toEqual({
@@ -121,7 +129,8 @@ describe('#deployServiceValidation', () => {
         environment: 'infra-dev',
         instanceCount: 0,
         memory: 2048,
-        version: '1.0.1'
+        version: '1.0.1',
+        configVersion: 'abc123def'
       }
     })
   })

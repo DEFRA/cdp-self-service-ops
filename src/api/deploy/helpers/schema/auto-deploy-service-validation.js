@@ -1,5 +1,6 @@
 import Joi from 'joi'
 import {
+  commitShaValidation,
   cpuValidation,
   environmentExceptForProdValidation,
   instanceCountValidation,
@@ -16,7 +17,8 @@ const autoDeployServiceValidation = Joi.object({
   user: userWithIdValidation,
   instanceCount: instanceCountValidation,
   cpu: cpuValidation,
-  memory: memoryValidation
+  memory: memoryValidation,
+  configVersion: commitShaValidation
 })
 
 export { autoDeployServiceValidation }
