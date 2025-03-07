@@ -1,5 +1,6 @@
 import Joi from 'joi'
 import {
+  commitShaValidation,
   cpuValidation,
   environmentValidation,
   instanceCountValidation,
@@ -14,7 +15,8 @@ const deployServiceValidation = Joi.object({
   environment: environmentValidation,
   instanceCount: instanceCountValidation,
   cpu: cpuValidation,
-  memory: memoryValidation
+  memory: memoryValidation,
+  configVersion: commitShaValidation
 })
 
 export { deployServiceValidation }

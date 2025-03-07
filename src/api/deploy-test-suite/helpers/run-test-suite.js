@@ -3,7 +3,7 @@ import crypto from 'node:crypto'
 import { config } from '~/src/config/index.js'
 import { generateTestRunMessage } from '~/src/api/deploy-test-suite/helpers/generate-test-run-message.js'
 import { sendSnsMessage } from '~/src/helpers/sns/send-sns-message.js'
-import { createRecordTestRun } from '~/src/api/deploy-test-suite/helpers/record-test-run.js'
+import { recordTestRun } from '~/src/api/deploy-test-suite/helpers/record-test-run.js'
 import { getLatestAppConfigCommitSha } from '~/src/helpers/portal-backend/get-latest-app-config-commit-sha.js'
 
 const snsRunTestTopic = config.get('snsRunTestTopicArn')
@@ -47,7 +47,7 @@ async function runTestSuite(imageName, environment, user, snsClient, logger) {
   logger.info(`SNS Run Test response: ${JSON.stringify(snsResponse, null, 2)}`)
 
   // Inform the backend about the new test run so it can track the results.
-  await createRecordTestRun(
+  await recordTestRun(
     imageName,
     runId,
     environment,

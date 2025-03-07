@@ -12,7 +12,8 @@ describe('#autoDeployServiceValidation', () => {
       user: {
         id: '00000000-0000-0000-0000-000000000000',
         displayName: 'Auto-deployed'
-      }
+      },
+      configVersion: 'abc123def'
     }
 
     expect(autoDeployServiceValidation.validate(payload)).toEqual({
@@ -26,7 +27,8 @@ describe('#autoDeployServiceValidation', () => {
         user: {
           id: '00000000-0000-0000-0000-000000000000',
           displayName: 'Auto-deployed'
-        }
+        },
+        configVersion: 'abc123def'
       }
     })
   })
@@ -42,7 +44,8 @@ describe('#autoDeployServiceValidation', () => {
       user: {
         id: '00000000-0000-0000-0000-000000000000',
         displayName: 'Auto-deployed'
-      }
+      },
+      configVersion: 'abc123def'
     }
 
     expect(
@@ -63,7 +66,8 @@ describe('#autoDeployServiceValidation', () => {
       user: {
         id: '00000000-0000-0000-0000-000000000000',
         displayName: 'Auto-deployed'
-      }
+      },
+      configVersion: 'abc123def'
     }
 
     expect(
@@ -84,7 +88,8 @@ describe('#autoDeployServiceValidation', () => {
       user: {
         id: '00000000-0000-0000-0000-000000000000',
         displayName: 'Auto-deployed'
-      }
+      },
+      configVersion: 'abc123def'
     }
 
     expect(
@@ -105,7 +110,8 @@ describe('#autoDeployServiceValidation', () => {
       user: {
         id: '00000000-0000-0000-0000-000000000000',
         displayName: 'Auto-deployed'
-      }
+      },
+      configVersion: 'abc123def'
     }
 
     expect(
@@ -124,7 +130,8 @@ describe('#autoDeployServiceValidation', () => {
       user: {
         id: '00000000-0000-0000-0000-000000000000',
         displayName: 'Auto-deployed'
-      }
+      },
+      configVersion: 'abc123def'
     }
 
     expect(
@@ -145,7 +152,8 @@ describe('#autoDeployServiceValidation', () => {
       user: {
         id: '00000000-0000-0000-0000-000000000000',
         displayName: 'Auto-deployed'
-      }
+      },
+      configVersion: 'abc123def'
     }
 
     expect(
@@ -164,7 +172,8 @@ describe('#autoDeployServiceValidation', () => {
       user: {
         id: '',
         displayName: 'Auto-deployed'
-      }
+      },
+      configVersion: 'abc123def'
     }
 
     expect(
@@ -183,7 +192,8 @@ describe('#autoDeployServiceValidation', () => {
       user: {
         id: '00000000-0000-0000-0000-000000000000',
         displayName: 'Auto-deployed'
-      }
+      },
+      configVersion: 'abc123def'
     }
 
     expect(autoDeployServiceValidation.validate(payload)).toEqual({
@@ -197,7 +207,8 @@ describe('#autoDeployServiceValidation', () => {
         user: {
           id: '00000000-0000-0000-0000-000000000000',
           displayName: 'Auto-deployed'
-        }
+        },
+        configVersion: 'abc123def'
       }
     })
   })
