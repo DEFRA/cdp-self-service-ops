@@ -17,7 +17,7 @@ const testRunMessageValidation = Joi.object({
   cluster_name: Joi.string().equal('ecs-public'),
   name: repositoryNameValidation,
   image: repositoryNameValidation,
-  image_version: Joi.number().equal('latest'),
+  image_version: Joi.string().pattern(/\d+\.\d+\.\d+/),
   port: Joi.number().integer().equal(80).required(),
   task_cpu: cpuValidation,
   task_memory: memoryValidation,
@@ -44,6 +44,7 @@ const testRunMessageValidation = Joi.object({
 /**
  *
  * @param {string} imageName
+ * @param {string} tag
  * @param {string} environment
  * @param {string} runId
  * @param {{id:string, displayName: string}} user
@@ -52,6 +53,7 @@ const testRunMessageValidation = Joi.object({
  */
 const generateTestRunMessage = (
   imageName,
+  tag,
   environment,
   runId,
   user,
@@ -69,7 +71,7 @@ const generateTestRunMessage = (
     cluster_name: 'ecs-public',
     name: imageName,
     image: imageName,
-    image_version: 'latest',
+    image_version: tag,
     port: 80,
     task_cpu: 4096,
     task_memory: 8192,

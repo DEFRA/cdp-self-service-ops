@@ -65,6 +65,8 @@ const repositoryNameValidation = Joi.string()
     'string.max': '32 characters or less'
   })
 
+const tagValidation = Joi.string().required()
+
 export {
   commitShaValidation,
   cpuValidation,
@@ -76,6 +78,7 @@ export {
   memoryValidation,
   repositoryNameValidation,
   runIdValidation,
+  tagValidation,
   userWithIdValidation,
   userWithUserIdValidation,
   versionValidation,

@@ -7,6 +7,7 @@ describe('#generateTestRunMessage', () => {
     config.get = jest.fn().mockReturnValue('http://fake-proxy')
     const message = generateTestRunMessage(
       'some-service',
+      '123.44.111',
       'infra-dev',
       crypto.randomUUID(),
       {
@@ -17,5 +18,6 @@ describe('#generateTestRunMessage', () => {
     )
 
     expect(message.deployed_by.userId).toBe('some-id')
+    expect(message.image_version).toBe('123.44.111')
   })
 })

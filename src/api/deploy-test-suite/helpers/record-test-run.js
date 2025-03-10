@@ -8,19 +8,32 @@ import {
   environmentValidation,
   repositoryNameValidation,
   runIdValidation,
+  tagValidation,
   userWithIdValidation
 } from '~/src/api/helpers/schema/common-validations.js'
 
 const recordTestRunValidation = Joi.object({
   testSuite: repositoryNameValidation,
+  tag: tagValidation,
   runId: runIdValidation,
   environment: environmentValidation,
   user: userWithIdValidation,
   configVersion: commitShaValidation
 })
 
+/**
+ *
+ * @param {string} imageName
+ * @param {string} tag
+ * @param {string} runId
+ * @param {string} environment
+ * @param {{ id: string, displayName: string}} user
+ * @param {string} configCommitSha
+ * @returns {Promise<{Response}|Response>}
+ */
 async function recordTestRun(
   imageName,
+  tag,
   runId,
   environment,
   user,
@@ -35,6 +48,7 @@ async function recordTestRun(
   )
   const body = {
     testSuite: imageName,
+    tag,
     runId,
     environment,
     user,
