@@ -12,6 +12,7 @@ describe('#recordTestRun', () => {
 
     const res = await recordTestRun(
       'some-service',
+      '1.1.0',
       randomUUID(),
       'test',
       {

@@ -5,6 +5,7 @@ import { generateTestRunMessage } from '~/src/api/deploy-test-suite/helpers/gene
 import { sendSnsMessage } from '~/src/helpers/sns/send-sns-message.js'
 import { recordTestRun } from '~/src/api/deploy-test-suite/helpers/record-test-run.js'
 import { getLatestAppConfigCommitSha } from '~/src/helpers/portal-backend/get-latest-app-config-commit-sha.js'
+import { getLatestImage } from '~/src/helpers/portal-backend/get-latest-image.js'
 
 const snsRunTestTopic = config.get('snsRunTestTopicArn')
 
@@ -24,8 +25,11 @@ async function runTestSuite(imageName, environment, user, snsClient, logger) {
 
   logger.info(`Config commit sha ${configLatestCommitSha}`)
 
+  const tag = (await getLatestImage(imageName))?.tag
+
   const runMessage = generateTestRunMessage(
     imageName,
+    tag,
     environment,
     runId,
     user,
@@ -49,6 +53,7 @@ async function runTestSuite(imageName, environment, user, snsClient, logger) {
   // Inform the backend about the new test run so it can track the results.
   await recordTestRun(
     imageName,
+    tag,
     runId,
     environment,
     user,

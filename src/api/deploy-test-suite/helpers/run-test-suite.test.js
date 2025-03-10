@@ -11,6 +11,10 @@ jest.mock(
   })
 )
 
+jest.mock('~/src/helpers/portal-backend/get-latest-image.js', () => ({
+  getLatestImage: jest.fn().mockResolvedValue({ tag: '1.0.0' })
+}))
+
 jest.mock('~/src/helpers/sns/send-sns-message.js', () => ({
   sendSnsMessage: jest.fn().mockResolvedValue({})
 }))
@@ -47,7 +51,7 @@ describe('#runTestSuite', () => {
         zone: 'public',
         name: 'some-service',
         image: 'some-service',
-        image_version: 'latest',
+        image_version: '1.0.0',
         port: 80,
         task_cpu: 4096,
         task_memory: 8192,
