@@ -5,7 +5,8 @@ import {
   memoryValidation,
   repositoryNameValidation,
   runIdValidation,
-  userWithUserIdValidation
+  userWithUserIdValidation,
+  versionValidation
 } from '~/src/api/helpers/schema/common-validations.js'
 import Joi from 'joi'
 
@@ -17,7 +18,7 @@ const testRunMessageValidation = Joi.object({
   cluster_name: Joi.string().equal('ecs-public'),
   name: repositoryNameValidation,
   image: repositoryNameValidation,
-  image_version: Joi.string().pattern(/\d+\.\d+\.\d+/),
+  image_version: versionValidation,
   port: Joi.number().integer().equal(80).required(),
   task_cpu: cpuValidation,
   task_memory: memoryValidation,

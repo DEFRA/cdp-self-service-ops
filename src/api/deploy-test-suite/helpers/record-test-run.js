@@ -8,13 +8,13 @@ import {
   environmentValidation,
   repositoryNameValidation,
   runIdValidation,
-  tagValidation,
+  versionValidation,
   userWithIdValidation
 } from '~/src/api/helpers/schema/common-validations.js'
 
 const recordTestRunValidation = Joi.object({
   testSuite: repositoryNameValidation,
-  tag: tagValidation,
+  tag: versionValidation,
   runId: runIdValidation,
   environment: environmentValidation,
   user: userWithIdValidation,
