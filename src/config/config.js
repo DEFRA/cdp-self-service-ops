@@ -119,13 +119,13 @@ const config = convict({
       format: String,
       env: 'OIDC_WELL_KNOWN_CONFIGURATION_URL',
       default:
-        'http://cdp.127.0.0.1.sslip.io:3939/63983fc2-cfff-45bb-8ec2-959e21062b9a/v2.0/.well-known/openid-configuration'
+        'http://cdp.127.0.0.1.sslip.io:3939/6f504113-6b64-43f2-ade9-242e05780007/v2.0/.well-known/openid-configuration'
     },
     audience: {
       doc: 'OIDC Audience for verification',
       format: String,
       env: 'OIDC_AUDIENCE',
-      default: '63983fc2-cfff-45bb-8ec2-959e21062b9a'
+      default: '26372ac9-d8f0-4da9-a17e-938eb3161d8e'
     }
   },
   isProduction: {
