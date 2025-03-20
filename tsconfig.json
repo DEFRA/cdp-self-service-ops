@@ -1,19 +1,27 @@
 {
+  "extends": "@tsconfig/node22/tsconfig.json",
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["./*"]
+    },
     "allowJs": true,
     "checkJs": false,
     "module": "NodeNext",
     "noEmit": true,
-    "paths": {
-      "~/*": ["./*"]
-    },
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strictFunctionTypes": true,
     "strictNullChecks": true,
-    "forceConsistentCasingInFileNames": true,
-    "types": ["jest", "node"]
+    "target": "ESNext",
+    "types": ["jest"]
   },
-  "exclude": [".cache", ".public", ".server", "coverage", "node_modules"],
-  "include": ["**/*.cjs", "**/*.js", ".eslintrc.*", ".prettierrc.*"]
+  "include": ["src", ".eslintrc.cjs", "**/*.cjs", "**/*.js", "**/*.json"],
+  "exclude": [
+    "node_modules",
+    "package-lock.json",
+    "coverage",
+    ".server",
+    ".public"
+  ]
 }

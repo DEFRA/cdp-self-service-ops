@@ -1,8 +1,15 @@
 /**
- * @type {ESLint.ConfigData}
+ * @type { ESLint.ConfigData }
  */
 module.exports = {
-  ignorePatterns: ['.server', '.public', 'src/__fixtures__', 'coverage'],
+  ignorePatterns: [
+    '.server',
+    'src/__fixtures__',
+    'coverage',
+    '.husky',
+    '.github',
+    'node_modules'
+  ],
   overrides: [
     {
       extends: [
@@ -76,7 +83,15 @@ module.exports = {
         'n/no-extraneous-require': 'off',
         'n/no-extraneous-import': 'off',
         'n/no-missing-require': 'off',
-        'n/no-missing-import': 'off'
+        'n/no-missing-import': 'off',
+
+        // Allow import devDependencies in tests
+        'n/no-unpublished-import': [
+          'error',
+          {
+            allowModules: []
+          }
+        ]
       },
       settings: {
         'import/parsers': {
@@ -105,7 +120,7 @@ module.exports = {
       rules: {
         '@typescript-eslint/no-var-requires': 'off',
 
-        // Allow require devDependencies
+        // Allow require devDependencies in config files
         'n/no-unpublished-require': [
           'error',
           {
@@ -130,14 +145,19 @@ module.exports = {
         'plugin:jest/recommended',
         'plugin:jest/style'
       ],
-      files: ['**/*.test.{cjs,js}', '**/*.e2e.{cjs,js}', '**/__mocks__/**'],
+      files: ['**/*.test.{cjs,js}'],
       plugins: ['jest'],
       rules: {
         // Allow Jest to assert on mocked unbound methods
         '@typescript-eslint/unbound-method': 'off',
-        'jest/unbound-method': 'error',
+        'jest/unbound-method': 'off',
+        // Allow custom expect functions in tests, that start with expect
+        'jest/expect-expect': [
+          'error',
+          { assertFunctionNames: ['expect', 'expect*'] }
+        ],
 
-        // Allow import devDependencies
+        // Allow import devDependencies in tests
         'n/no-unpublished-import': [
           'error',
           {

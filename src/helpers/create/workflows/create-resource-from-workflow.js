@@ -35,14 +35,15 @@ const createResourceFromWorkflow = async (
       trigger,
       result: 'ok'
     })
-  } catch (e) {
+  } catch (error) {
     await updateCreationStatus(request.db, service, repo, {
       status: statuses.failure,
       trigger,
-      result: e?.response ?? 'see cdp-self-service-ops logs'
+      result: error?.response ?? 'see cdp-self-service-ops logs'
     })
     request.logger.error(
-      `update ${repo}/${service} failed with inputs  ${JSON.stringify(inputs)}: ${e}`
+      error,
+      `update ${repo}/${service} failed with inputs  ${JSON.stringify(inputs)} ${error.message}`
     )
   }
 }
