@@ -49,7 +49,7 @@ async function registerDeployment(
 
   Joi.assert(body, registerDeploymentValidation)
 
-  const url = `${config.get('portalBackendUrl')}/v2/deployments`
+  const url = `${config.get('portalBackendUrl')}/deployments`
   await fetcher(url, {
     method: 'post',
     headers: { 'Content-Type': 'application/json' },
