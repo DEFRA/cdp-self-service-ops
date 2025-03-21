@@ -12,7 +12,7 @@ export async function fetcher(url, options = {}) {
 
   return await fetch(url, {
     ...options,
-    method: options?.method || 'get',
+    method: options?.method ?? 'get',
     headers: {
       ...(options?.headers && options.headers),
       ...(traceId && { [tracingHeader]: traceId }),

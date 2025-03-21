@@ -20,7 +20,12 @@ export default {
   ],
   coverageDirectory: '<rootDir>/coverage',
   transform: {
-    '^.+\\.js$': 'babel-jest'
+    '^.+\\.js$': [
+      'babel-jest',
+      {
+        plugins: ['babel-plugin-transform-import-meta']
+      }
+    ]
   },
   transformIgnorePatterns: [
     `node_modules/(?!${[

@@ -5,7 +5,7 @@
   "main": ".server/index.js",
   "type": "module",
   "engines": {
-    "node": ">=22"
+    "node": ">=22.13.1"
   },
   "scripts": {
     "build": "npm run build:server",
@@ -21,7 +21,7 @@
     "lint:fix": "eslint --cache --fix .",
     "lint:js": "eslint --cache .",
     "postversion": "git add package.json package-lock.json && git commit -m $npm_package_version",
-    "test": "TZ=UTC jest --coverage --verbose",
+    "test": "TZ=UTC node --no-experimental-require-module ./node_modules/jest/bin/jest.js --coverage --verbose",
     "test:watch": "TZ=UTC jest --watch",
     "server:watch": "nodemon --exec tsx --enable-source-maps ./src",
     "server:debug": "nodemon --exec tsx --enable-source-maps --inspect=9239 ./src",
@@ -72,7 +72,9 @@
     "@babel/node": "^7.26.0",
     "@babel/preset-env": "^7.26.0",
     "@shelf/jest-mongodb": "^4.3.2",
+    "@tsconfig/node22": "22.0.0",
     "@types/convict": "^6.1.6",
+    "@types/eslint": "9.6.1",
     "@types/jest": "^29.5.14",
     "@types/lodash": "^4.17.14",
     "@types/node": "^22.10.5",
@@ -85,7 +87,7 @@
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-config-standard": "^17.1.0",
-    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-import-resolver-typescript": "3.6.1",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-jest": "^28.6.0",
     "eslint-plugin-jest-formatting": "^3.1.0",
