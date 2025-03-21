@@ -10,7 +10,7 @@ const portalBackendUrl = config.get('portalBackendUrl')
  * @param {string} serviceName
  */
 export async function whatsRunningWhere(serviceName) {
-  const url = `${portalBackendUrl}/v2/whats-running-where/${serviceName}`
+  const url = `${portalBackendUrl}/whats-running-where/${serviceName}`
   const response = await fetcher(url, { method: 'get' })
   if (response.ok) {
     return await response.json()
