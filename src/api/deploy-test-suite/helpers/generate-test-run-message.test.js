@@ -1,23 +1,155 @@
-import { generateTestRunMessage } from '~/src/api/deploy-test-suite/helpers/generate-test-run-message.js'
-import crypto from 'node:crypto'
+import { randomUUID } from 'node:crypto'
+
 import { config } from '~/src/config/index.js'
+import { generateTestRunMessage } from '~/src/api/deploy-test-suite/helpers/generate-test-run-message.js'
+
+const expectedMessageResult = (runId) => {
+  const arnPrefix =
+    'arn:aws:s3:::cdp-infra-dev-service-configs/f2ca1bb6c7e907d06dafe4687e579fce76b37e4e93b7605022da52e6ccc26fd2'
+  return {
+    cluster_name: 'ecs-public',
+    deployed_by: {
+      displayName: 'My Name',
+      userId: 'some-id'
+    },
+    desired_count: 1,
+    environment: 'infra-dev',
+    environment_files: [
+      { type: 's3', value: `${arnPrefix}/global/global_fixed.env` },
+      {
+        type: 's3',
+        value: `${arnPrefix}/services/some-service/infra-dev/some-service.env`
+      },
+      { type: 's3', value: `${arnPrefix}/services/some-service/defaults.env` },
+      { type: 's3', value: `${arnPrefix}/environments/infra-dev/defaults.env` }
+    ],
+    environment_variables: {
+      BASE_URL: 'https://infra-dev.cdp-int.defra.cloud/',
+      ENVIRONMENT: 'infra-dev',
+      HTTP_PROXY: 'http://fake-proxy'
+    },
+    image: 'some-service',
+    image_version: '123.44.111',
+    name: 'some-service',
+    port: 80,
+    runId,
+    task_cpu: '4096',
+    task_memory: '8192',
+    webdriver_sidecar: {
+      browser: 'chrome',
+      version: 'latest'
+    },
+    zone: 'public'
+  }
+}
 
 describe('#generateTestRunMessage', () => {
-  test('Schema should pass validation without errors', () => {
-    config.get = jest.fn().mockReturnValue('http://fake-proxy')
-    const message = generateTestRunMessage(
-      'some-service',
-      '123.44.111',
-      'infra-dev',
-      crypto.randomUUID(),
-      {
-        id: 'some-id',
-        displayName: 'My Name'
-      },
-      'f2ca1bb6c7e907d06dafe4687e579fce76b37e4e93b7605022da52e6ccc26fd2'
-    )
+  afterEach(() => {
+    config.set('httpProxy', '')
+  })
 
-    expect(message.deployed_by.userId).toBe('some-id')
-    expect(message.image_version).toBe('123.44.111')
+  test('Schema should pass validation without errors', () => {
+    config.set('httpProxy', 'http://fake-proxy')
+    const mockRunId = randomUUID()
+
+    expect(() =>
+      generateTestRunMessage({
+        imageName: 'some-service',
+        environment: 'infra-dev',
+        cpu: '4096',
+        memory: '8192',
+        user: { id: 'some-id', displayName: 'My Name' },
+        tag: '123.44.111',
+        runId: mockRunId,
+        configCommitSha:
+          'f2ca1bb6c7e907d06dafe4687e579fce76b37e4e93b7605022da52e6ccc26fd2'
+      })
+    ).not.toThrow()
+  })
+
+  test('Message should return as expected', () => {
+    config.set('httpProxy', 'http://fake-proxy')
+
+    const mockRunId = randomUUID()
+
+    const message = generateTestRunMessage({
+      imageName: 'some-service',
+      environment: 'infra-dev',
+      cpu: '4096',
+      memory: '8192',
+      user: { id: 'some-id', displayName: 'My Name' },
+      tag: '123.44.111',
+      runId: mockRunId,
+      configCommitSha:
+        'f2ca1bb6c7e907d06dafe4687e579fce76b37e4e93b7605022da52e6ccc26fd2'
+    })
+
+    expect(message).toEqual(expectedMessageResult(mockRunId))
+  })
+
+  test('Should throw error when required fields are missing', () => {
+    expect(() =>
+      generateTestRunMessage({
+        imageName: 'some-service',
+        environment: 'infra-dev',
+        user: { id: 'some-id', displayName: 'My Name' },
+        tag: '123.44.111',
+        runId: randomUUID()
+      })
+    ).toThrow('"task_cpu" is required')
+  })
+
+  test('Should throw error when values are incorrect', () => {
+    expect(() =>
+      generateTestRunMessage({
+        imageName: 'some-service',
+        environment: 'infra-dev',
+        cpu: '256',
+        memory: '8192',
+        user: { id: 'some-id', displayName: 'My Name' },
+        tag: '123.44.111',
+        runId: randomUUID()
+      })
+    ).toThrow('"task_cpu" must be one of [512, 1024, 2048, 4096, 8192]')
+  })
+
+  test('Should generate expected environment variables', () => {
+    config.set('httpProxy', 'http://fake-proxy')
+
+    const message = generateTestRunMessage({
+      imageName: 'some-service',
+      environment: 'infra-dev',
+      cpu: '4096',
+      memory: '8192',
+      user: { id: 'some-id', displayName: 'My Name' },
+      tag: '123.44.111',
+      runId: randomUUID(),
+      configCommitSha:
+        'f2ca1bb6c7e907d06dafe4687e579fce76b37e4e93b7605022da52e6ccc26fd2'
+    })
+
+    expect(message.environment_variables.BASE_URL).toBe(
+      'https://infra-dev.cdp-int.defra.cloud/'
+    )
+    expect(message.environment_variables.ENVIRONMENT).toBe('infra-dev')
+    expect(message.environment_variables.HTTP_PROXY).toBe('http://fake-proxy')
+  })
+
+  test('Should handle missing configCommitSha', () => {
+    config.set('httpProxy', 'http://fake-proxy')
+
+    const message = generateTestRunMessage({
+      imageName: 'some-service',
+      environment: 'infra-dev',
+      cpu: '4096',
+      memory: '8192',
+      user: { id: 'some-id', displayName: 'My Name' },
+      tag: '123.44.111',
+      runId: randomUUID()
+    })
+
+    expect(message.environment_files.at(0).value).toBe(
+      'arn:aws:s3:::cdp-infra-dev-service-configs/global/global_fixed.env'
+    )
   })
 })

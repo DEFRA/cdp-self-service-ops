@@ -1,94 +1,109 @@
-import { sendSnsMessage } from '~/src/helpers/sns/send-sns-message.js'
-import { getLatestAppConfigCommitSha } from '~/src/helpers/portal-backend/get-latest-app-config-commit-sha.js'
+import { fetcher } from '~/src/helpers/fetcher.js'
+import { getLatestImage } from '~/src/helpers/portal-backend/get-latest-image.js'
 import { runTestSuite } from '~/src/api/deploy-test-suite/helpers/run-test-suite.js'
-import pino from 'pino'
-import { config } from '~/src/config/index.js'
+import { getLatestAppConfigCommitSha } from '~/src/helpers/portal-backend/get-latest-app-config-commit-sha.js'
 
-jest.mock(
-  '~/src/helpers/portal-backend/get-latest-app-config-commit-sha.js',
-  () => ({
-    getLatestAppConfigCommitSha: jest.fn()
+const mockInfoLogger = jest.fn()
+const mockErrorLogger = jest.fn()
+const mockDebugLogger = jest.fn()
+const mockLogger = {
+  info: mockInfoLogger,
+  error: mockErrorLogger,
+  debug: mockDebugLogger
+}
+const latestImageVersion = '1.0.0'
+const mockUUID = 'b7a0d95e-5224-488f-b8bb-b1705436f413'
+const mockSha = 'mock-sha'
+const mockSNSClientSend = jest.fn()
+const mockSNSClient = {
+  send: mockSNSClientSend
+}
+
+jest.mock('node:crypto', () => ({
+  randomUUID: () => mockUUID
+}))
+jest.mock('@aws-sdk/client-sns', () => ({
+  PublishCommand: jest.fn()
+}))
+jest.mock('~/src/helpers/fetcher.js')
+jest.mock('~/src/helpers/portal-backend/get-latest-app-config-commit-sha.js')
+jest.mock('~/src/helpers/portal-backend/get-latest-image.js')
+jest.mock('~/src/helpers/logging/logger.js', () => ({
+  createLogger: () => ({
+    info: (value) => mockInfoLogger(value),
+    error: (value) => mockErrorLogger(value)
   })
-)
-
-jest.mock('~/src/helpers/portal-backend/get-latest-image.js', () => ({
-  getLatestImage: jest.fn().mockResolvedValue({ tag: '1.0.0' })
-}))
-
-jest.mock('~/src/helpers/sns/send-sns-message.js', () => ({
-  sendSnsMessage: jest.fn().mockResolvedValue({})
-}))
-
-jest.mock('~/src/api/deploy-test-suite/helpers/record-test-run.js', () => ({
-  recordTestRun: jest.fn().mockResolvedValue({})
 }))
 
 describe('#runTestSuite', () => {
-  test('Should send message to sns', async () => {
-    const snsClient = jest.fn()
+  beforeEach(() => {
+    getLatestAppConfigCommitSha.mockResolvedValue(mockSha)
+    getLatestImage.mockResolvedValue({ tag: latestImageVersion })
+    fetcher.mockResolvedValue({})
+    mockSNSClientSend.mockResolvedValue({})
+  })
 
-    const commit =
-      'f2ca1bb6c7e907d06dafe4687e579fce76b37e4e93b7605022da52e6ccc26fd2'
-    getLatestAppConfigCommitSha.mockResolvedValue(commit)
+  test('Should return runId when all operations succeed', async () => {
+    const runId = await runTestSuite({
+      imageName: 'some-service',
+      environment: 'test',
+      user: { id: 'some-id', displayName: 'My Name' },
+      cpu: '4096',
+      memory: '8192',
+      snsClient: mockSNSClient,
+      logger: mockLogger
+    })
 
-    const res = await runTestSuite(
-      'some-service',
-      'test',
-      {
-        id: 'some-id',
-        displayName: 'My Name'
-      },
-      snsClient,
-      pino()
+    expect(runId).toBe(mockUUID)
+  })
+
+  test('Should return "null" when getLatestAppConfigCommitSha fails', async () => {
+    getLatestAppConfigCommitSha.mockResolvedValue(null)
+
+    const runId = await runTestSuite({
+      imageName: 'some-service',
+      environment: 'test',
+      user: { id: 'some-id', displayName: 'My Name' },
+      cpu: '4096',
+      memory: '8192',
+      snsClient: mockSNSClient,
+      logger: mockLogger
+    })
+
+    expect(runId).toBeNull()
+  })
+
+  test('Should log error when getLatestAppConfigCommitSha fails', async () => {
+    getLatestAppConfigCommitSha.mockResolvedValue(null)
+
+    await runTestSuite({
+      imageName: 'some-service',
+      environment: 'test',
+      user: { id: 'some-id', displayName: 'My Name' },
+      cpu: '4096',
+      memory: '8192',
+      snsClient: mockSNSClient,
+      logger: mockLogger
+    })
+
+    expect(mockErrorLogger).toHaveBeenCalledWith(
+      'Error encountered whilst attempting to get latest cdp-app-config sha'
     )
+  })
 
-    const basePath = `arn:aws:s3:::cdp-test-service-configs/${commit}`
-    expect(sendSnsMessage).toHaveBeenCalledWith(
-      expect.anything(),
-      config.get('snsRunTestTopicArn'),
-      expect.objectContaining({
+  test('Should return expected message when sendSnsMessage fails', async () => {
+    mockSNSClientSend.mockRejectedValue('Failure sending SNS message')
+
+    await expect(
+      runTestSuite({
+        imageName: 'some-service',
         environment: 'test',
-        zone: 'public',
-        name: 'some-service',
-        image: 'some-service',
-        image_version: '1.0.0',
-        port: 80,
-        task_cpu: 4096,
-        task_memory: 8192,
-        webdriver_sidecar: {
-          browser: 'chrome',
-          version: 'latest'
-        },
-        deployed_by: {
-          userId: 'some-id',
-          displayName: 'My Name'
-        },
-        environment_variables: expect.objectContaining({
-          BASE_URL: `https://test.cdp-int.defra.cloud/`,
-          ENVIRONMENT: 'test'
-        }),
-        environment_files: [
-          {
-            value: `${basePath}/global/global_fixed.env`,
-            type: 's3'
-          },
-          {
-            value: `${basePath}/services/some-service/test/some-service.env`,
-            type: 's3'
-          },
-          {
-            value: `${basePath}/services/some-service/defaults.env`,
-            type: 's3'
-          },
-          {
-            value: `${basePath}/environments/test/defaults.env`,
-            type: 's3'
-          }
-        ]
-      }),
-      expect.anything()
-    )
-
-    expect(res).not.toBeNull()
+        user: { id: 'some-id', displayName: 'My Name' },
+        cpu: '4096',
+        memory: '8192',
+        snsClient: mockSNSClient,
+        logger: mockLogger
+      })
+    ).rejects.toMatch('Failure sending SNS message')
   })
 })

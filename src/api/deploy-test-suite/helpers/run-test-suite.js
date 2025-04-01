@@ -1,4 +1,4 @@
-import crypto from 'node:crypto'
+import { randomUUID } from 'node:crypto'
 
 import { config } from '~/src/config/index.js'
 import { generateTestRunMessage } from '~/src/api/deploy-test-suite/helpers/generate-test-run-message.js'
@@ -9,56 +9,54 @@ import { getLatestImage } from '~/src/helpers/portal-backend/get-latest-image.js
 
 const snsRunTestTopic = config.get('snsRunTestTopicArn')
 
-async function runTestSuite(imageName, environment, user, snsClient, logger) {
-  const runId = crypto.randomUUID()
+async function runTestSuite({
+  imageName,
+  environment,
+  user,
+  cpu,
+  memory,
+  snsClient,
+  logger
+}) {
+  const runId = randomUUID()
 
-  const configLatestCommitSha = await getLatestAppConfigCommitSha(
-    environment,
-    logger
-  )
-  if (!configLatestCommitSha) {
+  const configCommitSha = await getLatestAppConfigCommitSha(environment, logger)
+  if (!configCommitSha) {
     logger.error(
       'Error encountered whilst attempting to get latest cdp-app-config sha'
     )
     return null
   }
 
-  logger.info(`Config commit sha ${configLatestCommitSha}`)
+  logger.info(`Config commit sha ${configCommitSha}`)
 
-  const tag = (await getLatestImage(imageName))?.tag
+  const latestImage = await getLatestImage(imageName)
+  const tag = latestImage?.tag ?? null
 
-  const runMessage = generateTestRunMessage(
+  const runMessage = generateTestRunMessage({
     imageName,
-    tag,
     environment,
-    runId,
+    cpu,
+    memory,
     user,
-    configLatestCommitSha
-  )
+    tag,
+    runId,
+    configCommitSha
+  })
 
-  const snsResponse = await sendSnsMessage(
-    snsClient,
-    snsRunTestTopic,
-    runMessage,
-    logger
-  )
-
-  if (!snsResponse) {
-    logger.error('Failed to send SNS message')
-    return null
-  }
-
-  logger.info(`SNS Run Test response: ${JSON.stringify(snsResponse, null, 2)}`)
+  await sendSnsMessage(snsClient, snsRunTestTopic, runMessage, logger)
 
   // Inform the backend about the new test run so it can track the results.
-  await recordTestRun(
+  await recordTestRun({
     imageName,
+    environment,
+    cpu,
+    memory,
+    user,
     tag,
     runId,
-    environment,
-    user,
-    configLatestCommitSha
-  )
+    configCommitSha
+  })
 
   return runId
 }

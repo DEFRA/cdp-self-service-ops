@@ -9,36 +9,49 @@ import {
   repositoryNameValidation,
   runIdValidation,
   versionValidation,
-  userWithIdValidation
+  userWithIdValidation,
+  cpuValidation,
+  memoryValidation
 } from '~/src/api/helpers/schema/common-validations.js'
 
 const recordTestRunValidation = Joi.object({
   testSuite: repositoryNameValidation,
+  environment: environmentValidation,
+  cpu: cpuValidation,
+  memory: memoryValidation,
+  user: userWithIdValidation,
   tag: versionValidation,
   runId: runIdValidation,
-  environment: environmentValidation,
-  user: userWithIdValidation,
   configVersion: commitShaValidation
 })
 
 /**
- *
- * @param {string} imageName
- * @param {string} tag
- * @param {string} runId
- * @param {string} environment
- * @param {{ id: string, displayName: string}} user
- * @param {string} configCommitSha
+ * @typedef {object} Options
+ * @property {string} imageName
+ * @property {string} environment
+ * @property {string} cpu
+ * @property {string} memory
+ * @property {{id: string, displayName: string}} user
+ * @property {string} tag
+ * @property {string} runId
+ * @property {string} configCommitSha
+ */
+
+/**
+ * Record test run in the portal backend
+ * @param {Options} options
  * @returns {Promise<{Response}|Response>}
  */
-async function recordTestRun(
+async function recordTestRun({
   imageName,
+  environment,
+  cpu,
+  memory,
+  user,
   tag,
   runId,
-  environment,
-  user,
   configCommitSha
-) {
+}) {
   const logger = createLogger()
 
   const url = `${config.get('portalBackendUrl')}/test-run`
@@ -48,10 +61,12 @@ async function recordTestRun(
   )
   const body = {
     testSuite: imageName,
+    environment,
+    cpu,
+    memory,
+    user,
     tag,
     runId,
-    environment,
-    user,
     configVersion: configCommitSha
   }
 
