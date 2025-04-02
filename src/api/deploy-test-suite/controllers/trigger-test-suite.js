@@ -13,15 +13,19 @@ const triggerTestSuiteController = {
     }
   },
   handler: async (request, h) => {
-    const { imageName, environment, user } = request.payload
+    const { imageName, environment, user, cpu, memory } = request.payload
+    const snsClient = request.snsClient
+    const logger = request.logger
 
-    const runId = await runTestSuite(
+    const runId = await runTestSuite({
       imageName,
       environment,
       user,
-      request.snsClient,
-      request.logger
-    )
+      cpu,
+      memory,
+      snsClient,
+      logger
+    })
 
     if (!runId) {
       return h.response({ message: 'Failed to send SNS message' }).code(500)
