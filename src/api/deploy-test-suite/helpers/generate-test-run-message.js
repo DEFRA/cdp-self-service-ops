@@ -43,23 +43,36 @@ const testRunMessageValidation = Joi.object({
 })
 
 /**
- *
- * @param {string} imageName
- * @param {string} tag
- * @param {string} environment
- * @param {string} runId
- * @param {{id:string, displayName: string}} user
- * @param {string} configCommitSha
- * @returns {{cluster_name: string, image, desired_count: number, webdriver_sidecar: {browser: string, version: string}, image_version: string, environment_files: [{type: string, value: string},{type: string, value: string},{type: string, value: string},{type: string, value: string}], environment_variables: {ENVIRONMENT, BASE_URL: string, HTTP_PROXY: never}, environment, zone: string, port: number, name, task_memory: number, runId, deployed_by: {displayName, userId}, task_cpu: number}}
+ * @typedef {{environment, runId, zone: string, desired_count: number, cluster_name: string, name, image, image_version, port: number, task_cpu, task_memory, webdriver_sidecar: {browser: string, version: string}, deployed_by: {userId, displayName}, environment_variables: {BASE_URL: string, ENVIRONMENT, HTTP_PROXY: never}, environment_files: [{value: string, type: string},{value: string, type: string},{value: string, type: string},{value: string, type: string}]}} TestRunMessage
  */
-const generateTestRunMessage = (
+
+/**
+ * @typedef {object} Options
+ * @property {string} imageName
+ * @property {string} environment
+ * @property {string} cpu
+ * @property {string} memory
+ * @property {{id: string, displayName: string}} user
+ * @property {string} tag
+ * @property {string} runId
+ * @property {string} configCommitSha
+ */
+
+/**
+ * Generate the test run message for the SNS topic
+ * @param {Options} options
+ * @returns {TestRunMessage}
+ */
+const generateTestRunMessage = ({
   imageName,
-  tag,
   environment,
-  runId,
+  cpu,
+  memory,
   user,
+  tag,
+  runId,
   configCommitSha
-) => {
+}) => {
   const basePath = configCommitSha
     ? `arn:aws:s3:::cdp-${environment}-service-configs/${configCommitSha}`
     : `arn:aws:s3:::cdp-${environment}-service-configs`
@@ -74,8 +87,8 @@ const generateTestRunMessage = (
     image: imageName,
     image_version: tag,
     port: 80,
-    task_cpu: 4096,
-    task_memory: 8192,
+    task_cpu: cpu,
+    task_memory: memory,
     webdriver_sidecar: {
       browser: 'chrome',
       version: 'latest'

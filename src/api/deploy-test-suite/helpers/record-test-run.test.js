@@ -1,27 +1,101 @@
-import { recordTestRun } from '~/src/api/deploy-test-suite/helpers/record-test-run.js'
 import { randomUUID } from 'node:crypto'
-import { fetcher } from '~/src/helpers/fetcher.js'
 
-jest.mock('~/src/helpers/fetcher.js', () => ({
-  fetcher: jest.fn().mockResolvedValue({})
+import { config } from '~/src/config/index.js'
+import { fetcher } from '~/src/helpers/fetcher.js'
+import { recordTestRun } from '~/src/api/deploy-test-suite/helpers/record-test-run.js'
+
+const mockInfoLogger = jest.fn()
+
+jest.mock('~/src/helpers/fetcher.js')
+jest.mock('~/src/helpers/logging/logger.js', () => ({
+  createLogger: () => ({
+    info: (value) => mockInfoLogger(value)
+  })
 }))
 
 describe('#recordTestRun', () => {
-  test('Schema should pass validation without errors', async () => {
+  test('Schema should pass validation without errors', () => {
     fetcher.mockResolvedValue({})
 
-    const res = await recordTestRun(
-      'some-service',
-      '1.1.0',
-      randomUUID(),
-      'test',
-      {
-        id: 'some-id',
-        displayName: 'My Name'
-      },
-      'f2ca1bb6c7e907d06dafe4687e579fce76b37e4e93b7605022da52e6ccc26fd2'
-    )
+    expect(() =>
+      recordTestRun({
+        imageName: 'some-service',
+        environment: 'infra-dev',
+        cpu: '4096',
+        memory: '8192',
+        user: { id: 'some-id', displayName: 'My Name' },
+        tag: '1.1.0',
+        runId: randomUUID(),
+        configCommitSha:
+          'f2ca1bb6c7e907d06dafe4687e579fce76b37e4e93b7605022da52e6ccc26fd2'
+      })
+    ).not.toThrow()
+  })
 
-    expect(res).not.toBeNull()
+  test('Should throw error when required fields are missing', async () => {
+    await expect(
+      recordTestRun({
+        imageName: 'some-service',
+        environment: 'infra-dev',
+        cpu: '4096',
+        user: { id: 'some-id', displayName: 'My Name' },
+        tag: '1.1.0',
+        runId: randomUUID()
+      })
+    ).rejects.toThrow('"memory" is required')
+  })
+
+  test('Should generate correct request body', async () => {
+    const mockRunId = randomUUID()
+    config.get = jest.fn().mockReturnValue('http://fake-backend')
+
+    await recordTestRun({
+      imageName: 'some-service',
+      environment: 'infra-dev',
+      cpu: '4096',
+      memory: '8192',
+      user: { id: 'some-id', displayName: 'My Name' },
+      tag: '1.1.0',
+      runId: mockRunId,
+      configCommitSha:
+        'f2ca1bb6c7e907d06dafe4687e579fce76b37e4e93b7605022da52e6ccc26fd2'
+    })
+
+    expect(fetcher).toHaveBeenCalledWith(
+      'http://fake-backend/test-run',
+      expect.objectContaining({
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          testSuite: 'some-service',
+          environment: 'infra-dev',
+          cpu: '4096',
+          memory: '8192',
+          user: { id: 'some-id', displayName: 'My Name' },
+          tag: '1.1.0',
+          runId: mockRunId,
+          configVersion:
+            'f2ca1bb6c7e907d06dafe4687e579fce76b37e4e93b7605022da52e6ccc26fd2'
+        })
+      })
+    )
+  })
+
+  test('Should log expected message', async () => {
+    await recordTestRun({
+      imageName: 'some-service',
+      environment: 'infra-dev',
+      cpu: '4096',
+      memory: '8192',
+      user: { id: 'some-id', displayName: 'My Name' },
+      tag: '1.1.0',
+      runId: randomUUID(),
+      configCommitSha:
+        'f2ca1bb6c7e907d06dafe4687e579fce76b37e4e93b7605022da52e6ccc26fd2'
+    })
+
+    expect(mockInfoLogger).toHaveBeenCalledWith(
+      expect.stringContaining('Recording test-run for some-service run')
+    )
   })
 })

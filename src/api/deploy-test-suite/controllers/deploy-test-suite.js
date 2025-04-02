@@ -20,12 +20,14 @@ const deployTestSuiteController = {
     }
   },
   handler: async (request, h) => {
-    const { imageName, environment } = request.payload
+    const { imageName, environment, cpu, memory } = request.payload
     const user = {
       id: request.auth?.credentials?.id,
       displayName: request.auth?.credentials?.displayName
     }
     const scope = request.auth?.credentials?.scope
+    const snsClient = request.snsClient
+    const logger = request.logger
 
     request.logger.info({ scope }, '--------')
 
@@ -44,13 +46,15 @@ const deployTestSuiteController = {
       )
     }
 
-    const runId = await runTestSuite(
+    const runId = await runTestSuite({
       imageName,
       environment,
       user,
-      request.snsClient,
-      request.logger
-    )
+      cpu,
+      memory,
+      snsClient,
+      logger
+    })
 
     if (!runId) {
       return h.response({ message: 'Failed to send SNS message' }).code(500)
