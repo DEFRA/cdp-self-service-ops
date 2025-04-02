@@ -29,8 +29,6 @@ const deployTestSuiteController = {
     const snsClient = request.snsClient
     const logger = request.logger
 
-    request.logger.info({ scope }, '--------')
-
     const isOwner = await isOwnerOfSuite(imageName, scope)
 
     if (!isOwner) {
