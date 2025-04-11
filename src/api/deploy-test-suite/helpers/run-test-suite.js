@@ -16,6 +16,7 @@ async function runTestSuite({
   cpu,
   memory,
   snsClient,
+  deployment,
   logger
 }) {
   const runId = randomUUID()
@@ -39,6 +40,7 @@ async function runTestSuite({
     cpu,
     memory,
     user,
+    deployment,
     tag,
     runId,
     configCommitSha
@@ -53,6 +55,7 @@ async function runTestSuite({
     cpu,
     memory,
     user,
+    deployment,
     tag,
     runId,
     configCommitSha

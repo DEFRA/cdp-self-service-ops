@@ -1,10 +1,12 @@
 import Joi from 'joi'
 import {
   cpuValidation,
+  deploymentIdValidation,
   environmentValidation,
   memoryValidation,
   repositoryNameValidation,
-  userWithIdValidation
+  userWithIdValidation,
+  versionValidation
 } from '~/src/api/helpers/schema/common-validations.js'
 
 const triggerTestSuiteValidation = Joi.object({
@@ -12,7 +14,12 @@ const triggerTestSuiteValidation = Joi.object({
   environment: environmentValidation,
   user: userWithIdValidation,
   cpu: cpuValidation,
-  memory: memoryValidation
+  memory: memoryValidation,
+  deployment: {
+    deploymentId: deploymentIdValidation,
+    version: versionValidation,
+    service: repositoryNameValidation
+  }
 })
 
 export { triggerTestSuiteValidation }
