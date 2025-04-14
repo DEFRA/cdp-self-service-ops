@@ -11,7 +11,8 @@ import {
   versionValidation,
   userWithIdValidation,
   cpuValidation,
-  memoryValidation
+  memoryValidation,
+  deploymentIdValidation
 } from '~/src/api/helpers/schema/common-validations.js'
 
 const recordTestRunValidation = Joi.object({
@@ -22,7 +23,12 @@ const recordTestRunValidation = Joi.object({
   user: userWithIdValidation,
   tag: versionValidation,
   runId: runIdValidation,
-  configVersion: commitShaValidation
+  configVersion: commitShaValidation,
+  deployment: {
+    deploymentId: deploymentIdValidation,
+    version: versionValidation,
+    service: repositoryNameValidation
+  }
 })
 
 /**
@@ -32,6 +38,7 @@ const recordTestRunValidation = Joi.object({
  * @property {string} cpu
  * @property {string} memory
  * @property {{id: string, displayName: string}} user
+ * @property {{deploymentId: string, service: string, version: string}} deployment
  * @property {string} tag
  * @property {string} runId
  * @property {string} configCommitSha
@@ -48,6 +55,7 @@ async function recordTestRun({
   cpu,
   memory,
   user,
+  deployment,
   tag,
   runId,
   configCommitSha
@@ -65,6 +73,7 @@ async function recordTestRun({
     cpu,
     memory,
     user,
+    deployment,
     tag,
     runId,
     configVersion: configCommitSha

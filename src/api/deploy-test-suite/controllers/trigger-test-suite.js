@@ -13,7 +13,8 @@ const triggerTestSuiteController = {
     }
   },
   handler: async (request, h) => {
-    const { imageName, environment, user, cpu, memory } = request.payload
+    const { imageName, environment, user, cpu, memory, deployment } =
+      request.payload
     const snsClient = request.snsClient
     const logger = request.logger
 
@@ -24,6 +25,7 @@ const triggerTestSuiteController = {
       cpu,
       memory,
       snsClient,
+      deployment,
       logger
     })
 

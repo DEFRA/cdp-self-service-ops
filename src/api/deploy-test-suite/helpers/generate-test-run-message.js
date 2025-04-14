@@ -1,6 +1,7 @@
 import { config } from '~/src/config/index.js'
 import {
   cpuValidation,
+  deploymentIdValidation,
   environmentValidation,
   memoryValidation,
   repositoryNameValidation,
@@ -26,6 +27,11 @@ const testRunMessageValidation = Joi.object({
     browser: Joi.string().equal('chrome'),
     version: Joi.string().equal('latest')
   }),
+  deployment: {
+    deploymentId: deploymentIdValidation,
+    version: versionValidation,
+    service: repositoryNameValidation
+  },
   deployed_by: userWithUserIdValidation,
   environment_variables: Joi.object({
     BASE_URL: Joi.string().required(),
@@ -53,6 +59,7 @@ const testRunMessageValidation = Joi.object({
  * @property {string} cpu
  * @property {string} memory
  * @property {{id: string, displayName: string}} user
+ * @property {{deploymentId: string, service: string, version: string}} deployment
  * @property {string} tag
  * @property {string} runId
  * @property {string} configCommitSha
@@ -69,6 +76,7 @@ const generateTestRunMessage = ({
   cpu,
   memory,
   user,
+  deployment,
   tag,
   runId,
   configCommitSha
@@ -97,6 +105,7 @@ const generateTestRunMessage = ({
       userId: user.id,
       displayName: user.displayName
     },
+    deployment,
     environment_variables: {
       BASE_URL: `https://${environment}.cdp-int.defra.cloud/`,
       ENVIRONMENT: environment,
