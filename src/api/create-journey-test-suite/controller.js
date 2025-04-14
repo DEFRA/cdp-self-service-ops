@@ -25,7 +25,7 @@ const createJourneyTestSuiteController = {
     const user = request.auth?.credentials
 
     await createTestRunnerSuite(
-      request,
+      request.logger,
       repositoryName,
       creations.journeyTestsuite,
       payload?.teamId,

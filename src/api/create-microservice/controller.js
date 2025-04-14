@@ -37,7 +37,7 @@ const createMicroserviceController = {
     const user = request.auth?.credentials
 
     await createMicroservice(
-      request,
+      request.logger,
       repositoryName,
       serviceTypeTemplate,
       templateTag,

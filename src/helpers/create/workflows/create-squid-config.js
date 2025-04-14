@@ -3,16 +3,16 @@ import { createResourceFromWorkflow } from '~/src/helpers/create/workflows/creat
 
 /**
  * Creates default Squid proxy config
- * @param {{ db: import('mongodb').Db, logger: import('pino').Logger}} request
+ * @param {import('pino').Logger} logger
  * @param {string} service
  * @returns {Promise<void>}
  */
-const createSquidConfig = async (request, service) => {
+const createSquidConfig = async (logger, service) => {
   const org = config.get('github.org')
   const repo = config.get('github.repos.cdpSquidProxy')
   const workflow = config.get('workflows.createSquidConfig')
 
-  await createResourceFromWorkflow(request, service, org, repo, workflow, {
+  await createResourceFromWorkflow(logger, service, org, repo, workflow, {
     service
   })
 }

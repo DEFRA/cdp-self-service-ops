@@ -25,7 +25,7 @@ const createPerfTestSuiteController = {
     const user = request.auth?.credentials
 
     await createTestRunnerSuite(
-      request,
+      request.logger,
       repositoryName,
       creations.perfTestsuite,
       payload?.teamId,

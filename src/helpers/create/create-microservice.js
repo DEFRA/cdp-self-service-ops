@@ -3,10 +3,7 @@ import Boom from '@hapi/boom'
 import { config } from '~/src/config/index.js'
 import { serviceTemplates } from '~/src/api/create-microservice/helpers/service-templates.js'
 import { fetchTeam } from '~/src/helpers/fetch-team.js'
-import {
-  initCreationStatus,
-  updateOverallStatus
-} from '~/src/helpers/create/init-creation-status.js'
+import { initCreationStatus } from '~/src/helpers/create/init-creation-status.js'
 import { creations } from '~/src/constants/creations.js'
 import {
   createAppConfig,
@@ -16,9 +13,10 @@ import {
   createTemplatedRepo,
   createTenantInfrastructure
 } from '~/src/helpers/create/workflows/index.js'
+import { calculateOverallStatus } from '~/src/helpers/portal-backend/legacy-status/calculate-overall-status.js'
 
 /**
- * @param {{db: import('mongodb').Db, logger: import('pino').Logger}} request
+ * @param {import('pino').Logger} logger
  * @param {string} repositoryName
  * @param {string} serviceTypeTemplate
  * @param {string} templateTag
@@ -28,7 +26,7 @@ import {
  * @returns {Promise<void>}
  */
 async function createMicroservice(
-  request,
+  logger,
   repositoryName,
   serviceTypeTemplate,
   templateTag,
@@ -45,12 +43,11 @@ async function createMicroservice(
     )
   }
 
-  request.logger.info(`Creating service ${repositoryName}`)
+  logger.info(`Creating service ${repositoryName}`)
 
   // Set up the initial DB record
   try {
     await initCreationStatus(
-      request.db,
       org,
       creations.microservice,
       repositoryName,
@@ -68,7 +65,7 @@ async function createMicroservice(
       ]
     )
   } catch (e) {
-    request.logger.error(e)
+    logger.error(e)
     throw Boom.badData(
       `Repository ${repositoryName} has already been requested or is in progress`
     )
@@ -83,7 +80,7 @@ async function createMicroservice(
 
   const promises = [
     createTemplatedRepo(
-      request,
+      logger,
       config.get('workflows.createMicroService'),
       repositoryName,
       team.github,
@@ -93,23 +90,23 @@ async function createMicroservice(
         templateTag
       }
     ),
-    createTenantInfrastructure(request, repositoryName, {
+    createTenantInfrastructure(logger, repositoryName, {
       service: repositoryName,
       zone,
       mongo_enabled: zone === 'protected' ? 'true' : 'false',
       redis_enabled: zone === 'public' ? 'true' : 'false',
       service_code: team.serviceCodes?.at(0) ?? ''
     }),
-    createAppConfig(request, repositoryName, team.github),
-    createNginxUpstreams(request, repositoryName, zone),
-    createSquidConfig(request, repositoryName),
-    createDashboard(request, repositoryName, zone)
+    createAppConfig(logger, repositoryName, team.github),
+    createNginxUpstreams(logger, repositoryName, zone),
+    createSquidConfig(logger, repositoryName),
+    createDashboard(logger, repositoryName, zone)
   ]
 
   await Promise.all(promises)
 
   // calculate and set the overall status
-  await updateOverallStatus(request.db, repositoryName)
+  await calculateOverallStatus(repositoryName)
 }
 
 export { createMicroservice }

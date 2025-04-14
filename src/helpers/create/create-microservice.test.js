@@ -1,10 +1,9 @@
-import { MongoClient } from 'mongodb'
-
 import { config } from '~/src/config/index.js'
 import { fetchTeam } from '~/src/helpers/fetch-team.js'
 import { createMicroservice } from '~/src/helpers/create/create-microservice.js'
-import { statuses } from '~/src/constants/statuses.js'
 import { triggerWorkflow } from '~/src/helpers/github/trigger-workflow.js'
+import { updateLegacyStatus } from '~/src/helpers/portal-backend/legacy-status/update-legacy-status.js'
+import { statuses } from '~/src/constants/statuses.js'
 
 jest.mock('~/src/helpers/fetch-team', () => ({
   fetchTeam: jest.fn()
@@ -14,26 +13,29 @@ jest.mock('~/src/helpers/github/trigger-workflow', () => ({
   triggerWorkflow: jest.fn()
 }))
 
-const logger = { info: jest.fn(), error: jest.fn(), warn: jest.fn() }
-let connection
-let db
-const service = `test-service-${new Date().toISOString()}`
-
-beforeEach(async () => {
-  await db.collection('status').deleteMany({ repositoryName: service })
-})
-
-beforeAll(async () => {
-  connection = await MongoClient.connect(globalThis.__MONGO_URI__, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
+jest.mock(
+  '~/src/helpers/portal-backend/legacy-status/create-legacy-status',
+  () => ({
+    createLegacyStatus: jest.fn()
   })
-  db = connection.db(globalThis.__MONGO_DB_NAME__)
-})
+)
 
-afterAll(async () => {
-  await connection.close()
-})
+jest.mock(
+  '~/src/helpers/portal-backend/legacy-status/update-legacy-status.js',
+  () => ({
+    updateLegacyStatus: jest.fn()
+  })
+)
+
+jest.mock(
+  '~/src/helpers/portal-backend/legacy-status/calculate-overall-status.js',
+  () => ({
+    calculateOverallStatus: jest.fn()
+  })
+)
+
+const logger = { info: jest.fn(), error: jest.fn(), warn: jest.fn() }
+const service = `test-service-${new Date().toISOString()}`
 
 describe('#create-test-runner-suite', () => {
   test('Should create microservice', async () => {
@@ -46,13 +48,8 @@ describe('#create-test-runner-suite', () => {
       }
     })
 
-    const request = {
-      db,
-      logger
-    }
-
     await createMicroservice(
-      request,
+      logger,
       service,
       'cdp-node-frontend-template',
       'main',
@@ -63,35 +60,67 @@ describe('#create-test-runner-suite', () => {
     expect(triggerWorkflow).toHaveBeenCalledTimes(6)
 
     // Create repo
+    const createRepoInputs = {
+      serviceTypeTemplate: 'cdp-node-frontend-template',
+      repositoryName: service,
+      team: 'test',
+      additionalGitHubTopics: 'cdp,service,node,frontend',
+      templateTag: 'main'
+    }
     expect(triggerWorkflow).toHaveBeenCalledWith(
       config.get('github.org'),
       config.get('github.repos.createWorkflows'),
       'create_microservice.yml',
-      {
-        serviceTypeTemplate: 'cdp-node-frontend-template',
-        repositoryName: service,
-        team: 'test',
-        additionalGitHubTopics: 'cdp,service,node,frontend',
-        templateTag: 'main'
-      },
+      createRepoInputs,
       service,
-      request.logger
+      logger
+    )
+
+    expect(updateLegacyStatus).toHaveBeenCalledWith(
+      service,
+      config.get('github.repos.createWorkflows'),
+      {
+        status: statuses.requested,
+        trigger: {
+          org: config.get('github.org'),
+          repo: config.get('github.repos.createWorkflows'),
+          workflow: 'create_microservice.yml',
+          inputs: createRepoInputs
+        },
+        result: 'ok'
+      }
     )
 
     // Create infrastructure
+    const infraInputs = {
+      service,
+      zone: 'public',
+      mongo_enabled: 'false',
+      redis_enabled: 'true',
+      service_code: 'TST'
+    }
     expect(triggerWorkflow).toHaveBeenCalledWith(
       config.get('github.org'),
       config.get('github.repos.cdpTfSvcInfra'),
       config.get('workflows.createTenantService'),
-      {
-        service,
-        zone: 'public',
-        mongo_enabled: 'false',
-        redis_enabled: 'true',
-        service_code: 'TST'
-      },
+      infraInputs,
       service,
-      request.logger
+      logger
+    )
+
+    expect(updateLegacyStatus).toHaveBeenCalledWith(
+      service,
+      config.get('github.repos.cdpTfSvcInfra'),
+      {
+        status: statuses.requested,
+        trigger: {
+          org: config.get('github.org'),
+          repo: config.get('github.repos.cdpTfSvcInfra'),
+          workflow: config.get('workflows.createTenantService'),
+          inputs: infraInputs
+        },
+        result: 'ok'
+      }
     )
 
     // Create App Config
@@ -104,7 +133,25 @@ describe('#create-test-runner-suite', () => {
         team: 'test'
       },
       service,
-      request.logger
+      logger
+    )
+
+    expect(updateLegacyStatus).toHaveBeenCalledWith(
+      service,
+      config.get('github.repos.cdpAppConfig'),
+      {
+        status: statuses.requested,
+        trigger: {
+          org: config.get('github.org'),
+          repo: config.get('github.repos.cdpAppConfig'),
+          workflow: config.get('workflows.createAppConfig'),
+          inputs: {
+            service,
+            team: 'test'
+          }
+        },
+        result: 'ok'
+      }
     )
 
     // Create Nginx
@@ -117,7 +164,25 @@ describe('#create-test-runner-suite', () => {
         zone: 'public'
       },
       service,
-      request.logger
+      logger
+    )
+
+    expect(updateLegacyStatus).toHaveBeenCalledWith(
+      service,
+      config.get('github.repos.cdpNginxUpstreams'),
+      {
+        status: statuses.requested,
+        trigger: {
+          org: config.get('github.org'),
+          repo: config.get('github.repos.cdpNginxUpstreams'),
+          workflow: config.get('workflows.createNginxUpstreams'),
+          inputs: {
+            service,
+            zone: 'public'
+          }
+        },
+        result: 'ok'
+      }
     )
 
     // Create Squid
@@ -129,7 +194,24 @@ describe('#create-test-runner-suite', () => {
         service
       },
       service,
-      request.logger
+      logger
+    )
+
+    expect(updateLegacyStatus).toHaveBeenCalledWith(
+      service,
+      config.get('github.repos.cdpSquidProxy'),
+      {
+        status: statuses.requested,
+        trigger: {
+          org: config.get('github.org'),
+          repo: config.get('github.repos.cdpSquidProxy'),
+          workflow: config.get('workflows.createSquidConfig'),
+          inputs: {
+            service
+          }
+        },
+        result: 'ok'
+      }
     )
 
     // Create Dashboard
@@ -142,31 +224,25 @@ describe('#create-test-runner-suite', () => {
         service_zone: 'public'
       },
       service,
-      request.logger
+      logger
     )
 
-    const status = await db
-      .collection('status')
-      .findOne({ repositoryName: service })
-
-    expect(status?.repositoryName).toEqual(service)
-    expect(status[config.get('github.repos.cdpAppConfig')]?.status).toEqual(
-      statuses.requested
-    )
-    expect(
-      status[config.get('github.repos.cdpNginxUpstreams')]?.status
-    ).toEqual(statuses.requested)
-    expect(status[config.get('github.repos.cdpTfSvcInfra')]?.status).toEqual(
-      statuses.requested
-    )
-    expect(status[config.get('github.repos.cdpGrafanaSvc')]?.status).toEqual(
-      statuses.requested
-    )
-    expect(status[config.get('github.repos.cdpSquidProxy')]?.status).toEqual(
-      statuses.requested
-    )
-    expect(status[config.get('github.repos.createWorkflows')]?.status).toEqual(
-      statuses.requested
+    expect(updateLegacyStatus).toHaveBeenCalledWith(
+      service,
+      config.get('github.repos.cdpGrafanaSvc'),
+      {
+        status: statuses.requested,
+        trigger: {
+          org: config.get('github.org'),
+          repo: config.get('github.repos.cdpGrafanaSvc'),
+          workflow: config.get('workflows.createDashboard'),
+          inputs: {
+            service,
+            service_zone: 'public'
+          }
+        },
+        result: 'ok'
+      }
     )
   })
 })

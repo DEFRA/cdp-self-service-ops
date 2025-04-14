@@ -1,10 +1,10 @@
 import { statuses } from '~/src/constants/statuses.js'
-import { updateCreationStatus } from '~/src/helpers/create/init-creation-status.js'
 import { triggerWorkflow } from '~/src/helpers/github/trigger-workflow.js'
+import { updateLegacyStatus } from '~/src/helpers/portal-backend/legacy-status/update-legacy-status.js'
 
 /**
  * Triggers a given workflow and updates the status record
- * @param {{ db: import('mongodb').Db, logger: import('pino').Logger}} request
+ * @param {import('pino').Logger} logger
  * @param {string} service  - resource being created
  * @param {string} org      - GitHub org
  * @param {string} repo     - repo the workflow is in
@@ -13,7 +13,7 @@ import { triggerWorkflow } from '~/src/helpers/github/trigger-workflow.js'
  * @returns {Promise<void>}
  */
 const createResourceFromWorkflow = async (
-  request,
+  logger,
   service,
   org,
   repo,
@@ -28,20 +28,20 @@ const createResourceFromWorkflow = async (
   }
 
   try {
-    await triggerWorkflow(org, repo, workflow, inputs, service, request.logger)
+    await triggerWorkflow(org, repo, workflow, inputs, service, logger)
 
-    await updateCreationStatus(request.db, service, repo, {
+    await updateLegacyStatus(service, repo, {
       status: statuses.requested,
       trigger,
       result: 'ok'
     })
   } catch (error) {
-    await updateCreationStatus(request.db, service, repo, {
+    await updateLegacyStatus(service, repo, {
       status: statuses.failure,
       trigger,
       result: error?.response ?? 'see cdp-self-service-ops logs'
     })
-    request.logger.error(
+    logger.error(
       error,
       `update ${repo}/${service} failed with inputs  ${JSON.stringify(inputs)} ${error.message}`
     )

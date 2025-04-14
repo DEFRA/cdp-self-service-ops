@@ -1,4 +1,4 @@
-import { removeNil } from '~/src/helpers/remove-nill.js'
+import { removeNil } from '~/src/helpers/remove-nil.js'
 
 describe('#removeNil', () => {
   test('Should remove null and undefined values from a flat object', () => {
