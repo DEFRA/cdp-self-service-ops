@@ -35,7 +35,6 @@ const createRepositoryController = {
     request.logger.info(`Creating repository: ${repositoryName}`)
 
     await initCreationStatus(
-      request.db,
       org,
       creations.repository,
       repositoryName,
@@ -47,7 +46,7 @@ const createRepositoryController = {
     )
 
     await createTemplatedRepo(
-      request,
+      request.logger,
       config.get('workflows.createRepository'),
       repositoryName,
       team.github,

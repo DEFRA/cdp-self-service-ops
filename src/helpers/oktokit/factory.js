@@ -1,6 +1,6 @@
 import { createAppAuth } from '@octokit/auth-app'
 
-import { removeNil } from '~/src/helpers/remove-nill.js'
+import { removeNil } from '~/src/helpers/remove-nil.js'
 import { proxyFetch } from '~/src/helpers/proxy/proxy-fetch.js'
 
 /**

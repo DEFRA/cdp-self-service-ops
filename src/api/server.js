@@ -9,7 +9,6 @@ import { azureOidc } from '~/src/plugins/azure-oidc.js'
 import { mongoDb } from '~/src/plugins/mongodb.js'
 import { snsClientPlugin } from '~/src/plugins/sns-client.js'
 import { secureContext } from '~/src/helpers/secure-context/index.js'
-import { gitHubEventsListener } from '~/src/plugins/sqs-listener.js'
 import { sqsClient } from '~/src/plugins/sqs-client.js'
 import { pulse } from '~/src/plugins/pulse.js'
 import { requestTracing } from '~/src/plugins/request-tracing.js'
@@ -63,10 +62,6 @@ async function createServer() {
     snsClientPlugin,
     router
   ])
-
-  if (config.get('sqsGitHubEvents.enabled')) {
-    await server.register(gitHubEventsListener)
-  }
 
   return server
 }

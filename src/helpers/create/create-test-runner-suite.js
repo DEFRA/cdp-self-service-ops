@@ -1,20 +1,18 @@
 import Boom from '@hapi/boom'
 import { config } from '~/src/config/index.js'
+import { initCreationStatus } from '~/src/helpers/create/init-creation-status.js'
 import {
-  initCreationStatus,
-  updateOverallStatus
-} from '~/src/helpers/create/init-creation-status.js'
-import {
-  createTemplatedRepo,
+  createAppConfig,
   createSquidConfig,
-  createAppConfig
+  createTemplatedRepo
 } from '~/src/helpers/create/workflows/index.js'
 import { fetchTeam } from '~/src/helpers/fetch-team.js'
 import { createTenantInfrastructure } from '~/src/helpers/create/workflows/create-tenant-infrastructure.js'
+import { calculateOverallStatus } from '~/src/helpers/portal-backend/legacy-status/calculate-overall-status.js'
 
 /**
  * Helper to create test suites that run on the platform (rather than GitHub).
- * @param {{db: import('mongodb').Db, logger: import('pino').Logger}} request
+ * @param {import('pino').Logger} logger
  * @param {string} repositoryName
  * @param {string} kind
  * @param {string} teamId
@@ -26,7 +24,7 @@ import { createTenantInfrastructure } from '~/src/helpers/create/workflows/creat
  * @returns {Promise<void>}
  */
 export async function createTestRunnerSuite(
-  request,
+  logger,
   repositoryName,
   kind,
   teamId,
@@ -45,7 +43,6 @@ export async function createTestRunnerSuite(
   const zone = 'public'
 
   await initCreationStatus(
-    request.db,
     org,
     kind,
     repositoryName,
@@ -65,16 +62,16 @@ export async function createTestRunnerSuite(
 
   await Promise.all([
     createTemplatedRepo(
-      request,
+      logger,
       templateWorkflow,
       repositoryName,
       team.github,
       topics,
       { templateTag }
     ),
-    createSquidConfig(request, repositoryName),
-    createAppConfig(request, repositoryName, team.github),
-    createTenantInfrastructure(request, repositoryName, {
+    createSquidConfig(logger, repositoryName),
+    createAppConfig(logger, repositoryName, team.github),
+    createTenantInfrastructure(logger, repositoryName, {
       service: repositoryName,
       zone,
       mongo_enabled: 'false',
@@ -85,5 +82,5 @@ export async function createTestRunnerSuite(
   ])
 
   // calculate and set the overall status
-  await updateOverallStatus(request.db, repositoryName)
+  await calculateOverallStatus(repositoryName)
 }

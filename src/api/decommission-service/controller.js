@@ -1,5 +1,4 @@
 import Joi from 'joi'
-import { removeStatus } from '~/src/api/status/helpers/remove-status.js'
 import { portalBackEndDecommissionService } from '~/src/api/decommission-service/helpers/decommission-portal-backend.js'
 import { triggerRemoveWorkflows } from '~/src/api/decommission-service/helpers/trigger-remove-workflows.js'
 import { getRepositoryInfo } from '~/src/helpers/portal-backend/get-repository-info.js'
@@ -41,7 +40,6 @@ const decommissionServiceController = {
     await deleteDockerImages(serviceName, user, logger)
     await triggerRemoveWorkflows(serviceName, response.repository, logger)
     await portalBackEndDecommissionService(serviceName)
-    await removeStatus(request.db, serviceName)
 
     await triggerArchiveGithubWorkflow(serviceName, logger)
 

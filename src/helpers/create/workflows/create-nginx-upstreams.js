@@ -3,17 +3,17 @@ import { createResourceFromWorkflow } from '~/src/helpers/create/workflows/creat
 
 /**
  * Creates default service routing
- * @param {{ db: import('mongodb').Db, logger: import('pino').Logger}} request
+ * @param {import('pino').Logger} logger
  * @param {string} service
  * @param {'public'|'protected'} zone
  * @returns {Promise<void>}
  */
-const createNginxUpstreams = async (request, service, zone) => {
+const createNginxUpstreams = async (logger, service, zone) => {
   const org = config.get('github.org')
   const repo = config.get('github.repos.cdpNginxUpstreams')
   const workflow = config.get('workflows.createNginxUpstreams')
 
-  await createResourceFromWorkflow(request, service, org, repo, workflow, {
+  await createResourceFromWorkflow(logger, service, org, repo, workflow, {
     service,
     zone
   })

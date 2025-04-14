@@ -3,17 +3,17 @@ import { createResourceFromWorkflow } from '~/src/helpers/create/workflows/creat
 
 /**
  * Create default dashboards
- * @param {{ db: import('mongodb').Db, logger: import('pino').Logger}} request
+ * @param {import('pino').Logger} logger
  * @param {string} service
  * @param {'public'|'protected'} zone
  * @returns {Promise<void>}
  */
-const createDashboard = async (request, service, zone) => {
+const createDashboard = async (logger, service, zone) => {
   const org = config.get('github.org')
   const repo = config.get('github.repos.cdpGrafanaSvc')
   const workflow = config.get('workflows.createDashboard')
 
-  await createResourceFromWorkflow(request, service, org, repo, workflow, {
+  await createResourceFromWorkflow(logger, service, org, repo, workflow, {
     service,
     service_zone: zone
   })

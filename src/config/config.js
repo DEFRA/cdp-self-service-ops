@@ -220,7 +220,7 @@ const config = convict({
     enabled: {
       doc: 'Should the service listen for gitHub webhook events?',
       format: Boolean,
-      default: true,
+      default: false,
       env: 'SQS_GITHUB_ENABLED'
     }
   },
