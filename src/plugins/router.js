@@ -11,6 +11,7 @@ import { secrets } from '~/src/api/secrets/index.js'
 import { decommissionService } from '~/src/api/decommission-service/index.js'
 import { undeploy } from '~/src/api/undeploy/index.js'
 import { deleteDockerImages } from '~/src/api/delete-docker-images/index.js'
+import { deployDatabaseMigration } from '~/src/api/deploy-database-migration/controllers/deploy-database-migration.js'
 
 const router = {
   plugin: {
@@ -27,6 +28,7 @@ const router = {
         deploy,
         deployTestSuite,
         deployTerminal,
+        deployDatabaseMigration,
         queuedEvents,
         secrets,
         undeploy

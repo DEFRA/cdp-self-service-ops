@@ -185,6 +185,12 @@ const config = convict({
     default: 'arn:aws:sns:eu-west-2:000000000000:run-webshell-topic',
     env: 'SNS_RUN_WEBSHELL_TOPIC_ARN'
   },
+  snsRunDatabaseMigrationTopicArn: {
+    doc: 'SNS Run Database Migrations ARN',
+    format: String,
+    default: 'arn:aws:sns:eu-west-2:000000000000:run-database-migration-topic',
+    env: 'SNS_RUN_DATABASE_MIGRATION_TOPIC_ARN'
+  },
   platformGlobalSecretKeys: {
     doc: 'Global Platform level secret keys. These keys are not to be overridden',
     format: Array,

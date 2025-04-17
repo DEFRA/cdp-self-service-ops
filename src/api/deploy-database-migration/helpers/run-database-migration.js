@@ -1,0 +1,44 @@
+import { randomUUID } from 'node:crypto'
+
+import { config } from '~/src/config/index.js'
+import { sendSnsMessage } from '~/src/helpers/sns/send-sns-message.js'
+import { recordDatabaseMigration } from '~/src/api/deploy-database-migration/helpers/record-database-migration.js'
+
+const snsRunTestTopic = config.get('snsRunDatabaseMigrationTopicArn')
+
+async function runDatabaseMigration({
+  service,
+  environment,
+  version,
+  user,
+  snsClient,
+  logger
+}) {
+  const cdpDeploymentId = randomUUID()
+
+  const runMessage = {
+    cdpDeploymentId,
+    service,
+    environment,
+    version,
+    user
+  }
+
+  await sendSnsMessage(snsClient, snsRunTestTopic, runMessage, logger)
+
+  await recordDatabaseMigration({
+    cdpDeploymentId,
+    service,
+    version,
+    environment,
+    user
+  })
+
+  logger.info(
+    `Ran database migration ${cdpDeploymentId} ${service}:${version} in ${environment}`
+  )
+
+  return cdpDeploymentId
+}
+
+export { runDatabaseMigration }
