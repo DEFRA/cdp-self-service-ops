@@ -188,7 +188,7 @@ const config = convict({
   snsRunDatabaseMigrationTopicArn: {
     doc: 'SNS Run Database Migrations ARN',
     format: String,
-    default: 'arn:aws:sns:eu-west-2:000000000000:run-database-migration-topic',
+    default: 'arn:aws:sns:eu-west-2:000000000000:run-migrations-topic',
     env: 'SNS_RUN_DATABASE_MIGRATION_TOPIC_ARN'
   },
   platformGlobalSecretKeys: {
