@@ -1,4 +1,4 @@
-import { databaseMigrationRequestValidation } from '~/src/api/deploy-database-migration/helpers/database-migration-request-validation.js'
+import { deployMigrationRequestValidation } from '~/src/api/deploy-database-migration/helpers/deploy-migration-request-validation.js'
 import { getScopedUser } from '~/src/helpers/user/get-scoped-user.js'
 import { runDatabaseMigration } from '~/src/api/deploy-database-migration/helpers/run-database-migration.js'
 
@@ -8,7 +8,7 @@ export const deployDatabaseMigration = {
       strategy: 'azure-oidc'
     },
     validate: {
-      payload: databaseMigrationRequestValidation
+      payload: deployMigrationRequestValidation
     },
     payload: {
       output: 'data',
