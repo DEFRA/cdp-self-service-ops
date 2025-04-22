@@ -12,7 +12,7 @@ import {
 } from '~/src/api/helpers/schema/common-validations.js'
 
 const recordMigrationValidation = Joi.object({
-  cdpDeploymentId: migrationIdValidation,
+  cdpMigrationId: migrationIdValidation,
   service: repositoryNameValidation,
   version: migrationVersionValidation,
   environment: environmentValidation,
@@ -21,7 +21,7 @@ const recordMigrationValidation = Joi.object({
 
 /**
  * @typedef {object} Payload
- * @property {string} cdpDeploymentId
+ * @property {string} cdpMigrationId
  * @property {string} service
  * @property {string} version
  * @property {string} environment
@@ -34,7 +34,7 @@ const recordMigrationValidation = Joi.object({
  * @returns {Promise<{Response}|Response>}
  */
 export async function recordDatabaseMigration({
-  cdpDeploymentId,
+  cdpMigrationId,
   service,
   environment,
   version,
@@ -45,11 +45,11 @@ export async function recordDatabaseMigration({
   const url = `${config.get('portalBackendUrl')}/migrations/run`
 
   logger.info(
-    `Recording db migration ${service}:${version} in ${environment} run ${cdpDeploymentId} by ${user.displayName}`
+    `Recording db migration ${service}:${version} in ${environment} run ${cdpMigrationId} by ${user.displayName}`
   )
 
   const body = {
-    cdpDeploymentId,
+    cdpMigrationId,
     service,
     version,
     environment,
@@ -66,5 +66,5 @@ export async function recordDatabaseMigration({
     body: JSON.stringify(body)
   })
 }
-// "{\"service\":\"some-service\",\"environment\":\"infra-dev\",\"user\":{\"id\":\"some-id\",\"displayName\":\"My Name\"},\"version\":\"1.1.0\",\"cdpDeploymentId\":\"e5b0a28c-4978-4550-b611-f961152cc75a\"}",
-// "{\"service\":\"some-service\",\"environment\":\"infra-dev\",\"version\":\"1.1.0\",\"user\":{\"id\":\"some-id\",\"displayName\":\"My Name\", {\"cdpDeploymentId\":\"e5b0a28c-4978-4550-b611-f961152cc75a\"}}"
+// "{\"service\":\"some-service\",\"environment\":\"infra-dev\",\"user\":{\"id\":\"some-id\",\"displayName\":\"My Name\"},\"version\":\"1.1.0\",\"cdpMigrationId\":\"e5b0a28c-4978-4550-b611-f961152cc75a\"}",
+// "{\"service\":\"some-service\",\"environment\":\"infra-dev\",\"version\":\"1.1.0\",\"user\":{\"id\":\"some-id\",\"displayName\":\"My Name\", {\"cdpMigrationId\":\"e5b0a28c-4978-4550-b611-f961152cc75a\"}}"

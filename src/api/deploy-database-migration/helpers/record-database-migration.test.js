@@ -23,7 +23,7 @@ describe('#recordTestRun', () => {
         environment: 'infra-dev',
         user: { id: 'some-id', displayName: 'My Name' },
         version: '1.1.0',
-        cdpDeploymentId: randomUUID()
+        cdpMigrationId: randomUUID()
       })
     ).not.toThrow()
   })
@@ -36,7 +36,7 @@ describe('#recordTestRun', () => {
         user: { id: 'some-id', displayName: 'My Name' },
         version: '1.1.0'
       })
-    ).rejects.toThrow('"cdpDeploymentId" is required')
+    ).rejects.toThrow('"cdpMigrationId" is required')
   })
 
   test('Should generate correct request body', async () => {
@@ -44,7 +44,7 @@ describe('#recordTestRun', () => {
     config.get = jest.fn().mockReturnValue('http://fake-backend')
 
     await recordDatabaseMigration({
-      cdpDeploymentId: mockRunId,
+      cdpMigrationId: mockRunId,
       service: 'some-service',
       environment: 'infra-dev',
       version: '1.1.0',
@@ -58,7 +58,7 @@ describe('#recordTestRun', () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          cdpDeploymentId: mockRunId,
+          cdpMigrationId: mockRunId,
           service: 'some-service',
           version: '1.1.0',
           environment: 'infra-dev',

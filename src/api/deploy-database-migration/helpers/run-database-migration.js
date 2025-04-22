@@ -13,7 +13,7 @@ import {
 } from '~/src/api/helpers/schema/common-validations.js'
 
 const runMigrationValidation = Joi.object({
-  cdpDeploymentId: migrationIdValidation,
+  cdpMigrationId: migrationIdValidation,
   service: repositoryNameValidation,
   version: migrationVersionValidation,
   environment: environmentValidation,
@@ -30,10 +30,10 @@ async function runDatabaseMigration({
   snsClient,
   logger
 }) {
-  const cdpDeploymentId = randomUUID()
+  const cdpMigrationId = randomUUID()
 
   const runMessage = {
-    cdpDeploymentId,
+    cdpMigrationId,
     service,
     environment,
     version,
@@ -45,7 +45,7 @@ async function runDatabaseMigration({
   await sendSnsMessage(snsClient, snsRunTestTopic, runMessage, logger)
 
   await recordDatabaseMigration({
-    cdpDeploymentId,
+    cdpMigrationId,
     service,
     version,
     environment,
@@ -53,10 +53,10 @@ async function runDatabaseMigration({
   })
 
   logger.info(
-    `Ran database migration ${cdpDeploymentId} ${service}:${version} in ${environment}`
+    `Ran database migration ${cdpMigrationId} ${service}:${version} in ${environment}`
   )
 
-  return cdpDeploymentId
+  return cdpMigrationId
 }
 
 export { runDatabaseMigration }
