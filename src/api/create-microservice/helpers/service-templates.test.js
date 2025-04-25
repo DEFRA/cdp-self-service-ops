@@ -20,15 +20,6 @@ describe('#getServiceTemplates', () => {
         id: 'cdp-node-backend-template'
       },
       {
-        repositoryName: 'cdp-node-backend-template',
-        zone: 'protected',
-        templateName: 'Node.js Backend without Mongo',
-        language: 'node',
-        type: 'backend',
-        defaultBranch: 'no-mongo',
-        id: 'cdp-node-backend-template-without-mongo'
-      },
-      {
         repositoryName: 'cdp-dotnet-backend-template',
         zone: 'protected',
         templateName: 'DotNet Backend',
@@ -49,8 +40,8 @@ describe('#getServiceTemplates', () => {
   })
 })
 
-test('Should not provide python template when python scope is not present', () => {
-  expect(getServiceTemplates([])).toEqual([
+test('Should provide minimal template (without mongo) when postgres scope is present', () => {
+  expect(getServiceTemplates(['restrictedTechPostgres'])).toEqual([
     {
       repositoryName: 'cdp-node-frontend-template',
       zone: 'public',
@@ -70,11 +61,41 @@ test('Should not provide python template when python scope is not present', () =
     {
       repositoryName: 'cdp-node-backend-template',
       zone: 'protected',
-      templateName: 'Node.js Backend without Mongo',
+      templateName: 'Node.js Backend - Minimal',
       language: 'node',
       type: 'backend',
-      defaultBranch: 'no-mongo',
-      id: 'cdp-node-backend-template-without-mongo'
+      defaultBranch: 'minimal',
+      requiredScope: 'restrictedTechPostgres',
+      id: 'cdp-node-backend-template-minimal'
+    },
+    {
+      repositoryName: 'cdp-dotnet-backend-template',
+      zone: 'protected',
+      templateName: 'DotNet Backend',
+      language: 'dotnet',
+      type: 'backend',
+      id: 'cdp-dotnet-backend-template'
+    }
+  ])
+})
+
+test('Should not provide restricted technology templates when no scopes are present', () => {
+  expect(getServiceTemplates([])).toEqual([
+    {
+      repositoryName: 'cdp-node-frontend-template',
+      zone: 'public',
+      templateName: 'Node.js Frontend',
+      language: 'node',
+      type: 'frontend',
+      id: 'cdp-node-frontend-template'
+    },
+    {
+      repositoryName: 'cdp-node-backend-template',
+      zone: 'protected',
+      templateName: 'Node.js Backend',
+      language: 'node',
+      type: 'backend',
+      id: 'cdp-node-backend-template'
     },
     {
       repositoryName: 'cdp-dotnet-backend-template',

@@ -15,14 +15,15 @@ const serviceTemplates = {
     type: 'backend',
     id: 'cdp-node-backend-template'
   },
-  'cdp-node-backend-template-without-mongo': {
+  'cdp-node-backend-template-minimal': {
     repositoryName: 'cdp-node-backend-template',
     zone: 'protected',
-    templateName: 'Node.js Backend without Mongo',
+    templateName: 'Node.js Backend - Minimal',
     language: 'node',
     type: 'backend',
-    defaultBranch: 'no-mongo',
-    id: 'cdp-node-backend-template-without-mongo'
+    defaultBranch: 'minimal',
+    requiredScope: 'restrictedTechPostgres',
+    id: 'cdp-node-backend-template-minimal'
   },
   'cdp-dotnet-backend-template': {
     repositoryName: 'cdp-dotnet-backend-template',
