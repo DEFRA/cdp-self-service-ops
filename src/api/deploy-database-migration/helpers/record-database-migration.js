@@ -42,7 +42,7 @@ export async function recordDatabaseMigration({
 }) {
   const logger = createLogger()
 
-  const url = `${config.get('portalBackendUrl')}/migrations/run`
+  const url = `${config.get('portalBackendUrl')}/migrations/runs`
 
   logger.info(
     `Recording db migration ${service}:${version} in ${environment} run ${cdpMigrationId} by ${user.displayName}`
@@ -66,5 +66,3 @@ export async function recordDatabaseMigration({
     body: JSON.stringify(body)
   })
 }
-// "{\"service\":\"some-service\",\"environment\":\"infra-dev\",\"user\":{\"id\":\"some-id\",\"displayName\":\"My Name\"},\"version\":\"1.1.0\",\"cdpMigrationId\":\"e5b0a28c-4978-4550-b611-f961152cc75a\"}",
-// "{\"service\":\"some-service\",\"environment\":\"infra-dev\",\"version\":\"1.1.0\",\"user\":{\"id\":\"some-id\",\"displayName\":\"My Name\", {\"cdpMigrationId\":\"e5b0a28c-4978-4550-b611-f961152cc75a\"}}"

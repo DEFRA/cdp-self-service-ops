@@ -53,7 +53,7 @@ describe('#recordTestRun', () => {
 
     // Note: this is fragile, body check assumes field ordering.
     expect(fetcher).toHaveBeenCalledWith(
-      'http://fake-backend/migrations/run',
+      'http://fake-backend/migrations/runs',
       expect.objectContaining({
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
