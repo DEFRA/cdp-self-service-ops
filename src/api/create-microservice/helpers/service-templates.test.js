@@ -4,33 +4,46 @@ describe('#getServiceTemplates', () => {
   test('Should provide python template when correct scope is present', () => {
     expect(getServiceTemplates(['restrictedTechPython'])).toEqual([
       {
-        language: 'node',
         repositoryName: 'cdp-node-frontend-template',
+        zone: 'public',
         templateName: 'Node.js Frontend',
-        type: 'frontend',
-        zone: 'public'
-      },
-      {
         language: 'node',
+        type: 'frontend',
+        id: 'cdp-node-frontend-template'
+      },
+      {
         repositoryName: 'cdp-node-backend-template',
+        zone: 'protected',
         templateName: 'Node.js Backend',
+        language: 'node',
         type: 'backend',
-        zone: 'protected'
+        id: 'cdp-node-backend-template'
       },
       {
-        language: 'dotnet',
+        repositoryName: 'cdp-node-backend-template',
+        zone: 'protected',
+        templateName: 'Node.js Backend without Mongo',
+        language: 'node',
+        type: 'backend',
+        defaultBranch: 'no-mongo',
+        id: 'cdp-node-backend-template-without-mongo'
+      },
+      {
         repositoryName: 'cdp-dotnet-backend-template',
+        zone: 'protected',
         templateName: 'DotNet Backend',
+        language: 'dotnet',
         type: 'backend',
-        zone: 'protected'
+        id: 'cdp-dotnet-backend-template'
       },
       {
-        language: 'python',
         repositoryName: 'cdp-python-backend-template',
-        requiredScope: 'restrictedTechPython',
+        zone: 'protected',
         templateName: 'Python Backend',
+        language: 'python',
         type: 'backend',
-        zone: 'protected'
+        requiredScope: 'restrictedTechPython',
+        id: 'cdp-python-backend-template'
       }
     ])
   })
@@ -39,25 +52,37 @@ describe('#getServiceTemplates', () => {
 test('Should not provide python template when python scope is not present', () => {
   expect(getServiceTemplates([])).toEqual([
     {
-      language: 'node',
       repositoryName: 'cdp-node-frontend-template',
+      zone: 'public',
       templateName: 'Node.js Frontend',
-      type: 'frontend',
-      zone: 'public'
-    },
-    {
       language: 'node',
-      repositoryName: 'cdp-node-backend-template',
-      templateName: 'Node.js Backend',
-      type: 'backend',
-      zone: 'protected'
+      type: 'frontend',
+      id: 'cdp-node-frontend-template'
     },
     {
-      language: 'dotnet',
-      repositoryName: 'cdp-dotnet-backend-template',
-      templateName: 'DotNet Backend',
+      repositoryName: 'cdp-node-backend-template',
+      zone: 'protected',
+      templateName: 'Node.js Backend',
+      language: 'node',
       type: 'backend',
-      zone: 'protected'
+      id: 'cdp-node-backend-template'
+    },
+    {
+      repositoryName: 'cdp-node-backend-template',
+      zone: 'protected',
+      templateName: 'Node.js Backend without Mongo',
+      language: 'node',
+      type: 'backend',
+      defaultBranch: 'no-mongo',
+      id: 'cdp-node-backend-template-without-mongo'
+    },
+    {
+      repositoryName: 'cdp-dotnet-backend-template',
+      zone: 'protected',
+      templateName: 'DotNet Backend',
+      language: 'dotnet',
+      type: 'backend',
+      id: 'cdp-dotnet-backend-template'
     }
   ])
 })
