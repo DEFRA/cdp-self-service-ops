@@ -47,8 +47,12 @@ const cpuValidation = Joi.number()
   .required()
 
 const runIdValidation = Joi.string().guid().required()
+const migrationIdValidation = Joi.string().required()
+const migrationVersionValidation = Joi.string().required()
+
 const deploymentIdValidation = Joi.string().guid().required()
 const commitShaValidation = Joi.string().required()
+
 const repositoryNameValidation = Joi.string()
   .pattern(/^[\w-]*$/)
   .pattern(/^[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]$/, {
@@ -74,6 +78,8 @@ export {
   environmentValidation,
   instanceCountValidation,
   memoryValidation,
+  migrationIdValidation,
+  migrationVersionValidation,
   repositoryNameValidation,
   runIdValidation,
   userWithIdValidation,
