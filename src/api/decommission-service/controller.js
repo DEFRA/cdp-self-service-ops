@@ -24,7 +24,7 @@ const decommissionServiceController = {
   handler: async (request, h) => {
     const serviceName = request.params.serviceName
     const logger = request.logger
-    const user = request.auth.credentials
+    const { id, displayName } = request.auth.credentials
 
     if (!isFeatureEnabled(featureToggles.decommissionService)) {
       logger.info('Decommission service feature is disabled')
@@ -37,9 +37,9 @@ const decommissionServiceController = {
 
     const response = await getRepositoryInfo(serviceName)
 
-    await deleteDockerImages(serviceName, user, logger)
+    await deleteDockerImages(serviceName, logger)
     await triggerRemoveWorkflows(serviceName, response.repository, logger)
-    await portalBackEndDecommissionService(serviceName)
+    await portalBackEndDecommissionService(serviceName, { id, displayName })
 
     await triggerArchiveGithubWorkflow(serviceName, logger)
 

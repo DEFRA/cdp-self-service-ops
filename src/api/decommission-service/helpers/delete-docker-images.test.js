@@ -7,18 +7,17 @@ jest.mock('~/src/helpers/remove/workflows/delete-ecr-images')
 
 const logger = { info: jest.fn() }
 const serviceName = 'some-service'
-const user = { id: 'some-user-id', displayName: 'some-name' }
 
 describe('#deleteDockerImages', () => {
   test('should call delete ECR images', async () => {
-    await deleteDockerImages(serviceName, user, logger)
+    await deleteDockerImages(serviceName, logger)
 
     expect(deleteEcrImages).toHaveBeenCalledTimes(1)
     expect(deleteEcrImages).toHaveBeenCalledWith(serviceName, logger)
   })
 
   test('should call delete DockerHub images', async () => {
-    await deleteDockerImages(serviceName, user, logger)
+    await deleteDockerImages(serviceName, logger)
 
     expect(deleteDockerHubImages).toHaveBeenCalledTimes(1)
     expect(deleteDockerHubImages).toHaveBeenCalledWith(serviceName, logger)
