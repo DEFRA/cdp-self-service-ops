@@ -13,6 +13,7 @@ import { sqsClient } from '~/src/plugins/sqs-client.js'
 import { pulse } from '~/src/plugins/pulse.js'
 import { requestTracing } from '~/src/plugins/request-tracing.js'
 import { setupProxy } from '~/src/helpers/proxy/setup-proxy.js'
+import { catchAll } from '~/src/helpers/errors/catch-all.js'
 
 const enableSecureContext = config.get('enableSecureContext')
 
@@ -62,6 +63,8 @@ async function createServer() {
     snsClientPlugin,
     router
   ])
+
+  server.ext('onPreResponse', catchAll)
 
   return server
 }
