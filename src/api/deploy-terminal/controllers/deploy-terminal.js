@@ -5,7 +5,6 @@ import { deployTerminalValidation } from '~/src/api/deploy-terminal/helpers/depl
 import { sendSnsMessage } from '~/src/helpers/sns/send-sns-message.js'
 import { canRunTerminalInEnvironment } from '~/src/api/deploy-terminal/helpers/can-run-terminal-in-environment.js'
 import { generateTerminalToken } from '~/src/api/deploy-terminal/helpers/generate-terminal-token.js'
-import { deployTerminalPayload } from '~/src/api/deploy-terminal/helpers/deploy-terminal-payload.js'
 import { lookupTenantService } from '~/src/helpers/portal-backend/lookup-tenant-service.js'
 
 const deployTerminalController = {
@@ -52,18 +51,20 @@ const deployTerminalController = {
       throw Boom.forbidden('Failed to lookup service in this environment')
     }
 
-    const role = payload.service
     const token = generateTerminalToken(64)
 
-    const runMessage = deployTerminalPayload({
-      user,
-      token,
+    let role = payload.role
+    if (payload.useDDL) {
+      role = role + '-ddl'
+    }
+
+    const runMessage = {
       environment: payload.environment,
+      deployed_by: user,
       zone,
-      role,
-      useDDL: tenantService?.postgres === true,
-      service: payload.service
-    })
+      token,
+      role
+    }
 
     logger.info(
       `Terminal requested ${JSON.stringify(runMessage)} by ${user.displayName}`
