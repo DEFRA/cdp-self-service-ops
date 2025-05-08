@@ -38,32 +38,36 @@ const deployTerminalController = {
       )
     }
 
-    const service = await lookupTenantService(
+    const tenantService = await lookupTenantService(
       payload.service,
       payload.environment,
       logger
     )
 
-    if (!service?.zone) {
+    const zone = tenantService?.zone
+    if (!zone) {
       logger.error(
         `failed to find zone for ${payload.service} in ${payload.environment}`
       )
       throw Boom.forbidden('Failed to lookup service in this environment')
     }
 
-    logger.info(
-      `Terminal requested ${JSON.stringify(payload)} by ${user.displayName}`
-    )
-
+    const role = payload.service
     const token = generateTerminalToken(64)
 
     const runMessage = deployTerminalPayload({
       user,
       token,
       environment: payload.environment,
-      zone: service.zone,
+      zone,
+      role,
+      useDDL: tenantService?.postgres === true,
       service: payload.service
     })
+
+    logger.info(
+      `Terminal requested ${JSON.stringify(runMessage)} by ${user.displayName}`
+    )
 
     const snsResponse = await sendSnsMessage(
       snsClient,
