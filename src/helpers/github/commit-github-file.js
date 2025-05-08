@@ -22,7 +22,7 @@ async function commitFile(
 ) {
   let startTime = Date.now()
   const commitSha = await getLatestCommitSha(owner, repo, branch)
-  logger.info(`getLatestCommitSha: ${Date.now() - startTime}ms`)
+  logger.info(`getLatestCommitSha: ${commitSha} in ${Date.now() - startTime}ms`)
 
   startTime = Date.now()
   const response = await createNewCommit(
@@ -32,7 +32,8 @@ async function commitFile(
     commitSha,
     commitMessage,
     filePath,
-    content
+    content,
+    logger
   )
   logger.info(`createNewCommit: ${Date.now() - startTime}ms`)
 
@@ -46,12 +47,13 @@ async function createNewCommit(
   commitSha,
   commitMessage,
   filePath,
-  content
+  content,
+  logger
 ) {
   const utf8JsonString = JSON.stringify(content, null, 2)
-
-  return await graphql(
-    `
+  try {
+    return await graphql(
+      `
     mutation m1 {
       createCommitOnBranch(
                 input: {
@@ -77,7 +79,11 @@ async function createNewCommit(
       }
     }
   `
-  )
+    )
+  } catch (error) {
+    logger.error(error, `Error creating commit: ${error.message}`)
+    throw error
+  }
 }
 
 export { commitFile }
