@@ -53,7 +53,7 @@ const deployTerminalController = {
 
     const token = generateTerminalToken(64)
 
-    let role = payload.role
+    let role = payload.service
     if (payload.useDDL) {
       role = role + '-ddl'
     }
