@@ -53,17 +53,14 @@ const deployTerminalController = {
 
     const token = generateTerminalToken(64)
 
-    let role = payload.service
-    if (tenantService.postgres === true) {
-      role = role + '-ddl'
-    }
-
     const runMessage = {
       environment: payload.environment,
       deployed_by: user,
       zone,
       token,
-      role
+      role: payload.service,
+      service: payload.service,
+      postgres: tenantService?.postgres === true
     }
 
     logger.info(
