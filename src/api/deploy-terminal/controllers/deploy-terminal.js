@@ -54,7 +54,7 @@ const deployTerminalController = {
     const token = generateTerminalToken(64)
 
     let role = payload.service
-    if (payload.useDDL) {
+    if (tenantService.postgres === true) {
       role = role + '-ddl'
     }
 
