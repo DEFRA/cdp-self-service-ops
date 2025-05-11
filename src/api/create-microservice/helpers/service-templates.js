@@ -22,7 +22,6 @@ const serviceTemplates = {
     language: 'node',
     type: 'backend',
     defaultBranch: 'minimal',
-    requiredScope: 'restrictedTechPostgres',
     id: 'cdp-node-backend-template-minimal'
   },
   'cdp-dotnet-backend-template': {
