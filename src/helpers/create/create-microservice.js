@@ -1,7 +1,6 @@
 import Boom from '@hapi/boom'
 
 import { config } from '~/src/config/index.js'
-import { serviceTemplates } from '~/src/api/create-microservice/helpers/service-templates.js'
 import { fetchTeam } from '~/src/helpers/fetch-team.js'
 import { initCreationStatus } from '~/src/helpers/create/init-creation-status.js'
 import { creations } from '~/src/constants/creations.js'
@@ -18,9 +17,8 @@ import { calculateOverallStatus } from '~/src/helpers/portal-backend/legacy-stat
 /**
  * @param {import('pino').Logger} logger
  * @param {string} repositoryName
- * @param {string} serviceTypeTemplate
+ * @param {{zone: 'public'|'protected', mongo: boolean, redis: boolean, id: string, language: string|null, type: string}} template
  * @param {string} templateTag
- * @param {'public'|'protected'} zone
  * @param {string} teamId
  * @param {{id: string, displayName: string}} user
  * @returns {Promise<void>}
@@ -28,9 +26,8 @@ import { calculateOverallStatus } from '~/src/helpers/portal-backend/legacy-stat
 async function createMicroservice(
   logger,
   repositoryName,
-  serviceTypeTemplate,
+  template,
   templateTag,
-  zone,
   teamId,
   user
 ) {
@@ -51,8 +48,8 @@ async function createMicroservice(
       org,
       creations.microservice,
       repositoryName,
-      serviceTypeTemplate,
-      zone,
+      template.id,
+      template.zone,
       team,
       user,
       [
@@ -71,12 +68,7 @@ async function createMicroservice(
     )
   }
 
-  const topics = [
-    'cdp',
-    'service',
-    serviceTemplates[serviceTypeTemplate]?.language,
-    serviceTemplates[serviceTypeTemplate]?.type
-  ]
+  const topics = ['cdp', 'service', template.language, template.type]
 
   const promises = [
     createTemplatedRepo(
@@ -86,21 +78,21 @@ async function createMicroservice(
       team.github,
       topics,
       {
-        serviceTypeTemplate,
+        serviceTypeTemplate: template.id,
         templateTag
       }
     ),
     createTenantInfrastructure(logger, repositoryName, {
       service: repositoryName,
-      zone,
-      mongo_enabled: zone === 'protected' ? 'true' : 'false',
-      redis_enabled: zone === 'public' ? 'true' : 'false',
+      zone: template.zone,
+      mongo_enabled: template.mongo ? 'true' : 'false',
+      redis_enabled: template.redis ? 'true' : 'false',
       service_code: team.serviceCodes?.at(0) ?? ''
     }),
     createAppConfig(logger, repositoryName, team.github),
-    createNginxUpstreams(logger, repositoryName, zone),
+    createNginxUpstreams(logger, repositoryName, template.zone),
     createSquidConfig(logger, repositoryName),
-    createDashboard(logger, repositoryName, zone)
+    createDashboard(logger, repositoryName, template.zone)
   ]
 
   await Promise.all(promises)
