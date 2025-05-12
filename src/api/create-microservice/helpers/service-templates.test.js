@@ -31,5 +31,7 @@ describe('#serviceTemplates', () => {
     Object.values(serviceTemplates).forEach((template) => {
       expect(() => Joi.assert(template, serviceTemplateSchema)).not.toThrow()
     })
+
+    expect.assertions(Object.values(serviceTemplates).length)
   })
 })
