@@ -75,6 +75,14 @@ const repositoryNameValidation = Joi.string()
 
 const commitShaValidation = Joi.string().required()
 
+const templateRepositoryNameValidation = Joi.string().min(1).max(100).required()
+
+const templateBranchNameValidation = Joi.string().min(1).max(62).optional()
+
+const templateTypeValidation = Joi.string()
+  .valid('frontend', 'backend')
+  .required()
+
 export {
   commitShaValidation,
   cpuValidation,
@@ -88,6 +96,9 @@ export {
   migrationVersionValidation,
   repositoryNameValidation,
   runIdValidation,
+  templateBranchNameValidation,
+  templateRepositoryNameValidation,
+  templateTypeValidation,
   userWithIdValidation,
   userWithUserIdValidation,
   versionValidation,
