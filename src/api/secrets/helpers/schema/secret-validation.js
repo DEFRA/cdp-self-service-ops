@@ -1,5 +1,4 @@
 import Joi from 'joi'
-
 import { config } from '~/src/config/index.js'
 import {
   environmentValidation,
