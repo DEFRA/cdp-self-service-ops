@@ -4,6 +4,7 @@ import { createMicroservice } from '~/src/helpers/create/create-microservice.js'
 import { triggerWorkflow } from '~/src/helpers/github/trigger-workflow.js'
 import { updateLegacyStatus } from '~/src/helpers/portal-backend/legacy-status/update-legacy-status.js'
 import { statuses } from '~/src/constants/statuses.js'
+import { serviceTemplates } from '~/src/api/create-microservice/helpers/service-templates.js'
 
 jest.mock('~/src/helpers/fetch-team', () => ({
   fetchTeam: jest.fn()
@@ -51,9 +52,8 @@ describe('#create-test-runner-suite', () => {
     await createMicroservice(
       logger,
       service,
-      'cdp-node-frontend-template',
+      serviceTemplates['cdp-node-frontend-template'],
       'main',
-      'public',
       'team',
       { id: '123', displayName: 'test user' }
     )

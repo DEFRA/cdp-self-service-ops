@@ -1,7 +1,24 @@
+import Joi from 'joi'
+
+const serviceTemplateSchema = Joi.object({
+  repositoryName: Joi.string().required(),
+  zone: Joi.string().valid('public', 'protected').required(),
+  mongo: Joi.boolean().required(),
+  redis: Joi.boolean().required(),
+  templateName: Joi.string().required(),
+  language: Joi.string().required(),
+  type: Joi.string().required(),
+  defaultBranch: Joi.string().optional(),
+  requiredScope: Joi.string().optional(),
+  id: Joi.string().required()
+})
+
 const serviceTemplates = {
   'cdp-node-frontend-template': {
     repositoryName: 'cdp-node-frontend-template',
     zone: 'public',
+    mongo: false,
+    redis: true,
     templateName: 'Node.js Frontend',
     language: 'node',
     type: 'frontend',
@@ -10,6 +27,8 @@ const serviceTemplates = {
   'cdp-node-backend-template': {
     repositoryName: 'cdp-node-backend-template',
     zone: 'protected',
+    mongo: true,
+    redis: false,
     templateName: 'Node.js Backend',
     language: 'node',
     type: 'backend',
@@ -18,6 +37,8 @@ const serviceTemplates = {
   'cdp-node-backend-template-minimal': {
     repositoryName: 'cdp-node-backend-template',
     zone: 'protected',
+    mongo: false,
+    redis: false,
     templateName: 'Node.js Backend - Minimal',
     language: 'node',
     type: 'backend',
@@ -27,6 +48,8 @@ const serviceTemplates = {
   'cdp-dotnet-backend-template': {
     repositoryName: 'cdp-dotnet-backend-template',
     zone: 'protected',
+    mongo: true,
+    redis: false,
     templateName: 'DotNet Backend',
     language: 'dotnet',
     type: 'backend',
@@ -35,6 +58,8 @@ const serviceTemplates = {
   'cdp-python-backend-template': {
     repositoryName: 'cdp-python-backend-template',
     zone: 'protected',
+    mongo: true,
+    redis: false,
     templateName: 'Python Backend',
     language: 'python',
     type: 'backend',
@@ -53,4 +78,4 @@ function getServiceTemplates(scopes = []) {
   })
 }
 
-export { serviceTemplates, getServiceTemplates }
+export { serviceTemplates, serviceTemplateSchema, getServiceTemplates }
