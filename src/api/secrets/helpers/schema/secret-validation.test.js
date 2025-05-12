@@ -1,6 +1,6 @@
 import Joi from 'joi'
 
-import { config } from '~/src/config/index.js'
+import { config } from '~/src/config/config.js'
 import {
   secretParamsValidation,
   secretPayloadValidation
@@ -48,8 +48,9 @@ describe('#secretPayloadValidation', () => {
       secretValue: 'validSecretValue'
     }
     config.get = jest.fn().mockReturnValue(['IMMUTABLE_KEY'])
-    const { error } = secretPayloadValidation().validate(payload)
+    const response = secretPayloadValidation().validate(payload)
 
+    const error = response.error
     expect(error).toBeInstanceOf(Joi.ValidationError)
     expect(error.message).toBe('"secretKey" contains an invalid value')
   })
