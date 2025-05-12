@@ -1,13 +1,13 @@
 import Joi from 'joi'
 import {
-  templateRepositoryNameValidation,
+  repositoryNameValidation,
   templateBranchNameValidation,
   zoneValidation,
   templateTypeValidation
 } from '~/src/api/helpers/schema/common-validations.js'
 
 const serviceTemplateSchema = Joi.object({
-  repositoryName: templateRepositoryNameValidation,
+  repositoryName: repositoryNameValidation,
   zone: zoneValidation,
   mongo: Joi.boolean().required(),
   redis: Joi.boolean().required(),
