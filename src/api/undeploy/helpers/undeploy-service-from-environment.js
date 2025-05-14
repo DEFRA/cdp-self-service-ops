@@ -3,6 +3,7 @@ import { scaleEcsToZero } from '~/src/api/undeploy/helpers/scale-ecs-to-zero.js'
 import { isFeatureEnabled } from '~/src/helpers/feature-toggle/is-feature-enabled.js'
 import { featureToggles } from '~/src/helpers/feature-toggle/feature-toggles.js'
 import { getEntity } from '~/src/helpers/portal-backend/get-entity.js'
+import { lookupTenantService } from '~/src/helpers/portal-backend/lookup-tenant-service.js'
 
 /**
  * @param {string} repositoryName
@@ -28,8 +29,16 @@ export async function undeployServiceFromEnvironment(
     return undeploymentId
   }
 
-  if (!entity.zone) {
-    logger.warn(`Unable to find zone for [${repositoryName}].`)
+  const tenantService = await lookupTenantService(
+    repositoryName,
+    environment,
+    logger
+  )
+
+  if (!tenantService?.zone) {
+    logger.warn(
+      `Unable to find zone for [${repositoryName}] in ${environment}.`
+    )
     return
   }
 
@@ -39,7 +48,7 @@ export async function undeployServiceFromEnvironment(
     await scaleEcsToZero(
       repositoryName,
       environment,
-      entity.zone,
+      tenantService?.zone,
       user,
       undeploymentId,
       logger
