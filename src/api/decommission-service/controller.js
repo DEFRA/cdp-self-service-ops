@@ -35,10 +35,10 @@ const decommissionServiceController = {
         .code(409)
     }
 
-    const response = await getRepositoryInfo(serviceName)
+    const repository = await getRepositoryInfo(serviceName)
 
     await deleteDockerImages(serviceName, logger)
-    await triggerRemoveWorkflows(serviceName, response.repository, logger)
+    await triggerRemoveWorkflows(serviceName, repository, logger)
     await portalBackEndDecommissionService(serviceName, { id, displayName })
 
     await triggerArchiveGithubWorkflow(serviceName, logger)
