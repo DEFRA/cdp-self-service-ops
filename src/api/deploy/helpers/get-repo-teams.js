@@ -9,13 +9,15 @@ async function getRepoTeams(repoName) {
     method: 'get',
     headers: { 'Content-Type': 'application/json' }
   })
-  const json = await response.json()
+  const repository = await response.json()
 
   if (response.ok) {
-    return json?.repository?.teams
+    return repository?.teams
   }
 
-  throw Boom.boomify(new Error(json.message), { statusCode: response.status })
+  throw Boom.boomify(new Error(repository.message), {
+    statusCode: response.status
+  })
 }
 
 export { getRepoTeams }
