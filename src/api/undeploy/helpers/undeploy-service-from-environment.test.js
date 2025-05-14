@@ -4,20 +4,27 @@ import { featureToggles } from '~/src/helpers/feature-toggle/feature-toggles.js'
 import { isFeatureEnabled } from '~/src/helpers/feature-toggle/is-feature-enabled.js'
 import { undeployServiceFromEnvironment } from '~/src/api/undeploy/helpers/undeploy-service-from-environment.js'
 import { getEntity } from '~/src/helpers/portal-backend/get-entity.js'
+import { lookupTenantService } from '~/src/helpers/portal-backend/lookup-tenant-service.js'
 
 jest.mock('~/src/helpers/portal-backend/get-entity')
 jest.mock('~/src/api/undeploy/helpers/register-undeployment')
 jest.mock('~/src/helpers/feature-toggle/is-feature-enabled')
 jest.mock('~/src/api/undeploy/helpers/scale-ecs-to-zero')
+jest.mock('~/src/helpers/portal-backend/lookup-tenant-service.js')
 
 const logger = { info: jest.fn(), warn: jest.fn() }
 getEntity.mockResolvedValue({
   name: 'some-service',
   type: 'Microservice',
-  zone: 'some-zone'
+  subType: 'Frontend'
 })
 registerUndeployment.mockResolvedValue()
 scaleEcsToZero.mockResolvedValue()
+lookupTenantService.mockResolvedValue({
+  serviceCode: 'CDP',
+  zone: 'public',
+  postgres: false
+})
 
 const repositoryName = 'some-service'
 const environment = 'dev'
@@ -63,7 +70,7 @@ describe('#undeployServiceFromEnvironment', () => {
     expect(scaleEcsToZero).toHaveBeenCalledWith(
       repositoryName,
       environment,
-      'some-zone',
+      'public',
       user,
       expect.anything(),
       logger
