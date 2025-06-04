@@ -335,6 +335,11 @@ const config = convict({
         doc: 'Repository to store deployment state for services on CDP',
         format: String,
         default: 'cdp-app-deployments'
+      },
+      cdpWaf: {
+        doc: 'Repository for CDP Web Application Firewall (WAF)',
+        format: String,
+        default: 'cdp-tf-waf'
       }
     }
   },
@@ -470,6 +475,12 @@ const config = convict({
       format: String,
       default: 'archive_repository.yml',
       env: 'ARCHIVE_GITHUB_REPOSITORY_WORKFLOW'
+    },
+    shutterWorkflow: {
+      doc: 'Name of workflow to trigger when shuttering a url',
+      format: String,
+      default: 'shuttering-add.yml',
+      env: 'SHUTTER_URL_WORKFLOW'
     }
   },
   enableSecureContext: {
