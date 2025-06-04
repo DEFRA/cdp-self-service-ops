@@ -12,6 +12,7 @@ import { decommissionService } from '~/src/api/decommission-service/index.js'
 import { undeploy } from '~/src/api/undeploy/index.js'
 import { deleteDockerImages } from '~/src/api/delete-docker-images/index.js'
 import { databaseMigrations } from '~/src/api/deploy-database-migration/index.js'
+import { shutter } from '~/src/api/shutter/index.js'
 
 const router = {
   plugin: {
@@ -31,6 +32,7 @@ const router = {
         databaseMigrations,
         queuedEvents,
         secrets,
+        shutter,
         undeploy
       ])
     }
