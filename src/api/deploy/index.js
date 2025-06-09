@@ -4,6 +4,7 @@ import {
   existingServiceInfoController
 } from '~/src/api/deploy/controllers/index.js'
 import { autoDeployServiceController } from '~/src/api/deploy/controllers/auto-deploy-service.js'
+import { deployToZeroController } from '~/src/api/deploy/controllers/deploy-to-zero.js'
 
 const deploy = {
   plugin: {
@@ -29,6 +30,11 @@ const deploy = {
           method: 'GET',
           path: '/deploy-service/info/{environment}/{imageName}',
           ...existingServiceInfoController
+        },
+        {
+          method: 'POST',
+          path: '/deploy-service/to-zero/{environment}/{serviceName}',
+          ...deployToZeroController
         }
       ])
     }
