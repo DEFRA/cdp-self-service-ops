@@ -1,9 +1,8 @@
 import Boom from '@hapi/boom'
-
 import { config } from '~/src/config/index.js'
-import { creations } from '~/src/constants/creations.js'
 import { createTestRunnerSuite } from '~/src/helpers/create/create-test-runner-suite.js'
 import { testSuiteValidation } from '~/src/api/helpers/schema/test-suite-validation.js'
+import { entitySubTypes } from '~/src/constants/entities.js'
 
 const createPerfTestSuiteController = {
   options: {
@@ -24,17 +23,15 @@ const createPerfTestSuiteController = {
     const templateTag = payload.templateTag
     const user = request.auth?.credentials
 
-    await createTestRunnerSuite(
-      request.logger,
+    await createTestRunnerSuite({
+      logger: request.logger,
       repositoryName,
-      creations.perfTestsuite,
-      payload?.teamId,
+      entitySubType: entitySubTypes.performance,
+      teamId: payload?.teamId,
       user,
-      config.get('workflows.createPerfTestSuite'),
-      'cdp-perf-test-suite-template',
-      templateTag,
-      ['performance']
-    )
+      templateWorkflow: config.get('workflows.createPerfTestSuite'),
+      templateTag
+    })
 
     return h
       .response({

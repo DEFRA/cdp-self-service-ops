@@ -2,8 +2,7 @@ import Boom from '@hapi/boom'
 
 import { config } from '~/src/config/index.js'
 import { fetchTeam } from '~/src/helpers/fetch-team.js'
-import { initCreationStatus } from '~/src/helpers/create/init-creation-status.js'
-import { creations } from '~/src/constants/creations.js'
+import { createInitialEntity } from '~/src/helpers/create/create-initial-entity.js'
 import {
   createAppConfig,
   createDashboard,
@@ -12,12 +11,11 @@ import {
   createTemplatedRepo,
   createTenantInfrastructure
 } from '~/src/helpers/create/workflows/index.js'
-import { calculateOverallStatus } from '~/src/helpers/portal-backend/legacy-status/calculate-overall-status.js'
 
 /**
- * @param {import('pino').Logger} logger
+ * @param {import("pino").Logger} logger
  * @param {string} repositoryName
- * @param {{zone: 'public'|'protected', mongo: boolean, redis: boolean, id: string, language: string|null, type: string}} template
+ * @param {{zone: "public"|"protected", mongo: boolean, redis: boolean, id: string, language: string|null, type: string, entityType: string, entitySubType: string}} template
  * @param {string} templateTag
  * @param {string} teamId
  * @param {{id: string, displayName: string}} user
@@ -31,8 +29,6 @@ async function createMicroservice(
   teamId,
   user
 ) {
-  const org = config.get('github.org')
-
   const { team } = await fetchTeam(teamId)
   if (!team?.github) {
     throw Boom.badData(
@@ -42,35 +38,24 @@ async function createMicroservice(
 
   logger.info(`Creating service ${repositoryName}`)
 
-  // Set up the initial DB record
   try {
-    await initCreationStatus(
-      org,
-      creations.microservice,
+    await createInitialEntity({
       repositoryName,
-      template.id,
-      template.zone,
+      entityType: template.entityType,
+      entitySubType: template.entitySubType,
       team,
-      user,
-      [
-        config.get('github.repos.createWorkflows'),
-        config.get('github.repos.cdpTfSvcInfra'),
-        config.get('github.repos.cdpAppConfig'),
-        config.get('github.repos.cdpNginxUpstreams'),
-        config.get('github.repos.cdpSquidProxy'),
-        config.get('github.repos.cdpGrafanaSvc')
-      ]
-    )
+      user
+    })
   } catch (e) {
     logger.error(e)
     throw Boom.badData(
-      `Repository ${repositoryName} has already been requested or is in progress`
+      `Repository ${repositoryName} has already been requested or is in progress: ${e.message}`
     )
   }
 
   const topics = ['cdp', 'service', template.language, template.type]
 
-  const promises = [
+  await Promise.all([
     createTemplatedRepo(
       logger,
       config.get('workflows.createMicroService'),
@@ -93,12 +78,7 @@ async function createMicroservice(
     createNginxUpstreams(logger, repositoryName, template.zone),
     createSquidConfig(logger, repositoryName),
     createDashboard(logger, repositoryName, template.zone)
-  ]
-
-  await Promise.all(promises)
-
-  // calculate and set the overall status
-  await calculateOverallStatus(repositoryName)
+  ])
 }
 
 export { createMicroservice }

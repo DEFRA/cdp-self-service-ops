@@ -26,11 +26,12 @@ const stopTestSuiteController = {
   handler: async (request, h) => {
     const testRun = await fetchTestRun(request.payload.runId)
 
+    const credentials = request.auth?.credentials
     const user = {
-      id: request.auth?.credentials?.id,
-      displayName: request.auth?.credentials?.displayName
+      id: credentials?.id,
+      displayName: credentials?.displayName
     }
-    const scope = request.auth?.credentials?.scope
+    const scope = credentials?.scope
 
     const isOwner = await isOwnerOfSuite(testRun.testSuite, scope)
 

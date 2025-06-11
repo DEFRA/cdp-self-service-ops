@@ -1,9 +1,9 @@
 import Boom from '@hapi/boom'
 
 import { config } from '~/src/config/index.js'
-import { creations } from '~/src/constants/creations.js'
 import { createTestRunnerSuite } from '~/src/helpers/create/create-test-runner-suite.js'
 import { testSuiteValidation } from '~/src/api/helpers/schema/test-suite-validation.js'
+import { entitySubTypes, entityTypes } from '~/src/constants/entities.js'
 
 const createJourneyTestSuiteController = {
   options: {
@@ -24,17 +24,16 @@ const createJourneyTestSuiteController = {
     const templateTag = payload?.templateTag
     const user = request.auth?.credentials
 
-    await createTestRunnerSuite(
-      request.logger,
+    await createTestRunnerSuite({
+      logger: request.logger,
       repositoryName,
-      creations.journeyTestsuite,
-      payload?.teamId,
+      entityType: entityTypes.testSuite,
+      entitySubType: entitySubTypes.journey,
+      teamId: payload?.teamId,
       user,
-      config.get('workflows.createJourneyTestSuite'),
-      'cdp-node-env-test-suite-template', // TODO update template to new journey tests template name
-      templateTag,
-      ['journey']
-    )
+      templateWorkflow: config.get('workflows.createJourneyTestSuite'),
+      templateTag
+    })
 
     return h
       .response({

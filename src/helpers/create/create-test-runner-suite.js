@@ -1,6 +1,5 @@
 import Boom from '@hapi/boom'
-import { config } from '~/src/config/index.js'
-import { initCreationStatus } from '~/src/helpers/create/init-creation-status.js'
+import { createInitialEntity } from '~/src/helpers/create/create-initial-entity.js'
 import {
   createAppConfig,
   createSquidConfig,
@@ -8,57 +7,38 @@ import {
 } from '~/src/helpers/create/workflows/index.js'
 import { fetchTeam } from '~/src/helpers/fetch-team.js'
 import { createTenantInfrastructure } from '~/src/helpers/create/workflows/create-tenant-infrastructure.js'
-import { calculateOverallStatus } from '~/src/helpers/portal-backend/legacy-status/calculate-overall-status.js'
+import { entityTypes } from '~/src/constants/entities.js'
 
 /**
- * Helper to create test suites that run on the platform (rather than GitHub).
- * @param {import('pino').Logger} logger
- * @param {string} repositoryName
- * @param {string} kind
- * @param {string} teamId
- * @param {{id: string, displayName: string}} user
- * @param {string} templateWorkflow
- * @param {string} serviceTypeTemplate
- * @param {string} templateTag
- * @param {string[]} extraTopics
+ * Helper to create test suites
+ * @param {{ logger: import('pino').Logger, repositoryName: string, entitySubType: string, teamId: string, user: {id: string, displayName: string}, templateWorkflow: string, templateTag: string}} params
  * @returns {Promise<void>}
  */
-export async function createTestRunnerSuite(
+export async function createTestRunnerSuite({
   logger,
   repositoryName,
-  kind,
+  entitySubType,
   teamId,
   user,
   templateWorkflow,
-  serviceTypeTemplate,
-  templateTag,
-  extraTopics = []
-) {
+  templateTag
+}) {
   const { team } = await fetchTeam(teamId)
   if (!team?.github) {
     throw Boom.badData(`Team ${team.name} does not have a linked Github team`)
   }
 
-  const org = config.get('github.org')
   const zone = 'public'
 
-  await initCreationStatus(
-    org,
-    kind,
+  await createInitialEntity({
     repositoryName,
-    serviceTypeTemplate,
-    zone,
+    entityType: entityTypes.testSuite,
+    entitySubType,
     team,
-    user,
-    [
-      config.get('github.repos.createWorkflows'),
-      config.get('github.repos.cdpTfSvcInfra'),
-      config.get('github.repos.cdpSquidProxy'),
-      config.get('github.repos.cdpAppConfig')
-    ]
-  )
+    user
+  })
 
-  const topics = ['cdp', 'test', 'test-suite', ...[extraTopics]]
+  const topics = ['cdp', 'test', 'test-suite', entitySubType.toLowerCase()]
 
   await Promise.all([
     createTemplatedRepo(
@@ -80,7 +60,4 @@ export async function createTestRunnerSuite(
       test_suite: repositoryName
     })
   ])
-
-  // calculate and set the overall status
-  await calculateOverallStatus(repositoryName)
 }

@@ -3,7 +3,9 @@ import {
   repositoryNameValidation,
   templateBranchNameValidation,
   zoneValidation,
-  templateTypeValidation
+  templateTypeValidation,
+  entityTypeValidation,
+  entitySubTypeValidation
 } from '~/src/api/helpers/schema/common-validations.js'
 
 const serviceTemplateSchema = Joi.object({
@@ -16,7 +18,9 @@ const serviceTemplateSchema = Joi.object({
   type: templateTypeValidation,
   defaultBranch: templateBranchNameValidation,
   requiredScope: Joi.string().optional(),
-  id: Joi.string().required()
+  id: Joi.string().required(),
+  entityType: entityTypeValidation,
+  entitySubType: entitySubTypeValidation
 })
 
 const serviceTemplates = {
@@ -28,7 +32,9 @@ const serviceTemplates = {
     templateName: 'Node.js Frontend',
     language: 'node',
     type: 'frontend',
-    id: 'cdp-node-frontend-template'
+    id: 'cdp-node-frontend-template',
+    entityType: 'Microservice',
+    entitySubType: 'Frontend'
   },
   'cdp-node-backend-template': {
     repositoryName: 'cdp-node-backend-template',
@@ -38,7 +44,9 @@ const serviceTemplates = {
     templateName: 'Node.js Backend',
     language: 'node',
     type: 'backend',
-    id: 'cdp-node-backend-template'
+    id: 'cdp-node-backend-template',
+    entityType: 'Microservice',
+    entitySubType: 'Backend'
   },
   'cdp-node-backend-template-minimal': {
     repositoryName: 'cdp-node-backend-template',
@@ -49,7 +57,9 @@ const serviceTemplates = {
     language: 'node',
     type: 'backend',
     defaultBranch: 'minimal',
-    id: 'cdp-node-backend-template-minimal'
+    id: 'cdp-node-backend-template-minimal',
+    entityType: 'Microservice',
+    entitySubType: 'Backend'
   },
   'cdp-dotnet-backend-template': {
     repositoryName: 'cdp-dotnet-backend-template',
@@ -59,7 +69,9 @@ const serviceTemplates = {
     templateName: 'DotNet Backend',
     language: 'dotnet',
     type: 'backend',
-    id: 'cdp-dotnet-backend-template'
+    id: 'cdp-dotnet-backend-template',
+    entityType: 'Microservice',
+    entitySubType: 'Backend'
   },
   'cdp-python-backend-template': {
     repositoryName: 'cdp-python-backend-template',
@@ -70,7 +82,9 @@ const serviceTemplates = {
     language: 'python',
     type: 'backend',
     requiredScope: 'restrictedTechPython',
-    id: 'cdp-python-backend-template'
+    id: 'cdp-python-backend-template',
+    entityType: 'Microservice',
+    entitySubType: 'Backend'
   }
 }
 
