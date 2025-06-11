@@ -1,13 +1,8 @@
 import { config } from '~/src/config/index.js'
 import { fetcher } from '~/src/helpers/fetcher.js'
 
-/**
- * @param {object} payload
- * @returns {Promise<Artifact>}
- */
-async function createLegacyStatus(payload) {
-  const url = `${config.get('portalBackendUrl')}/legacy-statuses`
-
+async function createEntity(payload) {
+  const url = `${config.get('portalBackendUrl')}/entities`
   await fetcher(url, {
     method: 'post',
     headers: { 'Content-Type': 'application/json' },
@@ -15,4 +10,4 @@ async function createLegacyStatus(payload) {
   })
 }
 
-export { createLegacyStatus }
+export { createEntity }

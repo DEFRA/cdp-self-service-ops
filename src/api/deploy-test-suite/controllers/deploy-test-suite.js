@@ -21,11 +21,12 @@ const deployTestSuiteController = {
   },
   handler: async (request, h) => {
     const { imageName, environment, cpu, memory } = request.payload
+    const credentials = request.auth?.credentials
     const user = {
-      id: request.auth?.credentials?.id,
-      displayName: request.auth?.credentials?.displayName
+      id: credentials?.id,
+      displayName: credentials?.displayName
     }
-    const scope = request.auth?.credentials?.scope
+    const scope = credentials?.scope
     const snsClient = request.snsClient
     const logger = request.logger
 

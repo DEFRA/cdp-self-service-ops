@@ -1,6 +1,4 @@
-import { statuses } from '~/src/constants/statuses.js'
 import { triggerWorkflow } from '~/src/helpers/github/trigger-workflow.js'
-import { updateLegacyStatus } from '~/src/helpers/portal-backend/legacy-status/update-legacy-status.js'
 
 /**
  * Triggers a given workflow and updates the status record
@@ -20,27 +18,9 @@ const createResourceFromWorkflow = async (
   workflow,
   inputs
 ) => {
-  const trigger = {
-    org,
-    repo,
-    workflow,
-    inputs
-  }
-
   try {
     await triggerWorkflow(org, repo, workflow, inputs, service, logger)
-
-    await updateLegacyStatus(service, repo, {
-      status: statuses.requested,
-      trigger,
-      result: 'ok'
-    })
   } catch (error) {
-    await updateLegacyStatus(service, repo, {
-      status: statuses.failure,
-      trigger,
-      result: error?.response ?? 'see cdp-self-service-ops logs'
-    })
     logger.error(
       error,
       `update ${repo}/${service} failed with inputs  ${JSON.stringify(inputs)} ${error.message}`

@@ -18,11 +18,28 @@ const currentEnvironmentValidation = Joi.string()
 
 const zoneValidation = Joi.string().valid('public', 'protected').required()
 
+const entityStatusValidation = Joi.string()
+  .valid('Creating', 'Created')
+  .required()
+
+const entityTypeValidation = Joi.string()
+  .valid('Microservice', 'TestSuite', 'Repository')
+  .required()
+
+const entitySubTypeValidation = Joi.string()
+  .valid('Frontend', 'Backend', 'Journey', 'Performance')
+  .optional()
+
 const displayNameValidation = Joi.string().required()
 
 const userWithIdValidation = Joi.object({
   id: Joi.string().required(),
   displayName: displayNameValidation
+})
+
+const teamValidation = Joi.object({
+  teamId: Joi.string().required(),
+  name: displayNameValidation
 })
 
 const userWithUserIdValidation = Joi.object({
@@ -73,6 +90,18 @@ const repositoryNameValidation = Joi.string()
     'string.max': '32 characters or less'
   })
 
+const entityValidation = Joi.object({
+  name: repositoryNameValidation,
+  type: entityTypeValidation,
+  subType: entitySubTypeValidation,
+  primaryLanguage: Joi.string().optional(),
+  created: Joi.date().required(),
+  creator: userWithIdValidation,
+  teams: Joi.array().items(teamValidation).required(),
+  status: entityStatusValidation,
+  decommissioned: Joi.object().optional().allow(null)
+})
+
 const commitShaValidation = Joi.string().required()
 
 const templateBranchNameValidation = Joi.string().min(1).max(62).optional()
@@ -86,6 +115,10 @@ export {
   cpuValidation,
   currentEnvironmentValidation,
   deploymentIdValidation,
+  entityStatusValidation,
+  entitySubTypeValidation,
+  entityTypeValidation,
+  entityValidation,
   environmentExceptForProdValidation,
   environmentValidation,
   instanceCountValidation,
@@ -94,6 +127,7 @@ export {
   migrationVersionValidation,
   repositoryNameValidation,
   runIdValidation,
+  teamValidation,
   templateBranchNameValidation,
   templateTypeValidation,
   userWithIdValidation,

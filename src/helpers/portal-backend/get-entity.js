@@ -14,7 +14,7 @@ async function getEntity(repositoryName, logger) {
   }
 
   logger.error(
-    `Error attempting to retrieve repository information for ${repositoryName}: '${json.message}' statusCode: '${response.status}'`
+    `Error attempting to retrieve entity for ${repositoryName}: '${json.message}' statusCode: '${response.status}'`
   )
 }
 
