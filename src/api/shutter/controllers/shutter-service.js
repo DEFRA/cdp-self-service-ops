@@ -14,11 +14,7 @@ const shutterServiceController = {
     auth: {
       strategy: 'azure-oidc',
       access: {
-        scope: [
-          scopes.tenant,
-          scopes.admin,
-          `+${scopes.restrictedTechMaintenance}`
-        ]
+        scope: [scopes.tenant, scopes.admin]
       }
     },
     validate: {
