@@ -1,5 +1,5 @@
 /**
- * @type {{admin: string, tenant: string, serviceOwner: string, externalTest: string, breakGlass: string, restrictedTechPython: string, restrictedTechPostgres: string, restrictedTechMaintenance: string}}
+ * @type {{admin: string, tenant: string, serviceOwner: string, externalTest: string, breakGlass: string, restrictedTechPython: string, restrictedTechPostgres: string }}
  */
 const scopes = {
   admin: 'admin',
@@ -8,8 +8,7 @@ const scopes = {
   externalTest: 'externalTest',
   breakGlass: 'breakGlass',
   restrictedTechPython: 'restrictedTechPython',
-  restrictedTechPostgres: 'restrictedTechPostgres',
-  restrictedTechMaintenance: 'restrictedTechMaintenance'
+  restrictedTechPostgres: 'restrictedTechPostgres'
 }
 
 export { scopes }
