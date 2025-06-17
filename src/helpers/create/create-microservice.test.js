@@ -5,6 +5,7 @@ import { triggerWorkflow } from '~/src/helpers/github/trigger-workflow.js'
 import { serviceTemplates } from '~/src/api/create-microservice/helpers/service-templates.js'
 import { createEntity } from '~/src/helpers/portal-backend/create-entity.js'
 import { entitySubTypes, entityTypes } from '~/src/constants/entities.js'
+import { randomUUID } from 'node:crypto'
 
 jest.mock('~/src/helpers/fetch-team', () => ({
   fetchTeam: jest.fn()
@@ -32,22 +33,24 @@ describe('#create-test-runner-suite', () => {
   })
 
   test('Should create microservice', async () => {
+    const teamId = randomUUID()
     fetchTeam.mockResolvedValue({
       team: {
-        teamId: 'teamId123',
+        teamId,
         name: 'test',
         github: 'test',
         serviceCodes: ['TST']
       }
     })
 
+    const userId = randomUUID()
     await createMicroservice(
       logger,
       repositoryName,
       serviceTemplates['cdp-node-frontend-template'],
       'main',
-      'teamId123',
-      { id: '123', displayName: 'test user' }
+      teamId,
+      { id: userId, displayName: 'test user' }
     )
     expect(triggerWorkflow).toHaveBeenCalledTimes(6)
 
@@ -57,12 +60,12 @@ describe('#create-test-runner-suite', () => {
       subType: entitySubTypes.frontend,
       created: new Date('2025-05-10T14:16:00.000Z'),
       creator: {
-        id: '123',
+        id: userId,
         displayName: 'test user'
       },
       teams: [
         {
-          teamId: 'teamId123',
+          teamId,
           name: 'test'
         }
       ],

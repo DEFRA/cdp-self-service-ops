@@ -29,8 +29,9 @@ export default {
   },
   transformIgnorePatterns: [
     `node_modules/(?!${[
-      '@defra/hapi-tracing', // Supports ESM only
-      'node-fetch', // Supports ESM only
+      '@defra/hapi-tracing',
+      '@defra/cdp-validation-kit',
+      'node-fetch',
       'universal-user-agent',
       'universal-github-app-jwt',
       '@octokit',

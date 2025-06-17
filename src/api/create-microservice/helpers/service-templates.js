@@ -1,12 +1,12 @@
 import Joi from 'joi'
 import {
-  repositoryNameValidation,
   templateBranchNameValidation,
   zoneValidation,
   templateTypeValidation,
   entityTypeValidation,
-  entitySubTypeValidation
-} from '~/src/api/helpers/schema/common-validations.js'
+  entitySubTypeValidation,
+  repositoryNameValidation
+} from '@defra/cdp-validation-kit/src/validations.js'
 
 const serviceTemplateSchema = Joi.object({
   repositoryName: repositoryNameValidation,

@@ -5,7 +5,7 @@ import { config } from '~/src/config/index.js'
 import { fetchTestRun } from '~/src/api/deploy-test-suite/helpers/fetch-test-run.js'
 import { isOwnerOfSuite } from '~/src/api/deploy-test-suite/helpers/is-owner-of-suite.js'
 import { sendSnsMessage } from '~/src/helpers/sns/send-sns-message.js'
-import { runIdValidation } from '~/src/api/helpers/schema/common-validations.js'
+import { runIdValidation } from '@defra/cdp-validation-kit/src/validations.js'
 
 const stopTestSuiteController = {
   options: {

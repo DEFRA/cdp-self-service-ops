@@ -1,9 +1,12 @@
 import Joi from 'joi'
-import { repositoryNameValidation } from '~/src/api/helpers/schema/common-validations.js'
+import {
+  repositoryNameValidation,
+  teamIdValidation
+} from '@defra/cdp-validation-kit/src/validations.js'
 
 const testSuiteValidation = Joi.object({
   repositoryName: repositoryNameValidation,
-  teamId: Joi.string()
+  teamId: teamIdValidation
     .messages({
       'any.required': 'Choose owning team'
     })

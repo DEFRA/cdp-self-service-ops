@@ -6,11 +6,11 @@ import { recordDatabaseMigration } from '~/src/api/deploy-database-migration/hel
 import Joi from 'joi'
 import {
   environmentValidation,
-  repositoryNameValidation,
   userWithIdValidation,
   migrationVersionValidation,
-  migrationIdValidation
-} from '~/src/api/helpers/schema/common-validations.js'
+  migrationIdValidation,
+  repositoryNameValidation
+} from '@defra/cdp-validation-kit/src/validations.js'
 
 const runMigrationValidation = Joi.object({
   cdpMigrationId: migrationIdValidation,

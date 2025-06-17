@@ -1,5 +1,6 @@
 import { fetcher } from '~/src/helpers/fetcher.js'
 import { runDatabaseMigration } from '~/src/api/deploy-database-migration/helpers/run-database-migration.js'
+import { randomUUID } from 'node:crypto'
 
 const mockInfoLogger = jest.fn()
 const mockErrorLogger = jest.fn()
@@ -41,7 +42,7 @@ describe('#runDatabaseMigration', () => {
       service: 'some-service',
       environment: 'test',
       version,
-      user: { id: 'some-id', displayName: 'My Name' },
+      user: { id: randomUUID(), displayName: 'My Name' },
       snsClient: mockSNSClient,
       logger: mockLogger
     })
@@ -57,7 +58,7 @@ describe('#runDatabaseMigration', () => {
         service: 'some-service',
         environment: 'test',
         version,
-        user: { id: 'some-id', displayName: 'My Name' },
+        user: { id: randomUUID(), displayName: 'My Name' },
         snsClient: mockSNSClient,
         logger: mockLogger
       })

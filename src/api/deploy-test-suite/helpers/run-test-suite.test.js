@@ -2,6 +2,7 @@ import { fetcher } from '~/src/helpers/fetcher.js'
 import { getLatestImage } from '~/src/helpers/portal-backend/get-latest-image.js'
 import { runTestSuite } from '~/src/api/deploy-test-suite/helpers/run-test-suite.js'
 import { getLatestAppConfigCommitSha } from '~/src/helpers/portal-backend/get-latest-app-config-commit-sha.js'
+import { randomUUID } from 'node:crypto'
 
 const mockInfoLogger = jest.fn()
 const mockErrorLogger = jest.fn()
@@ -47,7 +48,7 @@ describe('#runTestSuite', () => {
     const runId = await runTestSuite({
       imageName: 'some-service',
       environment: 'test',
-      user: { id: 'some-id', displayName: 'My Name' },
+      user: { id: randomUUID(), displayName: 'My Name' },
       cpu: '4096',
       memory: '8192',
       snsClient: mockSNSClient,
@@ -63,7 +64,7 @@ describe('#runTestSuite', () => {
     const runId = await runTestSuite({
       imageName: 'some-service',
       environment: 'test',
-      user: { id: 'some-id', displayName: 'My Name' },
+      user: { id: randomUUID(), displayName: 'My Name' },
       cpu: '4096',
       memory: '8192',
       snsClient: mockSNSClient,
@@ -79,7 +80,7 @@ describe('#runTestSuite', () => {
     await runTestSuite({
       imageName: 'some-service',
       environment: 'test',
-      user: { id: 'some-id', displayName: 'My Name' },
+      user: { id: randomUUID(), displayName: 'My Name' },
       cpu: '4096',
       memory: '8192',
       snsClient: mockSNSClient,
@@ -98,7 +99,7 @@ describe('#runTestSuite', () => {
       runTestSuite({
         imageName: 'some-service',
         environment: 'test',
-        user: { id: 'some-id', displayName: 'My Name' },
+        user: { id: randomUUID(), displayName: 'My Name' },
         cpu: '4096',
         memory: '8192',
         snsClient: mockSNSClient,

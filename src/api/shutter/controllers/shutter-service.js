@@ -6,7 +6,7 @@ import { shutterServiceWorkflow } from '~/src/api/shutter/helpers/shutter-servic
 import {
   environmentValidation,
   repositoryNameValidation
-} from '~/src/api/helpers/schema/common-validations.js'
+} from '@defra/cdp-validation-kit/src/validations.js'
 import { getScopedUser } from '~/src/helpers/user/get-scoped-user.js'
 
 const shutterServiceController = {

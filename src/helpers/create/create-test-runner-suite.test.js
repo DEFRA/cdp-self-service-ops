@@ -5,6 +5,7 @@ import { createTestRunnerSuite } from '~/src/helpers/create/create-test-runner-s
 import { triggerWorkflow } from '~/src/helpers/github/trigger-workflow.js'
 import { createEntity } from '~/src/helpers/portal-backend/create-entity.js'
 import { entitySubTypes, entityTypes } from '~/src/constants/entities.js'
+import { randomUUID } from 'node:crypto'
 
 jest.mock('~/src/helpers/fetch-team')
 
@@ -26,21 +27,23 @@ describe('#create-test-runner-suite', () => {
   })
 
   test('Should create test suite', async () => {
+    const teamId = randomUUID()
     fetchTeam.mockResolvedValue({
       team: {
-        teamId: 'teamId123',
+        teamId,
         name: 'test',
         github: 'test',
         serviceCodes: ['TST']
       }
     })
 
+    const userId = randomUUID()
     await createTestRunnerSuite({
       logger,
       repositoryName: service,
       entitySubType: entitySubTypes.journey,
-      teamId: 'teamId123',
-      user: { id: '123', displayName: 'test user' },
+      teamId,
+      user: { id: userId, displayName: 'test user' },
       templateWorkflow: config.get('workflows.createJourneyTestSuite'),
       templateTag: 'main'
     })
@@ -51,12 +54,12 @@ describe('#create-test-runner-suite', () => {
       subType: entitySubTypes.journey,
       created: new Date('2025-05-10T14:16:00.000Z'),
       creator: {
-        id: '123',
+        id: userId,
         displayName: 'test user'
       },
       teams: [
         {
-          teamId: 'teamId123',
+          teamId,
           name: 'test'
         }
       ],

@@ -23,7 +23,7 @@ describe('#recordTestRun', () => {
         environment: 'infra-dev',
         cpu: '4096',
         memory: '8192',
-        user: { id: 'some-id', displayName: 'My Name' },
+        user: { id: randomUUID(), displayName: 'My Name' },
         tag: '1.1.0',
         runId: randomUUID(),
         configCommitSha:
@@ -38,7 +38,7 @@ describe('#recordTestRun', () => {
         imageName: 'some-service',
         environment: 'infra-dev',
         cpu: '4096',
-        user: { id: 'some-id', displayName: 'My Name' },
+        user: { id: randomUUID(), displayName: 'My Name' },
         tag: '1.1.0',
         runId: randomUUID()
       })
@@ -49,12 +49,13 @@ describe('#recordTestRun', () => {
     const mockRunId = randomUUID()
     config.get = jest.fn().mockReturnValue('http://fake-backend')
 
+    const userId = randomUUID()
     await recordTestRun({
       imageName: 'some-service',
       environment: 'infra-dev',
       cpu: '4096',
       memory: '8192',
-      user: { id: 'some-id', displayName: 'My Name' },
+      user: { id: userId, displayName: 'My Name' },
       tag: '1.1.0',
       runId: mockRunId,
       configCommitSha:
@@ -71,7 +72,7 @@ describe('#recordTestRun', () => {
           environment: 'infra-dev',
           cpu: '4096',
           memory: '8192',
-          user: { id: 'some-id', displayName: 'My Name' },
+          user: { id: userId, displayName: 'My Name' },
           tag: '1.1.0',
           runId: mockRunId,
           configVersion:
@@ -87,7 +88,7 @@ describe('#recordTestRun', () => {
       environment: 'infra-dev',
       cpu: '4096',
       memory: '8192',
-      user: { id: 'some-id', displayName: 'My Name' },
+      user: { id: randomUUID(), displayName: 'My Name' },
       tag: '1.1.0',
       runId: randomUUID(),
       configCommitSha:

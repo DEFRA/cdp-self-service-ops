@@ -3,14 +3,14 @@ import { randomUUID } from 'node:crypto'
 import { config } from '~/src/config/index.js'
 import { generateTestRunMessage } from '~/src/api/deploy-test-suite/helpers/generate-test-run-message.js'
 
-const expectedMessageResult = (runId) => {
+const expectedMessageResult = (runId, userId) => {
   const arnPrefix =
     'arn:aws:s3:::cdp-infra-dev-service-configs/f2ca1bb6c7e907d06dafe4687e579fce76b37e4e93b7605022da52e6ccc26fd2'
   return {
     cluster_name: 'ecs-public',
     deployed_by: {
       displayName: 'My Name',
-      userId: 'some-id'
+      userId
     },
     desired_count: 1,
     environment: 'infra-dev',
@@ -58,7 +58,7 @@ describe('#generateTestRunMessage', () => {
         environment: 'infra-dev',
         cpu: '4096',
         memory: '8192',
-        user: { id: 'some-id', displayName: 'My Name' },
+        user: { id: randomUUID(), displayName: 'My Name' },
         tag: '123.44.111',
         runId: mockRunId,
         configCommitSha:
@@ -72,19 +72,20 @@ describe('#generateTestRunMessage', () => {
 
     const mockRunId = randomUUID()
 
+    const userId = randomUUID()
     const message = generateTestRunMessage({
       imageName: 'some-service',
       environment: 'infra-dev',
       cpu: '4096',
       memory: '8192',
-      user: { id: 'some-id', displayName: 'My Name' },
+      user: { id: userId, displayName: 'My Name' },
       tag: '123.44.111',
       runId: mockRunId,
       configCommitSha:
         'f2ca1bb6c7e907d06dafe4687e579fce76b37e4e93b7605022da52e6ccc26fd2'
     })
 
-    expect(message).toEqual(expectedMessageResult(mockRunId))
+    expect(message).toEqual(expectedMessageResult(mockRunId, userId))
   })
 
   test('Should throw error when required fields are missing', () => {
@@ -92,7 +93,7 @@ describe('#generateTestRunMessage', () => {
       generateTestRunMessage({
         imageName: 'some-service',
         environment: 'infra-dev',
-        user: { id: 'some-id', displayName: 'My Name' },
+        user: { id: randomUUID(), displayName: 'My Name' },
         tag: '123.44.111',
         runId: randomUUID()
       })
@@ -106,7 +107,7 @@ describe('#generateTestRunMessage', () => {
         environment: 'infra-dev',
         cpu: '256',
         memory: '8192',
-        user: { id: 'some-id', displayName: 'My Name' },
+        user: { id: randomUUID(), displayName: 'My Name' },
         tag: '123.44.111',
         runId: randomUUID()
       })
@@ -121,7 +122,7 @@ describe('#generateTestRunMessage', () => {
       environment: 'infra-dev',
       cpu: '4096',
       memory: '8192',
-      user: { id: 'some-id', displayName: 'My Name' },
+      user: { id: randomUUID(), displayName: 'My Name' },
       tag: '123.44.111',
       runId: randomUUID(),
       configCommitSha:
@@ -143,7 +144,7 @@ describe('#generateTestRunMessage', () => {
       environment: 'infra-dev',
       cpu: '4096',
       memory: '8192',
-      user: { id: 'some-id', displayName: 'My Name' },
+      user: { id: randomUUID(), displayName: 'My Name' },
       tag: '123.44.111',
       runId: randomUUID()
     })

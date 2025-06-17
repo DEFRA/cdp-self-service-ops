@@ -11,7 +11,7 @@ import {
   userWithUserIdValidation,
   versionValidation,
   zoneValidation
-} from '~/src/api/helpers/schema/common-validations.js'
+} from '@defra/cdp-validation-kit/src/validations.js'
 
 const currentEnvironment = config.get('environment')
 
