@@ -1,7 +1,10 @@
 import Joi from 'joi'
 
 import { repositoryVisibility } from '~/src/api/create-repository/constants/repository-visibility.js'
-import { repositoryNameValidation } from '~/src/api/helpers/schema/common-validations.js'
+import {
+  repositoryNameValidation,
+  teamIdValidation
+} from '@defra/cdp-validation-kit/src/validations.js'
 
 const repositoryValidation = Joi.object({
   repositoryName: repositoryNameValidation,
@@ -12,7 +15,7 @@ const repositoryValidation = Joi.object({
       'any.required': 'Choose repository visibility'
     })
     .required(),
-  teamId: Joi.string()
+  teamId: teamIdValidation
     .messages({
       'any.required': 'Choose owning team'
     })

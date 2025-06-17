@@ -1,4 +1,4 @@
-import { entityValidation } from '~/src/api/helpers/schema/common-validations.js'
+import { entityValidation } from '@defra/cdp-validation-kit/src/validations.js'
 import { createEntity } from '~/src/helpers/portal-backend/create-entity.js'
 
 /**

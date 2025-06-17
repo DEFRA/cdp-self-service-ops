@@ -1,6 +1,9 @@
 import Joi from 'joi'
 
-import { repositoryNameValidation } from '~/src/api/helpers/schema/common-validations.js'
+import {
+  repositoryNameValidation,
+  teamIdValidation
+} from '@defra/cdp-validation-kit/src/validations.js'
 
 function createServiceValidationSchema(allowableServiceTemplates) {
   return Joi.object({
@@ -11,7 +14,7 @@ function createServiceValidationSchema(allowableServiceTemplates) {
       .messages({
         'any.only': 'Choose a service type'
       }),
-    teamId: Joi.string().required(),
+    teamId: teamIdValidation,
     templateTag: Joi.string()
       .pattern(/^[a-zA-Z0-9][a-zA-Z0-9-_\\.]*[a-zA-Z0-9]$/)
       .allow('')

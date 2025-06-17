@@ -3,8 +3,7 @@ import { config } from '~/src/config/index.js'
 import {
   environmentValidation,
   repositoryNameValidation
-} from '~/src/api/helpers/schema/common-validations.js'
-
+} from '@defra/cdp-validation-kit/src/validations.js'
 /**
  * Validates the params for secrets.
  * @returns {Function} A function that validates the given parameters and options.

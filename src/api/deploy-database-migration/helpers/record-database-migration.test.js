@@ -21,7 +21,7 @@ describe('#recordTestRun', () => {
       recordDatabaseMigration({
         service: 'some-service',
         environment: 'infra-dev',
-        user: { id: 'some-id', displayName: 'My Name' },
+        user: { id: randomUUID(), displayName: 'My Name' },
         version: '1.1.0',
         cdpMigrationId: randomUUID()
       })
@@ -33,7 +33,7 @@ describe('#recordTestRun', () => {
       recordDatabaseMigration({
         service: 'some-service',
         environment: 'infra-dev',
-        user: { id: 'some-id', displayName: 'My Name' },
+        user: { id: randomUUID(), displayName: 'My Name' },
         version: '1.1.0'
       })
     ).rejects.toThrow('"cdpMigrationId" is required')
@@ -43,12 +43,13 @@ describe('#recordTestRun', () => {
     const mockRunId = randomUUID()
     config.get = jest.fn().mockReturnValue('http://fake-backend')
 
+    const userId = randomUUID()
     await recordDatabaseMigration({
       cdpMigrationId: mockRunId,
       service: 'some-service',
       environment: 'infra-dev',
       version: '1.1.0',
-      user: { id: 'some-id', displayName: 'My Name' }
+      user: { id: userId, displayName: 'My Name' }
     })
 
     // Note: this is fragile, body check assumes field ordering.
@@ -62,7 +63,7 @@ describe('#recordTestRun', () => {
           service: 'some-service',
           version: '1.1.0',
           environment: 'infra-dev',
-          user: { id: 'some-id', displayName: 'My Name' }
+          user: { id: userId, displayName: 'My Name' }
         })
       })
     )

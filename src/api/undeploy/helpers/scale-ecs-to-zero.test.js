@@ -1,6 +1,7 @@
 import { findRunningDetails } from '~/src/helpers/deployments/find-running-details.js'
 import { commitDeploymentFile } from '~/src/helpers/deployments/commit-deployment-file.js'
 import { scaleEcsToZero } from '~/src/api/undeploy/helpers/scale-ecs-to-zero.js'
+import { randomUUID } from 'node:crypto'
 
 jest.mock('~/src/helpers/deployments/find-running-details.js')
 jest.mock('~/src/helpers/deployments/commit-deployment-file')
@@ -10,9 +11,9 @@ const logger = {
 }
 const someUndeploymentId = 'some-undeployment-id'
 const serviceName = 'some-service-name'
-const someUser = { id: 'some-user-id', displayName: 'some-name' }
+const someUser = { id: randomUUID(), displayName: 'some-name' }
 const runningDetails = {
-  cdpDeploymentId: crypto.randomUUID(),
+  cdpDeploymentId: randomUUID(),
   environment: 'infra-dev',
   service: serviceName,
   version: '1.2.3',
@@ -20,7 +21,7 @@ const runningDetails = {
   cpu: 1024,
   memory: 2048,
   configVersion: 'some-config-version',
-  user: { id: 'other-user-id', displayName: 'other-name' },
+  user: { id: randomUUID(), displayName: 'other-name' },
   status: 'running'
 }
 

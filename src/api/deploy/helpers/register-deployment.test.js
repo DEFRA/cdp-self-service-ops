@@ -1,4 +1,4 @@
-import crypto from 'node:crypto'
+import { randomUUID } from 'node:crypto'
 import { config } from '~/src/config/index.js'
 import { registerDeployment } from '~/src/api/deploy/helpers/register-deployment.js'
 
@@ -14,10 +14,10 @@ describe('#registerDeployment', () => {
       1024,
       2048,
       {
-        id: 'some-id',
+        id: randomUUID(),
         displayName: 'My Name'
       },
-      crypto.randomUUID(),
+      randomUUID(),
       'abc123'
     )
 

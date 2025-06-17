@@ -1,7 +1,7 @@
 import Joi from 'joi'
 
 import { deleteEcsService } from '~/src/api/undeploy/helpers/delete-ecs-service.js'
-import { repositoryNameValidation } from '~/src/api/helpers/schema/common-validations.js'
+import { repositoryNameValidation } from '@defra/cdp-validation-kit/src/validations.js'
 
 const deleteEcsServiceController = {
   options: {

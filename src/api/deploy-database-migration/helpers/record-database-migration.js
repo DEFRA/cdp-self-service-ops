@@ -5,11 +5,11 @@ import { fetcher } from '~/src/helpers/fetcher.js'
 import Joi from 'joi'
 import {
   environmentValidation,
-  repositoryNameValidation,
   userWithIdValidation,
   migrationVersionValidation,
-  migrationIdValidation
-} from '~/src/api/helpers/schema/common-validations.js'
+  migrationIdValidation,
+  repositoryNameValidation
+} from '@defra/cdp-validation-kit/src/validations.js'
 
 const recordMigrationValidation = Joi.object({
   cdpMigrationId: migrationIdValidation,

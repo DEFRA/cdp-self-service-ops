@@ -2,7 +2,7 @@ import Joi from 'joi'
 import {
   environmentValidation,
   repositoryNameValidation
-} from '~/src/api/helpers/schema/common-validations.js'
+} from '@defra/cdp-validation-kit/src/validations.js'
 
 export const deployTerminalValidation = () => {
   return Joi.object({

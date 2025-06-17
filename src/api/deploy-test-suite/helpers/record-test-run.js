@@ -6,14 +6,14 @@ import Joi from 'joi'
 import {
   commitShaValidation,
   environmentValidation,
-  repositoryNameValidation,
   runIdValidation,
   versionValidation,
   userWithIdValidation,
   cpuValidation,
   memoryValidation,
-  deploymentIdValidation
-} from '~/src/api/helpers/schema/common-validations.js'
+  deploymentIdValidation,
+  repositoryNameValidation
+} from '@defra/cdp-validation-kit/src/validations.js'
 
 const recordTestRunValidation = Joi.object({
   testSuite: repositoryNameValidation,

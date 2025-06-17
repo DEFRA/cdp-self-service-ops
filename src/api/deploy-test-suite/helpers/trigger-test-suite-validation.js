@@ -7,7 +7,7 @@ import {
   repositoryNameValidation,
   userWithIdValidation,
   versionValidation
-} from '~/src/api/helpers/schema/common-validations.js'
+} from '@defra/cdp-validation-kit/src/validations.js'
 
 const triggerTestSuiteValidation = Joi.object({
   imageName: repositoryNameValidation,

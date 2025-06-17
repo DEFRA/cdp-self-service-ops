@@ -2,7 +2,7 @@ import Joi from 'joi'
 
 import { deleteDockerImages } from '~/src/api/decommission-service/helpers/delete-docker-images.js'
 import { getScopedUser } from '~/src/helpers/user/get-scoped-user.js'
-import { repositoryNameValidation } from '~/src/api/helpers/schema/common-validations.js'
+import { repositoryNameValidation } from '@defra/cdp-validation-kit/src/validations.js'
 
 const deleteDockerImagesController = {
   options: {
