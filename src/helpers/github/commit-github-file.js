@@ -50,35 +50,37 @@ async function createNewCommit(
   content,
   logger
 ) {
+  const escapedCommitMessage = JSON.stringify(commitMessage)
   const utf8JsonString = JSON.stringify(content, null, 2)
   try {
     return await graphql(
       `
-    mutation m1 {
-      createCommitOnBranch(
-                input: {
-                branch: {
-                    repositoryNameWithOwner: "${owner}/${repo}",
-                    branchName: "${branch}"
-                },
-                message: {
-                    headline: "${commitMessage}"
-                },
-                fileChanges: {
-                    additions: [
-                        {
-                            path: "${filePath}",
-                            contents: "${Buffer.from(utf8JsonString).toString('base64')}"
-                        }
-                    ]
-                },
-                expectedHeadOid: "${commitSha}"
-            }
-      ) {
-        clientMutationId
+        mutation m1($input: CreateCommitOnBranchInput!) {
+          createCommitOnBranch(input: $input) {
+            clientMutationId
+          }
+        }
+      `,
+      {
+        input: {
+          branch: {
+            repositoryNameWithOwner: `${owner}/${repo}`,
+            branchName: branch
+          },
+          message: {
+            headline: escapedCommitMessage
+          },
+          fileChanges: {
+            additions: [
+              {
+                path: filePath,
+                contents: Buffer.from(utf8JsonString).toString('base64')
+              }
+            ]
+          },
+          expectedHeadOid: commitSha
+        }
       }
-    }
-  `
     )
   } catch (error) {
     logger.error(error, `Error creating commit: ${error.message}`)
