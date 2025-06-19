@@ -50,7 +50,6 @@ async function createNewCommit(
   content,
   logger
 ) {
-  const escapedCommitMessage = JSON.stringify(commitMessage)
   const utf8JsonString = JSON.stringify(content, null, 2)
   try {
     return await graphql(
@@ -68,7 +67,7 @@ async function createNewCommit(
             branchName: branch
           },
           message: {
-            headline: escapedCommitMessage
+            headline: commitMessage
           },
           fileChanges: {
             additions: [
