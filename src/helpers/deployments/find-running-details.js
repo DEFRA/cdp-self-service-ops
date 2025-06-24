@@ -1,4 +1,4 @@
-import { whatsRunningWhere } from '~/src/helpers/deployments/whats-running-where.js'
+import { fetchRunningServices } from '~/src/helpers/deployments/fetch-running-services.js'
 
 /**
  * Finds running/deployment details for service in an environment.
@@ -6,7 +6,7 @@ import { whatsRunningWhere } from '~/src/helpers/deployments/whats-running-where
  * @param {string} environment
  */
 async function findRunningDetails(serviceName, environment) {
-  const details = await whatsRunningWhere(serviceName)
+  const details = await fetchRunningServices(serviceName)
   return details.find((detail) => detail.environment === environment)
 }
 
