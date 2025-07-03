@@ -1,8 +1,10 @@
 import { autoDeployServiceValidation } from '~/src/api/deploy/helpers/schema/auto-deploy-service-validation.js'
 import { deployService } from '~/src/api/deploy/controllers/deploy-service.js'
+import { validatePortalBackendRequest } from '~/src/api/helpers/pre/validate-portal-backend-request.js'
 
 const autoDeployServiceController = {
   options: {
+    pre: [validatePortalBackendRequest],
     validate: {
       payload: autoDeployServiceValidation
     },
