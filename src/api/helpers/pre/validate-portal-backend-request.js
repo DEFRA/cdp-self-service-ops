@@ -4,7 +4,7 @@ import crypto from 'crypto'
 
 const SHARED_SECRET = config.get('portalBackendSharedSecret')
 
-function generateSignature(method, path, timestamp, body, secret) {
+export function generateSignature(method, path, timestamp, body, secret) {
   const message = `${method}\n${path}\n${timestamp}\n${body}`
   return crypto.createHmac('sha256', secret).update(message).digest('hex')
 }
@@ -31,7 +31,7 @@ export const validatePortalBackendRequest = {
 
     const method = request.method.toUpperCase()
     const path = request.path
-    const body = ''
+    const body = request.payload ? JSON.stringify(request.payload) : ''
 
     const expected = generateSignature(
       method,

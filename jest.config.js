@@ -36,7 +36,11 @@ export default {
       'universal-github-app-jwt',
       '@octokit',
       'octokit-plugin-create-pull-request',
-      'before-after-hook'
+      'before-after-hook',
+      'data-uri-to-buffer',
+      'some-other-esm-lib',
+      'fetch-blob',
+      'formdata-polyfill'
     ].join('|')}/)`
   ]
 }
