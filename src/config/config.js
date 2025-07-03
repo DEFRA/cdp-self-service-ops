@@ -1,7 +1,6 @@
 import convict from 'convict'
 import { cwd } from 'node:process'
-
-import { environments } from '~/src/config/environments.js'
+import { environments } from '@defra/cdp-validation-kit/src/constants/environments.js'
 
 const isProduction = process.env.NODE_ENV === 'production'
 const isTest = process.env.NODE_ENV === 'test'
@@ -534,6 +533,12 @@ const config = convict({
       default: true,
       env: 'FEATURE_ARCHIVE_GITHUB_WORKFLOW'
     }
+  },
+  portalBackendSharedSecret: {
+    doc: 'Shared secret for portal backend',
+    format: String,
+    default: '',
+    env: 'PORTAL_BACKEND_SHARED_SECRET'
   }
 })
 

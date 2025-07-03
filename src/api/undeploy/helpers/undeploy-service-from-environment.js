@@ -1,4 +1,3 @@
-import { registerUndeployment } from '~/src/api/undeploy/helpers/register-undeployment.js'
 import { scaleEcsToZero } from '~/src/api/undeploy/helpers/scale-ecs-to-zero.js'
 import { isFeatureEnabled } from '~/src/helpers/feature-toggle/is-feature-enabled.js'
 import { featureToggles } from '~/src/helpers/feature-toggle/feature-toggles.js'
@@ -41,8 +40,6 @@ export async function undeployServiceFromEnvironment(
     )
     return
   }
-
-  await registerUndeployment(repositoryName, environment, user, undeploymentId)
 
   if (isFeatureEnabled(featureToggles.scaleEcsToZero)) {
     await scaleEcsToZero(
