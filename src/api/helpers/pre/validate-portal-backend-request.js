@@ -31,7 +31,9 @@ export const validatePortalBackendRequest = {
 
     const method = request.method.toUpperCase()
     const path = request.path
-    const body = request.payload ? JSON.stringify(request.payload) : ''
+    const body = request.orig.payload
+      ? JSON.stringify(request.orig.payload)
+      : ''
 
     const expected = generateSignature(
       method,

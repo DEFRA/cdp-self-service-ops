@@ -62,7 +62,6 @@ describe('Test Trigger Test Suite', () => {
       payload,
       url
     })
-
     const { message } = JSON.parse(responsePayload)
 
     expect(statusCode).toBe(401)
@@ -103,7 +102,6 @@ describe('Test Trigger Test Suite', () => {
         'content-type': 'application/json'
       }
     })
-
     const { message } = JSON.parse(responsePayload)
 
     expect(statusCode).toBe(401)
