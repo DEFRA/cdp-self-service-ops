@@ -494,46 +494,6 @@ const config = convict({
     default: isProduction,
     env: 'ENABLE_SECURE_CONTEXT'
   },
-  features: {
-    decommissionService: {
-      doc: 'Feature flag for decommission service',
-      format: Boolean,
-      default: true,
-      env: 'FEATURE_DECOMMISSION_SERVICE'
-    },
-    scaleEcsToZero: {
-      doc: 'Feature flag for scaling ECS instances to 0',
-      format: Boolean,
-      default: true,
-      env: 'FEATURE_SCALE_ECS_TO_0'
-    },
-    undeploy: {
-      deleteDeploymentFiles: {
-        doc: 'Feature flag for deleting deployment files',
-        format: Boolean,
-        default: false,
-        env: 'FEATURE_DELETE_DEPLOYMENT_FILES'
-      },
-      deleteEcsService: {
-        doc: 'Feature flag for deleting ecs service',
-        format: Boolean,
-        default: false,
-        env: 'FEATURE_DELETE_ECS_SERVICE'
-      }
-    },
-    removeServiceWorkflows: {
-      doc: 'Feature flag for removing a service workflows',
-      format: Boolean,
-      default: true,
-      env: 'FEATURE_REMOVE_SERVICE_WORKFLOWS'
-    },
-    archiveGitHubWorkflow: {
-      doc: 'Feature flag for archiving github repo on decommission',
-      format: Boolean,
-      default: true,
-      env: 'FEATURE_ARCHIVE_GITHUB_WORKFLOW'
-    }
-  },
   portalBackendSharedSecret: {
     doc: 'Shared secret for portal backend',
     format: String,

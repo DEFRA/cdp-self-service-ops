@@ -2,7 +2,7 @@ import { config } from '~/src/config/index.js'
 import { triggerWorkflow } from '~/src/helpers/github/trigger-workflow.js'
 
 /**
- * Deleter ECR images
+ * Delete ECR images
  * @param {string} service
  * @param {import('pino').Logger} logger
  * @returns {Promise<void>}

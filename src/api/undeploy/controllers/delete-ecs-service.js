@@ -1,7 +1,6 @@
 import Joi from 'joi'
-
-import { deleteEcsService } from '~/src/api/undeploy/helpers/delete-ecs-service.js'
 import { repositoryNameValidation } from '@defra/cdp-validation-kit/src/validations.js'
+import { removeEcsService } from '~/src/helpers/remove/workflows/remove-ecs-service.js'
 
 const deleteEcsServiceController = {
   options: {
@@ -20,7 +19,7 @@ const deleteEcsServiceController = {
   handler: async (request, h) => {
     const { serviceName } = request.params
 
-    await deleteEcsService(serviceName, request.logger)
+    await removeEcsService(serviceName, request.logger)
     return h.response().code(204)
   }
 }

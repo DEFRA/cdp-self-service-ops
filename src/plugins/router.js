@@ -10,7 +10,6 @@ import { queuedEvents } from '~/src/api/queued-events/index.js'
 import { secrets } from '~/src/api/secrets/index.js'
 import { decommissionService } from '~/src/api/decommission-service/index.js'
 import { undeploy } from '~/src/api/undeploy/index.js'
-import { deleteDockerImages } from '~/src/api/delete-docker-images/index.js'
 import { databaseMigrations } from '~/src/api/deploy-database-migration/index.js'
 import { shutter } from '~/src/api/shutter/index.js'
 
@@ -25,7 +24,6 @@ const router = {
         createJourneyTestSuite,
         createPerfTestSuite,
         decommissionService,
-        deleteDockerImages,
         deploy,
         deployTestSuite,
         deployTerminal,

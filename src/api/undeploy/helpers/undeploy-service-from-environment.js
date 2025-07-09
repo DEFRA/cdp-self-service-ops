@@ -1,6 +1,4 @@
 import { scaleEcsToZero } from '~/src/api/undeploy/helpers/scale-ecs-to-zero.js'
-import { isFeatureEnabled } from '~/src/helpers/feature-toggle/is-feature-enabled.js'
-import { featureToggles } from '~/src/helpers/feature-toggle/feature-toggles.js'
 import { getEntity } from '~/src/helpers/portal-backend/get-entity.js'
 import { lookupTenantService } from '~/src/helpers/portal-backend/lookup-tenant-service.js'
 
@@ -41,17 +39,13 @@ export async function undeployServiceFromEnvironment(
     return
   }
 
-  if (isFeatureEnabled(featureToggles.scaleEcsToZero)) {
-    await scaleEcsToZero(
-      repositoryName,
-      environment,
-      tenantService?.zone,
-      user,
-      undeploymentId,
-      logger
-    )
-  } else {
-    logger.info('Scale ECS Service to 0 feature is disabled')
-  }
+  await scaleEcsToZero(
+    repositoryName,
+    environment,
+    tenantService?.zone,
+    user,
+    undeploymentId,
+    logger
+  )
   return undeploymentId
 }

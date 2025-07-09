@@ -2,16 +2,11 @@ import Joi from 'joi'
 import { triggerRemoveWorkflows } from '~/src/api/decommission-service/helpers/trigger-remove-workflows.js'
 import { getEntity } from '~/src/helpers/portal-backend/get-entity.js'
 import { repositoryNameValidation } from '@defra/cdp-validation-kit/src/validations.js'
-import { portalBackEndDecommissionService } from '~/src/api/decommission-service/helpers/decommission-portal-backend.js'
+import { validatePortalBackendRequest } from '~/src/api/helpers/pre/validate-portal-backend-request.js'
 
-const decommissionServiceController = {
+const decommissionTriggerWorkflowsController = {
   options: {
-    auth: {
-      strategy: 'azure-oidc',
-      access: {
-        scope: ['admin']
-      }
-    },
+    pre: [validatePortalBackendRequest],
     validate: {
       params: Joi.object({
         serviceName: repositoryNameValidation
@@ -21,19 +16,17 @@ const decommissionServiceController = {
   handler: async (request, h) => {
     const serviceName = request.params.serviceName
     const logger = request.logger
-    const { id, displayName } = request.auth.credentials
 
     const entity = await getEntity(serviceName, logger)
 
     await triggerRemoveWorkflows(serviceName, entity, logger)
-    await portalBackEndDecommissionService(serviceName, { id, displayName })
 
     return h
       .response({
-        message: `${serviceName} has started decommissioning`
+        message: `Decommission workflows have been triggered for: ${serviceName}`
       })
       .code(200)
   }
 }
 
-export { decommissionServiceController }
+export { decommissionTriggerWorkflowsController }
