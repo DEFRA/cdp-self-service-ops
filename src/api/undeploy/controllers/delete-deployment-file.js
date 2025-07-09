@@ -1,6 +1,5 @@
 import Joi from 'joi'
-
-import { deleteDeploymentFiles } from '~/src/api/undeploy/helpers/delete-deployment-file.js'
+import { removeDeployment } from '~/src/helpers/remove/workflows/remove-deployment.js'
 
 export const deleteDeploymentFilesController = {
   options: {
@@ -19,7 +18,8 @@ export const deleteDeploymentFilesController = {
   handler: async (request, h) => {
     const { serviceName } = request.params
 
-    await deleteDeploymentFiles(serviceName, request.logger)
+    request.logger.info(`Deleting deployment files for ${serviceName}`)
+    await removeDeployment(serviceName, request.logger)
     return h.response().code(204)
   }
 }

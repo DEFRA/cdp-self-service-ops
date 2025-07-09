@@ -1,12 +1,9 @@
 import { scaleEcsToZero } from '~/src/api/undeploy/helpers/scale-ecs-to-zero.js'
-import { featureToggles } from '~/src/helpers/feature-toggle/feature-toggles.js'
-import { isFeatureEnabled } from '~/src/helpers/feature-toggle/is-feature-enabled.js'
 import { undeployServiceFromEnvironment } from '~/src/api/undeploy/helpers/undeploy-service-from-environment.js'
 import { getEntity } from '~/src/helpers/portal-backend/get-entity.js'
 import { lookupTenantService } from '~/src/helpers/portal-backend/lookup-tenant-service.js'
 
 jest.mock('~/src/helpers/portal-backend/get-entity')
-jest.mock('~/src/helpers/feature-toggle/is-feature-enabled')
 jest.mock('~/src/api/undeploy/helpers/scale-ecs-to-zero')
 jest.mock('~/src/helpers/portal-backend/lookup-tenant-service.js')
 
@@ -37,23 +34,9 @@ async function callUndeployServiceFromEnvironment() {
 }
 
 describe('#undeployServiceFromEnvironment', () => {
-  test('if not enabled should not call scaleEcsToZero', async () => {
-    isFeatureEnabled.mockReturnValue(false)
-
+  test('should call scaleEcsToZero', async () => {
     await callUndeployServiceFromEnvironment()
 
-    expect(isFeatureEnabled).toHaveBeenLastCalledWith(
-      featureToggles.scaleEcsToZero
-    )
-    expect(scaleEcsToZero).toHaveBeenCalledTimes(0)
-  })
-
-  test('if enabled should call scaleEcsToZero', async () => {
-    isFeatureEnabled.mockReturnValue(true)
-
-    await callUndeployServiceFromEnvironment()
-
-    expect(isFeatureEnabled).toHaveBeenCalledWith(featureToggles.scaleEcsToZero)
     expect(scaleEcsToZero).toHaveBeenCalledTimes(1)
     expect(scaleEcsToZero).toHaveBeenCalledWith(
       repositoryName,
@@ -65,7 +48,7 @@ describe('#undeployServiceFromEnvironment', () => {
     )
   })
 
-  test('if test suite should not call anything', async () => {
+  test('if test suite should not call scale to zero', async () => {
     getEntity.mockResolvedValue({ name: 'some-service', type: 'TestSuite' })
 
     await callUndeployServiceFromEnvironment()

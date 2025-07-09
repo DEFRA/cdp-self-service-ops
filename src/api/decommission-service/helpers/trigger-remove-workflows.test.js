@@ -1,15 +1,21 @@
 import { triggerRemoveWorkflows } from './trigger-remove-workflows.js'
-import {
-  removeAppConfig,
-  removeDashboard,
-  removeNginxUpstreams,
-  removeSquidConfig,
-  removeTenantInfrastructure
-} from '~/src/helpers/remove/workflows/index.js'
-import { isFeatureEnabled } from '~/src/helpers/feature-toggle/is-feature-enabled.js'
+import { archiveGithubRepo } from '~/src/helpers/remove/workflows/archive-github-repo.js'
+import { deleteEcrImages } from '~/src/helpers/remove/workflows/delete-ecr-images.js'
+import { deleteDockerHubImages } from '~/src/helpers/remove/workflows/delete-dockerhub-images.js'
+import { removeDashboard } from '~/src/helpers/remove/workflows/remove-dashboard.js'
+import { removeNginxUpstreams } from '~/src/helpers/remove/workflows/remove-nginx-upstreams.js'
+import { removeAppConfig } from '~/src/helpers/remove/workflows/remove-app-config.js'
+import { removeSquidConfig } from '~/src/helpers/remove/workflows/remove-squid-config.js'
+import { removeTenantInfrastructure } from '~/src/helpers/remove/workflows/remove-tenant-infrastructure.js'
 
-jest.mock('~/src/helpers/remove/workflows')
-jest.mock('~/src/helpers/feature-toggle/is-feature-enabled')
+jest.mock('~/src/helpers/remove/workflows/archive-github-repo.js')
+jest.mock('~/src/helpers/remove/workflows/delete-ecr-images.js')
+jest.mock('~/src/helpers/remove/workflows/delete-dockerhub-images.js')
+jest.mock('~/src/helpers/remove/workflows/remove-dashboard.js')
+jest.mock('~/src/helpers/remove/workflows/remove-nginx-upstreams.js')
+jest.mock('~/src/helpers/remove/workflows/remove-app-config.js')
+jest.mock('~/src/helpers/remove/workflows/remove-squid-config.js')
+jest.mock('~/src/helpers/remove/workflows/remove-tenant-infrastructure.js')
 
 const logger = {
   info: jest.fn()
@@ -17,69 +23,66 @@ const logger = {
 
 describe('#triggerRemoveWorkflows', () => {
   const serviceName = 'some-service'
-  const backendRepository = {
-    topics: ['backend']
+  const backendEntity = {
+    Type: 'Microservice',
+    SubType: 'Backend'
   }
-  const testRepository = {
-    topics: ['test-suite']
+  const frontendEntity = {
+    Type: 'Microservice',
+    SubType: 'Frontend'
+  }
+  const testEntity = {
+    Type: 'TestSuite',
+    SubType: 'Journey'
   }
 
-  isFeatureEnabled.mockReturnValue(true)
+  test('Should trigger relevant workflows when run for backend repo', async () => {
+    await triggerRemoveWorkflows(serviceName, backendEntity, logger)
 
-  test('Should trigger remove app config workflow', async () => {
-    await triggerRemoveWorkflows(serviceName, backendRepository, logger)
-
-    expect(removeAppConfig).toHaveBeenCalledWith(serviceName, logger)
-  })
-
-  test('Should trigger remove squid config workflow', async () => {
-    await triggerRemoveWorkflows(serviceName, backendRepository, logger)
-
-    expect(removeSquidConfig).toHaveBeenCalledWith(serviceName, logger)
-  })
-
-  test('Should trigger remove tenant infrastructure workflow', async () => {
-    await triggerRemoveWorkflows(serviceName, backendRepository, logger)
-
-    expect(removeTenantInfrastructure).toHaveBeenCalledWith(serviceName, logger)
-  })
-
-  test('Should trigger remove dashboard workflow if not test suite', async () => {
-    await triggerRemoveWorkflows(serviceName, backendRepository, logger)
+    expect(deleteEcrImages).toHaveBeenCalledWith(serviceName, logger)
+    expect(deleteDockerHubImages).toHaveBeenCalledWith(serviceName, logger)
 
     expect(removeDashboard).toHaveBeenCalledWith(serviceName, logger)
-  })
-
-  test('Should not trigger remove dashboard workflow if test suite', async () => {
-    await triggerRemoveWorkflows(serviceName, testRepository, logger)
-
-    expect(removeDashboard).toHaveBeenCalledTimes(0)
-  })
-
-  test('Should trigger remove nginx upstreams workflow if not test suite', async () => {
-    await triggerRemoveWorkflows(serviceName, backendRepository, logger)
-
     expect(removeNginxUpstreams).toHaveBeenCalledWith(
       serviceName,
       'Protected',
       logger
     )
+    expect(removeAppConfig).toHaveBeenCalledWith(serviceName, logger)
+    expect(removeSquidConfig).toHaveBeenCalledWith(serviceName, logger)
+    expect(removeTenantInfrastructure).toHaveBeenCalledWith(serviceName, logger)
+    expect(archiveGithubRepo).toHaveBeenCalledWith(serviceName, logger)
   })
 
-  test('Should not trigger remove nginx upstreams workflow if test suite', async () => {
-    await triggerRemoveWorkflows(serviceName, testRepository, logger)
+  test('Should trigger relevant workflows when run for frontend repo', async () => {
+    await triggerRemoveWorkflows(serviceName, frontendEntity, logger)
 
-    expect(removeNginxUpstreams).toHaveBeenCalledTimes(0)
-  })
+    expect(deleteEcrImages).toHaveBeenCalledWith(serviceName, logger)
+    expect(deleteDockerHubImages).toHaveBeenCalledWith(serviceName, logger)
 
-  test('Should log if remove service workflows feature is disabled', async () => {
-    isFeatureEnabled.mockReturnValue(false)
-
-    await triggerRemoveWorkflows(serviceName, backendRepository, logger)
-
-    expect(removeTenantInfrastructure).toHaveBeenCalledTimes(0)
-    expect(logger.info).toHaveBeenCalledWith(
-      'Remove service workflows feature is disabled'
+    expect(removeDashboard).toHaveBeenCalledWith(serviceName, logger)
+    expect(removeNginxUpstreams).toHaveBeenCalledWith(
+      serviceName,
+      'Public',
+      logger
     )
+    expect(removeAppConfig).toHaveBeenCalledWith(serviceName, logger)
+    expect(removeSquidConfig).toHaveBeenCalledWith(serviceName, logger)
+    expect(removeTenantInfrastructure).toHaveBeenCalledWith(serviceName, logger)
+    expect(archiveGithubRepo).toHaveBeenCalledWith(serviceName, logger)
+  })
+
+  test('Should trigger relevant workflows when run for test suite', async () => {
+    await triggerRemoveWorkflows(serviceName, testEntity, logger)
+
+    expect(deleteEcrImages).toHaveBeenCalledWith(serviceName, logger)
+    expect(deleteDockerHubImages).toHaveBeenCalledWith(serviceName, logger)
+
+    expect(removeDashboard).not.toHaveBeenCalled()
+    expect(removeNginxUpstreams).not.toHaveBeenCalled()
+    expect(removeAppConfig).toHaveBeenCalledWith(serviceName, logger)
+    expect(removeSquidConfig).toHaveBeenCalledWith(serviceName, logger)
+    expect(removeTenantInfrastructure).toHaveBeenCalledWith(serviceName, logger)
+    expect(archiveGithubRepo).toHaveBeenCalledWith(serviceName, logger)
   })
 })
