@@ -2,7 +2,8 @@ import { deleteDeploymentFilesController } from '~/src/api/undeploy/controllers/
 import { deleteEcsServiceController } from '~/src/api/undeploy/controllers/delete-ecs-service.js'
 import {
   undeployServiceFromAllEnvironmentController,
-  undeployServiceFromEnvironmentController
+  undeployServiceFromEnvironmentController,
+  undeployServiceViaPortalBackend
 } from '~/src/api/undeploy/controllers/undeploy-service.js'
 
 const undeploy = {
@@ -19,6 +20,11 @@ const undeploy = {
           method: 'POST',
           path: '/scale-to-zero/{serviceName}',
           ...undeployServiceFromAllEnvironmentController
+        },
+        {
+          method: 'POST',
+          path: '/scale-ecs-to-zero/{serviceName}',
+          ...undeployServiceViaPortalBackend
         },
         {
           method: 'POST',
