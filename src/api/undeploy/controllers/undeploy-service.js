@@ -61,7 +61,7 @@ const undeployServiceViaPortalBackend = {
   },
   handler: async (request, h) => {
     const serviceName = request.params.serviceName
-    const user = await getScopedUser(serviceName, request.auth)
+    const user = await request.payload
 
     await undeployServiceFromAllEnvironments(serviceName, user, request.logger)
     return h.response({ message: 'success' }).code(200)
