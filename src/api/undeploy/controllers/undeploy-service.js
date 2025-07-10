@@ -5,7 +5,10 @@ import { undeployServiceFromEnvironment } from '~/src/api/undeploy/helpers/undep
 import { undeployServiceFromAllEnvironments } from '~/src/api/undeploy/helpers/undeploy-service-from-all-environments.js'
 import { getScopedUser } from '~/src/helpers/user/get-scoped-user.js'
 import { validatePortalBackendRequest } from '~/src/api/helpers/pre/validate-portal-backend-request.js'
-import { repositoryNameValidation } from '@defra/cdp-validation-kit/src/validations.js'
+import {
+  repositoryNameValidation,
+  userWithIdValidation
+} from '@defra/cdp-validation-kit/src/validations.js'
 
 const undeployServiceFromEnvironmentController = {
   options: {
@@ -56,7 +59,8 @@ const undeployServiceViaPortalBackend = {
     validate: {
       params: Joi.object({
         serviceName: repositoryNameValidation
-      })
+      }),
+      payload: userWithIdValidation
     }
   },
   handler: async (request, h) => {
