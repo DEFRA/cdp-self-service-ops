@@ -1,4 +1,4 @@
-import { undeployServiceValidation } from '~/src/api/undeploy/helpers/schema/undeploy-service-validation.js'
+import { undeployServiceValidation } from '~/src/api/deploy/helpers/schema/undeploy-service-validation.js'
 import { getScopedUser } from '~/src/helpers/user/get-scoped-user.js'
 import { deployToZero } from '~/src/api/deploy/helpers/deploy-to-zero.js'
 
