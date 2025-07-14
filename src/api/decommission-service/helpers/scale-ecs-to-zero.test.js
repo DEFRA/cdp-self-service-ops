@@ -1,10 +1,10 @@
 import { findRunningDetails } from '~/src/helpers/deployments/find-running-details.js'
 import { commitDeploymentFile } from '~/src/helpers/deployments/commit-deployment-file.js'
-import { scaleEcsToZero } from '~/src/api/undeploy/helpers/scale-ecs-to-zero.js'
+import { scaleEcsToZero } from '~/src/api/decommission-service/helpers/scale-ecs-to-zero.js'
 import { randomUUID } from 'node:crypto'
 
 jest.mock('~/src/helpers/deployments/find-running-details.js')
-jest.mock('~/src/helpers/deployments/commit-deployment-file')
+jest.mock('~/src/helpers/deployments/commit-deployment-file.js')
 
 const logger = {
   info: jest.fn()

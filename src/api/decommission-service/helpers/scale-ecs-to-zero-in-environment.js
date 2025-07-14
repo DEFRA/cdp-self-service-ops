@@ -1,4 +1,4 @@
-import { scaleEcsToZero } from '~/src/api/undeploy/helpers/scale-ecs-to-zero.js'
+import { scaleEcsToZero } from '~/src/api/decommission-service/helpers/scale-ecs-to-zero.js'
 import { getEntity } from '~/src/helpers/portal-backend/get-entity.js'
 import { lookupTenantService } from '~/src/helpers/portal-backend/lookup-tenant-service.js'
 
@@ -9,13 +9,15 @@ import { lookupTenantService } from '~/src/helpers/portal-backend/lookup-tenant-
  * @param {import("pino").Logger} logger
  * @returns {Promise<string>}
  */
-export async function undeployServiceFromEnvironment(
+export async function scaleEcsToZeroInEnvironment(
   repositoryName,
   environment,
   user,
   logger
 ) {
-  logger.info(`Undeploying ${repositoryName} from ${environment} in progress`)
+  logger.info(
+    `Scaling ${repositoryName} ECS to zero in ${environment} in progress`
+  )
 
   const undeploymentId = crypto.randomUUID()
 

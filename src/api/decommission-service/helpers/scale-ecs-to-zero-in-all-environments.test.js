@@ -1,0 +1,32 @@
+import { scaleEcsToZeroInEnvironment } from '~/src/api/decommission-service/helpers/scale-ecs-to-zero-in-environment.js'
+import { scaleEcsToZeroInAllEnvironments } from '~/src/api/decommission-service/helpers/scale-ecs-to-zero-in-all-environments.js'
+import { orderedEnvironments } from '~/src/config/environments.js'
+
+jest.mock(
+  '~/src/api/decommission-service/helpers/scale-ecs-to-zero-in-environment.js',
+  () => {
+    return {
+      scaleEcsToZeroInEnvironment: jest.fn()
+    }
+  }
+)
+const mockLogger = { info: jest.fn() }
+
+const serviceName = 'some-service'
+const user = { id: 'some-user-id', displayName: 'some-name' }
+
+describe('#scaleEcsToZeroInAllEnvironments', () => {
+  test('Should call scaleEcsToZeroInEnvironment', async () => {
+    await scaleEcsToZeroInAllEnvironments(serviceName, user, mockLogger)
+
+    expect(scaleEcsToZeroInEnvironment).toHaveBeenCalledTimes(7)
+    orderedEnvironments.forEach((env) => {
+      expect(scaleEcsToZeroInEnvironment).toHaveBeenCalledWith(
+        serviceName,
+        env,
+        user,
+        mockLogger
+      )
+    })
+  })
+})
