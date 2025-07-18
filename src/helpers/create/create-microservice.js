@@ -38,20 +38,13 @@ async function createMicroservice(
 
   logger.info(`Creating service ${repositoryName}`)
 
-  try {
-    await createInitialEntity({
-      repositoryName,
-      entityType: template.entityType,
-      entitySubType: template.entitySubType,
-      team,
-      user
-    })
-  } catch (e) {
-    logger.error(e)
-    throw Boom.badData(
-      `Repository ${repositoryName} has already been requested or is in progress: ${e.message}`
-    )
-  }
+  await createInitialEntity({
+    repositoryName,
+    entityType: template.entityType,
+    entitySubType: template.entitySubType,
+    team,
+    user
+  })
 
   const topics = ['cdp', 'service', template.language, template.type]
 

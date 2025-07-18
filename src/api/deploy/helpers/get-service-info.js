@@ -10,13 +10,7 @@ async function getServiceInfo(serviceName, environment, logger) {
 
   const filePath = `environments/${environment}/${service?.zone}/${serviceName}.json`
 
-  const deployment = await getExistingDeployment(
-    gitHubOwner,
-    deploymentRepo,
-    filePath
-  )
-
-  return deployment
+  return await getExistingDeployment(gitHubOwner, deploymentRepo, filePath)
 }
 
 export { getServiceInfo }
