@@ -2,9 +2,6 @@
   "extends": "@tsconfig/node22/tsconfig.json",
   "compilerOptions": {
     "baseUrl": ".",
-    "paths": {
-      "~/*": ["./*"]
-    },
     "allowJs": true,
     "checkJs": false,
     "module": "NodeNext",
