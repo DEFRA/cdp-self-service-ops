@@ -1,7 +1,8 @@
 import { canAddSecretInEnv } from '~/src/api/secrets/helpers/can-add-secret.js'
+import { vi } from 'vitest'
 
-jest.mock('~/src/api/deploy/helpers/get-repo-teams', () => ({
-  getRepoTeams: jest
+vi.mock('~/src/api/deploy/helpers/get-repo-teams', () => ({
+  getRepoTeams: vi
     .fn()
     .mockResolvedValue([
       { teamId: 'tenant-scope', name: 'Tenant Team', github: '' }

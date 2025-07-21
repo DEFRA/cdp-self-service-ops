@@ -3,11 +3,12 @@ import { randomUUID } from 'node:crypto'
 import { config } from '~/src/config/index.js'
 import { fetcher } from '~/src/helpers/fetcher.js'
 import { recordDatabaseMigration } from '~/src/api/deploy-database-migration/helpers/record-database-migration.js'
+import { vi } from 'vitest'
 
-const mockInfoLogger = jest.fn()
+const mockInfoLogger = vi.fn()
 
-jest.mock('~/src/helpers/fetcher.js')
-jest.mock('~/src/helpers/logging/logger.js', () => ({
+vi.mock('~/src/helpers/fetcher.js')
+vi.mock('~/src/helpers/logging/logger.js', () => ({
   createLogger: () => ({
     info: (value) => mockInfoLogger(value)
   })
@@ -41,7 +42,7 @@ describe('#recordTestRun', () => {
 
   test('Should generate correct request body', async () => {
     const mockRunId = randomUUID()
-    config.get = jest.fn().mockReturnValue('http://fake-backend')
+    config.get = vi.fn().mockReturnValue('http://fake-backend')
 
     const userId = randomUUID()
     await recordDatabaseMigration({

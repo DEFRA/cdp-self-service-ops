@@ -1,3 +1,4 @@
+import { describe, expect, test } from 'vitest'
 import { environments } from '~/src/config/index.js'
 import { canRunTerminalInEnvironment } from '~/src/api/deploy-terminal/helpers/can-run-terminal-in-environment.js'
 

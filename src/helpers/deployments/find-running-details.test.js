@@ -1,9 +1,10 @@
 import { fetchRunningServices } from '~/src/helpers/deployments/fetch-running-services.js'
 import { findRunningDetails } from '~/src/helpers/deployments/find-running-details.js'
+import { vi } from 'vitest'
 
-jest.mock('~/src/helpers/deployments/fetch-running-services.js', () => {
+vi.mock('~/src/helpers/deployments/fetch-running-services.js', () => {
   return {
-    fetchRunningServices: jest.fn()
+    fetchRunningServices: vi.fn()
   }
 })
 

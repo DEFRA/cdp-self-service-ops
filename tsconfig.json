@@ -14,7 +14,7 @@
     "strictFunctionTypes": true,
     "strictNullChecks": true,
     "target": "ESNext",
-    "types": ["jest"]
+    "types": ["vitest"]
   },
   "include": ["src", ".eslintrc.cjs", "**/*.cjs", "**/*.js", "**/*.json"],
   "exclude": [

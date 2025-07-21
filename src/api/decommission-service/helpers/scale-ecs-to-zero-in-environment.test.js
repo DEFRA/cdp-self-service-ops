@@ -1,13 +1,23 @@
-import { scaleEcsToZero } from '~/src/api/decommission-service/helpers/scale-ecs-to-zero.js'
-import { scaleEcsToZeroInEnvironment } from '~/src/api/decommission-service/helpers/scale-ecs-to-zero-in-environment.js'
-import { getEntity } from '~/src/helpers/portal-backend/get-entity.js'
-import { lookupTenantService } from '~/src/helpers/portal-backend/lookup-tenant-service.js'
+import { describe, beforeAll, expect, test, vi } from 'vitest'
 
-jest.mock('~/src/helpers/portal-backend/get-entity.js')
-jest.mock('~/src/api/decommission-service/helpers/scale-ecs-to-zero.js')
-jest.mock('~/src/helpers/portal-backend/lookup-tenant-service.js')
+vi.mock('~/src/helpers/oktokit/oktokit.js', () => ({
+  octokit: vi.fn(),
+  graphql: vi.fn()
+}))
 
-const logger = { info: jest.fn(), warn: jest.fn() }
+const getEntity = vi.fn()
+vi.mock('~/src/helpers/portal-backend/get-entity.js', () => ({ getEntity }))
+
+const scaleEcsToZero = vi.fn()
+vi.mock('~/src/api/decommission-service/helpers/scale-ecs-to-zero.js', () => ({
+  scaleEcsToZero
+}))
+const lookupTenantService = vi.fn()
+vi.mock('~/src/helpers/portal-backend/lookup-tenant-service.js', () => ({
+  lookupTenantService
+}))
+
+const logger = { info: vi.fn(), warn: vi.fn() }
 getEntity.mockResolvedValue({
   name: 'some-service',
   type: 'Microservice',
@@ -24,16 +34,26 @@ const repositoryName = 'some-service'
 const environment = 'dev'
 const user = { id: 'some-user-id', displayName: 'some-name' }
 
-async function callScaleEcsToZeroInEnvironment() {
-  return await scaleEcsToZeroInEnvironment(
-    repositoryName,
-    environment,
-    user,
-    logger
-  )
-}
-
 describe('#scaleEcsToZeroInEnvironment', () => {
+  let scaleEcsToZeroInEnvironment
+
+  beforeAll(async () => {
+    const module = await import(
+      '~/src/api/decommission-service/helpers/scale-ecs-to-zero-in-environment.js'
+    )
+
+    scaleEcsToZeroInEnvironment = module.scaleEcsToZeroInEnvironment
+  })
+
+  async function callScaleEcsToZeroInEnvironment() {
+    return await scaleEcsToZeroInEnvironment(
+      repositoryName,
+      environment,
+      user,
+      logger
+    )
+  }
+
   test('should call scaleEcsToZero', async () => {
     await callScaleEcsToZeroInEnvironment()
 

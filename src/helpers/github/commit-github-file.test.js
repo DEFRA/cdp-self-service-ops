@@ -1,14 +1,27 @@
-import { retry } from '~/src/helpers/github/commit-github-file.js'
+import { beforeEach, describe, expect, test, vi } from 'vitest'
+
+vi.mock('~/src/helpers/oktokit/oktokit.js', () => ({
+  octokit: vi.fn(),
+  graphql: vi.fn()
+}))
 
 describe('#retry', () => {
   let logger
+  let retry
+
+  beforeAll(async () => {
+    const commitGitHubFiles = await import(
+      '~/src/helpers/github/commit-github-file.js'
+    )
+    retry = commitGitHubFiles.retry
+  })
 
   beforeEach(() => {
-    logger = { error: jest.fn() }
+    logger = { error: vi.fn() }
   })
 
   test('resolves immediately if fn succeeds', async () => {
-    const fn = jest.fn().mockResolvedValue('success')
+    const fn = vi.fn().mockResolvedValue('success')
     const result = await retry(logger, fn)
     expect(result).toBe('success')
     expect(fn).toHaveBeenCalledTimes(1)
@@ -16,7 +29,7 @@ describe('#retry', () => {
   })
 
   test('retries the function on failure and eventually succeeds', async () => {
-    const fn = jest
+    const fn = vi
       .fn()
       .mockRejectedValueOnce(new Error('fail1'))
       .mockResolvedValue('success')
@@ -29,7 +42,7 @@ describe('#retry', () => {
 
   test('throws after exhausting retries', async () => {
     const error = new Error('fail forever')
-    const fn = jest.fn().mockRejectedValue(error)
+    const fn = vi.fn().mockRejectedValue(error)
 
     await expect(retry(logger, fn, 2, 10)).rejects.toThrow(error)
     expect(fn).toHaveBeenCalledTimes(3) // initial try + 2 retries
@@ -38,7 +51,7 @@ describe('#retry', () => {
 
   test('does not retry if shouldRetry returns false', async () => {
     const error = new Error('fatal error')
-    const fn = jest.fn().mockRejectedValue(error)
+    const fn = vi.fn().mockRejectedValue(error)
     const shouldRetry = () => false
 
     await expect(retry(logger, fn, 5, 10, shouldRetry)).rejects.toThrow(error)
@@ -49,7 +62,7 @@ describe('#retry', () => {
   test('respects shouldRetry and stops retrying accordingly', async () => {
     const errorRetry = new Error('retryable')
     const errorNoRetry = new Error('no-retry')
-    const fn = jest
+    const fn = vi
       .fn()
       .mockRejectedValueOnce(errorRetry)
       .mockRejectedValueOnce(errorNoRetry)

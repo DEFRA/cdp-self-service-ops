@@ -1,3 +1,4 @@
+import { describe, expect, test } from 'vitest'
 import { autoDeployServiceValidation } from '~/src/api/deploy/helpers/schema/auto-deploy-service-validation.js'
 
 describe('#autoDeployServiceValidation', () => {

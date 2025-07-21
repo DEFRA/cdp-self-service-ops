@@ -1,3 +1,4 @@
+import { describe, expect, test } from 'vitest'
 import { sanitize } from '~/src/helpers/sanitize.js'
 
 describe('#sanitize', () => {

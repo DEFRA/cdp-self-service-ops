@@ -1,12 +1,14 @@
+import { vi, beforeEach } from 'vitest'
+
 import { fetcher } from '~/src/helpers/fetcher.js'
 import { getLatestImage } from '~/src/helpers/portal-backend/get-latest-image.js'
 import { runTestSuite } from '~/src/api/deploy-test-suite/helpers/run-test-suite.js'
 import { getLatestAppConfigCommitSha } from '~/src/helpers/portal-backend/get-latest-app-config-commit-sha.js'
 import { randomUUID } from 'node:crypto'
 
-const mockInfoLogger = jest.fn()
-const mockErrorLogger = jest.fn()
-const mockDebugLogger = jest.fn()
+const mockInfoLogger = vi.fn()
+const mockErrorLogger = vi.fn()
+const mockDebugLogger = vi.fn()
 const mockLogger = {
   info: mockInfoLogger,
   error: mockErrorLogger,
@@ -15,25 +17,28 @@ const mockLogger = {
 const latestImageVersion = '1.0.0'
 const mockUUID = 'b7a0d95e-5224-488f-b8bb-b1705436f413'
 const mockSha = 'mock-sha'
-const mockSNSClientSend = jest.fn()
+const mockSNSClientSend = vi.fn()
 const mockSNSClient = {
   send: mockSNSClientSend
 }
 
-jest.mock('node:crypto', () => ({
-  randomUUID: () => mockUUID
+vi.mock('node:crypto', async (importOriginal) => {
+  const actual = await importOriginal()
+  return {
+    ...actual,
+    randomUUID: () => mockUUID
+  }
+})
+
+vi.mock('@aws-sdk/client-sns', () => ({
+  PublishCommand: vi.fn()
 }))
-jest.mock('@aws-sdk/client-sns', () => ({
-  PublishCommand: jest.fn()
-}))
-jest.mock('~/src/helpers/fetcher.js')
-jest.mock('~/src/helpers/portal-backend/get-latest-app-config-commit-sha.js')
-jest.mock('~/src/helpers/portal-backend/get-latest-image.js')
-jest.mock('~/src/helpers/logging/logger.js', () => ({
-  createLogger: () => ({
-    info: (value) => mockInfoLogger(value),
-    error: (value) => mockErrorLogger(value)
-  })
+
+vi.mock('~/src/helpers/fetcher.js')
+vi.mock('~/src/helpers/portal-backend/get-latest-app-config-commit-sha.js')
+vi.mock('~/src/helpers/portal-backend/get-latest-image.js')
+vi.mock('~/src/helpers/logging/logger.js', () => ({
+  createLogger: () => mockLogger
 }))
 
 describe('#runTestSuite', () => {
@@ -95,16 +100,16 @@ describe('#runTestSuite', () => {
   test('Should return expected message when sendSnsMessage fails', async () => {
     mockSNSClientSend.mockRejectedValue('Failure sending SNS message')
 
-    await expect(
-      runTestSuite({
-        imageName: 'some-service',
-        environment: 'test',
-        user: { id: randomUUID(), displayName: 'My Name' },
-        cpu: '4096',
-        memory: '8192',
-        snsClient: mockSNSClient,
-        logger: mockLogger
-      })
-    ).rejects.toMatch('Failure sending SNS message')
+    const result = runTestSuite({
+      imageName: 'some-service',
+      environment: 'test',
+      user: { id: randomUUID(), displayName: 'My Name' },
+      cpu: '4096',
+      memory: '8192',
+      snsClient: mockSNSClient,
+      logger: mockLogger
+    })
+
+    await expect(result).rejects.toMatch('Failure sending SNS message')
   })
 })

@@ -1,10 +1,17 @@
-import { commitFile } from '~/src/helpers/github/commit-github-file.js'
-import { commitDeploymentFile } from '~/src/helpers/deployments/commit-deployment-file.js'
+import { describe, expect, test, vi } from 'vitest'
 
-jest.mock('~/src/helpers/github/commit-github-file.js')
+vi.mock('~/src/helpers/oktokit/oktokit.js', () => ({
+  octokit: vi.fn(),
+  graphql: vi.fn()
+}))
+
+const mockCommitFile = vi.fn()
+vi.mock('~/src/helpers/github/commit-github-file.js', () => ({
+  commitFile: mockCommitFile
+}))
 
 const logger = {
-  info: jest.fn()
+  info: vi.fn()
 }
 const deployment = {
   service: {
@@ -25,9 +32,13 @@ const deployment = {
 
 describe('#commitDeploymentFile', () => {
   test('Should commit with filePath', async () => {
+    const { commitDeploymentFile } = await import(
+      '~/src/helpers/deployments/commit-deployment-file.js'
+    )
+
     await commitDeploymentFile(deployment, logger)
 
-    expect(commitFile).toHaveBeenCalledWith(
+    expect(mockCommitFile).toHaveBeenCalledWith(
       'DEFRA',
       'cdp-app-deployments',
       'main',

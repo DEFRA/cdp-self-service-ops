@@ -1,3 +1,4 @@
+import { describe, expect, test } from 'vitest'
 import { generateDeployMessage } from '~/src/api/deploy/helpers/generate-deploy-message.js'
 
 describe('#generateDeployMessage', () => {

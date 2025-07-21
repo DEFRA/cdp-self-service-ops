@@ -1,14 +1,25 @@
-import { findRunningDetails } from '~/src/helpers/deployments/find-running-details.js'
-import { commitDeploymentFile } from '~/src/helpers/deployments/commit-deployment-file.js'
-import { scaleEcsToZero } from '~/src/api/decommission-service/helpers/scale-ecs-to-zero.js'
+import { describe, expect, test, vi, beforeAll } from 'vitest'
 import { randomUUID } from 'node:crypto'
 
-jest.mock('~/src/helpers/deployments/find-running-details.js')
-jest.mock('~/src/helpers/deployments/commit-deployment-file.js')
+vi.mock('~/src/helpers/oktokit/oktokit.js', () => ({
+  octokit: vi.fn(),
+  graphql: vi.fn()
+}))
+
+const findRunningDetails = vi.fn()
+vi.mock('~/src/helpers/deployments/find-running-details.js', () => ({
+  findRunningDetails
+}))
+
+const commitDeploymentFile = vi.fn()
+vi.mock('~/src/helpers/deployments/commit-deployment-file.js', () => ({
+  commitDeploymentFile
+}))
 
 const logger = {
-  info: jest.fn()
+  info: vi.fn()
 }
+
 const someUndeploymentId = 'some-undeployment-id'
 const serviceName = 'some-service-name'
 const someUser = { id: randomUUID(), displayName: 'some-name' }
@@ -26,6 +37,15 @@ const runningDetails = {
 }
 
 describe('#scaleEcsToZero', () => {
+  let scaleEcsToZero
+
+  beforeAll(async () => {
+    const stz = await import(
+      '~/src/api/decommission-service/helpers/scale-ecs-to-zero.js'
+    )
+    scaleEcsToZero = stz.scaleEcsToZero
+  })
+
   test('If no data (null) should not proceed with scale to 0', async () => {
     findRunningDetails.mockReturnValue(null)
 

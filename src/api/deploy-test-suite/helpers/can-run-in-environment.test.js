@@ -1,3 +1,4 @@
+import { describe, expect, test } from 'vitest'
 import { canRunInEnvironment } from '~/src/api/deploy-test-suite/helpers/can-run-in-environment.js'
 import { environments } from '~/src/config/index.js'
 

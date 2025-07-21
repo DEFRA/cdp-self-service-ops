@@ -1,3 +1,4 @@
+import { describe, expect, test } from 'vitest'
 import { memoryRange } from '~/src/api/deploy/helpers/memory-range.js'
 
 describe('#memoryRange', () => {

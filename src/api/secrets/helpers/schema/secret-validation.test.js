@@ -1,3 +1,4 @@
+import { describe, expect, test, vi } from 'vitest'
 import Joi from 'joi'
 
 import { config } from '~/src/config/config.js'
@@ -36,7 +37,7 @@ describe('#secretPayloadValidation', () => {
       secretKey: 'validSecretKey1',
       secretValue: 'validSecretValue'
     }
-    config.get = jest.fn().mockReturnValue([])
+    config.get = vi.fn().mockReturnValue([])
 
     const { error } = secretPayloadValidation().validate(payload)
     expect(error).toBeUndefined()
@@ -47,7 +48,7 @@ describe('#secretPayloadValidation', () => {
       secretKey: 'IMMUTABLE_KEY',
       secretValue: 'validSecretValue'
     }
-    config.get = jest.fn().mockReturnValue(['IMMUTABLE_KEY'])
+    config.get = vi.fn().mockReturnValue(['IMMUTABLE_KEY'])
     const response = secretPayloadValidation().validate(payload)
 
     const error = response.error
@@ -60,7 +61,7 @@ describe('#secretPayloadValidation', () => {
       secretKey: 'invalid secret key!',
       secretValue: 'validSecretValue'
     }
-    config.get = jest.fn().mockReturnValue([])
+    config.get = vi.fn().mockReturnValue([])
 
     const { error } = secretPayloadValidation().validate(payload)
     expect(error).toBeInstanceOf(Joi.ValidationError)
@@ -74,7 +75,7 @@ describe('#secretPayloadValidation', () => {
       secretKey: 'validSecretKey1',
       secretValue: 'invalid secret value!'
     }
-    config.get = jest.fn().mockReturnValue([])
+    config.get = vi.fn().mockReturnValue([])
 
     const { error } = secretPayloadValidation().validate(payload)
     expect(error).toBeInstanceOf(Joi.ValidationError)

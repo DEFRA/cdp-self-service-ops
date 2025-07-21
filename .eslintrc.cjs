@@ -138,30 +138,17 @@ module.exports = {
     },
     {
       env: {
-        'jest/globals': true
+        'vitest/env': true
       },
-      extends: [
-        'plugin:jest-formatting/recommended',
-        'plugin:jest/recommended',
-        'plugin:jest/style'
-      ],
-      files: ['**/*.test.{cjs,js}'],
-      plugins: ['jest'],
+      files: ['**/*.test.{js,cjs}', '**/__mocks__/**', '**/__fixtures__/**'],
+      extends: ['plugin:vitest/recommended'],
+      plugins: ['vitest'],
       rules: {
-        // Allow Jest to assert on mocked unbound methods
-        '@typescript-eslint/unbound-method': 'off',
-        'jest/unbound-method': 'off',
-        // Allow custom expect functions in tests, that start with expect
-        'jest/expect-expect': [
-          'error',
-          { assertFunctionNames: ['expect', 'expect*'] }
-        ],
-
-        // Allow import devDependencies in tests
+        // Allow devDependencies
         'n/no-unpublished-import': [
           'error',
           {
-            allowModules: []
+            allowModules: ['vitest']
           }
         ]
       }
