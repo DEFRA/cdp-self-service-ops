@@ -27,7 +27,7 @@ const createPrototypeController = {
       mongo: false,
       redis: false,
       templateName: 'CDP Node.js Prototype Template',
-      language: 'Node.js',
+      language: 'node',
       type: 'prototype',
       id: 'cdp-node-prototype-template',
       entityType: 'Prototype',
