@@ -1,9 +1,9 @@
-import { deployServiceValidation } from '~/src/api/deploy/helpers/schema/deploy-service-validation.js'
-import { registerDeployment } from '~/src/api/deploy/helpers/register-deployment.js'
-import { generateDeployment } from '~/src/helpers/deployments/generate-deployment.js'
-import { commitDeploymentFile } from '~/src/helpers/deployments/commit-deployment-file.js'
-import { lookupTenantService } from '~/src/helpers/portal-backend/lookup-tenant-service.js'
-import { getScopedUser } from '~/src/helpers/user/get-scoped-user.js'
+import { deployServiceValidation } from '../helpers/schema/deploy-service-validation.js'
+import { registerDeployment } from '../helpers/register-deployment.js'
+import { generateDeployment } from '../../../helpers/deployments/generate-deployment.js'
+import { commitDeploymentFile } from '../../../helpers/deployments/commit-deployment-file.js'
+import { lookupTenantService } from '../../../helpers/portal-backend/lookup-tenant-service.js'
+import { getScopedUser } from '../../../helpers/user/get-scoped-user.js'
 
 async function deployService(payload, logger, h, user) {
   const imageName = payload.imageName

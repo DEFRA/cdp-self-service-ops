@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest'
-import { environments } from '~/src/config/index.js'
-import { canRunTerminalInEnvironment } from '~/src/api/deploy-terminal/helpers/can-run-terminal-in-environment.js'
+import { environments } from '../../../config/index.js'
+import { canRunTerminalInEnvironment } from './can-run-terminal-in-environment.js'
 
 describe('#canRunTerminalInEnvironment', () => {
   test('admins can run in all environments except prod', () => {

@@ -1,4 +1,4 @@
-import { config } from '~/src/config/config.js'
-import { environments } from '~/src/config/environments.js'
+import { config } from './config.js'
+import { environments } from './environments.js'
 
 export { config, environments }

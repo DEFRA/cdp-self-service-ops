@@ -1,14 +1,14 @@
 import Boom from '@hapi/boom'
 
-import { config } from '~/src/config/index.js'
-import { sendSnsMessage } from '~/src/helpers/sns/send-sns-message.js'
+import { config } from '../../../config/index.js'
+import { sendSnsMessage } from '../../../helpers/sns/send-sns-message.js'
 import {
   secretParamsValidation,
   secretPayloadValidation
-} from '~/src/api/secrets/helpers/schema/secret-validation.js'
-import { sanitize } from '~/src/helpers/sanitize.js'
-import { registerPendingSecret } from '~/src/api/secrets/helpers/register-pending-secret.js'
-import { canAddSecretInEnv } from '~/src/api/secrets/helpers/can-add-secret.js'
+} from '../helpers/schema/secret-validation.js'
+import { sanitize } from '../../../helpers/sanitize.js'
+import { registerPendingSecret } from '../helpers/register-pending-secret.js'
+import { canAddSecretInEnv } from '../helpers/can-add-secret.js'
 
 const addSecretController = {
   options: {

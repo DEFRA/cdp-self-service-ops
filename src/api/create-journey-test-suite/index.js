@@ -1,4 +1,4 @@
-import { createJourneyTestSuiteController } from '~/src/api/create-journey-test-suite/controller.js'
+import { createJourneyTestSuiteController } from './controller.js'
 
 const createJourneyTestSuite = {
   plugin: {

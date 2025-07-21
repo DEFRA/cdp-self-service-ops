@@ -1,6 +1,6 @@
-import { config } from '~/src/config/index.js'
-import { triggerWorkflow } from '~/src/helpers/github/trigger-workflow.js'
-import { orderedEnvironments } from '~/src/config/environments.js'
+import { config } from '../../../config/index.js'
+import { triggerWorkflow } from '../../github/trigger-workflow.js'
+import { orderedEnvironments } from '../../../config/environments.js'
 
 /**
  * Removes deployment file for specified service

@@ -1,5 +1,5 @@
-import { shutterServiceController } from '~/src/api/shutter/controllers/shutter-service.js'
-import { unshutterServiceController } from '~/src/api/shutter/controllers/unshutter-service.js'
+import { shutterServiceController } from './controllers/shutter-service.js'
+import { unshutterServiceController } from './controllers/unshutter-service.js'
 
 const shutter = {
   plugin: {

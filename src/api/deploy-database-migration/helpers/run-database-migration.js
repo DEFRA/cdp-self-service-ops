@@ -1,8 +1,8 @@
 import { randomUUID } from 'node:crypto'
 
-import { config } from '~/src/config/index.js'
-import { sendSnsMessage } from '~/src/helpers/sns/send-sns-message.js'
-import { recordDatabaseMigration } from '~/src/api/deploy-database-migration/helpers/record-database-migration.js'
+import { config } from '../../../config/index.js'
+import { sendSnsMessage } from '../../../helpers/sns/send-sns-message.js'
+import { recordDatabaseMigration } from './record-database-migration.js'
 import Joi from 'joi'
 import {
   environmentValidation,

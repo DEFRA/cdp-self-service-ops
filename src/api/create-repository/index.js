@@ -1,4 +1,4 @@
-import { createRepositoryController } from '~/src/api/create-repository/controller.js'
+import { createRepositoryController } from './controller.js'
 
 const createRepository = {
   plugin: {

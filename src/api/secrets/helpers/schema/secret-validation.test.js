@@ -1,11 +1,11 @@
 import { describe, expect, test, vi } from 'vitest'
 import Joi from 'joi'
 
-import { config } from '~/src/config/config.js'
+import { config } from '../../../../config/config.js'
 import {
   secretParamsValidation,
   secretPayloadValidation
-} from '~/src/api/secrets/helpers/schema/secret-validation.js'
+} from './secret-validation.js'
 
 describe('#secretParamsValidation', () => {
   test('Should validate a service name and environment', () => {

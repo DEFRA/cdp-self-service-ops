@@ -1,8 +1,8 @@
 import Boom from '@hapi/boom'
-import { config } from '~/src/config/index.js'
-import { createTestRunnerSuite } from '~/src/helpers/create/create-test-runner-suite.js'
-import { testSuiteValidation } from '~/src/api/helpers/schema/test-suite-validation.js'
-import { entitySubTypes } from '~/src/constants/entities.js'
+import { config } from '../../config/index.js'
+import { createTestRunnerSuite } from '../../helpers/create/create-test-runner-suite.js'
+import { testSuiteValidation } from '../helpers/schema/test-suite-validation.js'
+import { entitySubTypes } from '../../constants/entities.js'
 
 const createPerfTestSuiteController = {
   options: {

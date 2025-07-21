@@ -1,8 +1,8 @@
 import { describe, expect, test } from 'vitest'
 import Joi from 'joi'
 
-import { buildMemoryValidation } from '~/src/api/deploy/helpers/schema/build-memory-validation.js'
-import { ecsCpuToMemoryOptionsMap } from '~/src/api/deploy/helpers/ecs-cpu-to-memory-options-map.js'
+import { buildMemoryValidation } from './build-memory-validation.js'
+import { ecsCpuToMemoryOptionsMap } from '../ecs-cpu-to-memory-options-map.js'
 
 describe('#buildMemoryValidation', () => {
   const testValidationSchema = (cpu) =>

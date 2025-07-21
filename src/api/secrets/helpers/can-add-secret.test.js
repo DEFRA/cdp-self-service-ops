@@ -1,7 +1,7 @@
-import { canAddSecretInEnv } from '~/src/api/secrets/helpers/can-add-secret.js'
+import { canAddSecretInEnv } from './can-add-secret.js'
 import { vi } from 'vitest'
 
-vi.mock('~/src/api/deploy/helpers/get-repo-teams', () => ({
+vi.mock('../../deploy/helpers/get-repo-teams', () => ({
   getRepoTeams: vi
     .fn()
     .mockResolvedValue([

@@ -1,6 +1,6 @@
-import { config } from '~/src/config/index.js'
-import { triggerWorkflow } from '~/src/helpers/github/trigger-workflow.js'
-import { registerShuttering } from '~/src/api/shutter/helpers/register-shuttering.js'
+import { config } from '../../../config/index.js'
+import { triggerWorkflow } from '../../../helpers/github/trigger-workflow.js'
+import { registerShuttering } from './register-shuttering.js'
 
 const buildWorkFlowInputs = (inputs) => ({
   service: inputs.serviceName,

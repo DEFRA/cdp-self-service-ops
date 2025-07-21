@@ -1,5 +1,5 @@
 import { describe, expect, test, vi } from 'vitest'
-import { healthController } from '~/src/api/health/controller.js'
+import { healthController } from './controller.js'
 
 describe('#healthController', () => {
   const mockViewHandler = {

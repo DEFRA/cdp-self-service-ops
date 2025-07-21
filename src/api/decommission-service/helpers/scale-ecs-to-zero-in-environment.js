@@ -1,6 +1,6 @@
-import { scaleEcsToZero } from '~/src/api/decommission-service/helpers/scale-ecs-to-zero.js'
-import { getEntity } from '~/src/helpers/portal-backend/get-entity.js'
-import { lookupTenantService } from '~/src/helpers/portal-backend/lookup-tenant-service.js'
+import { scaleEcsToZero } from './scale-ecs-to-zero.js'
+import { getEntity } from '../../../helpers/portal-backend/get-entity.js'
+import { lookupTenantService } from '../../../helpers/portal-backend/lookup-tenant-service.js'
 
 /**
  * @param {string} repositoryName

@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { generateDeployMessage } from '~/src/api/deploy/helpers/generate-deploy-message.js'
+import { generateDeployMessage } from './generate-deploy-message.js'
 
 describe('#generateDeployMessage', () => {
   test('should prefix deployments with sha and use global_fixed', () => {

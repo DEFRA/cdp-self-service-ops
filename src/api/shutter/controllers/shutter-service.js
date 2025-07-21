@@ -1,13 +1,13 @@
 import Joi from 'joi'
 
-import { waf } from '~/src/constants/waf.js'
-import { scopes } from '~/src/constants/scopes.js'
-import { shutterServiceWorkflow } from '~/src/api/shutter/helpers/shutter-service-workflow.js'
+import { waf } from '../../../constants/waf.js'
+import { scopes } from '../../../constants/scopes.js'
+import { shutterServiceWorkflow } from '../helpers/shutter-service-workflow.js'
 import {
   environmentValidation,
   repositoryNameValidation
 } from '@defra/cdp-validation-kit/src/validations.js'
-import { getScopedUser } from '~/src/helpers/user/get-scoped-user.js'
+import { getScopedUser } from '../../../helpers/user/get-scoped-user.js'
 
 const shutterServiceController = {
   options: {

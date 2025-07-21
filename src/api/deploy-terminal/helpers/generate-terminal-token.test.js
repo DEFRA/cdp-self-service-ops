@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { generateTerminalToken } from '~/src/api/deploy-terminal/helpers/generate-terminal-token.js'
+import { generateTerminalToken } from './generate-terminal-token.js'
 
 describe('#generate-terminal-token', () => {
   test('should generate unique tokens', () => {

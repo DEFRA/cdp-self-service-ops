@@ -1,4 +1,4 @@
-import { memoryRange } from '~/src/api/deploy/helpers/memory-range.js'
+import { memoryRange } from './memory-range.js'
 
 // Based on: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/fargate-tasks-services.html
 const ecsCpuToMemoryOptionsMap = {

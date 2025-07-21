@@ -1,7 +1,7 @@
-import { config } from '~/src/config/index.js'
+import { config } from '../../../config/index.js'
 
-import { createLogger } from '~/src/helpers/logging/logger.js'
-import { fetcher } from '~/src/helpers/fetcher.js'
+import { createLogger } from '../../../helpers/logging/logger.js'
+import { fetcher } from '../../../helpers/fetcher.js'
 import Joi from 'joi'
 import {
   commitShaValidation,

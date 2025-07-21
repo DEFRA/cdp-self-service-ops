@@ -2,7 +2,7 @@ import {
   getServiceTemplates,
   microserviceTemplates,
   serviceTemplateSchema
-} from '~/src/api/create-microservice/helpers/microservice-templates.js'
+} from './microservice-templates.js'
 import Joi from 'joi'
 
 describe('#getServiceTemplates', () => {

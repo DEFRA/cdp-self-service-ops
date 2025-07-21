@@ -1,4 +1,4 @@
-import { deployTerminalController } from '~/src/api/deploy-terminal/controllers/deploy-terminal.js'
+import { deployTerminalController } from './controllers/deploy-terminal.js'
 
 const deployTerminal = {
   plugin: {

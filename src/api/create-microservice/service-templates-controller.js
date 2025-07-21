@@ -1,4 +1,4 @@
-import { getServiceTemplates } from '~/src/api/create-microservice/helpers/microservice-templates.js'
+import { getServiceTemplates } from './helpers/microservice-templates.js'
 
 const serviceTemplatesController = {
   options: {

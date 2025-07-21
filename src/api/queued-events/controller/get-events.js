@@ -1,4 +1,4 @@
-import { findAll } from '~/src/helpers/queued-events/queued-events.js'
+import { findAll } from '../../../helpers/queued-events/queued-events.js'
 
 const getEventsController = {
   handler: async (request, h) => {

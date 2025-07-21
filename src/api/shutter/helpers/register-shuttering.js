@@ -1,5 +1,5 @@
-import { config } from '~/src/config/index.js'
-import { fetcher } from '~/src/helpers/fetcher.js'
+import { config } from '../../../config/index.js'
+import { fetcher } from '../../../helpers/fetcher.js'
 
 async function registerShuttering({
   environment,

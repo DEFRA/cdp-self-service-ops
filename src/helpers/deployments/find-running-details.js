@@ -1,4 +1,4 @@
-import { fetchRunningServices } from '~/src/helpers/deployments/fetch-running-services.js'
+import { fetchRunningServices } from './fetch-running-services.js'
 
 /**
  * Finds running/deployment details for service in an environment.

@@ -1,4 +1,4 @@
-import { triggerWorkflow } from '~/src/helpers/github/trigger-workflow.js'
+import { triggerWorkflow } from '../../github/trigger-workflow.js'
 
 /**
  * Triggers a given workflow and updates the status record

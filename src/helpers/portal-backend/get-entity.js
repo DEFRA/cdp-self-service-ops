@@ -1,5 +1,5 @@
-import { config } from '~/src/config/index.js'
-import { fetcher } from '~/src/helpers/fetcher.js'
+import { config } from '../../config/index.js'
+import { fetcher } from '../fetcher.js'
 
 async function getEntity(repositoryName, logger) {
   const url = `${config.get('portalBackendUrl')}/entities/${repositoryName}`

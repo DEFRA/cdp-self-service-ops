@@ -1,5 +1,5 @@
-import { config } from '~/src/config/index.js'
-import { triggerWorkflow } from '~/src/helpers/github/trigger-workflow.js'
+import { config } from '../../../config/index.js'
+import { triggerWorkflow } from '../../github/trigger-workflow.js'
 
 /**
  * Delete ECR images

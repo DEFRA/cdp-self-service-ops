@@ -1,4 +1,4 @@
-import { generateDeployment } from '~/src/helpers/deployments/generate-deployment.js'
+import { generateDeployment } from './generate-deployment.js'
 
 /**
  * @param {{cdpDeploymentId: string, status: string, service: string, version:string, configVersion: string, environment: string, memory: number, cpu: number, instanceCount: number, user: object}} runningDetails

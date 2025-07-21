@@ -1,5 +1,5 @@
-import { orderedEnvironments } from '~/src/config/environments.js'
-import { scaleEcsToZeroInEnvironment } from '~/src/api/decommission-service/helpers/scale-ecs-to-zero-in-environment.js'
+import { orderedEnvironments } from '../../../config/environments.js'
+import { scaleEcsToZeroInEnvironment } from './scale-ecs-to-zero-in-environment.js'
 
 /**
  * @param {string} serviceName

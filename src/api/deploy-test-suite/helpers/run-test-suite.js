@@ -1,11 +1,11 @@
 import { randomUUID } from 'node:crypto'
 
-import { config } from '~/src/config/index.js'
-import { generateTestRunMessage } from '~/src/api/deploy-test-suite/helpers/generate-test-run-message.js'
-import { sendSnsMessage } from '~/src/helpers/sns/send-sns-message.js'
-import { recordTestRun } from '~/src/api/deploy-test-suite/helpers/record-test-run.js'
-import { getLatestAppConfigCommitSha } from '~/src/helpers/portal-backend/get-latest-app-config-commit-sha.js'
-import { getLatestImage } from '~/src/helpers/portal-backend/get-latest-image.js'
+import { config } from '../../../config/index.js'
+import { generateTestRunMessage } from './generate-test-run-message.js'
+import { sendSnsMessage } from '../../../helpers/sns/send-sns-message.js'
+import { recordTestRun } from './record-test-run.js'
+import { getLatestAppConfigCommitSha } from '../../../helpers/portal-backend/get-latest-app-config-commit-sha.js'
+import { getLatestImage } from '../../../helpers/portal-backend/get-latest-image.js'
 
 const snsRunTestTopic = config.get('snsRunTestTopicArn')
 

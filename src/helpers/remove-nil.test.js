@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { removeNil } from '~/src/helpers/remove-nil.js'
+import { removeNil } from './remove-nil.js'
 
 describe('#removeNil', () => {
   test('Should remove null and undefined values from a flat object', () => {

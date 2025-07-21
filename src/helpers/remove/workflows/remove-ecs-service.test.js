@@ -1,20 +1,18 @@
 import { describe, expect, test, vi } from 'vitest'
 
-vi.mock('~/src/helpers/oktokit/oktokit.js', () => ({
+vi.mock('../../oktokit/oktokit.js', () => ({
   octokit: vi.fn(),
   graphql: vi.fn()
 }))
 
 const triggerWorkflow = vi.fn()
-vi.mock('~/src/helpers/github/trigger-workflow', () => ({ triggerWorkflow }))
+vi.mock('../../github/trigger-workflow.js', () => ({ triggerWorkflow }))
 
 const logger = { info: vi.fn(), warn: vi.fn() }
 
 describe('#removeEcsService', () => {
   test('should receive space separated list of all environments', async () => {
-    const { removeEcsService } = await import(
-      '~/src/helpers/remove/workflows/remove-ecs-service.js'
-    )
+    const { removeEcsService } = await import('./remove-ecs-service.js')
 
     const serviceName = 'my-service-name'
 

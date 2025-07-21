@@ -1,9 +1,9 @@
-import { getEntity } from '~/src/helpers/portal-backend/get-entity.js'
-import { lookupTenantService } from '~/src/helpers/portal-backend/lookup-tenant-service.js'
-import { registerDeployment } from '~/src/api/deploy/helpers/register-deployment.js'
-import { generateDeployment } from '~/src/helpers/deployments/generate-deployment.js'
-import { commitDeploymentFile } from '~/src/helpers/deployments/commit-deployment-file.js'
-import { getServiceInfo } from '~/src/api/deploy/helpers/get-service-info.js'
+import { getEntity } from '../../../helpers/portal-backend/get-entity.js'
+import { lookupTenantService } from '../../../helpers/portal-backend/lookup-tenant-service.js'
+import { registerDeployment } from './register-deployment.js'
+import { generateDeployment } from '../../../helpers/deployments/generate-deployment.js'
+import { commitDeploymentFile } from '../../../helpers/deployments/commit-deployment-file.js'
+import { getServiceInfo } from './get-service-info.js'
 
 async function deployToZero({ logger }, serviceName, environment, user) {
   logger.info(
