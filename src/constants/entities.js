@@ -1,7 +1,8 @@
 const entityTypes = {
   microservice: 'Microservice',
   repository: 'Repository',
-  testSuite: 'TestSuite'
+  testSuite: 'TestSuite',
+  prototype: 'Prototype'
 }
 
 const entitySubTypes = {

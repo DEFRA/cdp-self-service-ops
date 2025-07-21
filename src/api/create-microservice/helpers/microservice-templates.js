@@ -23,7 +23,7 @@ const serviceTemplateSchema = Joi.object({
   entitySubType: entitySubTypeValidation
 })
 
-const serviceTemplates = {
+const microserviceTemplates = {
   'cdp-node-frontend-template': {
     repositoryName: 'cdp-node-frontend-template',
     zone: 'public',
@@ -89,7 +89,7 @@ const serviceTemplates = {
 }
 
 function getServiceTemplates(scopes = []) {
-  return Object.values(serviceTemplates).filter(({ requiredScope }) => {
+  return Object.values(microserviceTemplates).filter(({ requiredScope }) => {
     if (!requiredScope) {
       return true
     } else {
@@ -98,4 +98,4 @@ function getServiceTemplates(scopes = []) {
   })
 }
 
-export { serviceTemplates, serviceTemplateSchema, getServiceTemplates }
+export { microserviceTemplates, serviceTemplateSchema, getServiceTemplates }

@@ -21,14 +21,14 @@ import {
  * @param {{id: string, displayName: string}} user
  * @returns {Promise<void>}
  */
-async function createMicroservice(
+async function createMicroservice({
   logger,
   repositoryName,
   template,
   templateTag,
   teamId,
   user
-) {
+}) {
   const { team } = await fetchTeam(teamId)
   if (!team?.github) {
     throw Boom.badData(

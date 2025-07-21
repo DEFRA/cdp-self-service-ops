@@ -11,6 +11,7 @@ import { secrets } from '~/src/api/secrets/index.js'
 import { decommissionService } from '~/src/api/decommission-service/index.js'
 import { databaseMigrations } from '~/src/api/deploy-database-migration/index.js'
 import { shutter } from '~/src/api/shutter/index.js'
+import { createPrototype } from '~/src/api/create-prototype/index.js'
 
 const router = {
   plugin: {
@@ -19,6 +20,7 @@ const router = {
       await server.register([
         health,
         createMicroservice,
+        createPrototype,
         createRepository,
         createJourneyTestSuite,
         createPerfTestSuite,
