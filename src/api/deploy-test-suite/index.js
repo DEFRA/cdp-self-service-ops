@@ -1,6 +1,6 @@
-import { deployTestSuiteController } from '~/src/api/deploy-test-suite/controllers/deploy-test-suite.js'
-import { triggerTestSuiteController } from '~/src/api/deploy-test-suite/controllers/trigger-test-suite.js'
-import { stopTestSuiteController } from '~/src/api/deploy-test-suite/controllers/stop-test-suite.js'
+import { deployTestSuiteController } from './controllers/deploy-test-suite.js'
+import { triggerTestSuiteController } from './controllers/trigger-test-suite.js'
+import { stopTestSuiteController } from './controllers/stop-test-suite.js'
 
 const deployTestSuite = {
   plugin: {

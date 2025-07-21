@@ -1,4 +1,4 @@
-import { deployDatabaseMigration } from '~/src/api/deploy-database-migration/controllers/deploy-database-migration.js'
+import { deployDatabaseMigration } from './controllers/deploy-database-migration.js'
 
 export const databaseMigrations = {
   plugin: {

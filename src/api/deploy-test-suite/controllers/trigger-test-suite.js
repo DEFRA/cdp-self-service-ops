@@ -1,6 +1,6 @@
-import { triggerTestSuiteValidation } from '~/src/api/deploy-test-suite/helpers/trigger-test-suite-validation.js'
-import { runTestSuite } from '~/src/api/deploy-test-suite/helpers/run-test-suite.js'
-import { validatePortalBackendRequest } from '~/src/api/helpers/pre/validate-portal-backend-request.js'
+import { triggerTestSuiteValidation } from '../helpers/trigger-test-suite-validation.js'
+import { runTestSuite } from '../helpers/run-test-suite.js'
+import { validatePortalBackendRequest } from '../../helpers/pre/validate-portal-backend-request.js'
 
 const triggerTestSuiteController = {
   options: {

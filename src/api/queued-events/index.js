@@ -1,5 +1,5 @@
-import { getEventsController } from '~/src/api/queued-events/controller/get-events.js'
-import { resetEventController } from '~/src/api/queued-events/controller/reset-event.js'
+import { getEventsController } from './controller/get-events.js'
+import { resetEventController } from './controller/reset-event.js'
 
 const queuedEvents = {
   plugin: {

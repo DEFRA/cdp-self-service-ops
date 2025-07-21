@@ -1,4 +1,4 @@
-import { getContent } from '~/src/helpers/github/get-content.js'
+import { getContent } from '../../../helpers/github/get-content.js'
 
 export async function getExistingDeployment(owner, repo, filePath) {
   try {

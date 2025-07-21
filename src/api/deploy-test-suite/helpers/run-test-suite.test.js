@@ -1,9 +1,9 @@
 import { vi, beforeEach } from 'vitest'
 
-import { fetcher } from '~/src/helpers/fetcher.js'
-import { getLatestImage } from '~/src/helpers/portal-backend/get-latest-image.js'
-import { runTestSuite } from '~/src/api/deploy-test-suite/helpers/run-test-suite.js'
-import { getLatestAppConfigCommitSha } from '~/src/helpers/portal-backend/get-latest-app-config-commit-sha.js'
+import { fetcher } from '../../../helpers/fetcher.js'
+import { getLatestImage } from '../../../helpers/portal-backend/get-latest-image.js'
+import { runTestSuite } from './run-test-suite.js'
+import { getLatestAppConfigCommitSha } from '../../../helpers/portal-backend/get-latest-app-config-commit-sha.js'
 import { randomUUID } from 'node:crypto'
 
 const mockInfoLogger = vi.fn()
@@ -34,10 +34,10 @@ vi.mock('@aws-sdk/client-sns', () => ({
   PublishCommand: vi.fn()
 }))
 
-vi.mock('~/src/helpers/fetcher.js')
-vi.mock('~/src/helpers/portal-backend/get-latest-app-config-commit-sha.js')
-vi.mock('~/src/helpers/portal-backend/get-latest-image.js')
-vi.mock('~/src/helpers/logging/logger.js', () => ({
+vi.mock('../../../helpers/fetcher.js')
+vi.mock('../../../helpers/portal-backend/get-latest-app-config-commit-sha.js')
+vi.mock('../../../helpers/portal-backend/get-latest-image.js')
+vi.mock('../../../helpers/logging/logger.js', () => ({
   createLogger: () => mockLogger
 }))
 

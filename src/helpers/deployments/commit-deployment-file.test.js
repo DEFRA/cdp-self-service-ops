@@ -1,17 +1,18 @@
 import { describe, expect, test, vi } from 'vitest'
 
-vi.mock('~/src/helpers/oktokit/oktokit.js', () => ({
+vi.mock('../oktokit/oktokit.js', () => ({
   octokit: vi.fn(),
   graphql: vi.fn()
 }))
 
 const mockCommitFile = vi.fn()
-vi.mock('~/src/helpers/github/commit-github-file.js', () => ({
+vi.mock('../github/commit-github-file.js', () => ({
   commitFile: mockCommitFile
 }))
 
 const logger = {
-  info: vi.fn()
+  info: vi.fn(),
+  error: vi.fn()
 }
 const deployment = {
   service: {
@@ -32,9 +33,7 @@ const deployment = {
 
 describe('#commitDeploymentFile', () => {
   test('Should commit with filePath', async () => {
-    const { commitDeploymentFile } = await import(
-      '~/src/helpers/deployments/commit-deployment-file.js'
-    )
+    const { commitDeploymentFile } = await import('./commit-deployment-file.js')
 
     await commitDeploymentFile(deployment, logger)
 

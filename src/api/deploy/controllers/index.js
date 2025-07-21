@@ -1,6 +1,6 @@
-import { deployServiceController } from '~/src/api/deploy/controllers/deploy-service.js'
-import { deployServiceOptionsController } from '~/src/api/deploy/controllers/deploy-service-options.js'
-import { existingServiceInfoController } from '~/src/api/deploy/controllers/existing-service-info.js'
+import { deployServiceController } from './deploy-service.js'
+import { deployServiceOptionsController } from './deploy-service-options.js'
+import { existingServiceInfoController } from './existing-service-info.js'
 
 export {
   deployServiceController,

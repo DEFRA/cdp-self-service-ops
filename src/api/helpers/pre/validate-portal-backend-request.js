@@ -1,4 +1,4 @@
-import { config } from '~/src/config/index.js'
+import { config } from '../../../config/index.js'
 import Boom from '@hapi/boom'
 import crypto from 'crypto'
 

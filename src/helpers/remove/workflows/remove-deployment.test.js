@@ -1,8 +1,8 @@
 import { describe, expect, test, vi } from 'vitest'
-import { triggerWorkflow } from '~/src/helpers/github/trigger-workflow.js'
-import { removeDeployment } from '~/src/helpers/remove/workflows/remove-deployment.js'
+import { triggerWorkflow } from '../../github/trigger-workflow.js'
+import { removeDeployment } from './remove-deployment.js'
 
-vi.mock('~/src/helpers/github/trigger-workflow.js', () => ({
+vi.mock('../../github/trigger-workflow.js', () => ({
   triggerWorkflow: vi.fn()
 }))
 

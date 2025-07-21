@@ -1,4 +1,4 @@
-import { getServiceInfo } from '~/src/api/deploy/helpers/get-service-info.js'
+import { getServiceInfo } from '../helpers/get-service-info.js'
 
 const existingServiceInfoController = {
   handler: async (request, h) => {

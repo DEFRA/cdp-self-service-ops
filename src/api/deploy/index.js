@@ -2,9 +2,9 @@ import {
   deployServiceController,
   deployServiceOptionsController,
   existingServiceInfoController
-} from '~/src/api/deploy/controllers/index.js'
-import { autoDeployServiceController } from '~/src/api/deploy/controllers/auto-deploy-service.js'
-import { deployToZeroController } from '~/src/api/deploy/controllers/deploy-to-zero.js'
+} from './controllers/index.js'
+import { autoDeployServiceController } from './controllers/auto-deploy-service.js'
+import { deployToZeroController } from './controllers/deploy-to-zero.js'
 
 const deploy = {
   plugin: {

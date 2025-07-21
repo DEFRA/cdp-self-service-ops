@@ -1,11 +1,11 @@
 import Boom from '@hapi/boom'
 
-import { config } from '~/src/config/index.js'
-import { deployTerminalValidation } from '~/src/api/deploy-terminal/helpers/deploy-terminal-validation.js'
-import { sendSnsMessage } from '~/src/helpers/sns/send-sns-message.js'
-import { canRunTerminalInEnvironment } from '~/src/api/deploy-terminal/helpers/can-run-terminal-in-environment.js'
-import { generateTerminalToken } from '~/src/api/deploy-terminal/helpers/generate-terminal-token.js'
-import { lookupTenantService } from '~/src/helpers/portal-backend/lookup-tenant-service.js'
+import { config } from '../../../config/index.js'
+import { deployTerminalValidation } from '../helpers/deploy-terminal-validation.js'
+import { sendSnsMessage } from '../../../helpers/sns/send-sns-message.js'
+import { canRunTerminalInEnvironment } from '../helpers/can-run-terminal-in-environment.js'
+import { generateTerminalToken } from '../helpers/generate-terminal-token.js'
+import { lookupTenantService } from '../../../helpers/portal-backend/lookup-tenant-service.js'
 
 const deployTerminalController = {
   options: {

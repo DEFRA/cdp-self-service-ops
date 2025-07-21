@@ -1,6 +1,6 @@
 import Boom from '@hapi/boom'
-import { prototypeValidation } from '~/src/api/create-prototype/schema/prototype-validation.js'
-import { createMicroservice } from '~/src/helpers/create/create-microservice.js'
+import { prototypeValidation } from './schema/prototype-validation.js'
+import { createMicroservice } from '../../helpers/create/create-microservice.js'
 
 const createPrototypeController = {
   options: {

@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { deployServiceValidation } from '~/src/api/deploy/helpers/schema/deploy-service-validation.js'
+import { deployServiceValidation } from './deploy-service-validation.js'
 
 describe('#deployServiceValidation', () => {
   test('Schema should pass validation without errors', () => {

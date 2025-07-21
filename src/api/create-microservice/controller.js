@@ -1,11 +1,11 @@
 import Boom from '@hapi/boom'
 
-import { createServiceValidationSchema } from '~/src/api/create-microservice/helpers/create-service-validation-schema.js'
-import { createMicroservice } from '~/src/helpers/create/create-microservice.js'
+import { createServiceValidationSchema } from './helpers/create-service-validation-schema.js'
+import { createMicroservice } from '../../helpers/create/create-microservice.js'
 import {
   getServiceTemplates,
   microserviceTemplates
-} from '~/src/api/create-microservice/helpers/microservice-templates.js'
+} from './helpers/microservice-templates.js'
 
 const createMicroserviceController = {
   options: {

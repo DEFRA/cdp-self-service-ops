@@ -1,5 +1,5 @@
-import { getLatestCommitSha } from '~/src/helpers/github/get-latest-commit-sha.js'
-import { graphql } from '~/src/helpers/oktokit/oktokit.js'
+import { getLatestCommitSha } from './get-latest-commit-sha.js'
+import { graphql } from '../oktokit/oktokit.js'
 
 /**
  *

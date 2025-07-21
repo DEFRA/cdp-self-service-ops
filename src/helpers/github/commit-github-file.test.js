@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest'
 
-vi.mock('~/src/helpers/oktokit/oktokit.js', () => ({
+vi.mock('../oktokit/oktokit.js', () => ({
   octokit: vi.fn(),
   graphql: vi.fn()
 }))
@@ -10,9 +10,7 @@ describe('#retry', () => {
   let retry
 
   beforeAll(async () => {
-    const commitGitHubFiles = await import(
-      '~/src/helpers/github/commit-github-file.js'
-    )
+    const commitGitHubFiles = await import('./commit-github-file.js')
     retry = commitGitHubFiles.retry
   })
 

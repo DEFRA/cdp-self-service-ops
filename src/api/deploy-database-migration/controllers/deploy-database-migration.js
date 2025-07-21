@@ -1,6 +1,6 @@
-import { deployMigrationRequestValidation } from '~/src/api/deploy-database-migration/helpers/deploy-migration-request-validation.js'
-import { getScopedUser } from '~/src/helpers/user/get-scoped-user.js'
-import { runDatabaseMigration } from '~/src/api/deploy-database-migration/helpers/run-database-migration.js'
+import { deployMigrationRequestValidation } from '../helpers/deploy-migration-request-validation.js'
+import { getScopedUser } from '../../../helpers/user/get-scoped-user.js'
+import { runDatabaseMigration } from '../helpers/run-database-migration.js'
 
 export const deployDatabaseMigration = {
   options: {

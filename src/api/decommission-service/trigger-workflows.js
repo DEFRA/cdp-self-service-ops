@@ -1,8 +1,8 @@
 import Joi from 'joi'
-import { triggerRemoveWorkflows } from '~/src/api/decommission-service/helpers/trigger-remove-workflows.js'
-import { getEntity } from '~/src/helpers/portal-backend/get-entity.js'
+import { triggerRemoveWorkflows } from './helpers/trigger-remove-workflows.js'
+import { getEntity } from '../../helpers/portal-backend/get-entity.js'
 import { repositoryNameValidation } from '@defra/cdp-validation-kit/src/validations.js'
-import { validatePortalBackendRequest } from '~/src/api/helpers/pre/validate-portal-backend-request.js'
+import { validatePortalBackendRequest } from '../helpers/pre/validate-portal-backend-request.js'
 
 const decommissionTriggerWorkflowsController = {
   options: {

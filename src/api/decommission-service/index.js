@@ -1,6 +1,6 @@
-import { decommissionTriggerWorkflowsController } from '~/src/api/decommission-service/trigger-workflows.js'
-import { deleteDeploymentsAndEcsController } from '~/src/api/decommission-service/delete-deployments-and-ecs.js'
-import { scaleEcsToZeroController } from '~/src/api/decommission-service/scale-ecs-to-zero-controller.js'
+import { decommissionTriggerWorkflowsController } from './trigger-workflows.js'
+import { deleteDeploymentsAndEcsController } from './delete-deployments-and-ecs.js'
+import { scaleEcsToZeroController } from './scale-ecs-to-zero-controller.js'
 
 const decommissionService = {
   plugin: {

@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { generateDeployment } from '~/src/helpers/deployments/generate-deployment.js'
+import { generateDeployment } from './generate-deployment.js'
 import { ValidationError } from 'joi'
 import { randomUUID } from 'node:crypto'
 

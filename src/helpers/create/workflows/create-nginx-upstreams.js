@@ -1,5 +1,5 @@
-import { config } from '~/src/config/index.js'
-import { createResourceFromWorkflow } from '~/src/helpers/create/workflows/create-resource-from-workflow.js'
+import { config } from '../../../config/index.js'
+import { createResourceFromWorkflow } from './create-resource-from-workflow.js'
 
 /**
  * Creates default service routing

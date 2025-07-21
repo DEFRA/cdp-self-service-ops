@@ -1,4 +1,4 @@
-import { createPrototypeController } from '~/src/api/create-prototype/controller.js'
+import { createPrototypeController } from './controller.js'
 
 const createPrototype = {
   plugin: {

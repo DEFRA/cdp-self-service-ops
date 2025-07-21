@@ -1,4 +1,4 @@
-import { environments } from '~/src/config/index.js'
+import { environments } from '../../../config/index.js'
 
 export function canRunTerminalInEnvironment(environment, scope) {
   if (!scope.includes('breakGlass') && environment === environments.prod) {

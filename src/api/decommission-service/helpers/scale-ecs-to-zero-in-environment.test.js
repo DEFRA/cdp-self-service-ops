@@ -1,19 +1,19 @@
 import { describe, beforeAll, expect, test, vi } from 'vitest'
 
-vi.mock('~/src/helpers/oktokit/oktokit.js', () => ({
+vi.mock('../../../helpers/oktokit/oktokit.js', () => ({
   octokit: vi.fn(),
   graphql: vi.fn()
 }))
 
 const getEntity = vi.fn()
-vi.mock('~/src/helpers/portal-backend/get-entity.js', () => ({ getEntity }))
+vi.mock('../../../helpers/portal-backend/get-entity.js', () => ({ getEntity }))
 
 const scaleEcsToZero = vi.fn()
-vi.mock('~/src/api/decommission-service/helpers/scale-ecs-to-zero.js', () => ({
+vi.mock('./scale-ecs-to-zero.js', () => ({
   scaleEcsToZero
 }))
 const lookupTenantService = vi.fn()
-vi.mock('~/src/helpers/portal-backend/lookup-tenant-service.js', () => ({
+vi.mock('../../../helpers/portal-backend/lookup-tenant-service.js', () => ({
   lookupTenantService
 }))
 
@@ -38,9 +38,7 @@ describe('#scaleEcsToZeroInEnvironment', () => {
   let scaleEcsToZeroInEnvironment
 
   beforeAll(async () => {
-    const module = await import(
-      '~/src/api/decommission-service/helpers/scale-ecs-to-zero-in-environment.js'
-    )
+    const module = await import('./scale-ecs-to-zero-in-environment.js')
 
     scaleEcsToZeroInEnvironment = module.scaleEcsToZeroInEnvironment
   })

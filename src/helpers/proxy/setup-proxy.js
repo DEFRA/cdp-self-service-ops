@@ -1,5 +1,5 @@
 import { ProxyAgent, setGlobalDispatcher } from 'undici'
-import { config } from '~/src/config/index.js'
+import { config } from '../../config/index.js'
 import { bootstrap } from 'global-agent'
 
 export function setupProxy() {

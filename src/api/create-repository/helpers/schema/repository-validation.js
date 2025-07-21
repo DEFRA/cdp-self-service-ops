@@ -1,6 +1,6 @@
 import Joi from 'joi'
 
-import { repositoryVisibility } from '~/src/api/create-repository/constants/repository-visibility.js'
+import { repositoryVisibility } from '../../constants/repository-visibility.js'
 import {
   repositoryNameValidation,
   teamIdValidation

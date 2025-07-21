@@ -1,8 +1,8 @@
 import { afterEach, describe, expect, test } from 'vitest'
 import { randomUUID } from 'node:crypto'
 
-import { config } from '~/src/config/index.js'
-import { generateTestRunMessage } from '~/src/api/deploy-test-suite/helpers/generate-test-run-message.js'
+import { config } from '../../../config/index.js'
+import { generateTestRunMessage } from './generate-test-run-message.js'
 
 const expectedMessageResult = (runId, userId) => {
   const arnPrefix =

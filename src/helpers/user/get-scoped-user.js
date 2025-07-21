@@ -1,6 +1,6 @@
 import Boom from '@hapi/boom'
 
-import { getRepoTeams } from '~/src/api/deploy/helpers/get-repo-teams.js'
+import { getRepoTeams } from '../../api/deploy/helpers/get-repo-teams.js'
 
 /**
  * @param {string} serviceName

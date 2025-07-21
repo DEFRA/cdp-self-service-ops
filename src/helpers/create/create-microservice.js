@@ -1,8 +1,8 @@
 import Boom from '@hapi/boom'
 
-import { config } from '~/src/config/index.js'
-import { fetchTeam } from '~/src/helpers/fetch-team.js'
-import { createInitialEntity } from '~/src/helpers/create/create-initial-entity.js'
+import { config } from '../../config/index.js'
+import { fetchTeam } from '../fetch-team.js'
+import { createInitialEntity } from './create-initial-entity.js'
 import {
   createAppConfig,
   createDashboard,
@@ -10,7 +10,7 @@ import {
   createSquidConfig,
   createTemplatedRepo,
   createTenantInfrastructure
-} from '~/src/helpers/create/workflows/index.js'
+} from './workflows/index.js'
 
 /**
  * @param {import("pino").Logger} logger

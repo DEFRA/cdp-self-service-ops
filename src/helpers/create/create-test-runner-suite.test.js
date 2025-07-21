@@ -1,23 +1,23 @@
 import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest'
 
-import { config } from '~/src/config/index.js'
-import { createLogger } from '~/src/helpers/logging/logger.js'
-import { fetchTeam } from '~/src/helpers/fetch-team.js'
-import { createEntity } from '~/src/helpers/portal-backend/create-entity.js'
-import { entitySubTypes, entityTypes } from '~/src/constants/entities.js'
+import { config } from '../../config/index.js'
+import { createLogger } from '../logging/logger.js'
+import { fetchTeam } from '../fetch-team.js'
+import { createEntity } from '../portal-backend/create-entity.js'
+import { entitySubTypes, entityTypes } from '../../constants/entities.js'
 import { randomUUID } from 'node:crypto'
 
-vi.mock('~/src/helpers/oktokit/oktokit.js', () => ({
+vi.mock('../oktokit/oktokit.js', () => ({
   octokit: vi.fn(),
   graphql: vi.fn()
 }))
 
-vi.mock('~/src/helpers/fetch-team')
-vi.mock('~/src/helpers/github/trigger-workflow')
-vi.mock('~/src/helpers/portal-backend/create-entity.js')
+vi.mock('../fetch-team')
+vi.mock('../github/trigger-workflow')
+vi.mock('../portal-backend/create-entity.js')
 
 const triggerWorkflow = vi.fn()
-vi.mock('~/src/helpers/github/trigger-workflow.js', () => ({
+vi.mock('../github/trigger-workflow.js', () => ({
   triggerWorkflow
 }))
 
@@ -36,7 +36,7 @@ describe('#create-test-runner-suite', () => {
 
   test('Should create test suite', async () => {
     const { createTestRunnerSuite } = await import(
-      '~/src/helpers/create/create-test-runner-suite.js'
+      './create-test-runner-suite.js'
     )
 
     const teamId = randomUUID()

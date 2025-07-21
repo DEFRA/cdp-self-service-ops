@@ -1,6 +1,6 @@
 import Joi from 'joi'
 
-import { ecsCpuToMemoryOptionsMap } from '~/src/api/deploy/helpers/ecs-cpu-to-memory-options-map.js'
+import { ecsCpuToMemoryOptionsMap } from '../ecs-cpu-to-memory-options-map.js'
 
 /**
  *

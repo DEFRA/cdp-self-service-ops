@@ -1,22 +1,22 @@
-import { config } from '~/src/config/index.js'
-import { fetchTeam } from '~/src/helpers/fetch-team.js'
-import { createMicroservice } from '~/src/helpers/create/create-microservice.js'
-import { triggerWorkflow } from '~/src/helpers/github/trigger-workflow.js'
-import { microserviceTemplates } from '~/src/api/create-microservice/helpers/microservice-templates.js'
-import { createEntity } from '~/src/helpers/portal-backend/create-entity.js'
-import { entitySubTypes, entityTypes } from '~/src/constants/entities.js'
+import { config } from '../../config/index.js'
+import { fetchTeam } from '../fetch-team.js'
+import { createMicroservice } from './create-microservice.js'
+import { triggerWorkflow } from '../github/trigger-workflow.js'
+import { microserviceTemplates } from '../../api/create-microservice/helpers/microservice-templates.js'
+import { createEntity } from '../portal-backend/create-entity.js'
+import { entitySubTypes, entityTypes } from '../../constants/entities.js'
 import { randomUUID } from 'node:crypto'
 import { vi } from 'vitest'
 
-vi.mock('~/src/helpers/fetch-team', () => ({
+vi.mock('../fetch-team', () => ({
   fetchTeam: vi.fn()
 }))
 
-vi.mock('~/src/helpers/github/trigger-workflow', () => ({
+vi.mock('../github/trigger-workflow', () => ({
   triggerWorkflow: vi.fn()
 }))
 
-vi.mock('~/src/helpers/portal-backend/create-entity.js', () => ({
+vi.mock('../portal-backend/create-entity.js', () => ({
   createEntity: vi.fn()
 }))
 

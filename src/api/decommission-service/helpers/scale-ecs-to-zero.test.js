@@ -1,18 +1,18 @@
 import { describe, expect, test, vi, beforeAll } from 'vitest'
 import { randomUUID } from 'node:crypto'
 
-vi.mock('~/src/helpers/oktokit/oktokit.js', () => ({
+vi.mock('../../../helpers/oktokit/oktokit.js', () => ({
   octokit: vi.fn(),
   graphql: vi.fn()
 }))
 
 const findRunningDetails = vi.fn()
-vi.mock('~/src/helpers/deployments/find-running-details.js', () => ({
+vi.mock('../../../helpers/deployments/find-running-details.js', () => ({
   findRunningDetails
 }))
 
 const commitDeploymentFile = vi.fn()
-vi.mock('~/src/helpers/deployments/commit-deployment-file.js', () => ({
+vi.mock('../../../helpers/deployments/commit-deployment-file.js', () => ({
   commitDeploymentFile
 }))
 
@@ -40,10 +40,7 @@ describe('#scaleEcsToZero', () => {
   let scaleEcsToZero
 
   beforeAll(async () => {
-    const stz = await import(
-      '~/src/api/decommission-service/helpers/scale-ecs-to-zero.js'
-    )
-    scaleEcsToZero = stz.scaleEcsToZero
+    scaleEcsToZero = (await import('./scale-ecs-to-zero.js')).scaleEcsToZero
   })
 
   test('If no data (null) should not proceed with scale to 0', async () => {

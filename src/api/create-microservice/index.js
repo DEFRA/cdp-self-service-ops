@@ -1,5 +1,5 @@
-import { createMicroserviceController } from '~/src/api/create-microservice/controller.js'
-import { serviceTemplatesController } from '~/src/api/create-microservice/service-templates-controller.js'
+import { createMicroserviceController } from './controller.js'
+import { serviceTemplatesController } from './service-templates-controller.js'
 
 const createMicroservice = {
   plugin: {

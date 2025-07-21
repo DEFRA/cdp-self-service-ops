@@ -3,15 +3,15 @@ import { MongoClient } from 'mongodb'
 import timeunit from 'timeunit'
 import { setTimeout } from 'timers/promises'
 
-import { config } from '~/src/config/index.js'
-import { createIndexes } from '~/src/plugins/mongodb.js'
+import { config } from '../../config/index.js'
+import { createIndexes } from '../../plugins/mongodb.js'
 import {
   ackEvent,
   findAll,
   getNextQueuedEvent,
   queueEvent
-} from '~/src/helpers/queued-events/queued-events.js'
-import { createLogger } from '~/src/helpers/logging/logger.js'
+} from './queued-events.js'
+import { createLogger } from '../logging/logger.js'
 
 const eventType = config.get('serviceInfraCreateEvent')
 const logger = createLogger()

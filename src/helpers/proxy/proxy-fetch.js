@@ -1,6 +1,6 @@
 import { ProxyAgent, fetch as undiciFetch } from 'undici'
 
-import { config } from '~/src/config/index.js'
+import { config } from '../../config/index.js'
 
 const nonProxyFetch = (url, opts) => {
   return undiciFetch(url, {

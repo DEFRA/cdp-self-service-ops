@@ -1,13 +1,13 @@
 import Boom from '@hapi/boom'
-import { createInitialEntity } from '~/src/helpers/create/create-initial-entity.js'
+import { createInitialEntity } from './create-initial-entity.js'
 import {
   createAppConfig,
   createSquidConfig,
   createTemplatedRepo
-} from '~/src/helpers/create/workflows/index.js'
-import { fetchTeam } from '~/src/helpers/fetch-team.js'
-import { createTenantInfrastructure } from '~/src/helpers/create/workflows/create-tenant-infrastructure.js'
-import { entityTypes } from '~/src/constants/entities.js'
+} from './workflows/index.js'
+import { fetchTeam } from '../fetch-team.js'
+import { createTenantInfrastructure } from './workflows/create-tenant-infrastructure.js'
+import { entityTypes } from '../../constants/entities.js'
 
 /**
  * Helper to create test suites

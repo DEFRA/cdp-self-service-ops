@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { ecsCpuToMemoryOptionsMap } from '~/src/api/deploy/helpers/ecs-cpu-to-memory-options-map.js'
+import { ecsCpuToMemoryOptionsMap } from './ecs-cpu-to-memory-options-map.js'
 
 describe('ecsCpuToMemoryMap', () => {
   test('Cpu of 8192 should only allows memory in increments of 4gb', () => {

@@ -1,10 +1,10 @@
 import { vi, beforeAll, afterAll } from 'vitest'
 import { randomUUID } from 'node:crypto'
 import * as Hapi from '@hapi/hapi'
-import { config } from '~/src/config/config.js'
+import { config } from '../../../config/config.js'
 
 const mockRunTestSuite = vi.fn()
-vi.mock('~/src/api/deploy-test-suite/helpers/run-test-suite.js', () => ({
+vi.mock('../helpers/run-test-suite.js', () => ({
   runTestSuite: mockRunTestSuite
 }))
 
@@ -15,7 +15,7 @@ describe('Test Trigger Test Suite', () => {
   beforeAll(async () => {
     config.set('portalBackendSharedSecret', 'mocked-secret')
     const { triggerTestSuiteController } = await import(
-      '~/src/api/deploy-test-suite/controllers/trigger-test-suite.js'
+      './trigger-test-suite.js'
     )
     server = Hapi.server()
     server.route([
@@ -102,7 +102,7 @@ describe('Test Trigger Test Suite', () => {
 
   test('call to trigger-test-suite passes with a valid signature', async () => {
     const { generateSignature } = await import(
-      '~/src/api/helpers/pre/validate-portal-backend-request.js'
+      '../../helpers/pre/validate-portal-backend-request.js'
     )
 
     const timestamp = Math.floor(Date.now() / 1000).toString()

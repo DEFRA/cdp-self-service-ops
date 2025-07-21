@@ -1,4 +1,4 @@
-import { createPerfTestSuiteController } from '~/src/api/create-perf-test-suite/controller.js'
+import { createPerfTestSuiteController } from './controller.js'
 
 const createPerfTestSuite = {
   plugin: {

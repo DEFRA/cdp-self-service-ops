@@ -1,14 +1,14 @@
 import { randomUUID } from 'node:crypto'
 
-import { config } from '~/src/config/index.js'
-import { fetcher } from '~/src/helpers/fetcher.js'
-import { recordDatabaseMigration } from '~/src/api/deploy-database-migration/helpers/record-database-migration.js'
+import { config } from '../../../config/index.js'
+import { fetcher } from '../../../helpers/fetcher.js'
+import { recordDatabaseMigration } from './record-database-migration.js'
 import { vi } from 'vitest'
 
 const mockInfoLogger = vi.fn()
 
-vi.mock('~/src/helpers/fetcher.js')
-vi.mock('~/src/helpers/logging/logger.js', () => ({
+vi.mock('../../../helpers/fetcher.js')
+vi.mock('../../../helpers/logging/logger.js', () => ({
   createLogger: () => ({
     info: (value) => mockInfoLogger(value)
   })

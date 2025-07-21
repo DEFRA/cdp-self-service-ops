@@ -1,11 +1,11 @@
-import { createAppConfig } from '~/src/helpers/create/workflows/create-app-config.js'
-import { createDashboard } from '~/src/helpers/create/workflows/create-dashboard.js'
-import { createNginxUpstreams } from '~/src/helpers/create/workflows/create-nginx-upstreams.js'
-import { createResourceFromWorkflow } from '~/src/helpers/create/workflows/create-resource-from-workflow.js'
-import { createSquidConfig } from '~/src/helpers/create/workflows/create-squid-config.js'
-import { createTenantInfrastructure } from '~/src/helpers/create/workflows/create-tenant-infrastructure.js'
-import { createTemplatedRepo } from '~/src/helpers/create/workflows/create-templated-repo.js'
-import { triggerWorkflow } from '~/src/helpers/github/trigger-workflow.js'
+import { createAppConfig } from './create-app-config.js'
+import { createDashboard } from './create-dashboard.js'
+import { createNginxUpstreams } from './create-nginx-upstreams.js'
+import { createResourceFromWorkflow } from './create-resource-from-workflow.js'
+import { createSquidConfig } from './create-squid-config.js'
+import { createTenantInfrastructure } from './create-tenant-infrastructure.js'
+import { createTemplatedRepo } from './create-templated-repo.js'
+import { triggerWorkflow } from '../../github/trigger-workflow.js'
 
 export {
   createAppConfig,

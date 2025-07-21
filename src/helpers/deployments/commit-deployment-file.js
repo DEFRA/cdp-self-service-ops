@@ -1,5 +1,5 @@
-import { config } from '~/src/config/index.js'
-import { commitFile } from '~/src/helpers/github/commit-github-file.js'
+import { config } from '../../config/index.js'
+import { commitFile } from '../github/commit-github-file.js'
 
 const deploymentRepo = config.get('github.repos.appDeployments')
 const gitHubOwner = config.get('github.org')

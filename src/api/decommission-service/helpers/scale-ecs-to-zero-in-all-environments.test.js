@@ -1,16 +1,13 @@
 import { vi } from 'vitest'
-import { scaleEcsToZeroInEnvironment } from '~/src/api/decommission-service/helpers/scale-ecs-to-zero-in-environment.js'
-import { scaleEcsToZeroInAllEnvironments } from '~/src/api/decommission-service/helpers/scale-ecs-to-zero-in-all-environments.js'
-import { orderedEnvironments } from '~/src/config/environments.js'
+import { scaleEcsToZeroInEnvironment } from './scale-ecs-to-zero-in-environment.js'
+import { scaleEcsToZeroInAllEnvironments } from './scale-ecs-to-zero-in-all-environments.js'
+import { orderedEnvironments } from '../../../config/environments.js'
 
-vi.mock(
-  '~/src/api/decommission-service/helpers/scale-ecs-to-zero-in-environment.js',
-  () => {
-    return {
-      scaleEcsToZeroInEnvironment: vi.fn()
-    }
+vi.mock('./scale-ecs-to-zero-in-environment.js', () => {
+  return {
+    scaleEcsToZeroInEnvironment: vi.fn()
   }
-)
+})
 const mockLogger = { info: vi.fn() }
 
 const serviceName = 'some-service'

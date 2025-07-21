@@ -1,4 +1,4 @@
-import { addSecretController } from '~/src/api/secrets/controllers/add-secret.js'
+import { addSecretController } from './controllers/add-secret.js'
 
 const secrets = {
   plugin: {

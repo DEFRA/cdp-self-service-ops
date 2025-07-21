@@ -1,9 +1,9 @@
 import isEmpty from 'lodash/isEmpty.js'
 
-import { findRunningDetails } from '~/src/helpers/deployments/find-running-details.js'
-import { commitDeploymentFile } from '~/src/helpers/deployments/commit-deployment-file.js'
-import { transformRunningDetailsToDeployment } from '~/src/helpers/deployments/transform-running-details-to-deployment.js'
-import { scaleDeploymentToZeroInstances } from '~/src/api/decommission-service/helpers/scale-deployment-to-zero-instances.js'
+import { findRunningDetails } from '../../../helpers/deployments/find-running-details.js'
+import { commitDeploymentFile } from '../../../helpers/deployments/commit-deployment-file.js'
+import { transformRunningDetailsToDeployment } from '../../../helpers/deployments/transform-running-details-to-deployment.js'
+import { scaleDeploymentToZeroInstances } from './scale-deployment-to-zero-instances.js'
 
 /**
  * @param {string} serviceName

@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { scaleDeploymentToZeroInstances } from '~/src/api/decommission-service/helpers/scale-deployment-to-zero-instances.js'
+import { scaleDeploymentToZeroInstances } from './scale-deployment-to-zero-instances.js'
 
 const undeploymentId = 'some-undeployment-id'
 

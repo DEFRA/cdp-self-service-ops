@@ -1,6 +1,6 @@
-import { lookupTenantService } from '~/src/helpers/portal-backend/lookup-tenant-service.js'
-import { getExistingDeployment } from '~/src/api/deploy/helpers/get-existing-deployment.js'
-import { config } from '~/src/config/index.js'
+import { lookupTenantService } from '../../../helpers/portal-backend/lookup-tenant-service.js'
+import { getExistingDeployment } from './get-existing-deployment.js'
+import { config } from '../../../config/index.js'
 
 const deploymentRepo = config.get('github.repos.appDeployments')
 const gitHubOwner = config.get('github.org')
