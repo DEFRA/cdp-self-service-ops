@@ -1,5 +1,5 @@
+import { describe, expect, test } from 'vitest'
 import { generateDeployment } from '~/src/helpers/deployments/generate-deployment.js'
-import { getScopedUser } from '~/src/helpers/user/get-scoped-user.js'
 import { ValidationError } from 'joi'
 import { randomUUID } from 'node:crypto'
 
@@ -28,14 +28,7 @@ describe('#generateDeployment', () => {
   })
 
   test('Should fail with invalid user return valid json', () => {
-    const unawaitedUser = getScopedUser('some-service', {
-      credentials: {
-        id: randomUUID(),
-        displayName: 'My Name',
-        scope: ['admin'],
-        scopeFlags: {}
-      }
-    })
+    const unawaitedUser = new Promise(() => ({}))
     expect(() =>
       generateDeployment({
         payload: {

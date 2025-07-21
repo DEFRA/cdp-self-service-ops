@@ -1,32 +1,44 @@
+import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest'
+
 import { config } from '~/src/config/index.js'
 import { createLogger } from '~/src/helpers/logging/logger.js'
 import { fetchTeam } from '~/src/helpers/fetch-team.js'
-import { createTestRunnerSuite } from '~/src/helpers/create/create-test-runner-suite.js'
-import { triggerWorkflow } from '~/src/helpers/github/trigger-workflow.js'
 import { createEntity } from '~/src/helpers/portal-backend/create-entity.js'
 import { entitySubTypes, entityTypes } from '~/src/constants/entities.js'
 import { randomUUID } from 'node:crypto'
 
-jest.mock('~/src/helpers/fetch-team')
+vi.mock('~/src/helpers/oktokit/oktokit.js', () => ({
+  octokit: vi.fn(),
+  graphql: vi.fn()
+}))
 
-jest.mock('~/src/helpers/github/trigger-workflow')
+vi.mock('~/src/helpers/fetch-team')
+vi.mock('~/src/helpers/github/trigger-workflow')
+vi.mock('~/src/helpers/portal-backend/create-entity.js')
 
-jest.mock('~/src/helpers/portal-backend/create-entity.js')
+const triggerWorkflow = vi.fn()
+vi.mock('~/src/helpers/github/trigger-workflow.js', () => ({
+  triggerWorkflow
+}))
 
 const logger = createLogger()
 const service = 'testrepo-12345'
 
 describe('#create-test-runner-suite', () => {
   beforeAll(() => {
-    jest.useFakeTimers({ advanceTimers: true })
-    jest.setSystemTime(new Date('2025-05-10T14:16:00.000Z'))
+    vi.useFakeTimers({ advanceTimers: true })
+    vi.setSystemTime(new Date('2025-05-10T14:16:00.000Z'))
   })
 
   afterAll(() => {
-    jest.useRealTimers()
+    vi.useRealTimers()
   })
 
   test('Should create test suite', async () => {
+    const { createTestRunnerSuite } = await import(
+      '~/src/helpers/create/create-test-runner-suite.js'
+    )
+
     const teamId = randomUUID()
     fetchTeam.mockResolvedValue({
       team: {

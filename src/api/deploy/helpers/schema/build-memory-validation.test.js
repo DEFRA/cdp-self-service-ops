@@ -1,3 +1,4 @@
+import { describe, expect, test } from 'vitest'
 import Joi from 'joi'
 
 import { buildMemoryValidation } from '~/src/api/deploy/helpers/schema/build-memory-validation.js'

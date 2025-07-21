@@ -1,30 +1,22 @@
-import { generateSignature } from '~/src/api/helpers/pre/validate-portal-backend-request.js'
+import { vi, beforeAll, afterAll } from 'vitest'
 import { randomUUID } from 'node:crypto'
-import { runTestSuite } from '~/src/api/deploy-test-suite/helpers/run-test-suite.js'
 import * as Hapi from '@hapi/hapi'
-import { triggerTestSuiteController } from '~/src/api/deploy-test-suite/controllers/trigger-test-suite.js'
+import { config } from '~/src/config/config.js'
 
-jest.mock('src/config/config.js', () => {
-  const actual = jest.requireActual('src/config/config.js')
-  return {
-    ...actual,
-    config: {
-      ...actual.config,
-      get: (key) => {
-        if (key === 'portalBackendSharedSecret') return 'mocked-secret'
-        return actual.config.get(key)
-      }
-    }
-  }
-})
-
-jest.mock('src/api/deploy-test-suite/helpers/run-test-suite.js')
+const mockRunTestSuite = vi.fn()
+vi.mock('~/src/api/deploy-test-suite/helpers/run-test-suite.js', () => ({
+  runTestSuite: mockRunTestSuite
+}))
 
 describe('Test Trigger Test Suite', () => {
   /** @type {import('@hapi/hapi').Server} */
   let server
 
-  beforeAll(() => {
+  beforeAll(async () => {
+    config.set('portalBackendSharedSecret', 'mocked-secret')
+    const { triggerTestSuiteController } = await import(
+      '~/src/api/deploy-test-suite/controllers/trigger-test-suite.js'
+    )
     server = Hapi.server()
     server.route([
       {
@@ -109,6 +101,10 @@ describe('Test Trigger Test Suite', () => {
   })
 
   test('call to trigger-test-suite passes with a valid signature', async () => {
+    const { generateSignature } = await import(
+      '~/src/api/helpers/pre/validate-portal-backend-request.js'
+    )
+
     const timestamp = Math.floor(Date.now() / 1000).toString()
 
     const validSignature = generateSignature(
@@ -119,7 +115,7 @@ describe('Test Trigger Test Suite', () => {
       'mocked-secret'
     )
 
-    runTestSuite.mockResolvedValue('mocked-run-id')
+    mockRunTestSuite.mockResolvedValue('mocked-run-id')
 
     const { statusCode } = await server.inject({
       method,

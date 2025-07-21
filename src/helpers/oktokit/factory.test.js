@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, test, vi } from 'vitest'
 import { createAppAuth } from '@octokit/auth-app'
 import { octokitFactory } from '~/src/helpers/oktokit/factory.js'
 import { proxyFetch } from '~/src/helpers/proxy/proxy-fetch.js'
@@ -13,8 +14,8 @@ const buildConfig = (baseUrl) => ({
 })
 
 describe('#octokitFactory', () => {
-  const mockGraphqlDefaults = jest.fn()
-  const mockOctokitExtra = jest.fn().mockReturnValue({
+  const mockGraphqlDefaults = vi.fn()
+  const mockOctokitExtra = vi.fn().mockReturnValue({
     graphql: { defaults: mockGraphqlDefaults },
     auth: { hook: 'mockAuthHook' }
   })

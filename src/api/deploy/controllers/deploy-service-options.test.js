@@ -1,3 +1,4 @@
+import { describe, expect, test, vi } from 'vitest'
 import { deployServiceOptionsController } from '~/src/api/deploy/controllers/deploy-service-options.js'
 import { ecsCpuToMemoryOptionsMap } from '~/src/api/deploy/helpers/ecs-cpu-to-memory-options-map.js'
 
@@ -5,8 +6,8 @@ describe('#deployServiceOptionsController', () => {
   test('Should return success message and CPU options', () => {
     const request = {}
     const h = {
-      response: jest.fn().mockReturnThis(),
-      code: jest.fn()
+      response: vi.fn().mockReturnThis(),
+      code: vi.fn()
     }
 
     deployServiceOptionsController.handler(request, h)
@@ -28,8 +29,8 @@ describe('#deployServiceOptionsController', () => {
   test('Should return correct CPU options', () => {
     const request = {}
     const h = {
-      response: jest.fn().mockReturnThis(),
-      code: jest.fn()
+      response: vi.fn().mockReturnThis(),
+      code: vi.fn()
     }
 
     deployServiceOptionsController.handler(request, h)
@@ -47,8 +48,8 @@ describe('#deployServiceOptionsController', () => {
   test('Should return correct ecsCpuToMemoryOptionsMap', () => {
     const request = {}
     const h = {
-      response: jest.fn().mockReturnThis(),
-      code: jest.fn()
+      response: vi.fn().mockReturnThis(),
+      code: vi.fn()
     }
 
     deployServiceOptionsController.handler(request, h)

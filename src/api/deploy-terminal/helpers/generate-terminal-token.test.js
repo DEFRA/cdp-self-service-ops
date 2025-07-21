@@ -1,3 +1,4 @@
+import { describe, expect, test } from 'vitest'
 import { generateTerminalToken } from '~/src/api/deploy-terminal/helpers/generate-terminal-token.js'
 
 describe('#generate-terminal-token', () => {

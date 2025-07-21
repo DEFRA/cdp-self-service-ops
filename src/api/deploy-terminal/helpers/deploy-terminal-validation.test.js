@@ -1,3 +1,4 @@
+import { describe, expect, test } from 'vitest'
 import { deployTerminalValidation } from '~/src/api/deploy-terminal/helpers/deploy-terminal-validation.js'
 
 describe('#deployTerminalValidation', () => {

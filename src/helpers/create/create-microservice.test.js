@@ -6,30 +6,31 @@ import { microserviceTemplates } from '~/src/api/create-microservice/helpers/mic
 import { createEntity } from '~/src/helpers/portal-backend/create-entity.js'
 import { entitySubTypes, entityTypes } from '~/src/constants/entities.js'
 import { randomUUID } from 'node:crypto'
+import { vi } from 'vitest'
 
-jest.mock('~/src/helpers/fetch-team', () => ({
-  fetchTeam: jest.fn()
+vi.mock('~/src/helpers/fetch-team', () => ({
+  fetchTeam: vi.fn()
 }))
 
-jest.mock('~/src/helpers/github/trigger-workflow', () => ({
-  triggerWorkflow: jest.fn()
+vi.mock('~/src/helpers/github/trigger-workflow', () => ({
+  triggerWorkflow: vi.fn()
 }))
 
-jest.mock('~/src/helpers/portal-backend/create-entity.js', () => ({
-  createEntity: jest.fn()
+vi.mock('~/src/helpers/portal-backend/create-entity.js', () => ({
+  createEntity: vi.fn()
 }))
 
-const logger = { info: jest.fn(), error: jest.fn(), warn: jest.fn() }
+const logger = { info: vi.fn(), error: vi.fn(), warn: vi.fn() }
 const repositoryName = `test-service-${new Date().toISOString().replace(/\D/g, '')}`
 
 describe('#create-test-runner-suite', () => {
   beforeAll(() => {
-    jest.useFakeTimers({ advanceTimers: true })
-    jest.setSystemTime(new Date('2025-05-10T14:16:00.000Z'))
+    vi.useFakeTimers({ advanceTimers: true })
+    vi.setSystemTime(new Date('2025-05-10T14:16:00.000Z'))
   })
 
   afterAll(() => {
-    jest.useRealTimers()
+    vi.useRealTimers()
   })
 
   test('Should create microservice', async () => {

@@ -1,15 +1,18 @@
+import { describe, expect, test, vi } from 'vitest'
 import { triggerWorkflow } from '~/src/helpers/github/trigger-workflow.js'
 import { removeDeployment } from '~/src/helpers/remove/workflows/remove-deployment.js'
 
-jest.mock('~/src/helpers/github/trigger-workflow')
+vi.mock('~/src/helpers/github/trigger-workflow.js', () => ({
+  triggerWorkflow: vi.fn()
+}))
 
-const logger = { info: jest.fn(), warn: jest.fn() }
+const logger = { info: vi.fn(), warn: vi.fn() }
 
 describe('#removeDeployment', () => {
   test('should receive space separated list of all environments', async () => {
     const serviceName = 'my-service-name'
 
-    triggerWorkflow.mockReturnValue({})
+    triggerWorkflow.mockResolvedValueOnce({})
 
     await removeDeployment(serviceName, logger)
 
