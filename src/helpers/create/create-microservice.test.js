@@ -2,7 +2,7 @@ import { config } from '~/src/config/index.js'
 import { fetchTeam } from '~/src/helpers/fetch-team.js'
 import { createMicroservice } from '~/src/helpers/create/create-microservice.js'
 import { triggerWorkflow } from '~/src/helpers/github/trigger-workflow.js'
-import { serviceTemplates } from '~/src/api/create-microservice/helpers/service-templates.js'
+import { microserviceTemplates } from '~/src/api/create-microservice/helpers/microservice-templates.js'
 import { createEntity } from '~/src/helpers/portal-backend/create-entity.js'
 import { entitySubTypes, entityTypes } from '~/src/constants/entities.js'
 import { randomUUID } from 'node:crypto'
@@ -44,14 +44,17 @@ describe('#create-test-runner-suite', () => {
     })
 
     const userId = randomUUID()
-    await createMicroservice(
+    await createMicroservice({
       logger,
       repositoryName,
-      serviceTemplates['cdp-node-frontend-template'],
-      'main',
+      template: microserviceTemplates['cdp-node-frontend-template'],
+      templateTag: 'main',
       teamId,
-      { id: userId, displayName: 'test user' }
-    )
+      user: {
+        id: userId,
+        displayName: 'test user'
+      }
+    })
     expect(triggerWorkflow).toHaveBeenCalledTimes(6)
 
     expect(createEntity).toHaveBeenCalledWith({

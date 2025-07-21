@@ -16,7 +16,7 @@ describe('#createServiceValidationSchema', () => {
       templateTag,
       teamId
     })
-    expect(validate.error.message).toBe('Start and end with a character')
+    expect(validate.error.message).toBe('Start and end with a letter or number')
   })
 
   test('Should prevent creation of service name ending with a non-alphanumeric character', () => {
@@ -34,7 +34,7 @@ describe('#createServiceValidationSchema', () => {
       templateTag,
       teamId
     })
-    expect(validate.error.message).toBe('Start and end with a character')
+    expect(validate.error.message).toBe('Start and end with a letter or number')
   })
 
   test('Should prevent creation of service name containing non-alphanumeric or hyphen characters', () => {

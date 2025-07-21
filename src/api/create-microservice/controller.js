@@ -4,8 +4,8 @@ import { createServiceValidationSchema } from '~/src/api/create-microservice/hel
 import { createMicroservice } from '~/src/helpers/create/create-microservice.js'
 import {
   getServiceTemplates,
-  serviceTemplates
-} from '~/src/api/create-microservice/helpers/service-templates.js'
+  microserviceTemplates
+} from '~/src/api/create-microservice/helpers/microservice-templates.js'
 
 const createMicroserviceController = {
   options: {
@@ -31,20 +31,20 @@ const createMicroserviceController = {
     const teamId = payload.teamId
     const templateTag = payload.templateTag
 
-    const template = serviceTemplates[serviceTypeTemplate]
+    const template = microserviceTemplates[serviceTypeTemplate]
     if (!template) {
       throw Boom.badData(`Invalid service template: '${serviceTypeTemplate}'`)
     }
     const user = request.auth?.credentials
 
-    await createMicroservice(
-      request.logger,
+    await createMicroservice({
+      logger: request.logger,
       repositoryName,
       template,
       templateTag,
       teamId,
       user
-    )
+    })
 
     return h
       .response({
