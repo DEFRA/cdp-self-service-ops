@@ -6,6 +6,7 @@ import { sendSnsMessage } from '../../../helpers/sns/send-sns-message.js'
 import { canRunTerminalInEnvironment } from '../helpers/can-run-terminal-in-environment.js'
 import { generateTerminalToken } from '../helpers/generate-terminal-token.js'
 import { lookupTenantService } from '../../../helpers/portal-backend/lookup-tenant-service.js'
+import { recordTerminalSession } from '../helpers/record-terminal-session.js'
 
 const deployTerminalController = {
   options: {
@@ -73,6 +74,21 @@ const deployTerminalController = {
       runMessage,
       logger
     )
+
+    try {
+      await recordTerminalSession({
+        service: payload.service,
+        environment: payload.environment,
+        user,
+        token
+      })
+    } catch (e) {
+      logger.error(
+        e,
+        `Failed to record terminal session request for ${payload.environment}/${payload.service} by ${user.displayName}`,
+        e
+      )
+    }
 
     logger.info(
       `SNS Deploy Terminal response: ${JSON.stringify(snsResponse, null, 2)}`
