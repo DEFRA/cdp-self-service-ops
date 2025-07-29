@@ -43,7 +43,7 @@ describe('#recordTestRun', () => {
     }
     await recordTerminalSession(payload)
 
-    expect(fetcher).toHaveBeenCalledWith('http://localhost:5094/terminal', {
+    expect(fetcher).toHaveBeenCalledWith('http://localhost:5094/terminals', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)

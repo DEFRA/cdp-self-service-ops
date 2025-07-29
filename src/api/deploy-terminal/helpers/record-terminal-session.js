@@ -39,7 +39,7 @@ async function recordTerminalSession(session) {
 
   Joi.assert(session, recordTerminalSessionValidation)
 
-  const url = `${config.get('portalBackendUrl')}/terminal`
+  const url = `${config.get('portalBackendUrl')}/terminals`
 
   logger.info(
     `Recording terminal session for ${session.environment}/${session.service} by ${session.user.displayName}`
