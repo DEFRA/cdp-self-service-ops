@@ -80,7 +80,7 @@ GITHUB_BASE_URL=http://localhost:3939
 SQS_GITHUB_QUEUE=http://localhost:4566/000000000000/github-events
 USER_SERVICE_BACKEND_URL=http:/localhost:3001
 PORTAL_BACKEND_URL=http://localhost:5094
-OIDC_WELL_KNOWN_CONFIGURATION_URL=http://cdp.127.0.0.1.sslip.io:3939/63983fc2-cfff-45bb-8ec2-959e21062b9a/v2.0/.well-known/openid-configuration
+OIDC_WELL_KNOWN_CONFIGURATION_URL=http://cdp.127.0.0.1.sslip.io:3939/6f504113-6b64-43f2-ade9-242e05780007/v2.0/.well-known/openid-configuration
 ```
 
 #### Updating dependencies

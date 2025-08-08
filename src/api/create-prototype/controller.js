@@ -1,5 +1,6 @@
 import Boom from '@hapi/boom'
 import { prototypeValidation } from './schema/prototype-validation.js'
+import { entityTypes } from '../../constants/entities.js'
 import { createMicroservice } from '../../helpers/create/create-microservice.js'
 
 const createPrototypeController = {
@@ -30,7 +31,7 @@ const createPrototypeController = {
       language: 'node',
       type: 'prototype',
       id: 'cdp-node-prototype-template',
-      entityType: 'Prototype',
+      entityType: entityTypes.prototype,
       entitySubType: undefined
     }
 
