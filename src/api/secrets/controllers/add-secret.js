@@ -9,6 +9,7 @@ import {
 import { sanitize } from '../../../helpers/sanitize.js'
 import { registerPendingSecret } from '../helpers/register-pending-secret.js'
 import { canAddSecretInEnv } from '../helpers/can-add-secret.js'
+import { statusCodes } from '../../../constants/status-codes.js'
 
 const addSecretController = {
   options: {
@@ -67,7 +68,9 @@ const addSecretController = {
 
       request.logger.debug(description)
 
-      return h.response({ message: 'Secret being created' }).code(200)
+      return h
+        .response({ message: 'Secret being created' })
+        .code(statusCodes.ok)
     } catch (error) {
       request.logger.error(error, 'Error creating secret')
 

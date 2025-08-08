@@ -6,6 +6,7 @@ import {
   getServiceTemplates,
   microserviceTemplates
 } from './helpers/microservice-templates.js'
+import { statusCodes } from '../../constants/status-codes.js'
 
 const createMicroserviceController = {
   options: {
@@ -52,7 +53,7 @@ const createMicroserviceController = {
         repositoryName,
         statusUrl: `/status/${repositoryName}`
       })
-      .code(200)
+      .code(statusCodes.ok)
   }
 }
 

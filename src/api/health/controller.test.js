@@ -1,5 +1,6 @@
 import { describe, expect, test, vi } from 'vitest'
 import { healthController } from './controller.js'
+import { statusCodes } from '../../constants/status-codes.js'
 
 describe('#healthController', () => {
   const mockViewHandler = {
@@ -13,6 +14,6 @@ describe('#healthController', () => {
     expect(mockViewHandler.response).toHaveBeenCalledWith({
       message: 'success'
     })
-    expect(mockViewHandler.code).toHaveBeenCalledWith(200)
+    expect(mockViewHandler.code).toHaveBeenCalledWith(statusCodes.ok)
   })
 })

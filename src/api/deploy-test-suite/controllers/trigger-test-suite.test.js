@@ -2,6 +2,7 @@ import { vi, beforeAll, afterAll } from 'vitest'
 import { randomUUID } from 'node:crypto'
 import * as Hapi from '@hapi/hapi'
 import { config } from '../../../config/config.js'
+import { statusCodes } from '../../../constants/status-codes.js'
 
 const mockRunTestSuite = vi.fn()
 vi.mock('../helpers/run-test-suite.js', () => ({
@@ -129,6 +130,6 @@ describe('Test Trigger Test Suite', () => {
       }
     })
 
-    expect(statusCode).toBe(200)
+    expect(statusCode).toBe(statusCodes.ok)
   })
 })

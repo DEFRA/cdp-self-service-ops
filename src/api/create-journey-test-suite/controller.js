@@ -4,6 +4,7 @@ import { config } from '../../config/index.js'
 import { createTestRunnerSuite } from '../../helpers/create/create-test-runner-suite.js'
 import { testSuiteValidation } from '../helpers/schema/test-suite-validation.js'
 import { entitySubTypes, entityTypes } from '../../constants/entities.js'
+import { statusCodes } from '../../constants/status-codes.js'
 
 const createJourneyTestSuiteController = {
   options: {
@@ -41,7 +42,7 @@ const createJourneyTestSuiteController = {
         repositoryName,
         statusUrl: `/status/${repositoryName}`
       })
-      .code(200)
+      .code(statusCodes.ok)
   }
 }
 

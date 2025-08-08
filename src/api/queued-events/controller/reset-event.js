@@ -1,5 +1,6 @@
 import { config } from '../../../config/index.js'
 import { resetEvent } from '../../../helpers/queued-events/queued-events.js'
+import { statusCodes } from '../../../constants/status-codes.js'
 
 const resetEventController = {
   handler: async (request, h) => {
@@ -9,7 +10,7 @@ const resetEventController = {
     const events = await resetEvent(request.db, repositoryName, eventType)
     await request.server.events.emit(config.get('serviceInfraCreateEvent'))
 
-    return h.response(events).code(200)
+    return h.response(events).code(statusCodes.ok)
   }
 }
 

@@ -5,6 +5,7 @@ import { repositoryValidation } from './helpers/schema/repository-validation.js'
 import { fetchTeam } from '../../helpers/fetch-team.js'
 import { createInitialEntity } from '../../helpers/create/create-initial-entity.js'
 import { createTemplatedRepo } from '../../helpers/create/workflows/create-templated-repo.js'
+import { statusCodes } from '../../constants/status-codes.js'
 
 const createRepositoryController = {
   options: {
@@ -54,7 +55,7 @@ const createRepositoryController = {
         repositoryName,
         statusUrl: `/status/${repositoryName}`
       })
-      .code(200)
+      .code(statusCodes.ok)
   }
 }
 

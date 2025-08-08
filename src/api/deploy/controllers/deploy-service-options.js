@@ -1,4 +1,5 @@
 import { ecsCpuToMemoryOptionsMap } from '../helpers/ecs-cpu-to-memory-options-map.js'
+import { statusCodes } from '../../../constants/status-codes.js'
 
 const deployServiceOptionsController = {
   handler: (request, h) => {
@@ -14,7 +15,7 @@ const deployServiceOptionsController = {
         ],
         ecsCpuToMemoryOptionsMap
       })
-      .code(200)
+      .code(statusCodes.ok)
   }
 }
 

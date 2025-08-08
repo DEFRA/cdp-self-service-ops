@@ -7,6 +7,7 @@ import { canRunTerminalInEnvironment } from '../helpers/can-run-terminal-in-envi
 import { generateTerminalToken } from '../helpers/generate-terminal-token.js'
 import { lookupTenantService } from '../../../helpers/portal-backend/lookup-tenant-service.js'
 import { recordTerminalSession } from '../helpers/record-terminal-session.js'
+import { statusCodes } from '../../../constants/status-codes.js'
 
 const deployTerminalController = {
   options: {
@@ -101,7 +102,7 @@ const deployTerminalController = {
       service: payload.service
     }
 
-    return h.response(responsePayload).code(200)
+    return h.response(responsePayload).code(statusCodes.ok)
   }
 }
 

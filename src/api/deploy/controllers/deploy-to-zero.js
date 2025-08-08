@@ -1,6 +1,7 @@
 import { undeployServiceValidation } from '../helpers/schema/undeploy-service-validation.js'
 import { getScopedUser } from '../../../helpers/user/get-scoped-user.js'
 import { deployToZero } from '../helpers/deploy-to-zero.js'
+import { statusCodes } from '../../../constants/status-codes.js'
 
 const deployToZeroController = {
   options: {
@@ -21,7 +22,7 @@ const deployToZeroController = {
       environment,
       user
     )
-    return h.response({ message: 'success', deploymentId }).code(200)
+    return h.response({ message: 'success', deploymentId }).code(statusCodes.ok)
   }
 }
 

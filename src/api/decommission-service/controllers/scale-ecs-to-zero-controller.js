@@ -5,6 +5,7 @@ import {
   repositoryNameValidation,
   userWithIdValidation
 } from '@defra/cdp-validation-kit/src/validations.js'
+import { statusCodes } from '../../../constants/status-codes.js'
 
 const scaleEcsToZeroController = {
   options: {
@@ -21,7 +22,7 @@ const scaleEcsToZeroController = {
     const user = await request.payload
 
     await scaleEcsToZeroInAllEnvironments(serviceName, user, request.logger)
-    return h.response({ message: 'success' }).code(200)
+    return h.response({ message: 'success' }).code(statusCodes.ok)
   }
 }
 
