@@ -193,8 +193,9 @@ const config = convict({
   platformGlobalSecretKeys: {
     doc: 'Global Platform level secret keys. These keys are not to be overridden',
     format: Array,
-    default:
-      'SQUID_USERNAME,SQUID_PASSWORD,REDIS_USERNAME,REDIS_PASSWORD,REDIS_KEY_PREFIX,CDP_HTTP_PROXY,CDP_HTTPS_PROXY,HTTP_PROXY,HTTPS_PROXY',
+    default: [
+      'SQUID_USERNAME,SQUID_PASSWORD,REDIS_USERNAME,REDIS_PASSWORD,REDIS_KEY_PREFIX,CDP_HTTP_PROXY,CDP_HTTPS_PROXY,HTTP_PROXY,HTTPS_PROXY'
+    ],
     env: 'PLATFORM_GLOBAL_SECRET_KEYS'
   },
   sqsGitHubEvents: {

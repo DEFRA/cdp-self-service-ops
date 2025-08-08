@@ -12,15 +12,6 @@ import {
   createTenantInfrastructure
 } from './workflows/index.js'
 
-/**
- * @param {import("pino").Logger} logger
- * @param {string} repositoryName
- * @param {{zone: "public"|"protected", mongo: boolean, redis: boolean, id: string, language: string|null, type: string, entityType: string, entitySubType: string}} template
- * @param {string} templateTag
- * @param {string} teamId
- * @param {{id: string, displayName: string}} user
- * @returns {Promise<void>}
- */
 async function createMicroservice({
   logger,
   repositoryName,
