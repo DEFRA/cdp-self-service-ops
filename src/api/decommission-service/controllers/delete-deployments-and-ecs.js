@@ -3,6 +3,7 @@ import { repositoryNameValidation } from '@defra/cdp-validation-kit/src/validati
 import { validatePortalBackendRequest } from '../../helpers/pre/validate-portal-backend-request.js'
 import { removeEcsService } from '../../../helpers/remove/workflows/remove-ecs-service.js'
 import { removeDeployment } from '../../../helpers/remove/workflows/remove-deployment.js'
+import { statusCodes } from '../../../constants/status-codes.js'
 
 const deleteDeploymentsAndEcsController = {
   options: {
@@ -25,7 +26,7 @@ const deleteDeploymentsAndEcsController = {
       .response({
         message: `${serviceName} has been decommissioned`
       })
-      .code(200)
+      .code(statusCodes.ok)
   }
 }
 

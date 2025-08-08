@@ -1,6 +1,7 @@
 import { triggerTestSuiteValidation } from '../helpers/trigger-test-suite-validation.js'
 import { runTestSuite } from '../helpers/run-test-suite.js'
 import { validatePortalBackendRequest } from '../../helpers/pre/validate-portal-backend-request.js'
+import { statusCodes } from '../../../constants/status-codes.js'
 
 const triggerTestSuiteController = {
   options: {
@@ -32,10 +33,12 @@ const triggerTestSuiteController = {
     })
 
     if (!runId) {
-      return h.response({ message: 'Failed to send SNS message' }).code(500)
+      return h
+        .response({ message: 'Failed to send SNS message' })
+        .code(statusCodes.internalError)
     }
 
-    return h.response({ message: 'success', runId }).code(200)
+    return h.response({ message: 'success', runId }).code(statusCodes.ok)
   }
 }
 

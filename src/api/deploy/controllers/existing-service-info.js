@@ -1,4 +1,5 @@
 import { getServiceInfo } from '../helpers/get-service-info.js'
+import { statusCodes } from '../../../constants/status-codes.js'
 
 const existingServiceInfoController = {
   handler: async (request, h) => {
@@ -12,7 +13,7 @@ const existingServiceInfoController = {
     )
 
     const message = deployment ? 'success' : 'service not found'
-    const responseCode = deployment ? 200 : 404
+    const responseCode = deployment ? statusCodes : statusCodes.notFound
     return h
       .response({
         message,

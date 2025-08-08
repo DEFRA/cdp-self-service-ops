@@ -3,6 +3,7 @@ import { triggerRemoveWorkflows } from '../helpers/trigger-remove-workflows.js'
 import { getEntity } from '../../../helpers/portal-backend/get-entity.js'
 import { repositoryNameValidation } from '@defra/cdp-validation-kit/src/validations.js'
 import { validatePortalBackendRequest } from '../../helpers/pre/validate-portal-backend-request.js'
+import { statusCodes } from '../../../constants/status-codes.js'
 
 const decommissionTriggerWorkflowsController = {
   options: {
@@ -25,7 +26,7 @@ const decommissionTriggerWorkflowsController = {
       .response({
         message: `Decommission workflows have been triggered for: ${serviceName}`
       })
-      .code(200)
+      .code(statusCodes.ok)
   }
 }
 

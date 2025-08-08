@@ -1,6 +1,7 @@
 import { deployMigrationRequestValidation } from '../helpers/deploy-migration-request-validation.js'
 import { getScopedUser } from '../../../helpers/user/get-scoped-user.js'
 import { runDatabaseMigration } from '../helpers/run-database-migration.js'
+import { statusCodes } from '../../../constants/status-codes.js'
 
 export const deployDatabaseMigration = {
   options: {
@@ -33,9 +34,11 @@ export const deployDatabaseMigration = {
     })
 
     if (!migrationId) {
-      return h.response({ message: 'Failed to send SNS message' }).code(500)
+      return h
+        .response({ message: 'Failed to send SNS message' })
+        .code(statusCodes.internalError)
     }
 
-    return h.response({ message: 'success', migrationId }).code(200)
+    return h.response({ message: 'success', migrationId }).code(statusCodes.ok)
   }
 }

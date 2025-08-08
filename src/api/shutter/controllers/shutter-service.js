@@ -8,6 +8,7 @@ import {
   repositoryNameValidation
 } from '@defra/cdp-validation-kit/src/validations.js'
 import { getScopedUser } from '../../../helpers/user/get-scoped-user.js'
+import { statusCodes } from '../../../constants/status-codes.js'
 
 const shutterServiceController = {
   options: {
@@ -34,7 +35,7 @@ const shutterServiceController = {
 
     await shutterServiceWorkflow(request.logger, payload, user)
 
-    return h.response().code(200)
+    return h.response().code(statusCodes.ok)
   }
 }
 

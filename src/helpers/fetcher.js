@@ -1,6 +1,7 @@
 import { config } from '../config/index.js'
 import { getTraceId } from '@defra/hapi-tracing'
 import Boom from '@hapi/boom'
+import { statusCodes } from '../constants/status-codes.js'
 
 /**
  * @param {string} url
@@ -22,15 +23,15 @@ export async function fetcher(url, options = {}) {
   })
   if (response.status >= 300) {
     switch (response.status) {
-      case 400:
+      case statusCodes.badRequest:
         throw Boom.badRequest('Bad input')
-      case 401:
+      case statusCodes.unauthorized:
         throw Boom.unauthorized('Missing or invalid token')
-      case 404:
+      case statusCodes.notFound:
         throw Boom.notFound('Resource not found')
-      case 409:
+      case statusCodes.conflict:
         throw Boom.conflict('Duplicate resource')
-      case 500:
+      case statusCodes.internalError:
         throw Boom.internal('Something went wrong')
       default:
         throw Boom.boomify(new Error('Unknown error'), {

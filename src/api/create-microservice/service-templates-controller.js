@@ -1,4 +1,5 @@
 import { getServiceTemplates } from './helpers/microservice-templates.js'
+import { statusCodes } from '../../constants/status-codes.js'
 
 const serviceTemplatesController = {
   options: {
@@ -12,7 +13,7 @@ const serviceTemplatesController = {
         message: 'success',
         serviceTemplates: getServiceTemplates(request.auth.credentials?.scope)
       })
-      .code(200)
+      .code(statusCodes.ok)
   }
 }
 

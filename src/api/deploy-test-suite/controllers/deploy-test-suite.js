@@ -4,6 +4,7 @@ import { deployTestSuiteValidation } from '../helpers/deploy-test-suite-validati
 import { isOwnerOfSuite } from '../helpers/is-owner-of-suite.js'
 import { canRunInEnvironment } from '../helpers/can-run-in-environment.js'
 import { runTestSuite } from '../helpers/run-test-suite.js'
+import { statusCodes } from '../../../constants/status-codes.js'
 
 const deployTestSuiteController = {
   options: {
@@ -56,10 +57,12 @@ const deployTestSuiteController = {
     })
 
     if (!runId) {
-      return h.response({ message: 'Failed to send SNS message' }).code(500)
+      return h
+        .response({ message: 'Failed to send SNS message' })
+        .code(statusCodes.internalError)
     }
 
-    return h.response({ message: 'success', runId }).code(200)
+    return h.response({ message: 'success', runId }).code(statusCodes.ok)
   }
 }
 

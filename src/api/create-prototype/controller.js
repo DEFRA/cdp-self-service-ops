@@ -2,6 +2,7 @@ import Boom from '@hapi/boom'
 import { prototypeValidation } from './schema/prototype-validation.js'
 import { entityTypes } from '../../constants/entities.js'
 import { createMicroservice } from '../../helpers/create/create-microservice.js'
+import { statusCodes } from '../../constants/status-codes.js'
 
 const createPrototypeController = {
   options: {
@@ -50,7 +51,7 @@ const createPrototypeController = {
         repositoryName,
         statusUrl: `/status/${repositoryName}`
       })
-      .code(200)
+      .code(statusCodes.ok)
   }
 }
 

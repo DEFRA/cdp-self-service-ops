@@ -4,6 +4,7 @@ import { generateDeployment } from '../../../helpers/deployments/generate-deploy
 import { commitDeploymentFile } from '../../../helpers/deployments/commit-deployment-file.js'
 import { lookupTenantService } from '../../../helpers/portal-backend/lookup-tenant-service.js'
 import { getScopedUser } from '../../../helpers/user/get-scoped-user.js'
+import { statusCodes } from '../../../constants/status-codes.js'
 
 async function deployService(payload, logger, h, user) {
   const imageName = payload.imageName
@@ -34,7 +35,7 @@ async function deployService(payload, logger, h, user) {
   if (!service) {
     const message =
       'Error encountered whilst attempting to find deployment zone information'
-    return h.response({ message }).code(500)
+    return h.response({ message }).code(statusCodes.internalError)
   }
 
   logger.info(
@@ -54,7 +55,7 @@ async function deployService(payload, logger, h, user) {
   await commitDeploymentFile(deployment, logger)
 
   logger.info('Deployment commit file created')
-  return h.response({ message: 'success', deploymentId }).code(200)
+  return h.response({ message: 'success', deploymentId }).code(statusCodes.ok)
 }
 
 const deployServiceController = {

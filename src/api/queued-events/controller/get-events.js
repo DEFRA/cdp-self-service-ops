@@ -1,4 +1,5 @@
 import { findAll } from '../../../helpers/queued-events/queued-events.js'
+import { statusCodes } from '../../../constants/status-codes.js'
 
 const getEventsController = {
   handler: async (request, h) => {
@@ -14,7 +15,7 @@ const getEventsController = {
     }
     const events = await findAll(request.db, predicate)
 
-    return h.response(events).code(200)
+    return h.response(events).code(statusCodes.ok)
   }
 }
 

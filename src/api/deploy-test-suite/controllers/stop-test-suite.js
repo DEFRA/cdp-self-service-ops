@@ -6,6 +6,7 @@ import { fetchTestRun } from '../helpers/fetch-test-run.js'
 import { isOwnerOfSuite } from '../helpers/is-owner-of-suite.js'
 import { sendSnsMessage } from '../../../helpers/sns/send-sns-message.js'
 import { runIdValidation } from '@defra/cdp-validation-kit/src/validations.js'
+import { statusCodes } from '../../../constants/status-codes.js'
 
 const stopTestSuiteController = {
   options: {
@@ -63,7 +64,7 @@ const stopTestSuiteController = {
       `SNS Stop Test response: ${JSON.stringify(snsResponse, null, 2)}`
     )
 
-    return h.response({ message: 'success' }).code(200)
+    return h.response({ message: 'success' }).code(statusCodes.ok)
   }
 }
 
