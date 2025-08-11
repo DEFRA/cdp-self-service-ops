@@ -1,4 +1,5 @@
 import Boom from '@hapi/boom'
+import { differenceInSeconds, addHours } from 'date-fns'
 
 import { config } from '../../../config/index.js'
 import { deployTerminalValidation } from '../helpers/deploy-terminal-validation.js'
@@ -55,6 +56,11 @@ const deployTerminalController = {
 
     const token = generateTerminalToken(64)
 
+    // Default terminal expires after 2 hours
+    const now = new Date()
+    const expiresAt = addHours(now, 2)
+    const timeout = differenceInSeconds(now, expiresAt)
+
     const runMessage = {
       environment: payload.environment,
       deployed_by: user,
@@ -62,7 +68,8 @@ const deployTerminalController = {
       token,
       role: payload.service,
       service: payload.service,
-      postgres: tenantService?.postgres === true
+      postgres: tenantService?.postgres === true,
+      timeout
     }
 
     logger.info(
