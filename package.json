@@ -45,6 +45,7 @@
     "@octokit/plugin-rest-endpoint-methods": "13.3.0",
     "aws4": "1.13.2",
     "convict": "6.2.4",
+    "date-fns": "4.1.0",
     "global-agent": "3.0.0",
     "hapi-pino": "12.1.0",
     "hapi-pulse": "3.0.1",
