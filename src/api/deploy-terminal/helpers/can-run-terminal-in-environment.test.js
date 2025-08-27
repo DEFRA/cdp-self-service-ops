@@ -1,10 +1,11 @@
 import { describe, expect, test } from 'vitest'
 import { environments } from '../../../config/index.js'
 import { canRunTerminalInEnvironment } from './can-run-terminal-in-environment.js'
+import { scopes } from '@defra/cdp-validation-kit/src/constants/scopes.js'
 
 describe('#canRunTerminalInEnvironment', () => {
   test('admins can run in all environments except prod', () => {
-    const scope = ['admin', 'otherGroup']
+    const scope = [scopes.admin, 'otherGroup']
     Object.values(environments).forEach((env) => {
       expect(canRunTerminalInEnvironment(env, scope)).toBe(
         env !== environments.prod

@@ -6,7 +6,7 @@ import { fetchTestRun } from '../helpers/fetch-test-run.js'
 import { isOwnerOfSuite } from '../helpers/is-owner-of-suite.js'
 import { sendSnsMessage } from '../../../helpers/sns/send-sns-message.js'
 import { runIdValidation } from '@defra/cdp-validation-kit/src/validations.js'
-import { statusCodes } from '../../../constants/status-codes.js'
+import { statusCodes } from '@defra/cdp-validation-kit/src/constants/status-codes.js'
 
 const stopTestSuiteController = {
   options: {

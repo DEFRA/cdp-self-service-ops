@@ -8,7 +8,7 @@ import { canRunTerminalInEnvironment } from '../helpers/can-run-terminal-in-envi
 import { generateTerminalToken } from '../helpers/generate-terminal-token.js'
 import { lookupTenantService } from '../../../helpers/portal-backend/lookup-tenant-service.js'
 import { recordTerminalSession } from '../helpers/record-terminal-session.js'
-import { statusCodes } from '../../../constants/status-codes.js'
+import { statusCodes } from '@defra/cdp-validation-kit/src/constants/status-codes.js'
 
 const deployTerminalController = {
   options: {

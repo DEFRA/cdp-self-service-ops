@@ -4,7 +4,7 @@ import { deployTestSuiteValidation } from '../helpers/deploy-test-suite-validati
 import { isOwnerOfSuite } from '../helpers/is-owner-of-suite.js'
 import { canRunInEnvironment } from '../helpers/can-run-in-environment.js'
 import { runTestSuite } from '../helpers/run-test-suite.js'
-import { statusCodes } from '../../../constants/status-codes.js'
+import { statusCodes } from '@defra/cdp-validation-kit/src/constants/status-codes.js'
 
 const deployTestSuiteController = {
   options: {

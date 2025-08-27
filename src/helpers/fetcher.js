@@ -1,7 +1,7 @@
 import { config } from '../config/index.js'
 import { getTraceId } from '@defra/hapi-tracing'
 import Boom from '@hapi/boom'
-import { statusCodes } from '../constants/status-codes.js'
+import { statusCodes } from '@defra/cdp-validation-kit/src/constants/status-codes.js'
 
 /**
  * @param {string} url

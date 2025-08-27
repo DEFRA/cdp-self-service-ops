@@ -1,14 +1,11 @@
-/**
- * @type {{admin: string, tenant: string, serviceOwner: string, externalTest: string, breakGlass: string, restrictedTechPython: string, restrictedTechPostgres: string }}
- */
 const scopes = {
-  admin: 'admin',
-  tenant: 'tenant',
-  serviceOwner: 'serviceOwner',
-  externalTest: 'externalTest',
-  breakGlass: 'breakGlass',
-  restrictedTechPython: 'restrictedTechPython',
-  restrictedTechPostgres: 'restrictedTechPostgres'
+  admin: 'permission:admin',
+  tenant: 'permission:tenant',
+  serviceOwner: 'permission:serviceOwner',
+  externalTest: 'permission:externalTest',
+  breakGlass: 'permission:breakGlass',
+  restrictedTechPython: 'permission:restrictedTechPython',
+  restrictedTechPostgres: 'permission:restrictedTechPostgres'
 }
 
 export { scopes }

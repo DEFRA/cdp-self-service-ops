@@ -1,11 +1,12 @@
 import { describe, expect, test } from 'vitest'
 import { canRunInEnvironment } from './can-run-in-environment.js'
 import { environments } from '../../../config/index.js'
+import { scopes } from '@defra/cdp-validation-kit/src/constants/scopes.js'
 
 describe('#can-run-in-environment', () => {
   test('Admin can run everywhere', () => {
     Object.values(environments).forEach((env) => {
-      expect(canRunInEnvironment(env, ['admin'])).toBe(true)
+      expect(canRunInEnvironment(env, [scopes.admin])).toBe(true)
     })
   })
 

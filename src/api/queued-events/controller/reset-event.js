@@ -1,6 +1,6 @@
 import { config } from '../../../config/index.js'
 import { resetEvent } from '../../../helpers/queued-events/queued-events.js'
-import { statusCodes } from '../../../constants/status-codes.js'
+import { statusCodes } from '@defra/cdp-validation-kit/src/constants/status-codes.js'
 
 const resetEventController = {
   handler: async (request, h) => {
