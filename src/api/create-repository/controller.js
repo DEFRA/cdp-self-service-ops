@@ -4,15 +4,16 @@ import { config } from '../../config/index.js'
 import { repositoryValidation } from './helpers/schema/repository-validation.js'
 import { fetchTeam } from '../../helpers/fetch-team.js'
 import { createInitialEntity } from '../../helpers/create/create-initial-entity.js'
-import { createTemplatedRepo } from '../../helpers/create/workflows/create-templated-repo.js'
-import { statusCodes } from '../../constants/status-codes.js'
+import { createTemplatedRepo } from '../../helpers/create/workflows/index.js'
+import { statusCodes } from '@defra/cdp-validation-kit/src/constants/status-codes.js'
+import { scopes } from '@defra/cdp-validation-kit/src/constants/scopes.js'
 
 const createRepositoryController = {
   options: {
     auth: {
       strategy: 'azure-oidc',
       access: {
-        scope: ['admin', '{payload.teamId}']
+        scope: [scopes.admin, 'team:{payload.teamId}']
       }
     },
     validate: {

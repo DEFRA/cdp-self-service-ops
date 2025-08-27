@@ -1,5 +1,5 @@
 import { getServiceTemplates } from './helpers/microservice-templates.js'
-import { statusCodes } from '../../constants/status-codes.js'
+import { statusCodes } from '@defra/cdp-validation-kit/src/constants/status-codes.js'
 
 const serviceTemplatesController = {
   options: {

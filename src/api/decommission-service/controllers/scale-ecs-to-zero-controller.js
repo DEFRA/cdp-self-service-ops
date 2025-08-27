@@ -5,7 +5,7 @@ import {
   repositoryNameValidation,
   userWithIdValidation
 } from '@defra/cdp-validation-kit/src/validations.js'
-import { statusCodes } from '../../../constants/status-codes.js'
+import { statusCodes } from '@defra/cdp-validation-kit/src/constants/status-codes.js'
 
 const scaleEcsToZeroController = {
   options: {

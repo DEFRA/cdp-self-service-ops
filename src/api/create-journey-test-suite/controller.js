@@ -4,14 +4,15 @@ import { config } from '../../config/index.js'
 import { createTestRunnerSuite } from '../../helpers/create/create-test-runner-suite.js'
 import { testSuiteValidation } from '../helpers/schema/test-suite-validation.js'
 import { entitySubTypes, entityTypes } from '../../constants/entities.js'
-import { statusCodes } from '../../constants/status-codes.js'
+import { statusCodes } from '@defra/cdp-validation-kit/src/constants/status-codes.js'
+import { scopes } from '@defra/cdp-validation-kit/src/constants/scopes.js'
 
 const createJourneyTestSuiteController = {
   options: {
     auth: {
       strategy: 'azure-oidc',
       access: {
-        scope: ['admin', '{payload.teamId}']
+        scope: [scopes.admin, 'team:{payload.teamId}']
       }
     },
     validate: {

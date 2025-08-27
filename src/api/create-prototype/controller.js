@@ -2,14 +2,15 @@ import Boom from '@hapi/boom'
 import { prototypeValidation } from './schema/prototype-validation.js'
 import { entityTypes } from '../../constants/entities.js'
 import { createMicroservice } from '../../helpers/create/create-microservice.js'
-import { statusCodes } from '../../constants/status-codes.js'
+import { statusCodes } from '@defra/cdp-validation-kit/src/constants/status-codes.js'
+import { scopes } from '@defra/cdp-validation-kit/src/constants/scopes.js'
 
 const createPrototypeController = {
   options: {
     auth: {
       strategy: 'azure-oidc',
       access: {
-        scope: ['admin', '{payload.teamId}']
+        scope: [scopes.admin, 'team:{payload.teamId}']
       }
     },
     validate: {

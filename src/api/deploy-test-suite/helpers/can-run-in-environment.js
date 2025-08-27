@@ -1,4 +1,5 @@
 import { environments } from '../../../config/index.js'
+import { scopes } from '@defra/cdp-validation-kit/src/constants/scopes.js'
 
 /**
  * Is a user allowed to run a test suite in given environment.
@@ -7,7 +8,7 @@ import { environments } from '../../../config/index.js'
  * @returns {boolean}
  */
 function canRunInEnvironment(environment, scope) {
-  if (scope.includes('admin')) {
+  if (scope.includes(scopes.admin)) {
     return true
   }
 

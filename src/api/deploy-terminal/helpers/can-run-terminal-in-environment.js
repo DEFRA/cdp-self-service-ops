@@ -1,4 +1,5 @@
 import { environments } from '../../../config/index.js'
+import { scopes } from '@defra/cdp-validation-kit/src/constants/scopes.js'
 
 export function canRunTerminalInEnvironment(environment, scope) {
   if (!scope.includes('breakGlass') && environment === environments.prod) {
@@ -6,7 +7,7 @@ export function canRunTerminalInEnvironment(environment, scope) {
   }
 
   // Admins can run in all other environments
-  if (scope.includes('admin')) {
+  if (scope.includes(scopes.admin)) {
     return true
   }
 
