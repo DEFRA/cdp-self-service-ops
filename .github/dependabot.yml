@@ -1,0 +1,86 @@
+version: 2
+
+updates:
+  # Update npm packages
+  - package-ecosystem: npm
+    directory: /
+    open-pull-requests-limit: 10
+
+    # Group packages into shared PR
+    groups:
+      build:
+        patterns:
+          - 'tsx'
+
+      lint:
+        patterns:
+          - 'prettier'
+          - 'eslint'
+          - 'eslint-*'
+
+      logging:
+        patterns:
+          - 'pino'
+          - '*-pino'
+          - '*-pino-format'
+
+      hapi:
+        patterns:
+          - '@hapi/*'
+          - 'hapi-*'
+
+      aws:
+        patterns:
+          - '@aws-sdk/*'
+
+      mongo:
+        patterns:
+          - 'mongodb'
+          - 'mongo-*'
+
+      types:
+        patterns:
+          - '@types/*'
+
+      tools:
+        patterns:
+          - 'nodemon'
+          - 'npm-run-all'
+          - 'husky'
+          - 'vitest'
+          - 'vitest-*'
+          - 'typescript'
+          - 'date-fns'
+          - 'convict'
+          - 'joi'
+          - 'lodash'
+          - 'node-fetch'
+
+    # Allow releases to settle into a stable state before updating
+    cooldown:
+      default-days: 5
+      semver-major-days: 20
+      semver-minor-days: 7
+      semver-patch-days: 3
+
+    # Schedule run every Monday, local time
+    schedule:
+      interval: weekly
+      time: '11:00'
+      timezone: 'Europe/London'
+
+    versioning-strategy: increase
+
+    allow:
+      # Include direct package.json updates
+      - dependency-type: direct
+
+  # Update GitHub Actions
+  - package-ecosystem: github-actions
+    directory: /
+
+    # Schedule run every Monday, local time
+    schedule:
+      interval: weekly
+      time: '11:30'
+      timezone: 'Europe/London'

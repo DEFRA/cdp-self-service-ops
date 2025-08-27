@@ -16,12 +16,12 @@ describe('#canAddSecret', () => {
   })
 
   test('should return false if no-admin deploys to admin envs', async () => {
-    expect(await canAddSecretInEnv('foo', 'management', ['tenant-team'])).toBe(
-      false
-    )
-    expect(await canAddSecretInEnv('foo', 'infra-dev', ['tenant-team'])).toBe(
-      false
-    )
+    expect(
+      await canAddSecretInEnv('foo', 'management', ['team:tenant-team'])
+    ).toBe(false)
+    expect(
+      await canAddSecretInEnv('foo', 'infra-dev', ['team:tenant-team'])
+    ).toBe(false)
   })
 
   test('should return true if tenant owns the service', async () => {
