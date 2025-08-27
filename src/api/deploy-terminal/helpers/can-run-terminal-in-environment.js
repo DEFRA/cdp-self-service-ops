@@ -2,7 +2,7 @@ import { environments } from '../../../config/index.js'
 import { scopes } from '@defra/cdp-validation-kit/src/constants/scopes.js'
 
 export function canRunTerminalInEnvironment(environment, scope) {
-  if (!scope.includes('breakGlass') && environment === environments.prod) {
+  if (!scope.includes(scopes.breakGlass) && environment === environments.prod) {
     return false
   }
 

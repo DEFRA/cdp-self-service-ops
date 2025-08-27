@@ -10,12 +10,17 @@ import { getRepoTeams } from '../../api/deploy/helpers/get-repo-teams.js'
 export async function getScopedUser(serviceName, auth) {
   const { id, displayName, scope, scopeFlags } = auth?.credentials
   const user = { id, displayName }
+
   if (!scopeFlags?.isAdmin) {
     if (!scope) {
       throw Boom.forbidden('No scope found')
     }
+
     const repoTeams = await getRepoTeams(serviceName)
-    const isTeamMember = repoTeams.some((team) => scope.includes(team.teamId))
+    const isTeamMember = repoTeams.some((team) =>
+      scope.includes(`team:${team.teamId}`)
+    )
+
     if (!isTeamMember) {
       throw Boom.forbidden('Insufficient scope')
     }

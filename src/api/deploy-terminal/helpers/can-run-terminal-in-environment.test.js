@@ -14,7 +14,7 @@ describe('#canRunTerminalInEnvironment', () => {
   })
 
   test('users with break glass can run in prod', () => {
-    const scope = ['breakGlass', 'otherGroup']
+    const scope = [scopes.breakGlass, 'otherGroup']
     expect(canRunTerminalInEnvironment(environments.prod, scope)).toBe(true)
   })
 
