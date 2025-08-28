@@ -56,7 +56,10 @@ async function createMicroservice({
       zone: template.zone,
       mongo_enabled: template.mongo ? 'true' : 'false',
       redis_enabled: template.redis ? 'true' : 'false',
-      service_code: team.serviceCodes?.at(0) ?? ''
+      service_code: team.serviceCodes?.at(0) ?? '',
+      type: template.entityType,
+      subtype: template.entitySubType,
+      team: team.teamId
     }),
     createAppConfig(logger, repositoryName, team.github),
     createNginxUpstreams(logger, repositoryName, template.zone),
