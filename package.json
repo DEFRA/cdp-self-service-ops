@@ -43,7 +43,7 @@
     "@octokit/auth-app": "8.0.2",
     "@octokit/core": "7.0.3",
     "@octokit/graphql": "9.0.1",
-    "@octokit/plugin-rest-endpoint-methods": "13.3.0",
+    "@octokit/plugin-rest-endpoint-methods": "16.0.0",
     "aws4": "1.13.2",
     "convict": "6.2.4",
     "date-fns": "4.1.0",
