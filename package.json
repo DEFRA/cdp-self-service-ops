@@ -63,7 +63,7 @@
     "qs": "6.14.0",
     "sqs-consumer": "11.4.0",
     "timeunit": "1.1.1",
-    "undici": "7.2.0"
+    "undici": "7.14.0"
   },
   "devDependencies": {
     "@tsconfig/node22": "22.0.2",
