@@ -98,7 +98,10 @@ describe('#create-test-runner-suite', () => {
       zone: 'public',
       mongo_enabled: 'false',
       redis_enabled: 'true',
-      service_code: 'TST'
+      service_code: 'TST',
+      type: entityTypes.microservice,
+      subtype: entitySubTypes.frontend,
+      team: teamId
     }
     expect(triggerWorkflow).toHaveBeenCalledWith(
       config.get('github.org'),
