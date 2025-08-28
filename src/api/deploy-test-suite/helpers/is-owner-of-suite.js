@@ -12,7 +12,7 @@ async function isOwnerOfSuite(testSuite, scope) {
     return true
   }
   const repoTeams = await getRepoTeams(testSuite)
-  return repoTeams.some((team) => scope.includes(team.teamId))
+  return repoTeams.some((team) => scope.includes(`team:${team.teamId}`))
 }
 
 export { isOwnerOfSuite }
