@@ -26,7 +26,7 @@ const createRepositoryController = {
     const repositoryName = payload?.repositoryName
     const visibility = payload?.repositoryVisibility
 
-    const { team } = await fetchTeam(payload?.teamId)
+    const team = await fetchTeam(payload?.teamId)
     if (!team?.github) {
       throw Boom.badData(`Team ${team.name} does not have a linked Github team`)
     }

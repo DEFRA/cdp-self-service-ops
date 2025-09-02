@@ -5,7 +5,6 @@ const deployServiceOptionsController = {
   handler: (request, h) => {
     return h
       .response({
-        message: 'success',
         cpuOptions: [
           { value: 512, text: '0.5 vCPU' },
           { value: 1024, text: '1 vCPU' },

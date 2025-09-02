@@ -110,7 +110,6 @@ const deployTerminal = async function (payload, user, logger, snsClient) {
   )
 
   return {
-    message: 'success',
     token,
     environment: payload.environment,
     service: payload.service

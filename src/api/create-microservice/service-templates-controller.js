@@ -9,10 +9,7 @@ const serviceTemplatesController = {
   },
   handler: (request, h) => {
     return h
-      .response({
-        message: 'success',
-        serviceTemplates: getServiceTemplates(request.auth.credentials?.scope)
-      })
+      .response(getServiceTemplates(request.auth.credentials?.scope))
       .code(statusCodes.ok)
   }
 }

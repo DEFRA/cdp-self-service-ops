@@ -22,7 +22,7 @@ const scaleEcsToZeroController = {
     const user = await request.payload
 
     await scaleEcsToZeroInAllEnvironments(serviceName, user, request.logger)
-    return h.response({ message: 'success' }).code(statusCodes.ok)
+    return h.response().code(statusCodes.ok)
   }
 }
 

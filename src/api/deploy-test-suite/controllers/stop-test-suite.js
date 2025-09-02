@@ -64,7 +64,7 @@ const stopTestSuiteController = {
       `SNS Stop Test response: ${JSON.stringify(snsResponse, null, 2)}`
     )
 
-    return h.response({ message: 'success' }).code(statusCodes.ok)
+    return h.response().code(statusCodes.ok)
   }
 }
 
