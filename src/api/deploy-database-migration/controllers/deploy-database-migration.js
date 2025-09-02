@@ -39,6 +39,6 @@ export const deployDatabaseMigration = {
         .code(statusCodes.internalError)
     }
 
-    return h.response({ message: 'success', migrationId }).code(statusCodes.ok)
+    return h.response({ migrationId }).code(statusCodes.ok)
   }
 }

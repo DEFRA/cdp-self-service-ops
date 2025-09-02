@@ -55,7 +55,7 @@ async function deployService(payload, logger, h, user) {
   await commitDeploymentFile(deployment, logger)
 
   logger.info('Deployment commit file created')
-  return h.response({ message: 'success', deploymentId }).code(statusCodes.ok)
+  return h.response({ deploymentId }).code(statusCodes.ok)
 }
 
 const deployServiceController = {

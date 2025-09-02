@@ -23,7 +23,7 @@ export async function createTestRunnerSuite({
   templateWorkflow,
   templateTag
 }) {
-  const { team } = await fetchTeam(teamId)
+  const team = await fetchTeam(teamId)
   if (!team?.github) {
     throw Boom.badData(`Team ${team.name} does not have a linked Github team`)
   }

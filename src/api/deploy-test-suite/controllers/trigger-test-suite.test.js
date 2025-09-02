@@ -118,7 +118,7 @@ describe('Test Trigger Test Suite', () => {
 
     mockRunTestSuite.mockResolvedValue('mocked-run-id')
 
-    const { statusCode } = await server.inject({
+    const { statusCode, payload: responsePayload } = await server.inject({
       method,
       url,
       payload,
@@ -129,6 +129,8 @@ describe('Test Trigger Test Suite', () => {
         'content-type': 'application/json'
       }
     })
+
+    expect(responsePayload).toBe('{"runId":"mocked-run-id"}')
 
     expect(statusCode).toBe(statusCodes.ok)
   })

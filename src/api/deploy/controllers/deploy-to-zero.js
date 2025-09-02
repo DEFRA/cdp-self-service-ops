@@ -22,7 +22,7 @@ const deployToZeroController = {
       environment,
       user
     )
-    return h.response({ message: 'success', deploymentId }).code(statusCodes.ok)
+    return h.response({ deploymentId }).code(statusCodes.ok)
   }
 }
 

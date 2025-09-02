@@ -36,12 +36,10 @@ describe('#create-test-runner-suite', () => {
   test('Should create microservice', async () => {
     const teamId = randomUUID()
     fetchTeam.mockResolvedValue({
-      team: {
-        teamId,
-        name: 'test',
-        github: 'test',
-        serviceCodes: ['TST']
-      }
+      teamId,
+      name: 'test',
+      github: 'test',
+      serviceCodes: ['TST']
     })
 
     const userId = randomUUID()

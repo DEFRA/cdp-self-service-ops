@@ -62,7 +62,7 @@ const deployTestSuiteController = {
         .code(statusCodes.internalError)
     }
 
-    return h.response({ message: 'success', runId }).code(statusCodes.ok)
+    return h.response({ runId }).code(statusCodes.ok)
   }
 }
 

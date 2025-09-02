@@ -41,12 +41,10 @@ describe('#create-test-runner-suite', () => {
 
     const teamId = randomUUID()
     fetchTeam.mockResolvedValue({
-      team: {
-        teamId,
-        name: 'test',
-        github: 'test',
-        serviceCodes: ['TST']
-      }
+      teamId,
+      name: 'test',
+      github: 'test',
+      serviceCodes: ['TST']
     })
 
     const userId = randomUUID()

@@ -20,7 +20,7 @@ async function createMicroservice({
   teamId,
   user
 }) {
-  const { team } = await fetchTeam(teamId)
+  const team = await fetchTeam(teamId)
   if (!team?.github) {
     throw Boom.badData(
       `Team ${team.name} does not have a link to a Github team`

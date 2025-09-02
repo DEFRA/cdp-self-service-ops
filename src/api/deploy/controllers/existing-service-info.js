@@ -12,14 +12,9 @@ const existingServiceInfoController = {
       request.logger
     )
 
-    const message = deployment ? 'success' : 'service not found'
-    const responseCode = deployment ? statusCodes : statusCodes.notFound
-    return h
-      .response({
-        message,
-        ...(deployment && { deployment })
-      })
-      .code(responseCode)
+    return deployment
+      ? h.response(deployment).code(statusCodes.ok)
+      : h.response({ message: 'service not found' }).code(statusCodes.notFound)
   }
 }
 
