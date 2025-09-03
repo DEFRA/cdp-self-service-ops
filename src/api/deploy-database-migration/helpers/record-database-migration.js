@@ -9,7 +9,7 @@ import {
   migrationVersionValidation,
   migrationIdValidation,
   repositoryNameValidation
-} from '@defra/cdp-validation-kit/src/validations.js'
+} from '@defra/cdp-validation-kit'
 
 const recordMigrationValidation = Joi.object({
   cdpMigrationId: migrationIdValidation,

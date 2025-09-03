@@ -1,11 +1,12 @@
 import Joi from 'joi'
-import { scaleEcsToZeroInAllEnvironments } from '../helpers/scale-ecs-to-zero-in-all-environments.js'
-import { validatePortalBackendRequest } from '../../helpers/pre/validate-portal-backend-request.js'
 import {
+  statusCodes,
   repositoryNameValidation,
   userWithIdValidation
-} from '@defra/cdp-validation-kit/src/validations.js'
-import { statusCodes } from '@defra/cdp-validation-kit/src/constants/status-codes.js'
+} from '@defra/cdp-validation-kit'
+
+import { scaleEcsToZeroInAllEnvironments } from '../helpers/scale-ecs-to-zero-in-all-environments.js'
+import { validatePortalBackendRequest } from '../../helpers/pre/validate-portal-backend-request.js'
 
 const scaleEcsToZeroController = {
   options: {

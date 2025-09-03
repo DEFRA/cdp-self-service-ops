@@ -3,7 +3,7 @@ import {
   environmentValidation,
   migrationIdValidation,
   repositoryNameValidation
-} from '@defra/cdp-validation-kit/src/validations.js'
+} from '@defra/cdp-validation-kit'
 
 const deployMigrationRequestValidation = Joi.object({
   service: repositoryNameValidation,

@@ -1,5 +1,5 @@
 import { getRepoTeams } from '../../deploy/helpers/get-repo-teams.js'
-import { scopes } from '@defra/cdp-validation-kit/src/constants/scopes.js'
+import { scopes } from '@defra/cdp-validation-kit'
 
 /**
  * Does a given scope own a test suite.

@@ -1,8 +1,8 @@
-import { vi, beforeAll, afterAll } from 'vitest'
 import { randomUUID } from 'node:crypto'
 import * as Hapi from '@hapi/hapi'
+import { statusCodes } from '@defra/cdp-validation-kit'
+
 import { config } from '../../../config/config.js'
-import { statusCodes } from '@defra/cdp-validation-kit/src/constants/status-codes.js'
 
 const mockRunTestSuite = vi.fn()
 vi.mock('../helpers/run-test-suite.js', () => ({

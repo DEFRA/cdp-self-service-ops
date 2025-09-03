@@ -1,5 +1,5 @@
 import { environments } from '../../../config/index.js'
-import { scopes } from '@defra/cdp-validation-kit/src/constants/scopes.js'
+import { scopes } from '@defra/cdp-validation-kit'
 
 /**
  * Is a user allowed to run a test suite in given environment.

@@ -3,7 +3,7 @@ import Joi from 'joi'
 import {
   repositoryNameValidation,
   teamIdValidation
-} from '@defra/cdp-validation-kit/src/validations.js'
+} from '@defra/cdp-validation-kit'
 
 function createServiceValidationSchema(allowableServiceTemplates) {
   return Joi.object({

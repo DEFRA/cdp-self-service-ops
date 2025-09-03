@@ -1,7 +1,8 @@
+import { statusCodes } from '@defra/cdp-validation-kit'
+
 import { triggerTestSuiteValidation } from '../helpers/trigger-test-suite-validation.js'
 import { runTestSuite } from '../helpers/run-test-suite.js'
 import { validatePortalBackendRequest } from '../../helpers/pre/validate-portal-backend-request.js'
-import { statusCodes } from '@defra/cdp-validation-kit/src/constants/status-codes.js'
 
 const triggerTestSuiteController = {
   options: {

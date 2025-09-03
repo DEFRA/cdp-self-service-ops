@@ -1,14 +1,15 @@
 import Boom from '@hapi/boom'
+import { UTCDate } from '@date-fns/utc'
 import { differenceInSeconds, addHours } from 'date-fns'
+import { statusCodes } from '@defra/cdp-validation-kit'
 
 import { config } from '../../../config/index.js'
 import { deployTerminalValidation } from '../helpers/deploy-terminal-validation.js'
 import { sendSnsMessage } from '../../../helpers/sns/send-sns-message.js'
-import { canRunTerminalInEnvironment } from '../helpers/can-run-terminal-in-environment.js'
 import { generateTerminalToken } from '../helpers/generate-terminal-token.js'
 import { lookupTenantService } from '../../../helpers/portal-backend/lookup-tenant-service.js'
 import { recordTerminalSession } from '../helpers/record-terminal-session.js'
-import { statusCodes } from '@defra/cdp-validation-kit/src/constants/status-codes.js'
+import { isAllowedTerminalEnvironment } from '../helpers/is-allowed-terminal-environment.js'
 
 const deployTerminalController = {
   options: {
@@ -16,7 +17,7 @@ const deployTerminalController = {
       strategy: 'azure-oidc'
     },
     validate: {
-      payload: deployTerminalValidation()
+      payload: deployTerminalValidation
     },
     payload: {
       output: 'data',
@@ -34,7 +35,13 @@ const deployTerminalController = {
 
     const scope = auth?.credentials?.scope ?? []
 
-    if (!canRunTerminalInEnvironment(payload.environment, scope)) {
+    if (
+      !isAllowedTerminalEnvironment({
+        userScopes: scope,
+        environment: payload.environment,
+        teamIds: payload.teamIds
+      })
+    ) {
       throw Boom.forbidden(
         'Insufficient permissions to launch a terminal in this environment'
       )
@@ -63,10 +70,9 @@ const deployTerminal = async function (payload, user, logger, snsClient) {
 
   const token = generateTerminalToken(64)
 
-  // Default terminal expires after 2 hours
-  const now = new Date()
-  const expiresAt = addHours(now, 2)
-  const timeout = Math.abs(differenceInSeconds(expiresAt, now))
+  const now = new UTCDate()
+  const expiresDate = payload.expiresAt ?? addHours(now, 2)
+  const timeoutInSeconds = Math.abs(differenceInSeconds(expiresDate, now))
 
   const runMessage = {
     environment: payload.environment,
@@ -76,7 +82,7 @@ const deployTerminal = async function (payload, user, logger, snsClient) {
     role: payload.service,
     service: payload.service,
     postgres: tenantService?.postgres === true,
-    timeout
+    timeout: timeoutInSeconds
   }
 
   logger.info(

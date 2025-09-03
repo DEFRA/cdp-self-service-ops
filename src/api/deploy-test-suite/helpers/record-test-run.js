@@ -13,7 +13,7 @@ import {
   memoryValidation,
   deploymentIdValidation,
   repositoryNameValidation
-} from '@defra/cdp-validation-kit/src/validations.js'
+} from '@defra/cdp-validation-kit'
 
 const recordTestRunValidation = Joi.object({
   testSuite: repositoryNameValidation,

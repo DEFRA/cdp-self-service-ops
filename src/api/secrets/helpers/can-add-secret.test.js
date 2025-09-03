@@ -1,6 +1,6 @@
 import { canAddSecretInEnv } from './can-add-secret.js'
 import { vi } from 'vitest'
-import { scopes } from '@defra/cdp-validation-kit/src/constants/scopes.js'
+import { scopes } from '@defra/cdp-validation-kit'
 
 vi.mock('../../deploy/helpers/get-repo-teams', () => ({
   getRepoTeams: vi

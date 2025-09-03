@@ -1,6 +1,6 @@
 import convict from 'convict'
 import { cwd } from 'node:process'
-import { environments } from '@defra/cdp-validation-kit/src/constants/environments.js'
+import { environments } from '@defra/cdp-validation-kit'
 
 const isProduction = process.env.NODE_ENV === 'production'
 const isTest = process.env.NODE_ENV === 'test'

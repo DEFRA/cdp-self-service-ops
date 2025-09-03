@@ -7,7 +7,7 @@ import {
   memoryValidation,
   repositoryNameValidation,
   versionValidation
-} from '@defra/cdp-validation-kit/src/validations.js'
+} from '@defra/cdp-validation-kit'
 
 const deployServiceValidation = Joi.object({
   imageName: repositoryNameValidation,

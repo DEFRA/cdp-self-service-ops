@@ -9,7 +9,7 @@ import {
   repositoryNameValidation,
   userWithIdValidation,
   versionValidation
-} from '@defra/cdp-validation-kit/src/validations.js'
+} from '@defra/cdp-validation-kit'
 import Joi from 'joi'
 
 const registerDeploymentValidation = Joi.object({
