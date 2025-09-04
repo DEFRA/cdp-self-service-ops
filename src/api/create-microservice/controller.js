@@ -1,4 +1,5 @@
 import Boom from '@hapi/boom'
+import { statusCodes, scopes } from '@defra/cdp-validation-kit'
 
 import { createServiceValidationSchema } from './helpers/create-service-validation-schema.js'
 import { createMicroservice } from '../../helpers/create/create-microservice.js'
@@ -6,8 +7,6 @@ import {
   getServiceTemplates,
   microserviceTemplates
 } from './helpers/microservice-templates.js'
-import { statusCodes } from '@defra/cdp-validation-kit/src/constants/status-codes.js'
-import { scopes } from '@defra/cdp-validation-kit/src/constants/scopes.js'
 
 const createMicroserviceController = {
   options: {

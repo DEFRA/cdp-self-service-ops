@@ -1,7 +1,8 @@
+import { statusCodes } from '@defra/cdp-validation-kit'
+
 import { deployMigrationRequestValidation } from '../helpers/deploy-migration-request-validation.js'
 import { getScopedUser } from '../../../helpers/user/get-scoped-user.js'
 import { runDatabaseMigration } from '../helpers/run-database-migration.js'
-import { statusCodes } from '@defra/cdp-validation-kit/src/constants/status-codes.js'
 
 export const deployDatabaseMigration = {
   options: {

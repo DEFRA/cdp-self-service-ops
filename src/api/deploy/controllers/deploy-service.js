@@ -4,7 +4,7 @@ import { generateDeployment } from '../../../helpers/deployments/generate-deploy
 import { commitDeploymentFile } from '../../../helpers/deployments/commit-deployment-file.js'
 import { lookupTenantService } from '../../../helpers/portal-backend/lookup-tenant-service.js'
 import { getScopedUser } from '../../../helpers/user/get-scoped-user.js'
-import { statusCodes } from '@defra/cdp-validation-kit/src/constants/status-codes.js'
+import { statusCodes } from '@defra/cdp-validation-kit'
 
 async function deployService(payload, logger, h, user) {
   const imageName = payload.imageName

@@ -1,5 +1,5 @@
 import { ecsCpuToMemoryOptionsMap } from '../helpers/ecs-cpu-to-memory-options-map.js'
-import { statusCodes } from '@defra/cdp-validation-kit/src/constants/status-codes.js'
+import { statusCodes } from '@defra/cdp-validation-kit'
 
 const deployServiceOptionsController = {
   handler: (request, h) => {

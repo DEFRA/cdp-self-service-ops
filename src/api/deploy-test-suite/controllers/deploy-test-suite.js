@@ -1,10 +1,10 @@
 import Boom from '@hapi/boom'
+import { statusCodes } from '@defra/cdp-validation-kit'
 
 import { deployTestSuiteValidation } from '../helpers/deploy-test-suite-validation.js'
 import { isOwnerOfSuite } from '../helpers/is-owner-of-suite.js'
 import { canRunInEnvironment } from '../helpers/can-run-in-environment.js'
 import { runTestSuite } from '../helpers/run-test-suite.js'
-import { statusCodes } from '@defra/cdp-validation-kit/src/constants/status-codes.js'
 
 const deployTestSuiteController = {
   options: {

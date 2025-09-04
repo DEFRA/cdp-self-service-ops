@@ -1,10 +1,10 @@
 import Joi from 'joi'
-
-import { repositoryVisibility } from '../../constants/repository-visibility.js'
 import {
   repositoryNameValidation,
   teamIdValidation
-} from '@defra/cdp-validation-kit/src/validations.js'
+} from '@defra/cdp-validation-kit'
+
+import { repositoryVisibility } from '../../constants/repository-visibility.js'
 
 const repositoryValidation = Joi.object({
   repositoryName: repositoryNameValidation,

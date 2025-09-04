@@ -1,14 +1,14 @@
 import Joi from 'joi'
 
 import { waf } from '../../../constants/waf.js'
-import { scopes } from '@defra/cdp-validation-kit/src/constants/scopes.js'
 import { unshutterServiceWorkflow } from '../helpers/shutter-service-workflow.js'
 import {
+  scopes,
+  statusCodes,
   environmentValidation,
   repositoryNameValidation
-} from '@defra/cdp-validation-kit/src/validations.js'
+} from '@defra/cdp-validation-kit'
 import { getScopedUser } from '../../../helpers/user/get-scoped-user.js'
-import { statusCodes } from '@defra/cdp-validation-kit/src/constants/status-codes.js'
 
 const unshutterServiceController = {
   options: {

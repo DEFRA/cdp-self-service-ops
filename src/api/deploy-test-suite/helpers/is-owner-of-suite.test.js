@@ -1,6 +1,6 @@
 import { isOwnerOfSuite } from './is-owner-of-suite.js'
 import { getRepoTeams } from '../../deploy/helpers/get-repo-teams.js'
-import { scopes } from '@defra/cdp-validation-kit/src/constants/scopes.js'
+import { scopes } from '@defra/cdp-validation-kit'
 
 vi.mock('../../deploy/helpers/get-repo-teams.js', () => ({
   getRepoTeams: vi.fn()

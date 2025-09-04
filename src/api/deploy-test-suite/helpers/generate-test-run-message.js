@@ -8,7 +8,7 @@ import {
   runIdValidation,
   userWithUserIdValidation,
   versionValidation
-} from '@defra/cdp-validation-kit/src/validations.js'
+} from '@defra/cdp-validation-kit'
 import Joi from 'joi'
 
 const testRunMessageValidation = Joi.object({

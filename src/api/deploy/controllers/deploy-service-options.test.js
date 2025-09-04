@@ -1,7 +1,6 @@
-import { describe, expect, test, vi } from 'vitest'
 import { deployServiceOptionsController } from './deploy-service-options.js'
 import { ecsCpuToMemoryOptionsMap } from '../helpers/ecs-cpu-to-memory-options-map.js'
-import { statusCodes } from '@defra/cdp-validation-kit/src/constants/status-codes.js'
+import { statusCodes } from '@defra/cdp-validation-kit'
 
 describe('#deployServiceOptionsController', () => {
   test('Should return success message and CPU options', () => {

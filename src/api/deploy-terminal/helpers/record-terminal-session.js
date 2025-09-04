@@ -7,7 +7,7 @@ import {
   repositoryNameValidation,
   environmentValidation,
   userWithIdValidation
-} from '@defra/cdp-validation-kit/src/validations.js'
+} from '@defra/cdp-validation-kit'
 
 const recordTerminalSessionValidation = Joi.object({
   token: Joi.string().min(1).required(),

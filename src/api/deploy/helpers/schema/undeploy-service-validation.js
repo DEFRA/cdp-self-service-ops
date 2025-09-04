@@ -2,7 +2,7 @@ import Joi from 'joi'
 import {
   environmentValidation,
   repositoryNameValidation
-} from '@defra/cdp-validation-kit/src/validations.js'
+} from '@defra/cdp-validation-kit'
 
 function undeployServiceValidation() {
   return Joi.object({

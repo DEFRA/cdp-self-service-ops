@@ -1,9 +1,12 @@
 import Joi from 'joi'
-import { repositoryNameValidation } from '@defra/cdp-validation-kit/src/validations.js'
+import {
+  repositoryNameValidation,
+  statusCodes
+} from '@defra/cdp-validation-kit'
+
 import { validatePortalBackendRequest } from '../../helpers/pre/validate-portal-backend-request.js'
 import { removeEcsService } from '../../../helpers/remove/workflows/remove-ecs-service.js'
 import { removeDeployment } from '../../../helpers/remove/workflows/remove-deployment.js'
-import { statusCodes } from '@defra/cdp-validation-kit/src/constants/status-codes.js'
 
 const deleteDeploymentsAndEcsController = {
   options: {

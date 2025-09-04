@@ -9,7 +9,7 @@ import {
 import { sanitize } from '../../../helpers/sanitize.js'
 import { registerPendingSecret } from '../helpers/register-pending-secret.js'
 import { canAddSecretInEnv } from '../helpers/can-add-secret.js'
-import { statusCodes } from '@defra/cdp-validation-kit/src/constants/status-codes.js'
+import { statusCodes } from '@defra/cdp-validation-kit'
 
 const addSecretController = {
   options: {

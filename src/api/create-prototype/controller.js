@@ -1,9 +1,9 @@
 import Boom from '@hapi/boom'
+import { statusCodes, scopes } from '@defra/cdp-validation-kit'
+
 import { prototypeValidation } from './schema/prototype-validation.js'
 import { entityTypes } from '../../constants/entities.js'
 import { createMicroservice } from '../../helpers/create/create-microservice.js'
-import { statusCodes } from '@defra/cdp-validation-kit/src/constants/status-codes.js'
-import { scopes } from '@defra/cdp-validation-kit/src/constants/scopes.js'
 
 const createPrototypeController = {
   options: {

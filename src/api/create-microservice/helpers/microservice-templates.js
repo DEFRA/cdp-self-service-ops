@@ -6,7 +6,7 @@ import {
   entityTypeValidation,
   entitySubTypeValidation,
   repositoryNameValidation
-} from '@defra/cdp-validation-kit/src/validations.js'
+} from '@defra/cdp-validation-kit'
 
 const serviceTemplateSchema = Joi.object({
   repositoryName: repositoryNameValidation,
