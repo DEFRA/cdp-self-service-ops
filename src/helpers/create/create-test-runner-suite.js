@@ -57,7 +57,9 @@ export async function createTestRunnerSuite({
       mongo_enabled: 'false',
       redis_enabled: 'false',
       service_code: team.serviceCodes?.at(0) ?? '',
-      test_suite: repositoryName
+      type: entityTypes.testSuite,
+      subtype: entitySubType ?? '',
+      team: team.teamId
     })
   ])
 }
