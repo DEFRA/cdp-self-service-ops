@@ -58,7 +58,7 @@ async function createMicroservice({
       redis_enabled: template.redis ? 'true' : 'false',
       service_code: team.serviceCodes?.at(0) ?? '',
       type: template.entityType,
-      subtype: template.entitySubType,
+      subtype: template.entitySubType ?? '',
       team: team.teamId
     }),
     createAppConfig(logger, repositoryName, team.github),
