@@ -13,8 +13,9 @@ export async function canAddSecretInEnv(service, env, scope) {
   if (scope.includes(scopes.admin)) {
     return true
   }
-  if ([environments.infraDev, environments.management].includes(env))
+  if ([environments.infraDev, environments.management].includes(env)) {
     return false
+  }
   const repoTeams = await getRepoTeams(service)
   return repoTeams.some((team) => scope.includes(`team:${team.teamId}`))
 }

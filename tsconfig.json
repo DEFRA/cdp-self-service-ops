@@ -13,7 +13,14 @@
     "target": "ESNext",
     "types": ["vitest"]
   },
-  "include": ["src", ".eslintrc.cjs", "**/*.cjs", "**/*.js", "**/*.json"],
+  "include": [
+    "src",
+    ".eslintrc.cjs",
+    "**/*.cjs",
+    "**/*.js",
+    "**/*.json",
+    ".vite/**/*.js"
+  ],
   "exclude": [
     "node_modules",
     "package-lock.json",
