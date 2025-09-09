@@ -126,7 +126,9 @@ describe('#create-test-runner-suite', () => {
       mongo_enabled: 'false',
       redis_enabled: 'false',
       service_code: 'TST',
-      test_suite: service
+      team: teamId,
+      type: entityTypes.testSuite,
+      subtype: entitySubTypes.journey
     }
     expect(triggerWorkflow).toHaveBeenCalledWith(
       config.get('github.org'),
