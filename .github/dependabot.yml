@@ -64,9 +64,8 @@ updates:
       semver-patch-days: 3
 
     schedule:
-      interval: monthly
-      time: '08:00'
-      day: 20
+      interval: "cron"
+      cronjob: "0 9 20 * *"
       timezone: 'Europe/London'
 
     versioning-strategy: increase
@@ -80,7 +79,6 @@ updates:
     directory: /
 
     schedule:
-      interval: monthly
-      time: '08:00'
-      day: 20
+      interval: "cron"
+      cronjob: "0 9 20 * *"
       timezone: 'Europe/London'
