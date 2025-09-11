@@ -28,11 +28,13 @@ async function getNextQueuedEvent(
   ttlInMillis = timeunit.minutes.toMillis(15),
   maxRetries = 1
 ) {
-  const latestEvent = await db
-    .collection(collectionName)
-    .findOne({ eventType, status: { $ne: 'processed' } }, null, {
+  const latestEvent = await db.collection(collectionName).findOne(
+    { eventType, status: { $ne: 'processed' } },
+    {},
+    {
       sort: { requestedAt: 1 }
-    })
+    }
+  )
 
   const nowMillis = new Date().getTime()
   const lockedOrExpired =

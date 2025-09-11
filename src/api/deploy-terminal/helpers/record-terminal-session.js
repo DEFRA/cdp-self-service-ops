@@ -30,7 +30,7 @@ const recordTerminalSessionValidation = Joi.object({
  */
 
 /**
- * Record test run in the portal backend
+ * Record terminal session in portal backend
  * @param {{ token: string, environment: string, service: string, user: {displayName: string, id: string} }} session
  * @returns {Promise<{Response}|Response>}
  */
