@@ -47,7 +47,7 @@ async function createMicroservice({
       team.github,
       topics,
       {
-        serviceTypeTemplate: template.id,
+        serviceTypeTemplate: template.repositoryName,
         templateTag
       }
     ),
