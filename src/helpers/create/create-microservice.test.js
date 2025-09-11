@@ -163,4 +163,44 @@ describe('#create-test-runner-suite', () => {
       logger
     )
   })
+
+  test('Should create minimal backend from the right repository', async () => {
+    const teamId = randomUUID()
+    fetchTeam.mockResolvedValue({
+      teamId,
+      name: 'test',
+      github: 'test',
+      serviceCodes: ['TST']
+    })
+
+    const userId = randomUUID()
+    await createMicroservice({
+      logger,
+      repositoryName,
+      template: microserviceTemplates['cdp-node-backend-template-minimal'],
+      templateTag: 'minimal',
+      teamId,
+      user: {
+        id: userId,
+        displayName: 'test user'
+      }
+    })
+
+    // Create repo
+    const createRepoInputs = {
+      serviceTypeTemplate: 'cdp-node-backend-template',
+      repositoryName,
+      team: 'test',
+      additionalGitHubTopics: 'cdp,service,node,backend',
+      templateTag: 'minimal'
+    }
+    expect(triggerWorkflow).toHaveBeenCalledWith(
+      config.get('github.org'),
+      config.get('github.repos.createWorkflows'),
+      'create_microservice.yml',
+      createRepoInputs,
+      repositoryName,
+      logger
+    )
+  })
 })
