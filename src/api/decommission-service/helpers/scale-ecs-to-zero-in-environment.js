@@ -1,6 +1,7 @@
 import { scaleEcsToZero } from './scale-ecs-to-zero.js'
 import { getEntity } from '../../../helpers/portal-backend/get-entity.js'
 import { lookupTenantService } from '../../../helpers/portal-backend/lookup-tenant-service.js'
+import { entityTypes } from '@defra/cdp-validation-kit'
 
 /**
  * @param {string} repositoryName
@@ -22,9 +23,11 @@ export async function scaleEcsToZeroInEnvironment(
   const undeploymentId = crypto.randomUUID()
 
   const entity = await getEntity(repositoryName, logger)
-  const isTestSuite = entity?.type === 'TestSuite'
-  if (isTestSuite) {
-    logger.info(`${repositoryName} is a test suite, nothing to undeploy`)
+  const isNotDeployable =
+    entity?.type === entityTypes.repository ||
+    entity?.type === entityTypes.testSuite
+  if (isNotDeployable) {
+    logger.info(`${repositoryName} is a ${entity?.type}, nothing to undeploy`)
     return undeploymentId
   }
 

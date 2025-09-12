@@ -74,4 +74,13 @@ describe('#scaleEcsToZeroInEnvironment', () => {
     expect(getEntity).toHaveBeenCalledTimes(1)
     expect(scaleEcsToZero).toHaveBeenCalledTimes(0)
   })
+
+  test('if repository should not call scale to zero', async () => {
+    getEntity.mockResolvedValue({ name: 'some-service', type: 'Repository' })
+
+    await callScaleEcsToZeroInEnvironment()
+
+    expect(getEntity).toHaveBeenCalledTimes(1)
+    expect(scaleEcsToZero).toHaveBeenCalledTimes(0)
+  })
 })
