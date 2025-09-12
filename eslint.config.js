@@ -152,7 +152,11 @@ export default [
       'n/no-unpublished-import': [
         'error',
         {
-          allowModules: ['vitest', 'vitest-mongodb']
+          allowModules: [
+            'vitest',
+            'vitest-mongodb',
+            'mongodb-memory-server-core'
+          ]
         }
       ]
     }

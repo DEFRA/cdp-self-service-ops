@@ -142,17 +142,37 @@ const config = convict({
     format: Boolean,
     default: isTest
   },
-  mongoUri: {
-    doc: 'URI for mongodb',
-    format: String,
-    default: 'mongodb://127.0.0.1:27017/',
-    env: 'MONGO_URI'
-  },
-  mongoDatabase: {
-    doc: 'database for mongodb',
-    format: String,
-    default: 'cdp-self-service-ops',
-    env: 'MONGO_DATABASE'
+  mongo: {
+    mongoUrl: {
+      doc: 'URL for mongodb',
+      format: String,
+      default: 'mongodb://127.0.0.1:27017/?replicaSet=rs0',
+      env: 'MONGO_URI'
+    },
+    databaseName: {
+      doc: 'database for mongodb',
+      format: String,
+      default: 'cdp-self-service-ops',
+      env: 'MONGO_DATABASE'
+    },
+    mongoOptions: {
+      retryWrites: {
+        doc: 'enable mongo write retries',
+        format: Boolean,
+        default: false
+      },
+      readPreference: {
+        doc: 'mongo read preference',
+        format: [
+          'primary',
+          'primaryPreferred',
+          'secondary',
+          'secondaryPreferred',
+          'nearest'
+        ],
+        default: 'secondaryPreferred'
+      }
+    }
   },
   snsDeployTopicArn: {
     doc: 'SNS Deploy Topic ARN',
