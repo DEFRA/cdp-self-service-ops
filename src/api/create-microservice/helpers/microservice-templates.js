@@ -5,7 +5,8 @@ import {
   templateTypeValidation,
   entityTypeValidation,
   entitySubTypeValidation,
-  repositoryNameValidation
+  repositoryNameValidation,
+  scopes
 } from '@defra/cdp-validation-kit'
 
 const serviceTemplateSchema = Joi.object({
@@ -81,7 +82,7 @@ const microserviceTemplates = {
     templateName: 'Python Backend',
     language: 'python',
     type: 'backend',
-    requiredScope: 'restrictedTechPython',
+    requiredScope: scopes.restrictedTechPython,
     id: 'cdp-python-backend-template',
     entityType: 'Microservice',
     entitySubType: 'Backend'

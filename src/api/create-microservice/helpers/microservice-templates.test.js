@@ -4,10 +4,11 @@ import {
   serviceTemplateSchema
 } from './microservice-templates.js'
 import Joi from 'joi'
+import { scopes } from '@defra/cdp-validation-kit'
 
 describe('#getServiceTemplates', () => {
   test('Should provide python template when correct scope is present', () => {
-    expect(getServiceTemplates(['restrictedTechPython'])).toEqual([
+    expect(getServiceTemplates([scopes.restrictedTechPython])).toEqual([
       microserviceTemplates['cdp-node-frontend-template'],
       microserviceTemplates['cdp-node-backend-template'],
       microserviceTemplates['cdp-node-backend-template-minimal'],
