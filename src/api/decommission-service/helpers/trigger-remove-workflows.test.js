@@ -1,5 +1,3 @@
-import { describe, expect, test, vi } from 'vitest'
-
 import { archiveGithubRepo } from '../../../helpers/remove/workflows/archive-github-repo.js'
 import { deleteEcrImages } from '../../../helpers/remove/workflows/delete-ecr-images.js'
 import { deleteDockerHubImages } from '../../../helpers/remove/workflows/delete-dockerhub-images.js'

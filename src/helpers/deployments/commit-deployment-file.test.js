@@ -1,5 +1,3 @@
-import { describe, expect, test, vi } from 'vitest'
-
 vi.mock('../oktokit/oktokit.js', () => ({
   octokit: vi.fn(),
   graphql: vi.fn()

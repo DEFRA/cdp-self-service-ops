@@ -1,4 +1,3 @@
-import { describe, expect, test, vi } from 'vitest'
 import { randomUUID } from 'node:crypto'
 import { config } from '../../../config/index.js'
 import { registerDeployment } from './register-deployment.js'

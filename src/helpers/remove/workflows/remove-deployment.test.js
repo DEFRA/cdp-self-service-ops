@@ -1,4 +1,3 @@
-import { describe, expect, test, vi } from 'vitest'
 import { triggerWorkflow } from '../../github/trigger-workflow.js'
 import { removeDeployment } from './remove-deployment.js'
 

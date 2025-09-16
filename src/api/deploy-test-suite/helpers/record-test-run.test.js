@@ -3,7 +3,6 @@ import { randomUUID } from 'node:crypto'
 import { config } from '../../../config/index.js'
 import { fetcher } from '../../../helpers/fetcher.js'
 import { recordTestRun } from './record-test-run.js'
-import { vi } from 'vitest'
 
 vi.mock('../../../helpers/fetcher.js')
 

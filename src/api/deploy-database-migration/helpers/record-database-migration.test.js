@@ -3,7 +3,6 @@ import { randomUUID } from 'node:crypto'
 import { config } from '../../../config/index.js'
 import { fetcher } from '../../../helpers/fetcher.js'
 import { recordDatabaseMigration } from './record-database-migration.js'
-import { vi } from 'vitest'
 
 const mockInfoLogger = vi.fn()
 

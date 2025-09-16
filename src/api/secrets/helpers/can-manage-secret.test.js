@@ -1,6 +1,6 @@
-import { canManageSecretInEnv } from './can-manage-secret.js'
-import { vi } from 'vitest'
 import { scopes } from '@defra/cdp-validation-kit'
+
+import { canManageSecretInEnv } from './can-manage-secret.js'
 
 vi.mock('../../deploy/helpers/get-repo-teams', () => ({
   getRepoTeams: vi
@@ -11,7 +11,7 @@ vi.mock('../../deploy/helpers/get-repo-teams', () => ({
 }))
 
 describe('#canManageSecret', () => {
-  it('should return true when user is admin', async () => {
+  test('should return true when user is admin', async () => {
     expect(await canManageSecretInEnv('foo', 'dev', [scopes.admin])).toBe(true)
   })
 

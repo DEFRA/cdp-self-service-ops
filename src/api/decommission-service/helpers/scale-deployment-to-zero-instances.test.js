@@ -1,4 +1,3 @@
-import { describe, expect, test } from 'vitest'
 import { scaleDeploymentToZeroInstances } from './scale-deployment-to-zero-instances.js'
 
 const undeploymentId = 'some-undeployment-id'

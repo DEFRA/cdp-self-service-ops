@@ -1,5 +1,3 @@
-import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest'
-
 import { config } from '../../config/index.js'
 import { createLogger } from '../logging/logger.js'
 import { fetchTeam } from '../fetch-team.js'

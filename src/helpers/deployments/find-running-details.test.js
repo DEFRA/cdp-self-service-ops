@@ -1,6 +1,5 @@
 import { fetchRunningServices } from './fetch-running-services.js'
 import { findRunningDetails } from './find-running-details.js'
-import { vi } from 'vitest'
 
 vi.mock('./fetch-running-services.js', () => {
   return {
