@@ -6,7 +6,6 @@ import { deploy } from '../api/deploy/index.js'
 import { deployTestSuite } from '../api/deploy-test-suite/index.js'
 import { deployTerminal } from '../api/deploy-terminal/index.js'
 import { health } from '../api/health/index.js'
-import { queuedEvents } from '../api/queued-events/index.js'
 import { secrets } from '../api/secrets/index.js'
 import { decommissionService } from '../api/decommission-service/index.js'
 import { databaseMigrations } from '../api/deploy-database-migration/index.js'
@@ -29,7 +28,6 @@ const router = {
         deployTestSuite,
         deployTerminal,
         databaseMigrations,
-        queuedEvents,
         secrets,
         shutter
       ])

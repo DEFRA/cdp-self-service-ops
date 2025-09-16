@@ -41,16 +41,10 @@ const mongoDb = {
   }
 }
 
-const createIndexes = async (db) => {
+async function createIndexes(db) {
   await db
     .collection('status')
     .createIndex({ repositoryName: 1 }, { unique: true })
-  await db
-    .collection('queue-events')
-    .createIndex({ repositoryName: 1, eventType: 1 }, { unique: true })
-  await db
-    .collection('queue-events')
-    .createIndex({ eventType: 1, requestedAt: 1 })
   await db.collection('status').createIndex({ repositoryName: 1, status: 1 })
   await db.collection('mongo-locks').createIndex({ id: 1 })
 }
