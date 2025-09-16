@@ -1,22 +1,19 @@
 import { MongoClient } from 'mongodb'
 import { LockManager } from 'mongo-locks'
 
-import { config } from '../config/index.js'
-
 const mongoDb = {
   plugin: {
-    name: 'mongodb',
+    name: 'mongoDb',
     version: '1.0.0',
     register: async function (server, options) {
       server.logger.info('Setting up mongodb')
 
       const client = await MongoClient.connect(options.mongoUrl, {
-        retryWrites: options.retryWrites,
-        readPreference: options.readPreference,
+        ...options.mongoOptions,
         ...(server.secureContext && { secureContext: server.secureContext })
       })
 
-      const databaseName = options.databaseName
+      const { databaseName } = options
       const db = client.db(databaseName)
       const locker = new LockManager(db.collection('mongo-locks'))
 

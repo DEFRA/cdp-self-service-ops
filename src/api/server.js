@@ -59,7 +59,7 @@ async function createServer() {
     pulse,
     azureOidc,
     sqsClient,
-    mongoDb,
+    { plugin: mongoDb.plugin, options: config.get('mongo') },
     snsClientPlugin,
     router
   ])
