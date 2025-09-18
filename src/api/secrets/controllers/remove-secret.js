@@ -4,22 +4,22 @@ import { config } from '../../../config/index.js'
 import { sendSnsMessage } from '../../../helpers/sns/send-sns-message.js'
 import {
   secretParamsValidation,
-  addSecretPayloadValidation
+  removeSecretPayloadValidation
 } from '../helpers/schema/secret-validation.js'
 import { sanitize } from '../../../helpers/sanitize.js'
 import { registerPendingSecret } from '../helpers/register-pending-secret.js'
 import { canManageSecretInEnv } from '../helpers/can-manage-secret.js'
 import { statusCodes } from '@defra/cdp-validation-kit'
 
-const addSecretController = {
+const removeSecretController = {
   options: {
     auth: {
       strategy: 'azure-oidc'
     },
     validate: {
       params: secretParamsValidation(),
-      payload: addSecretPayloadValidation(),
-      failAction: (request, h, validationError) => {
+      payload: removeSecretPayloadValidation(),
+      failAction: (request, _h, validationError) => {
         request.logger.debug(
           validationError,
           `Validation error: ${validationError.message}`
@@ -32,18 +32,18 @@ const addSecretController = {
     const { serviceName, environment } = request.params
     const scope = request.auth?.credentials?.scope
 
-    const canAddSecret = await canManageSecretInEnv(
+    const canManageSecret = await canManageSecretInEnv(
       serviceName,
       environment,
       scope
     )
-    if (!canAddSecret) {
-      throw Boom.forbidden('Insufficient permissions to manage this secret')
+    if (!canManageSecret) {
+      throw Boom.forbidden('Insufficient permissions to update this secret')
     }
 
-    const { secretValue, secretKey } = request.payload
+    const { secretKey } = request.payload
     const topic = config.get('snsSecretsManagementTopicArn')
-    const description = `Secret ${secretKey} pending for ${serviceName}`
+    const description = `Secret ${secretKey} removal pending for ${serviceName}`
 
     try {
       await sendSnsMessage(
@@ -54,8 +54,7 @@ const addSecretController = {
           name: `cdp/services/${serviceName}`,
           description,
           secret_key: secretKey,
-          secret_value: secretValue,
-          action: 'add_secret'
+          action: 'remove_secret_by_key'
         },
         request.logger
       )
@@ -64,18 +63,18 @@ const addSecretController = {
         environment,
         service: serviceName,
         secretKey,
-        action: 'add_secret'
+        action: 'remove_secret_by_key'
       })
 
       request.logger.debug(description)
 
       return h.response().code(statusCodes.ok)
     } catch (error) {
-      request.logger.error(error, 'Error creating secret')
+      request.logger.error(error, 'Error removing secret')
 
-      return Boom.notImplemented('Error creating secret')
+      return Boom.notImplemented('Error removing secret')
     }
   }
 }
 
-export { addSecretController }
+export { removeSecretController }

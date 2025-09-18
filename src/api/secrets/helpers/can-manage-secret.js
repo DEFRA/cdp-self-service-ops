@@ -3,13 +3,13 @@ import { getRepoTeams } from '../../deploy/helpers/get-repo-teams.js'
 import { scopes } from '@defra/cdp-validation-kit'
 
 /**
- * Does a given scope own a test suite.
+ * Does user have permission to manage secrets for this service in this environment?
  * @param {string} service
  * @param {string} env
  * @param {string[]} scope
  * @returns {Promise<boolean>}
  */
-export async function canAddSecretInEnv(service, env, scope) {
+export async function canManageSecretInEnv(service, env, scope) {
   if (scope.includes(scopes.admin)) {
     return true
   }

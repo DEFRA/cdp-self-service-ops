@@ -14,22 +14,39 @@ const secretParamsValidation = () =>
     environment: environmentValidation
   })
 
+function secretKeyValidation() {
+  return Joi.string()
+    .disallow(...config.get('platformGlobalSecretKeys'))
+    .pattern(/^\w*$/)
+    .pattern(/^[a-zA-Z0-9]\w*[a-zA-Z0-9]$/, {
+      name: 'startAndEndWithCharacter'
+    })
+    .min(1)
+    .max(20000)
+    .required()
+}
+
 /**
- * Validates the payload for secrets.
+ * Validates the payload for adding secrets.
  * @returns {object} Joi validation schema for the secret payload.
  */
-const secretPayloadValidation = () =>
+const addSecretPayloadValidation = () =>
   Joi.object({
-    secretKey: Joi.string()
-      .not(...config.get('platformGlobalSecretKeys'))
-      .pattern(/^\w*$/)
-      .pattern(/^[a-zA-Z0-9]\w*[a-zA-Z0-9]$/, {
-        name: 'startAndEndWithCharacter'
-      })
-      .min(1)
-      .max(20000)
-      .required(),
+    secretKey: secretKeyValidation(),
     secretValue: Joi.string().pattern(/^\S*$/).min(1).max(20000).required()
   }).unknown(true)
 
-export { secretParamsValidation, secretPayloadValidation }
+/**
+ * Validates the payload for removing secrets.
+ * @returns {object} Joi validation schema for the secret payload.
+ */
+const removeSecretPayloadValidation = () =>
+  Joi.object({
+    secretKey: secretKeyValidation()
+  }).unknown(true)
+
+export {
+  secretParamsValidation,
+  addSecretPayloadValidation,
+  removeSecretPayloadValidation
+}
