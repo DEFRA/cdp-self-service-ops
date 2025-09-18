@@ -1,4 +1,3 @@
-import { vi } from 'vitest'
 import { scaleEcsToZeroInEnvironment } from './scale-ecs-to-zero-in-environment.js'
 import { scaleEcsToZeroInAllEnvironments } from './scale-ecs-to-zero-in-all-environments.js'
 import { orderedEnvironments } from '../../../config/environments.js'

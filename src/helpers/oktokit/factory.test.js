@@ -1,4 +1,3 @@
-import { beforeEach, describe, expect, test, vi } from 'vitest'
 import { createAppAuth } from '@octokit/auth-app'
 import { octokitFactory } from './factory.js'
 import { proxyFetch } from '../proxy/proxy-fetch.js'

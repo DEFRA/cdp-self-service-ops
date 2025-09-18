@@ -1,5 +1,3 @@
-import { vi, beforeEach } from 'vitest'
-
 import { fetcher } from '../../../helpers/fetcher.js'
 import { getLatestImage } from '../../../helpers/portal-backend/get-latest-image.js'
 import { runTestSuite } from './run-test-suite.js'

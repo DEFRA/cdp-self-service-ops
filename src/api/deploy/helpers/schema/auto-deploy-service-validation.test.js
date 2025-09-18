@@ -1,4 +1,3 @@
-import { describe, expect, test } from 'vitest'
 import { autoDeployServiceValidation } from './auto-deploy-service-validation.js'
 
 describe('#autoDeployServiceValidation', () => {

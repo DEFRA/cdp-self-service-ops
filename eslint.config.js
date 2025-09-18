@@ -128,7 +128,7 @@ export default [
   {
     files: [
       '.vite/**/*.js',
-      '**/*.test.{js,cjs}',
+      '**/*.test.js',
       '**/__mocks__/**',
       '**/__fixtures__/**',
       'vitest.config.js'
@@ -152,7 +152,11 @@ export default [
       'n/no-unpublished-import': [
         'error',
         {
-          allowModules: ['vitest', 'vitest-mongodb']
+          allowModules: [
+            'vitest',
+            'vitest-mongodb',
+            'mongodb-memory-server-core'
+          ]
         }
       ]
     }

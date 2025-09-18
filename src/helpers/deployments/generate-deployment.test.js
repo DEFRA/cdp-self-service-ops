@@ -1,4 +1,3 @@
-import { describe, expect, test } from 'vitest'
 import { generateDeployment } from './generate-deployment.js'
 import { ValidationError } from 'joi'
 import { randomUUID } from 'node:crypto'

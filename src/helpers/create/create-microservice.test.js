@@ -6,7 +6,6 @@ import { microserviceTemplates } from '../../api/create-microservice/helpers/mic
 import { createEntity } from '../portal-backend/create-entity.js'
 import { entitySubTypes, entityTypes } from '../../constants/entities.js'
 import { randomUUID } from 'node:crypto'
-import { vi } from 'vitest'
 
 vi.mock('../fetch-team', () => ({
   fetchTeam: vi.fn()

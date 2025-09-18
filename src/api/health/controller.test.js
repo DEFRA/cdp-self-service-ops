@@ -1,4 +1,3 @@
-import { describe, expect, test, vi } from 'vitest'
 import { healthController } from './controller.js'
 import { statusCodes } from '@defra/cdp-validation-kit'
 

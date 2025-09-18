@@ -1,4 +1,3 @@
-import { describe, expect, test } from 'vitest'
 import { generateTerminalToken } from './generate-terminal-token.js'
 
 describe('#generate-terminal-token', () => {

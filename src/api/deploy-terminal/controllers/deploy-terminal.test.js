@@ -1,4 +1,3 @@
-import { describe, expect, vi } from 'vitest'
 import { deployTerminal } from './deploy-terminal.js'
 import { sendSnsMessage } from '../../../helpers/sns/send-sns-message.js'
 import { lookupTenantService } from '../../../helpers/portal-backend/lookup-tenant-service.js'

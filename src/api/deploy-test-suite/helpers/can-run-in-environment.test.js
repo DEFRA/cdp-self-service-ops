@@ -1,4 +1,3 @@
-import { describe, expect, test } from 'vitest'
 import { canRunInEnvironment } from './can-run-in-environment.js'
 import { environments } from '../../../config/index.js'
 import { scopes } from '@defra/cdp-validation-kit'

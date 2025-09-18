@@ -3,8 +3,6 @@ import { randomUUID } from 'node:crypto'
 import { fetcher } from '../../../helpers/fetcher.js'
 import { recordTerminalSession } from './record-terminal-session.js'
 
-import { vi } from 'vitest'
-
 vi.mock('../../../helpers/fetcher.js')
 
 describe('#recordTestRun', () => {

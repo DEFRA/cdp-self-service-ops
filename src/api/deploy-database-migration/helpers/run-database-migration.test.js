@@ -1,6 +1,6 @@
 import { fetcher } from '../../../helpers/fetcher.js'
 import { runDatabaseMigration } from './run-database-migration.js'
-import { vi } from 'vitest'
+
 import { validate as validateUUID } from 'uuid'
 
 const mockInfoLogger = vi.fn()

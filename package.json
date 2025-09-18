@@ -20,6 +20,7 @@
     "lint:js": "eslint --cache --cache-strategy content \"**/*.{cjs,js}\"",
     "postversion": "git add package.json package-lock.json && git commit -m $npm_package_version",
     "security-audit": "npm audit --audit-level=high",
+    "pretest": " node test-helpers/download-mongo.js",
     "test": "TZ=UTC vitest run --coverage",
     "test:watch": "TZ=UTC vitest",
     "server:debug": "nodemon --inspect=9239 --ext js,json --legacy-watch ./src",
@@ -88,6 +89,7 @@
     "eslint-plugin-vitest": "0.5.4",
     "globals": "16.3.0",
     "husky": "9.1.7",
+    "mongodb-memory-server-core": "10.2.0",
     "neostandard": "0.12.2",
     "nodemon": "3.1.10",
     "npm-run-all": "4.1.5",
@@ -96,6 +98,7 @@
     "timers": "0.1.1",
     "tsx": "4.20.5",
     "typescript": "5.9.2",
+    "vitest": "3.2.4",
     "vitest-fetch-mock": "0.4.5",
     "vitest-mongodb": "1.0.1"
   }
