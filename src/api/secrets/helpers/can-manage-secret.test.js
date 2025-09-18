@@ -1,4 +1,4 @@
-import { canAddSecretInEnv } from './can-add-secret.js'
+import { canManageSecretInEnv } from './can-manage-secret.js'
 import { vi } from 'vitest'
 import { scopes } from '@defra/cdp-validation-kit'
 
@@ -10,22 +10,22 @@ vi.mock('../../deploy/helpers/get-repo-teams', () => ({
     ])
 }))
 
-describe('#canAddSecret', () => {
+describe('#canManageSecret', () => {
   it('should return true when user is admin', async () => {
-    expect(await canAddSecretInEnv('foo', 'dev', [scopes.admin])).toBe(true)
+    expect(await canManageSecretInEnv('foo', 'dev', [scopes.admin])).toBe(true)
   })
 
   test('should return false if no-admin deploys to admin envs', async () => {
     expect(
-      await canAddSecretInEnv('foo', 'management', ['team:tenant-team'])
+      await canManageSecretInEnv('foo', 'management', ['team:tenant-team'])
     ).toBe(false)
     expect(
-      await canAddSecretInEnv('foo', 'infra-dev', ['team:tenant-team'])
+      await canManageSecretInEnv('foo', 'infra-dev', ['team:tenant-team'])
     ).toBe(false)
   })
 
   test('should return true if tenant owns the service', async () => {
-    expect(await canAddSecretInEnv('foo', 'dev', ['team:tenant-team'])).toBe(
+    expect(await canManageSecretInEnv('foo', 'dev', ['team:tenant-team'])).toBe(
       true
     )
   })

@@ -4,7 +4,7 @@ import Joi from 'joi'
 import { config } from '../../../../config/config.js'
 import {
   secretParamsValidation,
-  secretPayloadValidation
+  addSecretPayloadValidation
 } from './secret-validation.js'
 
 describe('#secretParamsValidation', () => {
@@ -39,7 +39,7 @@ describe('#secretPayloadValidation', () => {
     }
     config.get = vi.fn().mockReturnValue([])
 
-    const { error } = secretPayloadValidation().validate(payload)
+    const { error } = addSecretPayloadValidation().validate(payload)
     expect(error).toBeUndefined()
   })
 
@@ -49,7 +49,7 @@ describe('#secretPayloadValidation', () => {
       secretValue: 'validSecretValue'
     }
     config.get = vi.fn().mockReturnValue(['IMMUTABLE_KEY'])
-    const response = secretPayloadValidation().validate(payload)
+    const response = addSecretPayloadValidation().validate(payload)
 
     const error = response.error
     expect(error).toBeInstanceOf(Joi.ValidationError)
@@ -63,7 +63,7 @@ describe('#secretPayloadValidation', () => {
     }
     config.get = vi.fn().mockReturnValue([])
 
-    const { error } = secretPayloadValidation().validate(payload)
+    const { error } = addSecretPayloadValidation().validate(payload)
     expect(error).toBeInstanceOf(Joi.ValidationError)
     expect(error.message).toBe(
       '"secretKey" with value "invalid secret key!" fails to match the required pattern: /^\\w*$/'
@@ -77,7 +77,7 @@ describe('#secretPayloadValidation', () => {
     }
     config.get = vi.fn().mockReturnValue([])
 
-    const { error } = secretPayloadValidation().validate(payload)
+    const { error } = addSecretPayloadValidation().validate(payload)
     expect(error).toBeInstanceOf(Joi.ValidationError)
     expect(error.message).toBe(
       '"secretValue" with value "invalid secret value!" fails to match the required pattern: /^\\S*$/'

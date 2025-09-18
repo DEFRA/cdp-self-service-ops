@@ -1,4 +1,5 @@
 import { addSecretController } from './controllers/add-secret.js'
+import { removeSecretController } from './controllers/remove-secret.js'
 
 const secrets = {
   plugin: {
@@ -9,6 +10,11 @@ const secrets = {
           method: 'POST',
           path: '/secrets/add/{serviceName}/{environment}',
           ...addSecretController
+        },
+        {
+          method: 'POST',
+          path: '/secrets/remove/{serviceName}/{environment}',
+          ...removeSecretController
         }
       ])
     }
