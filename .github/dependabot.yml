@@ -18,6 +18,11 @@ updates:
           - 'eslint'
           - 'eslint-*'
 
+      typescript-eslint:
+        patterns:
+          - '@typescript-eslint/*'
+          - 'typescript-eslint'
+
       logging:
         patterns:
           - 'pino'
