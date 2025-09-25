@@ -91,4 +91,14 @@ describe('#isAllowedTerminalEnvironment', () => {
 
     expect(result).toBe(false)
   })
+
+  test('Should allow access to lower environments for non-platform team for admin user', () => {
+    const result = isAllowedTerminalEnvironment({
+      userScopes: [scopes.admin],
+      environment: environments.dev,
+      teamIds: ['forms']
+    })
+
+    expect(result).toBe(true)
+  })
 })

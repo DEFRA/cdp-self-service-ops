@@ -14,6 +14,10 @@ function isAllowedTerminalEnvironment({ userScopes, environment, teamIds }) {
   const hasTeamScope = (scope) =>
     teamIds.some((teamId) => hasScope(`${scope}:team:${teamId}`))
 
+  if (hasScope(scopes.admin)) {
+    return true
+  }
+
   if (
     environment === environments.prod &&
     (hasScope(scopes.breakGlass) || hasTeamScope(scopes.breakGlass))
