@@ -1,4 +1,4 @@
-import { orderedEnvironments } from '../../../config/environments.js'
+import { orderedEnvironments } from '@defra/cdp-validation-kit'
 import { scaleEcsToZeroInEnvironment } from './scale-ecs-to-zero-in-environment.js'
 
 /**

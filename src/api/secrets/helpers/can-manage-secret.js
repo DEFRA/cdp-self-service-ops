@@ -1,6 +1,5 @@
-import { environments } from '../../../config/index.js'
 import { getRepoTeams } from '../../deploy/helpers/get-repo-teams.js'
-import { scopes } from '@defra/cdp-validation-kit'
+import { scopes, adminOnlyEnvironments } from '@defra/cdp-validation-kit'
 
 /**
  * Does user have permission to manage secrets for this service in this environment?
@@ -13,7 +12,7 @@ export async function canManageSecretInEnv(service, env, scope) {
   if (scope.includes(scopes.admin)) {
     return true
   }
-  if ([environments.infraDev, environments.management].includes(env)) {
+  if (adminOnlyEnvironments.includes(env)) {
     return false
   }
   const repoTeams = await getRepoTeams(service)

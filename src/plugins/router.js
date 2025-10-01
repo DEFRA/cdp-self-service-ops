@@ -12,6 +12,7 @@ import { databaseMigrations } from '../api/deploy-database-migration/index.js'
 import { shutter } from '../api/shutter/index.js'
 import { createPrototype } from '../api/create-prototype/index.js'
 import { createTenant } from '../api/create-tenant/index.js'
+import { ephemeralKeys } from '../api/ephemeral-keys/index.js'
 
 const router = {
   plugin: {
@@ -30,6 +31,7 @@ const router = {
         deployTestSuite,
         deployTerminal,
         databaseMigrations,
+        ephemeralKeys,
         secrets,
         shutter
       ])

@@ -1,6 +1,6 @@
 import { config } from '../../../config/index.js'
 import { triggerWorkflow } from '../../github/trigger-workflow.js'
-import { orderedEnvironments } from '../../../config/environments.js'
+import { orderedEnvironments } from '@defra/cdp-validation-kit'
 
 /**
  * Removes an ECS service from an environment
