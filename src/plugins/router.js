@@ -11,6 +11,7 @@ import { decommissionService } from '../api/decommission-service/index.js'
 import { databaseMigrations } from '../api/deploy-database-migration/index.js'
 import { shutter } from '../api/shutter/index.js'
 import { createPrototype } from '../api/create-prototype/index.js'
+import { createTenant } from '../api/create-tenant/index.js'
 
 const router = {
   plugin: {
@@ -23,6 +24,7 @@ const router = {
         createRepository,
         createJourneyTestSuite,
         createPerfTestSuite,
+        createTenant,
         decommissionService,
         deploy,
         deployTestSuite,
