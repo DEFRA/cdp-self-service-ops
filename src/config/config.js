@@ -364,6 +364,12 @@ const config = convict({
         doc: 'Repository for CDP Web Application Firewall (WAF)',
         format: String,
         default: 'cdp-tf-waf'
+      },
+      cdpTenantConfig: {
+        doc: 'GitHub repository containing the tenant config',
+        format: String,
+        default: 'cdp-tenant-config',
+        env: 'GITHUB_REPO_CDP_TENANT_CONFIG'
       }
     }
   },
