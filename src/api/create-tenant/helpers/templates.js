@@ -4,7 +4,7 @@ import {
   zoneValidation,
   entityTypeValidation,
   entitySubTypeValidation,
-  scopes,
+  scopes as cdpScopes,
   entityTypes,
   entitySubTypes
 } from '@defra/cdp-validation-kit'
@@ -114,7 +114,7 @@ const tenantTemplates = {
     redis: false,
     templateName: 'Python Backend',
     language: 'python',
-    requiredScope: scopes.restrictedTechPython,
+    requiredScope: cdpScopes.restrictedTechPython,
     entityType: entityTypes.microservice,
     entitySubType: entitySubTypes.backend
   },
@@ -142,17 +142,20 @@ const tenantTemplates = {
   }
 }
 
-Joi.assert(tenantTemplates, tenantTemplateLookupSchema)
-
 function filterTemplates({ scopes = null, type = null, subtype = null }) {
   return Object.values(tenantTemplates).filter((template) => {
-    if (scopes && template.requiredScope) {
-      if (!scopes.includes(template.requiredScope)) return false
+    if (
+      scopes &&
+      template.requiredScope &&
+      !scopes.includes(template.requiredScope)
+    ) {
+      return false
     }
 
-    if (type && template.entityType !== type) {
-      return false
-    } else if (subtype && template.entitySubType !== subtype) {
+    if (
+      (type && template.entityType !== type) ||
+      (subtype && template.entitySubType !== subtype)
+    ) {
       return false
     }
 

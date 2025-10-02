@@ -1,5 +1,5 @@
 import Boom from '@hapi/boom'
-import { statusCodes, scopes } from '@defra/cdp-validation-kit'
+import { statusCodes, scopes as cdpScopes } from '@defra/cdp-validation-kit'
 
 import { tenantTemplates } from './helpers/templates.js'
 import { fetchTeam } from '../../helpers/fetch-team.js'
@@ -12,7 +12,7 @@ const createTenantController = {
     auth: {
       strategy: 'azure-oidc',
       access: {
-        scope: [scopes.admin, 'team:{payload.teamId}']
+        scope: [cdpScopes.admin, 'team:{payload.teamId}']
       }
     },
     validate: {
