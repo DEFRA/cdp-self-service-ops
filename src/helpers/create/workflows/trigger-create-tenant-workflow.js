@@ -5,7 +5,7 @@ import { config } from '../../../config/index.js'
  * @import {TenantTemplate} from "./templates.js"
  * @param {{}} request
  * @param {string} name - name of tenant service or test suite to create
- * @param {{ teamId: string, serviceCodes: string|null }} team - CDP Team record
+ * @param {{ teamId: string, github: string, serviceCodes: string|null }} team - CDP Team record
  * @param {TenantTemplate} template - template object
  * @param {string|null} templateTag - overrides branch or tag used to template the repo
  * @returns {Promise<void>}
@@ -28,6 +28,7 @@ async function triggerCreateTenantWorkflow(
     type: template.entityType,
     subtype: template.entitySubType ?? '',
     team: team.teamId,
+    github_team: team.github,
     service_code: team.serviceCodes?.at(0)
   }
 
