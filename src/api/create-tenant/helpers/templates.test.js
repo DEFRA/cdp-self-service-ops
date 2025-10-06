@@ -4,8 +4,7 @@ import {
   tenantTemplateLookupSchema
 } from './templates.js'
 import Joi from 'joi'
-import { entityTypes } from '../../../constants/entities.js'
-import { entitySubTypes, scopes } from '@defra/cdp-validation-kit'
+import { entitySubTypes, entityTypes, scopes } from '@defra/cdp-validation-kit'
 
 describe('tenantTemplateSchema', () => {
   test('Should validate the template lookup table', () => {
