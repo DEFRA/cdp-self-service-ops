@@ -103,8 +103,8 @@ const tenantTemplates = {
     redis: false,
     templateName: 'GOVUK Prototype Kit',
     language: 'node',
-    entityType: entityTypes.prototype,
-    entitySubType: entitySubTypes.frontend
+    entityType: entityTypes.microservice,
+    entitySubType: entitySubTypes.prototype
   },
   'cdp-python-backend-template': {
     id: 'cdp-python-backend-template',

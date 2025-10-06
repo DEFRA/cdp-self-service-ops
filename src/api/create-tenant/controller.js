@@ -16,7 +16,7 @@ const createTenantController = {
       }
     },
     validate: {
-      payload: createTenantValidationSchema(),
+      payload: createTenantValidationSchema,
       failAction: () => Boom.boomify(Boom.badRequest())
     }
   },
