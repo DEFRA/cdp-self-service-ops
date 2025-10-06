@@ -1,8 +1,12 @@
 import Boom from '@hapi/boom'
-import { statusCodes, scopes } from '@defra/cdp-validation-kit'
+import {
+  statusCodes,
+  scopes,
+  entityTypes,
+  entitySubTypes
+} from '@defra/cdp-validation-kit'
 
 import { prototypeValidation } from './schema/prototype-validation.js'
-import { entityTypes } from '../../constants/entities.js'
 import { createMicroservice } from '../../helpers/create/create-microservice.js'
 
 const createPrototypeController = {
@@ -33,8 +37,8 @@ const createPrototypeController = {
       language: 'node',
       type: 'prototype',
       id: 'cdp-node-prototype-template',
-      entityType: entityTypes.prototype,
-      entitySubType: undefined
+      entityType: entityTypes.microservice,
+      entitySubType: entitySubTypes.prototype
     }
 
     await createMicroservice({

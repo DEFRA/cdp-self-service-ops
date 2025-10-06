@@ -6,7 +6,9 @@ import {
   entityTypeValidation,
   entitySubTypeValidation,
   repositoryNameValidation,
-  scopes
+  scopes,
+  entitySubTypes,
+  entityTypes
 } from '@defra/cdp-validation-kit'
 
 const serviceTemplateSchema = Joi.object({
@@ -34,8 +36,8 @@ const microserviceTemplates = {
     language: 'node',
     type: 'frontend',
     id: 'cdp-node-frontend-template',
-    entityType: 'Microservice',
-    entitySubType: 'Frontend'
+    entityType: entityTypes.microservice,
+    entitySubType: entitySubTypes.frontend
   },
   'cdp-node-backend-template': {
     repositoryName: 'cdp-node-backend-template',
@@ -46,8 +48,8 @@ const microserviceTemplates = {
     language: 'node',
     type: 'backend',
     id: 'cdp-node-backend-template',
-    entityType: 'Microservice',
-    entitySubType: 'Backend'
+    entityType: entityTypes.microservice,
+    entitySubType: entitySubTypes.backend
   },
   'cdp-node-backend-template-minimal': {
     repositoryName: 'cdp-node-backend-template',
@@ -59,8 +61,8 @@ const microserviceTemplates = {
     type: 'backend',
     defaultBranch: 'minimal',
     id: 'cdp-node-backend-template-minimal',
-    entityType: 'Microservice',
-    entitySubType: 'Backend'
+    entityType: entityTypes.microservice,
+    entitySubType: entitySubTypes.backend
   },
   'cdp-dotnet-backend-template': {
     repositoryName: 'cdp-dotnet-backend-template',
@@ -71,8 +73,8 @@ const microserviceTemplates = {
     language: 'dotnet',
     type: 'backend',
     id: 'cdp-dotnet-backend-template',
-    entityType: 'Microservice',
-    entitySubType: 'Backend'
+    entityType: entityTypes.microservice,
+    entitySubType: entitySubTypes.backend
   },
   'cdp-python-backend-template': {
     repositoryName: 'cdp-python-backend-template',
@@ -84,8 +86,8 @@ const microserviceTemplates = {
     type: 'backend',
     requiredScope: scopes.restrictedTechPython,
     id: 'cdp-python-backend-template',
-    entityType: 'Microservice',
-    entitySubType: 'Backend'
+    entityType: entityTypes.microservice,
+    entitySubType: entitySubTypes.backend
   }
 }
 
