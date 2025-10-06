@@ -3,11 +3,11 @@ import { createInitialEntity } from './create-initial-entity.js'
 import {
   createAppConfig,
   createSquidConfig,
-  createTemplatedRepo
+  createTemplatedRepo,
+  createTenantInfrastructure
 } from './workflows/index.js'
 import { fetchTeam } from '../fetch-team.js'
-import { createTenantInfrastructure } from './workflows/create-tenant-infrastructure.js'
-import { entityTypes } from '../../constants/entities.js'
+import { entityTypes } from '@defra/cdp-validation-kit'
 
 /**
  * Helper to create test suites

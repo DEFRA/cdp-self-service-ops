@@ -1,10 +1,9 @@
 import Boom from '@hapi/boom'
-import { statusCodes, scopes } from '@defra/cdp-validation-kit'
+import { statusCodes, scopes, entitySubTypes } from '@defra/cdp-validation-kit'
 
 import { config } from '../../config/index.js'
 import { createTestRunnerSuite } from '../../helpers/create/create-test-runner-suite.js'
 import { testSuiteValidation } from '../helpers/schema/test-suite-validation.js'
-import { entitySubTypes } from '../../constants/entities.js'
 
 const createPerfTestSuiteController = {
   options: {

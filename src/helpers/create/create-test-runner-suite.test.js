@@ -2,7 +2,7 @@ import { config } from '../../config/index.js'
 import { createLogger } from '../logging/logger.js'
 import { fetchTeam } from '../fetch-team.js'
 import { createEntity } from '../portal-backend/create-entity.js'
-import { entitySubTypes, entityTypes } from '../../constants/entities.js'
+import { entitySubTypes, entityTypes } from '@defra/cdp-validation-kit'
 import { randomUUID } from 'node:crypto'
 
 vi.mock('../oktokit/oktokit.js', () => ({

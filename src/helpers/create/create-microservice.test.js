@@ -4,7 +4,7 @@ import { createMicroservice } from './create-microservice.js'
 import { triggerWorkflow } from '../github/trigger-workflow.js'
 import { microserviceTemplates } from '../../api/create-microservice/helpers/microservice-templates.js'
 import { createEntity } from '../portal-backend/create-entity.js'
-import { entitySubTypes, entityTypes } from '../../constants/entities.js'
+import { entitySubTypes, entityTypes } from '@defra/cdp-validation-kit'
 import { randomUUID } from 'node:crypto'
 
 vi.mock('../fetch-team', () => ({
