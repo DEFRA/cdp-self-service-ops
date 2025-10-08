@@ -143,24 +143,12 @@ const tenantTemplates = {
 }
 
 function filterTemplates({ scopes = null, type = null, subtype = null }) {
-  return Object.values(tenantTemplates).filter((template) => {
-    if (
-      scopes &&
-      template.requiredScope &&
-      !scopes.includes(template.requiredScope)
-    ) {
-      return false
-    }
-
-    if (
-      (type && template.entityType !== type) ||
-      (subtype && template.entitySubType !== subtype)
-    ) {
-      return false
-    }
-
-    return true
-  })
+  return Object.values(tenantTemplates).filter(
+    (template) =>
+      (!template.requiredScope || scopes?.includes(template.requiredScope)) &&
+      (!type || template.entityType === type) &&
+      (!subtype || template.entitySubType === subtype)
+  )
 }
 
 export {
