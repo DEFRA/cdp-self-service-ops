@@ -57,6 +57,7 @@ const addEphemeralKeyController = {
         {
           environment,
           event_type: 'add_ephemeral_api_key',
+          timestamp: new Date().toISOString(),
           payload: {
             api_key: apiKey,
             user: request.auth.credentials.displayName,
