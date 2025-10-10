@@ -214,6 +214,12 @@ const config = convict({
     default: 'arn:aws:sns:eu-west-2:000000000000:run-migrations-topic',
     env: 'SNS_RUN_DATABASE_MIGRATION_TOPIC_ARN'
   },
+  monoLambdaTriggerTopicArn: {
+    doc: 'Mono Lambda Trigger Topic ARN',
+    format: String,
+    default: 'arn:aws:sns:eu-west-2:000000000000:mono-lambda-trigger-topic',
+    env: 'SNS_MONO_LAMBDA_TRIGGER_TOPIC_ARN'
+  },
   platformGlobalSecretKeys: {
     doc: 'Global Platform level secret keys. These keys are not to be overridden',
     format: Array,

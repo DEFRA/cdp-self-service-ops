@@ -1,4 +1,4 @@
-import { environments } from './environments.js'
+import { environments } from '@defra/cdp-validation-kit'
 
 const testRunnerEnvironments = {
   smoke: [

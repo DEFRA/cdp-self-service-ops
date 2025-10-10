@@ -1,6 +1,6 @@
 import { scaleEcsToZeroInEnvironment } from './scale-ecs-to-zero-in-environment.js'
 import { scaleEcsToZeroInAllEnvironments } from './scale-ecs-to-zero-in-all-environments.js'
-import { orderedEnvironments } from '../../../config/environments.js'
+import { orderedEnvironments } from '@defra/cdp-validation-kit'
 
 vi.mock('./scale-ecs-to-zero-in-environment.js', () => {
   return {
