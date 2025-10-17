@@ -388,18 +388,6 @@ const config = convict({
     }
   },
   workflows: {
-    createAppConfig: {
-      doc: 'Github workflow to trigger when creating placeholder config',
-      format: String,
-      default: 'create-service.yml',
-      env: 'WORKFLOWS_CREATE_APP_CONFIG'
-    },
-    createNginxUpstreams: {
-      doc: 'Github workflow to trigger when creating nginx upstream config',
-      format: String,
-      default: 'create-service.yml',
-      env: 'WORKFLOWS_CREATE_NGINX_UPSTREAMS'
-    },
     createTenantService: {
       doc: 'Github workflow to trigger when creating tenant service infrastructure',
       format: String,
@@ -460,51 +448,11 @@ const config = convict({
       default: 'remove-service.yml',
       env: 'WORKFLOWS_REMOVE_SQUID_CONFIG'
     },
-    applyTenantService: {
-      doc: 'Github workflow triggered by merges to cdp-tf-svc-infra. Used for recovering failed create runs.',
-      format: String,
-      default: 'apply.yml'
-    },
-    manualApplyTenantService: {
-      doc: 'Github workflow for manually applying cdp-tf-svc-infra. Used for recovering failed create runs.',
-      format: String,
-      default: 'manual.yml'
-    },
-    createDashboard: {
-      doc: 'Github workflow to trigger when creating dashboard',
-      format: String,
-      default: 'create-service.yml',
-      env: 'WORKFLOWS_CREATE_DASHBOARDS'
-    },
-    createSquidConfig: {
-      doc: 'Name of workflow to trigger when creating squid config',
-      format: String,
-      default: 'create-service.yml',
-      env: 'WORKFLOWS_CREATE_SQUID_CONFIG'
-    },
-    createMicroService: {
-      doc: 'Name of workflow to trigger when creating a microservice',
-      format: String,
-      default: 'create_microservice.yml',
-      env: 'CREATE_MICROSERVICE_WORKFLOW'
-    },
     createRepository: {
       doc: 'Name of workflow to trigger when creating a repository',
       format: String,
       default: 'create_repository.yml',
       env: 'CREATE_REPOSITORY_WORKFLOW'
-    },
-    createJourneyTestSuite: {
-      doc: 'Name of workflow to trigger when creating a journey test suite',
-      format: String,
-      default: 'create_journey_test_suite.yml',
-      env: 'CREATE_JOURNEY_TEST_SUITE_WORKFLOW'
-    },
-    createPerfTestSuite: {
-      doc: 'Name of workflow to trigger when creating a perf test repository',
-      format: String,
-      default: 'create_perf_test_suite.yml',
-      env: 'CREATE_PERF_TEST_SUITE_WORKFLOW'
     },
     archiveGithubRepoWorkflow: {
       doc: 'Name of workflow to trigger when archiving a GitHub repository',

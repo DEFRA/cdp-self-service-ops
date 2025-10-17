@@ -1,5 +1,5 @@
 import { config } from '../../../config/index.js'
-import { createResourceFromWorkflow } from './create-resource-from-workflow.js'
+import { triggerWorkflow } from '../../github/trigger-workflow.js'
 
 /**
  * Creates a new GitHub repository from a template
@@ -20,21 +20,30 @@ async function createTemplatedRepo(
   extraInputs = {}
 ) {
   const org = config.get('github.org')
-  const repo = config.get('github.repos.createWorkflows')
+  const workflowRepo = config.get('github.repos.createWorkflows')
 
-  await createResourceFromWorkflow(
-    logger,
+  const inputs = {
+    ...extraInputs,
     repositoryName,
-    org,
-    repo,
-    workflow,
-    {
-      ...extraInputs,
+    team,
+    additionalGitHubTopics: githubTopics.toString()
+  }
+
+  try {
+    await triggerWorkflow(
+      org,
+      workflowRepo,
+      workflow,
+      inputs,
       repositoryName,
-      team,
-      additionalGitHubTopics: githubTopics.toString()
-    }
-  )
+      logger
+    )
+  } catch (error) {
+    logger.error(
+      error,
+      `update ${workflowRepo}/${repositoryName} failed with inputs  ${JSON.stringify(inputs)} ${error.message}`
+    )
+  }
 }
 
 export { createTemplatedRepo }
