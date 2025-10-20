@@ -36,7 +36,9 @@ const createTenantController = {
     }
 
     const templateId = payload.serviceTypeTemplate
-    const templateTag = payload.templateTag
+    const templateTag =
+      payload.templateTag === '' ? null : (payload.templateTag ?? null)
+
     const template = tenantTemplates[templateId]
 
     if (!template) {
