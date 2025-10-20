@@ -42,7 +42,7 @@
     "@hapi/hapi": "21.4.3",
     "@hapi/jwt": "3.2.1",
     "@hapi/wreck": "18.1.0",
-    "@octokit/auth-app": "8.1.0",
+    "@octokit/auth-app": "8.1.1",
     "@octokit/core": "7.0.4",
     "@octokit/graphql": "9.0.1",
     "@octokit/plugin-rest-endpoint-methods": "16.0.0",
