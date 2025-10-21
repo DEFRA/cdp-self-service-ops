@@ -54,7 +54,7 @@ const testRunMessageValidation = Joi.object({
 
 /**
  * @typedef {object} Options
- * @property {string} imageName
+ * @property {string} testSuite
  * @property {string} environment
  * @property {string} cpu
  * @property {string} memory
@@ -71,7 +71,7 @@ const testRunMessageValidation = Joi.object({
  * @returns {TestRunMessage}
  */
 const generateTestRunMessage = ({
-  imageName,
+  testSuite,
   environment,
   cpu,
   memory,
@@ -79,7 +79,8 @@ const generateTestRunMessage = ({
   deployment,
   tag,
   runId,
-  configCommitSha
+  configCommitSha,
+  profile
 }) => {
   const basePath = configCommitSha
     ? `arn:aws:s3:::cdp-${environment}-service-configs/${configCommitSha}`
@@ -91,8 +92,8 @@ const generateTestRunMessage = ({
     zone: 'public',
     desired_count: 1,
     cluster_name: 'ecs-public',
-    name: imageName,
-    image: imageName,
+    name: testSuite,
+    image: testSuite,
     image_version: tag,
     port: 80,
     task_cpu: cpu,
@@ -109,7 +110,8 @@ const generateTestRunMessage = ({
     environment_variables: {
       BASE_URL: `https://${environment}.cdp-int.defra.cloud/`,
       ENVIRONMENT: environment,
-      HTTP_PROXY: config.get('httpProxy') // Once we support cdp-app-config in test suites this can go
+      HTTP_PROXY: config.get('httpProxy'), // Once we support cdp-app-config in test suites this can go,
+      PROFILE: profile
     },
     environment_files: [
       {
@@ -117,11 +119,11 @@ const generateTestRunMessage = ({
         type: 's3'
       },
       {
-        value: `${basePath}/services/${imageName}/${environment}/${imageName}.env`,
+        value: `${basePath}/services/${testSuite}/${environment}/${testSuite}.env`,
         type: 's3'
       },
       {
-        value: `${basePath}/services/${imageName}/defaults.env`,
+        value: `${basePath}/services/${testSuite}/defaults.env`,
         type: 's3'
       },
       {

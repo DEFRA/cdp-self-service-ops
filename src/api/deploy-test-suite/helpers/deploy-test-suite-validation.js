@@ -3,14 +3,16 @@ import {
   cpuValidation,
   environmentValidation,
   memoryValidation,
+  profileValidation,
   repositoryNameValidation
 } from '@defra/cdp-validation-kit'
 
 const deployTestSuiteValidation = Joi.object({
-  imageName: repositoryNameValidation,
+  testSuite: repositoryNameValidation,
   environment: environmentValidation,
   cpu: cpuValidation,
-  memory: memoryValidation
+  memory: memoryValidation,
+  profile: profileValidation
 })
 
 export { deployTestSuiteValidation }

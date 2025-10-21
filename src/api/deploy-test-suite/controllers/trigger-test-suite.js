@@ -17,19 +17,20 @@ const triggerTestSuiteController = {
     }
   },
   handler: async (request, h) => {
-    const { imageName, environment, user, cpu, memory, deployment } =
+    const { testSuite, environment, user, cpu, memory, deployment, profile } =
       request.payload
     const snsClient = request.snsClient
     const logger = request.logger
 
     const runId = await runTestSuite({
-      imageName,
+      testSuite,
       environment,
       user,
       cpu,
       memory,
       snsClient,
       deployment,
+      profile,
       logger
     })
 

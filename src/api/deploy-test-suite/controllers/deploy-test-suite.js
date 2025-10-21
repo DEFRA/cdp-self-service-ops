@@ -21,7 +21,7 @@ const deployTestSuiteController = {
     }
   },
   handler: async (request, h) => {
-    const { imageName, environment, cpu, memory } = request.payload
+    const { testSuite, environment, cpu, memory, profile } = request.payload
     const credentials = request.auth?.credentials
     const user = {
       id: credentials?.id,
@@ -31,11 +31,11 @@ const deployTestSuiteController = {
     const snsClient = request.snsClient
     const logger = request.logger
 
-    const isOwner = await isOwnerOfSuite(imageName, scope)
+    const isOwner = await isOwnerOfSuite(testSuite, scope)
 
     if (!isOwner) {
       throw Boom.forbidden(
-        `Insufficient permissions to start test-suite ${imageName}`
+        `Insufficient permissions to start test-suite ${testSuite}`
       )
     }
 
@@ -47,12 +47,13 @@ const deployTestSuiteController = {
     }
 
     const runId = await runTestSuite({
-      imageName,
+      testSuite,
       environment,
       user,
       cpu,
       memory,
       snsClient,
+      profile,
       logger
     })
 

@@ -12,7 +12,7 @@ describe('#recordTestRun', () => {
 
     expect(() =>
       recordTestRun({
-        imageName: 'some-service',
+        testSuite: 'some-service',
         environment: 'infra-dev',
         cpu: '4096',
         memory: '8192',
@@ -28,7 +28,7 @@ describe('#recordTestRun', () => {
   test('Should throw error when required fields are missing', async () => {
     await expect(
       recordTestRun({
-        imageName: 'some-service',
+        testSuite: 'some-service',
         environment: 'infra-dev',
         cpu: '4096',
         user: { id: randomUUID(), displayName: 'My Name' },
@@ -44,7 +44,7 @@ describe('#recordTestRun', () => {
 
     const userId = randomUUID()
     await recordTestRun({
-      imageName: 'some-service',
+      testSuite: 'some-service',
       environment: 'infra-dev',
       cpu: '4096',
       memory: '8192',

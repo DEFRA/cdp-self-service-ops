@@ -54,7 +54,7 @@ describe('#generateTestRunMessage', () => {
 
     expect(() =>
       generateTestRunMessage({
-        imageName: 'some-service',
+        testSuite: 'some-service',
         environment: 'infra-dev',
         cpu: '4096',
         memory: '8192',
@@ -74,7 +74,7 @@ describe('#generateTestRunMessage', () => {
 
     const userId = randomUUID()
     const message = generateTestRunMessage({
-      imageName: 'some-service',
+      testSuite: 'some-service',
       environment: 'infra-dev',
       cpu: '4096',
       memory: '8192',
@@ -91,7 +91,7 @@ describe('#generateTestRunMessage', () => {
   test('Should throw error when required fields are missing', () => {
     expect(() =>
       generateTestRunMessage({
-        imageName: 'some-service',
+        testSuite: 'some-service',
         environment: 'infra-dev',
         user: { id: randomUUID(), displayName: 'My Name' },
         tag: '123.44.111',
@@ -103,7 +103,7 @@ describe('#generateTestRunMessage', () => {
   test('Should throw error when values are incorrect', () => {
     expect(() =>
       generateTestRunMessage({
-        imageName: 'some-service',
+        testSuite: 'some-service',
         environment: 'infra-dev',
         cpu: '256',
         memory: '8192',
@@ -118,7 +118,7 @@ describe('#generateTestRunMessage', () => {
     config.set('httpProxy', 'http://fake-proxy')
 
     const message = generateTestRunMessage({
-      imageName: 'some-service',
+      testSuite: 'some-service',
       environment: 'infra-dev',
       cpu: '4096',
       memory: '8192',
@@ -140,7 +140,7 @@ describe('#generateTestRunMessage', () => {
     config.set('httpProxy', 'http://fake-proxy')
 
     const message = generateTestRunMessage({
-      imageName: 'some-service',
+      testSuite: 'some-service',
       environment: 'infra-dev',
       cpu: '4096',
       memory: '8192',

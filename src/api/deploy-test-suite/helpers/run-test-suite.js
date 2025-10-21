@@ -10,13 +10,14 @@ import { getLatestImage } from '../../../helpers/portal-backend/get-latest-image
 const snsRunTestTopic = config.get('snsRunTestTopicArn')
 
 async function runTestSuite({
-  imageName,
+  testSuite,
   environment,
   user,
   cpu,
   memory,
   snsClient,
   deployment,
+  profile,
   logger
 }) {
   const runId = randomUUID()
@@ -31,11 +32,11 @@ async function runTestSuite({
 
   logger.info(`Config commit sha ${configCommitSha}`)
 
-  const latestImage = await getLatestImage(imageName)
+  const latestImage = await getLatestImage(testSuite)
   const tag = latestImage?.tag ?? null
 
   const runMessage = generateTestRunMessage({
-    imageName,
+    testSuite,
     environment,
     cpu,
     memory,
@@ -43,14 +44,15 @@ async function runTestSuite({
     deployment,
     tag,
     runId,
-    configCommitSha
+    configCommitSha,
+    profile
   })
 
   await sendSnsMessage(snsClient, snsRunTestTopic, runMessage, logger)
 
   // Inform the backend about the new test run so it can track the results.
   await recordTestRun({
-    imageName,
+    testSuite,
     environment,
     cpu,
     memory,
@@ -58,7 +60,8 @@ async function runTestSuite({
     deployment,
     tag,
     runId,
-    configCommitSha
+    configCommitSha,
+    profile
   })
 
   return runId

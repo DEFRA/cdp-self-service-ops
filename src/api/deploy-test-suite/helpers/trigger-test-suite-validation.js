@@ -4,13 +4,14 @@ import {
   deploymentIdValidation,
   environmentValidation,
   memoryValidation,
+  profileValidation,
   repositoryNameValidation,
   userWithIdValidation,
   versionValidation
 } from '@defra/cdp-validation-kit'
 
 const triggerTestSuiteValidation = Joi.object({
-  imageName: repositoryNameValidation,
+  testSuite: repositoryNameValidation,
   environment: environmentValidation,
   user: userWithIdValidation,
   cpu: cpuValidation,
@@ -19,7 +20,8 @@ const triggerTestSuiteValidation = Joi.object({
     deploymentId: deploymentIdValidation,
     version: versionValidation,
     service: repositoryNameValidation
-  }
+  },
+  profile: profileValidation
 })
 
 export { triggerTestSuiteValidation }
