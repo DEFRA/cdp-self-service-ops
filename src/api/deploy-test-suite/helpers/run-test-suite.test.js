@@ -49,7 +49,7 @@ describe('#runTestSuite', () => {
 
   test('Should return runId when all operations succeed', async () => {
     const runId = await runTestSuite({
-      imageName: 'some-service',
+      testSuite: 'some-service',
       environment: 'test',
       user: { id: randomUUID(), displayName: 'My Name' },
       cpu: '4096',
@@ -99,7 +99,7 @@ describe('#runTestSuite', () => {
     mockSNSClientSend.mockRejectedValue('Failure sending SNS message')
 
     const result = runTestSuite({
-      imageName: 'some-service',
+      testSuite: 'some-service',
       environment: 'test',
       user: { id: randomUUID(), displayName: 'My Name' },
       cpu: '4096',

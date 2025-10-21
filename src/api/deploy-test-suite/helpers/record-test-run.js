@@ -12,7 +12,8 @@ import {
   cpuValidation,
   memoryValidation,
   deploymentIdValidation,
-  repositoryNameValidation
+  repositoryNameValidation,
+  profileValidation
 } from '@defra/cdp-validation-kit'
 
 const recordTestRunValidation = Joi.object({
@@ -28,7 +29,8 @@ const recordTestRunValidation = Joi.object({
     deploymentId: deploymentIdValidation,
     version: versionValidation,
     service: repositoryNameValidation
-  }
+  },
+  profile: profileValidation
 })
 
 /**
@@ -50,7 +52,7 @@ const recordTestRunValidation = Joi.object({
  * @returns {Promise<{Response}|Response>}
  */
 async function recordTestRun({
-  imageName,
+  testSuite,
   environment,
   cpu,
   memory,
@@ -58,17 +60,16 @@ async function recordTestRun({
   deployment,
   tag,
   runId,
-  configCommitSha
+  configCommitSha,
+  profile
 }) {
   const logger = createLogger()
 
-  const url = `${config.get('portalBackendUrl')}/test-run`
-
   logger.info(
-    `Recording test-run for ${imageName} run ${runId} by ${user.displayName}`
+    `Recording test-run for ${testSuite} run ${runId} by ${user.displayName} with profile ${profile} in ${environment}`
   )
   const body = {
-    testSuite: imageName,
+    testSuite,
     environment,
     cpu,
     memory,
@@ -76,11 +77,13 @@ async function recordTestRun({
     deployment,
     tag,
     runId,
-    configVersion: configCommitSha
+    configVersion: configCommitSha,
+    profile
   }
 
   Joi.assert(body, recordTestRunValidation)
 
+  const url = `${config.get('portalBackendUrl')}/test-run`
   return fetcher(url, {
     method: 'POST',
     headers: {

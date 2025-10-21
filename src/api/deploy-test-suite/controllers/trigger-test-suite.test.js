@@ -37,7 +37,7 @@ describe('Test Trigger Test Suite', () => {
   const method = 'POST'
   const url = '/trigger-test-suite'
   const payload = {
-    imageName: 'test-image',
+    testSuite: 'test-image',
     environment: 'infra-dev',
     cpu: 4096,
     memory: 8192,
