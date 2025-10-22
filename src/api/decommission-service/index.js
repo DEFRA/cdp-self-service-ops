@@ -1,5 +1,4 @@
 import { decommissionTriggerWorkflowsController } from './controllers/trigger-workflows.js'
-import { deleteDeploymentsAndEcsController } from './controllers/delete-deployments-and-ecs.js'
 import { scaleEcsToZeroController } from './controllers/scale-ecs-to-zero-controller.js'
 
 const decommissionService = {
@@ -11,11 +10,6 @@ const decommissionService = {
           method: 'POST',
           path: '/decommission/{serviceName}/trigger-workflows',
           ...decommissionTriggerWorkflowsController
-        },
-        {
-          method: 'POST',
-          path: '/decommission/{serviceName}/delete-deployments-and-ecs',
-          ...deleteDeploymentsAndEcsController
         },
         {
           method: 'POST',
