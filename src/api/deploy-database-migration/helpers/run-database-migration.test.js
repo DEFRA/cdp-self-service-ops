@@ -1,8 +1,6 @@
 import { fetcher } from '../../../helpers/fetcher.js'
 import { runDatabaseMigration } from './run-database-migration.js'
 
-import { validate as validateUUID } from 'uuid'
-
 const mockInfoLogger = vi.fn()
 const mockErrorLogger = vi.fn()
 const mockDebugLogger = vi.fn()
@@ -29,6 +27,13 @@ vi.mock('../../../helpers/logging/logger.js', () => ({
     error: (value) => mockErrorLogger(value)
   })
 }))
+vi.mock('crypto', async (importOriginal) => {
+  const actual = await importOriginal()
+  return {
+    ...actual,
+    randomUUID: () => '123e4567-e89b-12d3-a456-426614174000'
+  }
+})
 
 describe('#runDatabaseMigration', () => {
   beforeEach(() => {
@@ -46,7 +51,8 @@ describe('#runDatabaseMigration', () => {
       logger: mockLogger
     })
 
-    expect(validateUUID(migrationId)).toBe(true)
+    expect(typeof migrationId).toBe('string')
+    expect(migrationId).toBe('123e4567-e89b-12d3-a456-426614174000')
   })
 
   test('Should return expected message when sendSnsMessage fails', async () => {
