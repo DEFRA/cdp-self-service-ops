@@ -1,4 +1,4 @@
-import { decommissionTriggerWorkflowsController } from './controllers/trigger-workflows.js'
+import { decommissionTriggerWorkflowController } from './controllers/trigger-workflow.js'
 import { scaleEcsToZeroController } from './controllers/scale-ecs-to-zero-controller.js'
 
 const decommissionService = {
@@ -8,13 +8,13 @@ const decommissionService = {
       await server.route([
         {
           method: 'POST',
-          path: '/decommission/{serviceName}/trigger-workflows',
-          ...decommissionTriggerWorkflowsController
+          path: '/decommission/{entityName}/scale-ecs-to-zero',
+          ...scaleEcsToZeroController
         },
         {
           method: 'POST',
-          path: '/decommission/{serviceName}/scale-ecs-to-zero',
-          ...scaleEcsToZeroController
+          path: '/decommission/{entityName}/trigger-workflow',
+          ...decommissionTriggerWorkflowController
         }
       ])
     }

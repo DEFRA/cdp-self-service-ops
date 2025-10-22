@@ -13,16 +13,16 @@ const scaleEcsToZeroController = {
     pre: [validatePortalBackendRequest],
     validate: {
       params: Joi.object({
-        serviceName: repositoryNameValidation
+        entityName: repositoryNameValidation
       }),
       payload: userWithIdValidation
     }
   },
   handler: async (request, h) => {
-    const serviceName = request.params.serviceName
+    const entityName = request.params.entityName
     const user = await request.payload
 
-    await scaleEcsToZeroInAllEnvironments(serviceName, user, request.logger)
+    await scaleEcsToZeroInAllEnvironments(entityName, user, request.logger)
     return h.response().code(statusCodes.ok)
   }
 }
