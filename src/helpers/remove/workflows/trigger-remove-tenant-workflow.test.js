@@ -8,23 +8,26 @@ vi.mock('../../github/trigger-workflow.js', () => ({ triggerWorkflow }))
 
 const logger = { info: vi.fn(), warn: vi.fn() }
 
-describe('#removeEcsService', () => {
-  test('should receive space separated list of all environments', async () => {
-    const { removeEcsService } = await import('./remove-ecs-service.js')
+describe('#triggerRemoveTenantWorkflow', () => {
+  test('should receive service name and type inputs', async () => {
+    const { triggerRemoveTenantWorkflow } = await import(
+      './trigger-remove-tenant-workflow.js'
+    )
 
     const serviceName = 'my-service-name'
+    const type = 'Microservice'
 
     triggerWorkflow.mockReturnValue({})
 
-    await removeEcsService(serviceName, logger)
+    await triggerRemoveTenantWorkflow(serviceName, type, logger)
 
     expect(triggerWorkflow).toHaveBeenCalledWith(
       'DEFRA',
-      'cdp-tf-svc-infra',
-      'remove-ecs.yml',
+      'cdp-tenant-config',
+      'remove-service.yml',
       {
-        environments: 'infra-dev management dev test perf-test ext-test prod',
-        service: serviceName
+        service: serviceName,
+        type
       },
       serviceName,
       logger

@@ -325,36 +325,6 @@ const config = convict({
       env: 'GITHUB_BASE_URL'
     },
     repos: {
-      cdpAppConfig: {
-        doc: 'GitHub repo for cdp-app-config',
-        format: String,
-        default: 'cdp-app-config',
-        env: 'GITHUB_REPO_APP_CONFIG'
-      },
-      cdpNginxUpstreams: {
-        doc: 'GitHub repo for cdp-nginx-upstreams',
-        format: String,
-        default: 'cdp-nginx-upstreams',
-        env: 'GITHUB_REPO_NGINX_UPSTREAMS'
-      },
-      cdpTfSvcInfra: {
-        doc: 'GitHub repo for cdp-tf-svc-infra',
-        format: String,
-        default: 'cdp-tf-svc-infra',
-        env: 'GITHUB_REPO_TF_SVC_INFRA'
-      },
-      cdpGrafanaSvc: {
-        doc: 'GitHub repo to create default dashboard config in',
-        format: String,
-        default: 'cdp-grafana-svc',
-        env: 'GITHUB_REPO_DASHBOARDS'
-      },
-      cdpSquidProxy: {
-        doc: 'GitHub repo to create default dashboard config in',
-        format: String,
-        default: 'cdp-squid-proxy',
-        env: 'GITHUB_REPO_SQUID_PROXY'
-      },
       createWorkflows: {
         doc: 'GitHub repository containing the create workflows',
         format: String,
@@ -394,71 +364,17 @@ const config = convict({
       default: 'create-service.yml',
       env: 'WORKFLOWS_CREATE_TENANT_SERVICE'
     },
-    deleteEcrImages: {
-      doc: 'Github workflow to trigger when deleting ECR images',
-      format: String,
-      default: 'remove-ecr.yml',
-      env: 'WORKFLOWS_DELETE_ECR_IMAGES'
-    },
-    deleteDockerHubImages: {
-      doc: 'Github workflow to trigger when deleting DockerHub images',
-      format: String,
-      default: 'remove-dockerhub.yml',
-      env: 'WORKFLOWS_DELETE_DOCKERHUB_IMAGES'
-    },
-    removeAppConfig: {
-      doc: 'Github workflow to trigger when removing placeholder config',
-      format: String,
-      default: 'remove-service.yml',
-      env: 'WORKFLOWS_REMOVE_APP_CONFIG'
-    },
-    removeDeploymentFiles: {
-      doc: 'Github workflow to trigger when removing deployment files',
-      format: String,
-      default: 'remove-service.yml',
-      env: 'WORKFLOWS_REMOVE_DEPLOYMENT_FILES'
-    },
-    removeEcsService: {
-      doc: 'Github workflow to trigger when removing ECS service',
-      format: String,
-      default: 'remove-ecs.yml',
-      env: 'WORKFLOWS_REMOVE_ECS_SERVICE'
-    },
-    removeNginxUpstreams: {
-      doc: 'Github workflow to trigger when removing nginx upstream config',
-      format: String,
-      default: 'remove-service.yml',
-      env: 'WORKFLOWS_REMOVE_NGINX_UPSTREAMS'
-    },
     removeTenantService: {
-      doc: 'Github workflow to trigger when removing tenant service infrastructure',
+      doc: 'Github workflow to trigger when removing a tenant service',
       format: String,
       default: 'remove-service.yml',
-      env: 'WORKFLOWS_CREATE_TENANT_SERVICE'
-    },
-    removeDashboard: {
-      doc: 'Github workflow to trigger when removing dashboard',
-      format: String,
-      default: 'remove-service.yml',
-      env: 'WORKFLOWS_REMOVE_DASHBOARDS'
-    },
-    removeSquidConfig: {
-      doc: 'Name of workflow to trigger when removing squid config',
-      format: String,
-      default: 'remove-service.yml',
-      env: 'WORKFLOWS_REMOVE_SQUID_CONFIG'
+      env: 'WORKFLOWS_REMOVE_TENANT_SERVICE'
     },
     createRepository: {
       doc: 'Name of workflow to trigger when creating a repository',
       format: String,
       default: 'create_repository.yml',
       env: 'CREATE_REPOSITORY_WORKFLOW'
-    },
-    archiveGithubRepoWorkflow: {
-      doc: 'Name of workflow to trigger when archiving a GitHub repository',
-      format: String,
-      default: 'archive_repository.yml',
-      env: 'ARCHIVE_GITHUB_REPOSITORY_WORKFLOW'
     },
     addShutterWorkflow: {
       doc: 'Name of workflow to trigger when enabling shuttering for a url',
