@@ -134,4 +134,80 @@ describe('Test Trigger Test Suite', () => {
 
     expect(statusCode).toBe(statusCodes.ok)
   })
+
+  test('call to trigger-test-suite passes with a  profile', async () => {
+    const { generateSignature } = await import(
+      '../../helpers/pre/validate-portal-backend-request.js'
+    )
+
+    const timestamp = Math.floor(Date.now() / 1000).toString()
+
+    const payloadWithProfile = {
+      profile: 'test-profile',
+      ...payload
+    }
+    const validSignature = generateSignature(
+      method,
+      url,
+      timestamp,
+      JSON.stringify(payloadWithProfile),
+      'mocked-secret'
+    )
+
+    mockRunTestSuite.mockResolvedValue('mocked-run-id')
+
+    const { statusCode, payload: responsePayload } = await server.inject({
+      method,
+      url,
+      payload: payloadWithProfile,
+      headers: {
+        'x-signature': validSignature,
+        'x-timestamp': timestamp,
+        'x-signature-version': 'v1',
+        'content-type': 'application/json'
+      }
+    })
+
+    expect(responsePayload).toBe('{"runId":"mocked-run-id"}')
+
+    expect(statusCode).toBe(statusCodes.ok)
+  })
+
+  test('call to trigger-test-suite passes with a null profile', async () => {
+    const { generateSignature } = await import(
+      '../../helpers/pre/validate-portal-backend-request.js'
+    )
+
+    const timestamp = Math.floor(Date.now() / 1000).toString()
+
+    const payloadWithNullProfile = {
+      profile: null,
+      ...payload
+    }
+    const validSignature = generateSignature(
+      method,
+      url,
+      timestamp,
+      JSON.stringify(payloadWithNullProfile),
+      'mocked-secret'
+    )
+
+    mockRunTestSuite.mockResolvedValue('mocked-run-id')
+
+    const { statusCode, payload: responsePayload } = await server.inject({
+      method,
+      url,
+      payload: payloadWithNullProfile,
+      headers: {
+        'x-signature': validSignature,
+        'x-timestamp': timestamp,
+        'x-signature-version': 'v1',
+        'content-type': 'application/json'
+      }
+    })
+
+    expect(responsePayload).toBe('{"runId":"mocked-run-id"}')
+
+    expect(statusCode).toBe(statusCodes.ok)
+  })
 })
