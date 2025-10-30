@@ -9,6 +9,7 @@ import { databaseMigrations } from '../api/deploy-database-migration/index.js'
 import { shutter } from '../api/shutter/index.js'
 import { createTenant } from '../api/create-tenant/index.js'
 import { ephemeralKeys } from '../api/ephemeral-keys/index.js'
+import { platformState } from '../api/platform-state/index.js'
 
 const router = {
   plugin: {
@@ -24,6 +25,7 @@ const router = {
         deployTerminal,
         databaseMigrations,
         ephemeralKeys,
+        platformState,
         secrets,
         shutter
       ])
