@@ -9,21 +9,48 @@ describe('#can-run-in-environment', () => {
     })
   })
 
-  test('Non-admin cannot run in admin envs', () => {
+  test('Non-admin cannot run in admin envs or ext-test', () => {
     const nonAdmin = [
       environments.prod,
       environments.perfTest,
       environments.test,
       environments.dev
     ]
-    const admin = [environments.infraDev, environments.management]
+    const admin = [
+      environments.infraDev,
+      environments.management,
+      environments.extTest
+    ]
 
     nonAdmin.forEach((env) => {
-      expect(canRunInEnvironment(env, ['not-admin'])).toBe(true)
+      expect(canRunInEnvironment(env, [scopes.tenant])).toBe(true)
     })
 
     admin.forEach((env) => {
-      expect(canRunInEnvironment(env, ['not-admin'])).toBe(false)
+      expect(canRunInEnvironment(env, [scopes.tenant])).toBe(false)
+    })
+  })
+
+  test('Non-admin with ext-test permission can run ext-test', () => {
+    const nonAdmin = [
+      environments.prod,
+      environments.perfTest,
+      environments.test,
+      environments.dev,
+      environments.extTest
+    ]
+    const admin = [environments.infraDev, environments.management]
+
+    nonAdmin.forEach((env) => {
+      expect(
+        canRunInEnvironment(env, [scopes.tenant, scopes.externalTest])
+      ).toBe(true)
+    })
+
+    admin.forEach((env) => {
+      expect(
+        canRunInEnvironment(env, [scopes.tenant, scopes.externalTest])
+      ).toBe(false)
     })
   })
 })
