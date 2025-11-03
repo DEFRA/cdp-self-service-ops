@@ -1,5 +1,4 @@
 import { statusCodes } from '@defra/cdp-validation-kit'
-
 import { deployMigrationRequestValidation } from '../helpers/deploy-migration-request-validation.js'
 import { getScopedUser } from '../../../helpers/user/get-scoped-user.js'
 import { runDatabaseMigration } from '../helpers/run-database-migration.js'
@@ -19,11 +18,10 @@ export const deployDatabaseMigration = {
     }
   },
   handler: async (request, h) => {
-    const { service, version, environment } = request.payload
+    const { payload, auth, snsClient, logger } = request
+    const { service, version, environment } = payload
 
-    const user = await getScopedUser(service, request.auth)
-    const snsClient = request.snsClient
-    const logger = request.logger
+    const user = await getScopedUser(service, auth, logger)
 
     const migrationId = await runDatabaseMigration({
       service,

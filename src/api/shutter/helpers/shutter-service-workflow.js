@@ -9,7 +9,7 @@ const buildWorkFlowInputs = (inputs) => ({
   url: inputs.url
 })
 
-async function shutterServiceWorkflow(logger, inputs, user) {
+async function shutterServiceWorkflow(inputs, user, logger) {
   const org = config.get('github.org')
   const repo = config.get('github.repos.cdpWaf')
   const workflow = config.get('workflows.addShutterWorkflow')
@@ -26,7 +26,7 @@ async function shutterServiceWorkflow(logger, inputs, user) {
   await registerShuttering({ ...inputs, shuttered: true, actionedBy: user })
 }
 
-async function unshutterServiceWorkflow(logger, inputs, user) {
+async function unshutterServiceWorkflow(inputs, user, logger) {
   const org = config.get('github.org')
   const repo = config.get('github.repos.cdpWaf')
   const workflow = config.get('workflows.removeShutterWorkflow')

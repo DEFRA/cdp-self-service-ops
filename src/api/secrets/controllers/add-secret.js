@@ -29,25 +29,27 @@ const addSecretController = {
     }
   },
   handler: async (request, h) => {
-    const { serviceName, environment } = request.params
-    const scope = request.auth?.credentials?.scope
+    const { params, payload, auth, snsClient, logger } = request
+    const { serviceName, environment } = params
+    const scope = auth?.credentials?.scope
 
     const canAddSecret = await canManageSecretInEnv(
       serviceName,
       environment,
-      scope
+      scope,
+      logger
     )
     if (!canAddSecret) {
       throw Boom.forbidden('Insufficient permissions to manage this secret')
     }
 
-    const { secretValue, secretKey } = request.payload
+    const { secretValue, secretKey } = payload
     const topic = config.get('snsSecretsManagementTopicArn')
     const description = `Secret ${secretKey} pending for ${serviceName}`
 
     try {
       await sendSnsMessage(
-        request.snsClient,
+        snsClient,
         topic,
         {
           environment,
@@ -57,7 +59,7 @@ const addSecretController = {
           secret_value: secretValue,
           action: 'add_secret'
         },
-        request.logger
+        logger
       )
 
       await registerPendingSecret({
@@ -67,11 +69,11 @@ const addSecretController = {
         action: 'add_secret'
       })
 
-      request.logger.debug(description)
+      logger.debug(description)
 
       return h.response().code(statusCodes.ok)
     } catch (error) {
-      request.logger.error(error, 'Error creating secret')
+      logger.error(error, 'Error creating secret')
 
       return Boom.notImplemented('Error creating secret')
     }

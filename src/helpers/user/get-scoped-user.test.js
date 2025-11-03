@@ -1,11 +1,14 @@
 import Boom from '@hapi/boom'
-
 import { getScopedUser } from './get-scoped-user.js'
-import { getRepoTeams } from '../../api/deploy/helpers/get-repo-teams.js'
+import { getEntity } from '../portal-backend/get-entity.js'
 
-vi.mock('../../api/deploy/helpers/get-repo-teams.js', () => ({
-  getRepoTeams: vi.fn()
+vi.mock('../portal-backend/get-entity.js', () => ({
+  getEntity: vi.fn()
 }))
+
+const logger = {
+  error: () => {}
+}
 
 describe('#getScopedUser', () => {
   test('Should return user details for admin users', async () => {
@@ -17,7 +20,7 @@ describe('#getScopedUser', () => {
         scope: []
       }
     }
-    const result = await getScopedUser('service-name', auth)
+    const result = await getScopedUser('service-name', auth, logger)
 
     expect(result).toEqual({ id: 'admin-id', displayName: 'Admin User' })
   })
@@ -32,13 +35,13 @@ describe('#getScopedUser', () => {
       }
     }
 
-    await expect(getScopedUser('service-name', auth)).rejects.toThrowError(
-      Boom.forbidden('No scope found')
-    )
+    await expect(
+      getScopedUser('service-name', auth, logger)
+    ).rejects.toThrowError(Boom.forbidden('No scope found'))
   })
 
   test('Should throw forbidden error if user is not a team member', async () => {
-    getRepoTeams.mockResolvedValue([{ teamId: 'team-1' }])
+    getEntity.mockResolvedValue({ teams: [{ teamId: 'team-1' }] })
 
     const auth = {
       credentials: {
@@ -49,13 +52,13 @@ describe('#getScopedUser', () => {
       }
     }
 
-    await expect(getScopedUser('service-name', auth)).rejects.toThrowError(
-      Boom.forbidden('Insufficient scope')
-    )
+    await expect(
+      getScopedUser('service-name', auth, logger)
+    ).rejects.toThrowError(Boom.forbidden('Insufficient scope'))
   })
 
   test('Should return user details if user is a team member', async () => {
-    getRepoTeams.mockResolvedValue([{ teamId: 'team-1' }])
+    getEntity.mockResolvedValue({ teams: [{ teamId: 'team-1' }] })
 
     const auth = {
       credentials: {
@@ -66,7 +69,7 @@ describe('#getScopedUser', () => {
       }
     }
 
-    const result = await getScopedUser('service-name', auth)
+    const result = await getScopedUser('service-name', auth, logger)
     expect(result).toEqual({ id: 'user-id', displayName: 'Team Member' })
   })
 })

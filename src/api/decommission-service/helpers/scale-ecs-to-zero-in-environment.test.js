@@ -10,6 +10,7 @@ const scaleEcsToZero = vi.fn()
 vi.mock('./scale-ecs-to-zero.js', () => ({
   scaleEcsToZero
 }))
+
 const lookupTenantService = vi.fn()
 vi.mock('../../../helpers/portal-backend/lookup-tenant-service.js', () => ({
   lookupTenantService

@@ -13,8 +13,9 @@ const deployToZeroController = {
     }
   },
   handler: async (request, h) => {
-    const { serviceName, environment } = request.params
-    const user = await getScopedUser(serviceName, request.auth)
+    const { params, auth, logger } = request
+    const { serviceName, environment } = params
+    const user = await getScopedUser(serviceName, auth, logger)
 
     const deploymentId = await deployToZero(
       request,

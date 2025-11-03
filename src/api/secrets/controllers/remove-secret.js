@@ -29,8 +29,9 @@ const removeSecretController = {
     }
   },
   handler: async (request, h) => {
-    const { serviceName, environment } = request.params
-    const scope = request.auth?.credentials?.scope
+    const { params, auth, payload, snsClient, logger } = request
+    const { serviceName, environment } = params
+    const scope = auth?.credentials?.scope
 
     const canManageSecret = await canManageSecretInEnv(
       serviceName,
@@ -41,13 +42,13 @@ const removeSecretController = {
       throw Boom.forbidden('Insufficient permissions to update this secret')
     }
 
-    const { secretKey } = request.payload
+    const { secretKey } = payload
     const topic = config.get('snsSecretsManagementTopicArn')
     const description = `Secret ${secretKey} removal pending for ${serviceName}`
 
     try {
       await sendSnsMessage(
-        request.snsClient,
+        snsClient,
         topic,
         {
           environment,
@@ -56,7 +57,7 @@ const removeSecretController = {
           secret_key: secretKey,
           action: 'remove_secret_by_key'
         },
-        request.logger
+        logger
       )
 
       await registerPendingSecret({
@@ -66,11 +67,11 @@ const removeSecretController = {
         action: 'remove_secret_by_key'
       })
 
-      request.logger.debug(description)
+      logger.debug(description)
 
       return h.response().code(statusCodes.ok)
     } catch (error) {
-      request.logger.error(error, 'Error removing secret')
+      logger.error(error, 'Error removing secret')
 
       return Boom.notImplemented('Error removing secret')
     }
