@@ -74,7 +74,7 @@ const deployServiceController = {
   },
   handler: async (request, h) => {
     const { payload, logger, auth } = request
-    const user = await getScopedUser(payload.imageName, auth)
+    const user = await getScopedUser(payload.imageName, auth, logger)
 
     return await deployService(payload, logger, h, user)
   }

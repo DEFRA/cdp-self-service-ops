@@ -30,10 +30,10 @@ const unshutterServiceController = {
     }
   },
   handler: async (request, h) => {
-    const payload = request.payload
-    const user = await getScopedUser(payload.serviceName, request.auth)
+    const { payload, auth, logger } = request
+    const user = await getScopedUser(payload.serviceName, auth, logger)
 
-    await unshutterServiceWorkflow(request.logger, payload, user)
+    await unshutterServiceWorkflow(payload, user, logger)
 
     return h.response().code(statusCodes.ok)
   }
