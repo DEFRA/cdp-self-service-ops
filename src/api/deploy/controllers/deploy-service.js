@@ -2,8 +2,8 @@ import { deployServiceValidation } from '../helpers/schema/deploy-service-valida
 import { registerDeployment } from '../helpers/register-deployment.js'
 import { generateDeployment } from '../../../helpers/deployments/generate-deployment.js'
 import { commitDeploymentFile } from '../../../helpers/deployments/commit-deployment-file.js'
-import { lookupTenantService } from '../../../helpers/portal-backend/lookup-tenant-service.js'
 import { getScopedUser } from '../../../helpers/user/get-scoped-user.js'
+import { getEntity } from '../../../helpers/portal-backend/get-entity.js'
 import { statusCodes } from '@defra/cdp-validation-kit'
 
 async function deployService(payload, logger, h, user) {
@@ -30,24 +30,25 @@ async function deployService(payload, logger, h, user) {
 
   logger.info('Deployment registered')
 
-  const service = await lookupTenantService(imageName, environment, logger)
-
-  if (!service) {
+  const entity = await getEntity(imageName)
+  if (!entity) {
     const message =
       'Error encountered whilst attempting to find deployment zone information'
     return h.response({ message }).code(statusCodes.internalError)
   }
 
+  const zone = entity.environments[environment]?.tenant_config?.zone
+
   logger.info(
-    `Service ${imageName} in ${environment} should be deployed to ${service.zone}`
+    `Service ${imageName} in ${environment} should be deployed to ${zone}`
   )
 
   const deployment = generateDeployment({
     deploymentId,
     payload,
-    zone: service.zone,
+    zone,
     commitSha: payload.configVersion,
-    serviceCode: service.serviceCode,
+    serviceCode: entity.metadata.service_code,
     deploy: true,
     user
   })

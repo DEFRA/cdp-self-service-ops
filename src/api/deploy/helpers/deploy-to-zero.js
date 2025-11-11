@@ -1,5 +1,4 @@
 import { getEntity } from '../../../helpers/portal-backend/get-entity.js'
-import { lookupTenantService } from '../../../helpers/portal-backend/lookup-tenant-service.js'
 import { registerDeployment } from './register-deployment.js'
 import { generateDeployment } from '../../../helpers/deployments/generate-deployment.js'
 import { commitDeploymentFile } from '../../../helpers/deployments/commit-deployment-file.js'
@@ -19,13 +18,9 @@ async function deployToZero({ logger }, serviceName, environment, user) {
     return deploymentId
   }
 
-  const tenantService = await lookupTenantService(
-    serviceName,
-    environment,
-    logger
-  )
+  const zone = entity.environments[environment]?.tenant_config?.zone
 
-  if (!tenantService?.zone) {
+  if (!zone) {
     logger.warn(`Unable to find zone for ${serviceName} in ${environment}`)
     return
   }
@@ -63,9 +58,9 @@ async function deployToZero({ logger }, serviceName, environment, user) {
       memory: deployment.resources.memory
     },
     deploymentId,
-    zone: tenantService.zone,
+    zone,
     commitSha: deployment.service.configuration.commitSha,
-    serviceCode: tenantService.serviceCode,
+    serviceCode: entity.metadata.service_code,
     deploy: true,
     user
   })
