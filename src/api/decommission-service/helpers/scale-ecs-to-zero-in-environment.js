@@ -1,6 +1,5 @@
 import { scaleEcsToZero } from './scale-ecs-to-zero.js'
 import { getEntity } from '../../../helpers/portal-backend/get-entity.js'
-import { lookupTenantService } from '../../../helpers/portal-backend/lookup-tenant-service.js'
 import { entityTypes } from '@defra/cdp-validation-kit'
 
 /**
@@ -31,13 +30,8 @@ export async function scaleEcsToZeroInEnvironment(
     return undeploymentId
   }
 
-  const tenantService = await lookupTenantService(
-    repositoryName,
-    environment,
-    logger
-  )
-
-  if (!tenantService?.zone) {
+  const zone = entity.environments[environment]?.tenant_config?.zone
+  if (!zone) {
     logger.warn(
       `Unable to find zone for [${repositoryName}] in ${environment}.`
     )
@@ -47,7 +41,7 @@ export async function scaleEcsToZeroInEnvironment(
   await scaleEcsToZero(
     repositoryName,
     environment,
-    tenantService?.zone,
+    zone,
     user,
     undeploymentId,
     logger
