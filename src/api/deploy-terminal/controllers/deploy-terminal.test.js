@@ -1,16 +1,22 @@
 import { deployTerminal } from './deploy-terminal.js'
 import { sendSnsMessage } from '../../../helpers/sns/send-sns-message.js'
-import { lookupTenantService } from '../../../helpers/portal-backend/lookup-tenant-service.js'
+import { getEntity } from '../../../helpers/portal-backend/get-entity.js'
 import { generateTerminalToken } from '../helpers/generate-terminal-token.js'
 
 describe('#deploy-terminal', () => {
   vi.mock('../../../helpers/sns/send-sns-message.js')
-  vi.mock('../../../helpers/portal-backend/lookup-tenant-service.js')
+  vi.mock('../../../helpers/portal-backend/get-entity.js')
   vi.mock('../helpers/generate-terminal-token.js')
 
   it('Should send a valid payload to sns', async () => {
-    lookupTenantService.mockResolvedValue({
-      zone: 'public'
+    getEntity.mockResolvedValue({
+      environments: {
+        dev: {
+          tenant_config: {
+            zone: 'public'
+          }
+        }
+      }
     })
 
     generateTerminalToken.mockReturnValue('1234567890')
