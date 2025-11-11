@@ -2,12 +2,11 @@ import Boom from '@hapi/boom'
 import { UTCDate } from '@date-fns/utc'
 import { differenceInSeconds, addHours } from 'date-fns'
 import { statusCodes } from '@defra/cdp-validation-kit'
-
+import { getEntity } from '../../../helpers/portal-backend/get-entity.js'
 import { config } from '../../../config/index.js'
 import { deployTerminalValidation } from '../helpers/deploy-terminal-validation.js'
 import { sendSnsMessage } from '../../../helpers/sns/send-sns-message.js'
 import { generateTerminalToken } from '../helpers/generate-terminal-token.js'
-import { lookupTenantService } from '../../../helpers/portal-backend/lookup-tenant-service.js'
 import { recordTerminalSession } from '../helpers/record-terminal-session.js'
 import { isAllowedTerminalEnvironment } from '../helpers/is-allowed-terminal-environment.js'
 
@@ -54,13 +53,9 @@ const deployTerminalController = {
 }
 
 const deployTerminal = async function (payload, user, logger, snsClient) {
-  const tenantService = await lookupTenantService(
-    payload.service,
-    payload.environment,
-    logger
-  )
+  const entity = await getEntity(payload.service)
 
-  const zone = tenantService?.zone
+  const zone = entity.environments[payload.environment]?.tenant_config?.zone
   if (!zone) {
     logger.error(
       `failed to find zone for ${payload.service} in ${payload.environment}`
@@ -73,6 +68,8 @@ const deployTerminal = async function (payload, user, logger, snsClient) {
   const now = new UTCDate()
   const expiresDate = payload.expiresAt ?? addHours(now, 2)
   const timeoutInSeconds = Math.abs(differenceInSeconds(expiresDate, now))
+  const hasPostgres =
+    entity.environments[payload.environment]?.sql_database != null
 
   const runMessage = {
     environment: payload.environment,
@@ -81,7 +78,7 @@ const deployTerminal = async function (payload, user, logger, snsClient) {
     token,
     role: payload.service,
     service: payload.service,
-    postgres: tenantService?.postgres === true,
+    postgres: hasPostgres,
     timeout: timeoutInSeconds
   }
 

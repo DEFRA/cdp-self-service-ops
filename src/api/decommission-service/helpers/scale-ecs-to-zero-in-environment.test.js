@@ -11,23 +11,20 @@ vi.mock('./scale-ecs-to-zero.js', () => ({
   scaleEcsToZero
 }))
 
-const lookupTenantService = vi.fn()
-vi.mock('../../../helpers/portal-backend/lookup-tenant-service.js', () => ({
-  lookupTenantService
-}))
-
 const logger = { info: vi.fn(), warn: vi.fn() }
 getEntity.mockResolvedValue({
   name: 'some-service',
   type: 'Microservice',
-  subType: 'Frontend'
+  subType: 'Frontend',
+  environments: {
+    dev: {
+      tenant_config: {
+        zone: 'public'
+      }
+    }
+  }
 })
 scaleEcsToZero.mockResolvedValue()
-lookupTenantService.mockResolvedValue({
-  serviceCode: 'CDP',
-  zone: 'public',
-  postgres: false
-})
 
 const repositoryName = 'some-service'
 const environment = 'dev'
