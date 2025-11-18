@@ -52,14 +52,18 @@ updates:
           - 'nodemon'
           - 'npm-run-all'
           - 'husky'
-          - 'vitest'
-          - 'vitest-*'
           - 'typescript'
           - 'date-fns'
           - 'convict'
           - 'joi'
           - 'lodash'
           - 'node-fetch'
+
+      vitest:
+        patterns:
+          - 'vitest'
+          - 'vitest-*'
+          - '@vitest/*'
 
     # Allow releases to settle into a stable state before updating
     cooldown:
