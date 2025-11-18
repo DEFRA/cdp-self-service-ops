@@ -14,9 +14,10 @@ const buildConfig = (baseUrl) => ({
 
 describe('#octokitFactory', () => {
   const mockGraphqlDefaults = vi.fn()
-  const mockOctokitExtra = vi.fn().mockReturnValue({
-    graphql: { defaults: mockGraphqlDefaults },
-    auth: { hook: 'mockAuthHook' }
+  const mockOctokitExtra = vi.fn(function (options) {
+    this.graphql = { defaults: mockGraphqlDefaults }
+    this.auth = { hook: 'mockAuthHook' }
+    mockOctokitExtra.lastCallOptions = options
   })
   const stubBaseUrl = 'http://cdp.127.0.0.1.sslip.io:3333'
 
