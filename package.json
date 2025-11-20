@@ -68,7 +68,7 @@
     "undici": "7.16.0"
   },
   "devDependencies": {
-    "@tsconfig/node22": "22.0.2",
+    "@tsconfig/node22": "22.0.4",
     "@types/convict": "6.1.6",
     "@types/eslint": "9.6.1",
     "@types/lodash": "4.17.20",
