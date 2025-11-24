@@ -9,4 +9,9 @@ const waf = {
   apiPrivate: 'api_private'
 }
 
-export { waf }
+const shutterUrlType = {
+  frontendVanityUrl: 'frontend_vanity_url',
+  apigwVanityUrl: 'apigw_vanity_url'
+}
+
+export { waf, shutterUrlType }

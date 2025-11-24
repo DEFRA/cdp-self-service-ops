@@ -3,10 +3,10 @@ import { triggerWorkflow } from '../../../helpers/github/trigger-workflow.js'
 import { registerShuttering } from './register-shuttering.js'
 
 const buildWorkFlowInputs = (inputs) => ({
-  service: inputs.serviceName,
+  service_name: inputs.serviceName,
   environment: inputs.environment,
-  waf: inputs.waf,
-  url: inputs.url
+  url: inputs.url,
+  urlType: inputs.urlType
 })
 
 async function shutterServiceWorkflow(inputs, user, logger) {
