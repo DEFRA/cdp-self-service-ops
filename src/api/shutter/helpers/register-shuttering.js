@@ -5,7 +5,7 @@ async function registerShuttering({
   environment,
   serviceName,
   url,
-  waf,
+  urlType,
   shuttered,
   actionedBy
 }) {
@@ -17,7 +17,7 @@ async function registerShuttering({
       environment,
       serviceName,
       url,
-      waf,
+      urlType,
       shuttered,
       actionedBy,
       actionedAt: new Date().toISOString()

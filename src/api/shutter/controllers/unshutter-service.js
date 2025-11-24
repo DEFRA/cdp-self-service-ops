@@ -1,6 +1,6 @@
 import Joi from 'joi'
 
-import { waf } from '../../../constants/waf.js'
+import { shutterUrlType } from '../../../constants/waf.js'
 import { unshutterServiceWorkflow } from '../helpers/shutter-service-workflow.js'
 import {
   scopes,
@@ -22,8 +22,8 @@ const unshutterServiceController = {
       payload: Joi.object({
         serviceName: repositoryNameValidation,
         environment: environmentValidation,
-        waf: Joi.string()
-          .valid(...Object.values(waf))
+        urlType: Joi.string()
+          .valid(...Object.values(shutterUrlType))
           .required(),
         url: Joi.string().required()
       })
