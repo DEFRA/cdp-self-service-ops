@@ -336,11 +336,6 @@ const config = convict({
         format: String,
         default: 'cdp-app-deployments'
       },
-      cdpWaf: {
-        doc: 'Repository for CDP Web Application Firewall (WAF)',
-        format: String,
-        default: 'cdp-tf-waf'
-      },
       cdpTenantConfig: {
         doc: 'GitHub repository containing the tenant config',
         format: String,
@@ -379,13 +374,13 @@ const config = convict({
     addShutterWorkflow: {
       doc: 'Name of workflow to trigger when enabling shuttering for a url',
       format: String,
-      default: 'shuttering-add.yml',
+      default: 'create-shuttering.yml',
       env: 'ADD_SHUTTER_URL_WORKFLOW'
     },
     removeShutterWorkflow: {
       doc: 'Name of workflow to trigger when removing shuttering for a url',
       format: String,
-      default: 'shuttering-remove.yml',
+      default: 'remove-shuttering.yml',
       env: 'REMOVE_SHUTTER_URL_WORKFLOW'
     }
   },

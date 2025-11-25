@@ -11,7 +11,7 @@ const buildWorkFlowInputs = (inputs) => ({
 
 async function shutterServiceWorkflow(inputs, user, logger) {
   const org = config.get('github.org')
-  const repo = config.get('github.repos.cdpWaf')
+  const repo = config.get('github.repos.cdpTenantConfig')
   const workflow = config.get('workflows.addShutterWorkflow')
 
   await triggerWorkflow(
@@ -28,7 +28,7 @@ async function shutterServiceWorkflow(inputs, user, logger) {
 
 async function unshutterServiceWorkflow(inputs, user, logger) {
   const org = config.get('github.org')
-  const repo = config.get('github.repos.cdpWaf')
+  const repo = config.get('github.repos.cdpTenantConfig')
   const workflow = config.get('workflows.removeShutterWorkflow')
 
   await triggerWorkflow(
