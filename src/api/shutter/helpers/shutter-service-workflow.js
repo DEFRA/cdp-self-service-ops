@@ -6,7 +6,7 @@ const buildWorkFlowInputs = (inputs) => ({
   service_name: inputs.serviceName,
   environment: inputs.environment,
   url: inputs.url,
-  urlType: inputs.urlType
+  url_type: inputs.urlType
 })
 
 async function shutterServiceWorkflow(inputs, user, logger) {
