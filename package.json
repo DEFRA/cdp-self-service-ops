@@ -76,7 +76,7 @@
     "@types/node-fetch": "2.6.13",
     "@typescript-eslint/eslint-plugin": "8.46.4",
     "@typescript-eslint/parser": "8.46.4",
-    "@vitest/coverage-v8": "4.0.9",
+    "@vitest/coverage-v8": "4.0.16",
     "eslint": "9.39.1",
     "eslint-config-prettier": "10.1.8",
     "eslint-import-resolver-alias": "1.1.2",
@@ -99,8 +99,8 @@
     "tsx": "4.20.6",
     "typescript": "5.9.3",
     "uuid": "13.0.0",
-    "vitest": "4.0.9",
+    "vitest": "4.0.16",
     "vitest-fetch-mock": "0.4.5",
-    "vitest-mongodb": "1.0.2"
+    "vitest-mongodb": "1.0.3"
   }
 }
