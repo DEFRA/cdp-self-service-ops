@@ -15,9 +15,8 @@ describe('createTenant', () => {
   const workflowId = config.get('workflows.createTenantService')
 
   test('triggers workflow with expected parameters', async () => {
-    const { triggerCreateTenantWorkflow } = await import(
-      './trigger-create-tenant-workflow.js'
-    )
+    const { triggerCreateTenantWorkflow } =
+      await import('./trigger-create-tenant-workflow.js')
 
     const request = {
       logger: { info: vi.fn() }
@@ -58,9 +57,8 @@ describe('createTenant', () => {
   })
 
   test('triggers workflow over-riding template tag', async () => {
-    const { triggerCreateTenantWorkflow } = await import(
-      './trigger-create-tenant-workflow.js'
-    )
+    const { triggerCreateTenantWorkflow } =
+      await import('./trigger-create-tenant-workflow.js')
 
     const request = {
       logger: { info: vi.fn() }
@@ -101,9 +99,8 @@ describe('createTenant', () => {
   })
 
   test('uses default branch overrides', async () => {
-    const { triggerCreateTenantWorkflow } = await import(
-      './trigger-create-tenant-workflow.js'
-    )
+    const { triggerCreateTenantWorkflow } =
+      await import('./trigger-create-tenant-workflow.js')
 
     const request = {
       logger: { info: vi.fn() }
