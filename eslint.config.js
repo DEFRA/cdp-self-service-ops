@@ -6,7 +6,7 @@ import promise from 'eslint-plugin-promise'
 import jsdoc from 'eslint-plugin-jsdoc'
 import importPlugin from 'eslint-plugin-import'
 import prettier from 'eslint-plugin-prettier'
-import vitest from 'eslint-plugin-vitest'
+import vitest from '@vitest/eslint-plugin'
 import globals from 'globals'
 
 const customIgnores = [
