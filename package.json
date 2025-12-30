@@ -96,7 +96,7 @@
     "prettier": "3.6.2",
     "resolve-url-loader": "5.0.0",
     "timers": "0.1.1",
-    "tsx": "4.20.6",
+    "tsx": "4.21.0",
     "typescript": "5.9.3",
     "uuid": "13.0.0",
     "vitest": "4.0.9",
