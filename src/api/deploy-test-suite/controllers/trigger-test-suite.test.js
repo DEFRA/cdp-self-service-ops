@@ -15,9 +15,8 @@ describe('Test Trigger Test Suite', () => {
 
   beforeAll(async () => {
     config.set('portalBackendSharedSecret', 'mocked-secret')
-    const { triggerTestSuiteController } = await import(
-      './trigger-test-suite.js'
-    )
+    const { triggerTestSuiteController } =
+      await import('./trigger-test-suite.js')
     server = Hapi.server()
     server.route([
       {
@@ -102,9 +101,8 @@ describe('Test Trigger Test Suite', () => {
   })
 
   test('call to trigger-test-suite passes with a valid signature', async () => {
-    const { generateSignature } = await import(
-      '../../helpers/pre/validate-portal-backend-request.js'
-    )
+    const { generateSignature } =
+      await import('../../helpers/pre/validate-portal-backend-request.js')
 
     const timestamp = Math.floor(Date.now() / 1000).toString()
 
@@ -136,9 +134,8 @@ describe('Test Trigger Test Suite', () => {
   })
 
   test('call to trigger-test-suite passes with a  profile', async () => {
-    const { generateSignature } = await import(
-      '../../helpers/pre/validate-portal-backend-request.js'
-    )
+    const { generateSignature } =
+      await import('../../helpers/pre/validate-portal-backend-request.js')
 
     const timestamp = Math.floor(Date.now() / 1000).toString()
 
@@ -174,9 +171,8 @@ describe('Test Trigger Test Suite', () => {
   })
 
   test('call to trigger-test-suite passes with a null profile', async () => {
-    const { generateSignature } = await import(
-      '../../helpers/pre/validate-portal-backend-request.js'
-    )
+    const { generateSignature } =
+      await import('../../helpers/pre/validate-portal-backend-request.js')
 
     const timestamp = Math.floor(Date.now() / 1000).toString()
 

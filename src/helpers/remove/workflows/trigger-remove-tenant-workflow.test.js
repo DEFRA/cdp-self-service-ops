@@ -10,9 +10,8 @@ const logger = { info: vi.fn(), warn: vi.fn() }
 
 describe('#triggerRemoveTenantWorkflow', () => {
   test('should receive service name and type inputs', async () => {
-    const { triggerRemoveTenantWorkflow } = await import(
-      './trigger-remove-tenant-workflow.js'
-    )
+    const { triggerRemoveTenantWorkflow } =
+      await import('./trigger-remove-tenant-workflow.js')
 
     const serviceName = 'my-service-name'
     const type = 'Microservice'

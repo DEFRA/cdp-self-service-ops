@@ -31,9 +31,8 @@ describe('#triggerRemoveWorkflow', () => {
   }
 
   test('Should trigger relevant workflow when run for backend repo', async () => {
-    const { triggerRemoveWorkflow } = await import(
-      './trigger-remove-workflow.js'
-    )
+    const { triggerRemoveWorkflow } =
+      await import('./trigger-remove-workflow.js')
 
     await triggerRemoveWorkflow(backendEntity, logger)
 
@@ -45,9 +44,8 @@ describe('#triggerRemoveWorkflow', () => {
   })
 
   test('Should trigger relevant workflow when run for frontend repo', async () => {
-    const { triggerRemoveWorkflow } = await import(
-      './trigger-remove-workflow.js'
-    )
+    const { triggerRemoveWorkflow } =
+      await import('./trigger-remove-workflow.js')
 
     await triggerRemoveWorkflow(frontendEntity, logger)
 
@@ -59,9 +57,8 @@ describe('#triggerRemoveWorkflow', () => {
   })
 
   test('Should trigger relevant workflow when run for test suite', async () => {
-    const { triggerRemoveWorkflow } = await import(
-      './trigger-remove-workflow.js'
-    )
+    const { triggerRemoveWorkflow } =
+      await import('./trigger-remove-workflow.js')
 
     await triggerRemoveWorkflow(testEntity, logger)
 
