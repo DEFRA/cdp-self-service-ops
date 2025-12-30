@@ -34,7 +34,7 @@ const recordTerminalSessionValidation = Joi.object({
  * @param {{ token: string, environment: string, service: string, user: {displayName: string, id: string} }} session
  * @returns {Promise<{Response}|Response>}
  */
-async function recordTerminalSession(session) {
+function recordTerminalSession(session) {
   const logger = createLogger()
 
   Joi.assert(session, recordTerminalSessionValidation)
