@@ -25,11 +25,13 @@ const recordTestRunValidation = Joi.object({
   tag: versionValidation,
   runId: runIdValidation,
   configVersion: commitShaValidation,
-  deployment: {
+  deployment: Joi.object({
     deploymentId: deploymentIdValidation,
     version: versionValidation,
     service: repositoryNameValidation
-  },
+  })
+    .empty(null)
+    .default({}),
   profile: profileValidation
 })
 

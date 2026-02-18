@@ -16,11 +16,13 @@ const triggerTestSuiteValidation = Joi.object({
   user: userWithIdValidation,
   cpu: cpuValidation,
   memory: memoryValidation,
-  deployment: {
+  deployment: Joi.object({
     deploymentId: deploymentIdValidation,
     version: versionValidation,
     service: repositoryNameValidation
-  },
+  })
+    .empty(null)
+    .default(null),
   profile: profileValidation
 })
 
