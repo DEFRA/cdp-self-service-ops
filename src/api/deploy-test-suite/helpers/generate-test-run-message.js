@@ -27,11 +27,13 @@ const testRunMessageValidation = Joi.object({
     browser: Joi.string().equal('chrome'),
     version: Joi.string().equal('latest')
   }),
-  deployment: {
+  deployment: Joi.object({
     deploymentId: deploymentIdValidation,
     version: versionValidation,
     service: repositoryNameValidation
-  },
+  })
+    .empty(null)
+    .default({}),
   deployed_by: userWithUserIdValidation,
   environment_variables: Joi.object({
     BASE_URL: Joi.string().required(),
