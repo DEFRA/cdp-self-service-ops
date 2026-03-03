@@ -37,7 +37,10 @@ const expectedMessageResult = (runId, userId) => {
     task_memory: '8192',
     webdriver_sidecar: {
       browser: 'chrome',
-      version: 'latest'
+      version: 'latest',
+      environment_variables: {
+        SE_NODE_ENABLE_MANAGED_DOWNLOADS: 'true'
+      }
     },
     zone: 'public'
   }

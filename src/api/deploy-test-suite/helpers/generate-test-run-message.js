@@ -100,7 +100,10 @@ const generateTestRunMessage = ({
     task_memory: memory,
     webdriver_sidecar: {
       browser: 'chrome',
-      version: 'latest'
+      version: 'latest',
+      environment_variables: {
+        SE_NODE_ENABLE_MANAGED_DOWNLOADS: 'true'
+      }
     },
     deployed_by: {
       userId: user.id,
