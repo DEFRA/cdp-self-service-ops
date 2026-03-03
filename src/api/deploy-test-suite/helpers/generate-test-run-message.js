@@ -25,7 +25,8 @@ const testRunMessageValidation = Joi.object({
   task_memory: memoryValidation,
   webdriver_sidecar: Joi.object({
     browser: Joi.string().equal('chrome'),
-    version: Joi.string().equal('latest')
+    version: Joi.string().equal('latest'),
+    environment_variables: Joi.object({}).unknown(true).optional()
   }),
   deployment: {
     deploymentId: deploymentIdValidation,
