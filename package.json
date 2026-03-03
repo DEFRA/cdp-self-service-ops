@@ -105,6 +105,6 @@
     "vitest-mongodb": "1.0.3"
   },
   "overrides": {
-    "fast-xml-parser": "^5.3.6"
+    "fast-xml-parser": "^5.3.8"
   }
 }
