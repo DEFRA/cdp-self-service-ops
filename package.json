@@ -48,7 +48,7 @@
     "@octokit/graphql": "9.0.1",
     "@octokit/plugin-rest-endpoint-methods": "17.0.0",
     "aws4": "1.13.2",
-    "convict": "6.2.4",
+    "convict": "6.2.5",
     "date-fns": "4.1.0",
     "global-agent": "3.0.0",
     "hapi-pino": "13.0.0",
