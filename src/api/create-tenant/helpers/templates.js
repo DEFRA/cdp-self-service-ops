@@ -74,7 +74,7 @@ const tenantTemplates = {
   },
   'cdp-node-backend-template-minimal': {
     id: 'cdp-node-backend-template-minimal',
-    repositoryName: 'cdp-node-backend-no-db-minimal',
+    repositoryName: 'cdp-node-backend-no-db-template',
     zone: 'protected',
     mongo: false,
     redis: false,
