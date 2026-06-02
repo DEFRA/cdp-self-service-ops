@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto'
-import { config } from '../../../config/index.js'
+import { config } from '#config/config.js'
 import { registerDeployment } from './register-deployment.js'
 
 describe('#registerDeployment', () => {

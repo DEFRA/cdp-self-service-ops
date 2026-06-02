@@ -2,7 +2,7 @@ import Boom from '@hapi/boom'
 import Joi from 'joi'
 import { runIdValidation, statusCodes } from '@defra/cdp-validation-kit'
 
-import { config } from '../../../config/index.js'
+import { config } from '#config/config.js'
 import { fetchTestRun } from '../helpers/fetch-test-run.js'
 import { isOwnerOfSuite } from '../helpers/is-owner-of-suite.js'
 import { sendSnsMessage } from '../../../helpers/sns/send-sns-message.js'

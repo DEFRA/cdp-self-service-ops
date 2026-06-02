@@ -1,4 +1,4 @@
-import { config } from '../../config/index.js'
+import { config } from '#config/config.js'
 import { commitFile } from '../github/commit-github-file.js'
 
 const deploymentRepo = config.get('github.repos.appDeployments')

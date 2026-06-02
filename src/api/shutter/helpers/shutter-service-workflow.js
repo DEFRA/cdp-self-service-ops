@@ -1,4 +1,4 @@
-import { config } from '../../../config/index.js'
+import { config } from '#config/config.js'
 import { triggerWorkflow } from '../../../helpers/github/trigger-workflow.js'
 import { registerShuttering } from './register-shuttering.js'
 

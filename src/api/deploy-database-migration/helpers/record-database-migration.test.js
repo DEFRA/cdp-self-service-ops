@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto'
 
-import { config } from '../../../config/index.js'
+import { config } from '#config/config.js'
 import { fetcher } from '../../../helpers/fetcher.js'
 import { recordDatabaseMigration } from './record-database-migration.js'
 

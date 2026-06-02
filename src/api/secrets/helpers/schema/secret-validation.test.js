@@ -1,6 +1,6 @@
 import Joi from 'joi'
 
-import { config } from '../../../../config/config.js'
+import { config } from '#config/config.js'
 import {
   secretParamsValidation,
   addSecretPayloadValidation

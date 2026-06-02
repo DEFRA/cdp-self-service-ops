@@ -1,5 +1,5 @@
 import { triggerWorkflow } from '../../github/trigger-workflow.js'
-import { config } from '../../../config/index.js'
+import { config } from '#config/config.js'
 import { tenantTemplates } from '../../../api/create-tenant/helpers/templates.js'
 
 vi.mock('../../oktokit/oktokit.js', () => ({

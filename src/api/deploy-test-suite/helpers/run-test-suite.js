@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto'
 
-import { config } from '../../../config/index.js'
+import { config } from '#config/config.js'
 import { generateTestRunMessage } from './generate-test-run-message.js'
 import { sendSnsMessage } from '../../../helpers/sns/send-sns-message.js'
 import { recordTestRun } from './record-test-run.js'
