@@ -1,6 +1,6 @@
 import { getEntity } from '../../../helpers/portal-backend/get-entity.js'
 import { getExistingDeployment } from './get-existing-deployment.js'
-import { config } from '../../../config/index.js'
+import { config } from '#config/config.js'
 
 const deploymentRepo = config.get('github.repos.appDeployments')
 const gitHubOwner = config.get('github.org')

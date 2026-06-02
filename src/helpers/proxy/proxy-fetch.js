@@ -1,6 +1,6 @@
 import { ProxyAgent, fetch as undiciFetch } from 'undici'
 
-import { config } from '../../config/index.js'
+import { config } from '#config/config.js'
 
 const nonProxyFetch = (url, opts) => {
   return undiciFetch(url, {
@@ -8,6 +8,7 @@ const nonProxyFetch = (url, opts) => {
   })
 }
 
+//todo see if you can remove this
 const proxyFetch = (url, opts) => {
   const proxy = config.get('httpProxy')
   if (!proxy) {

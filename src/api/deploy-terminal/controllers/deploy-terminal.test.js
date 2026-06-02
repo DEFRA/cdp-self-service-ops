@@ -3,11 +3,11 @@ import { sendSnsMessage } from '../../../helpers/sns/send-sns-message.js'
 import { getEntity } from '../../../helpers/portal-backend/get-entity.js'
 import { generateTerminalToken } from '../helpers/generate-terminal-token.js'
 
-describe('#deploy-terminal', () => {
-  vi.mock('../../../helpers/sns/send-sns-message.js')
-  vi.mock('../../../helpers/portal-backend/get-entity.js')
-  vi.mock('../helpers/generate-terminal-token.js')
+vi.mock('../../../helpers/sns/send-sns-message.js')
+vi.mock('../../../helpers/portal-backend/get-entity.js')
+vi.mock('../helpers/generate-terminal-token.js')
 
+describe('#deploy-terminal', () => {
   it('Should send a valid payload to sns', async () => {
     getEntity.mockResolvedValue({
       environments: {

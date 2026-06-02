@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto'
 
-import { config } from '../../../config/index.js'
+import { config } from '#config/config.js'
 import { sendSnsMessage } from '../../../helpers/sns/send-sns-message.js'
 import { recordDatabaseMigration } from './record-database-migration.js'
 import Joi from 'joi'

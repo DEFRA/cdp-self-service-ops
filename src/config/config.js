@@ -384,12 +384,6 @@ const config = convict({
       env: 'REMOVE_SHUTTER_URL_WORKFLOW'
     }
   },
-  enableSecureContext: {
-    doc: 'Enable Secure Context',
-    format: Boolean,
-    default: isProduction,
-    env: 'ENABLE_SECURE_CONTEXT'
-  },
   portalBackendSharedSecret: {
     doc: 'Shared secret for portal backend',
     format: String,

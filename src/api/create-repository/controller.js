@@ -1,7 +1,7 @@
 import Boom from '@hapi/boom'
 import { statusCodes, scopes } from '@defra/cdp-validation-kit'
 
-import { config } from '../../config/index.js'
+import { config } from '#config/config.js'
 import { repositoryValidation } from './helpers/schema/repository-validation.js'
 import { fetchTeam } from '../../helpers/fetch-team.js'
 import { createTemplatedRepo } from '../../helpers/create/workflows/index.js'

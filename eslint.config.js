@@ -1,12 +1,9 @@
 import neostandard from 'neostandard'
-import tsParser from '@typescript-eslint/parser'
-import tsEslintPlugin from '@typescript-eslint/eslint-plugin'
-import n from 'eslint-plugin-n'
+import vitest from '@vitest/eslint-plugin'
+import prettier from 'eslint-plugin-prettier'
+import importPlugin from 'eslint-plugin-import'
 import promise from 'eslint-plugin-promise'
 import jsdoc from 'eslint-plugin-jsdoc'
-import importPlugin from 'eslint-plugin-import'
-import prettier from 'eslint-plugin-prettier'
-import vitest from '@vitest/eslint-plugin'
 import globals from 'globals'
 
 const customIgnores = [
@@ -29,24 +26,17 @@ export default [
     noStyle: true
   }),
   {
-    files: ['**/*.{js,cjs,ts}'],
+    files: ['**/*.js'],
     languageOptions: {
       ecmaVersion: 'latest',
-      parser: tsParser,
       sourceType: 'module',
       globals: {
         fetchMock: true
-      },
-      parserOptions: {
-        project: ['./tsconfig.json'],
-        tsconfigRootDir: new URL('.', import.meta.url).pathname
       }
     },
     plugins: {
-      '@typescript-eslint': tsEslintPlugin,
       import: importPlugin,
       jsdoc,
-      n,
       promise,
       prettier,
       vitest
@@ -93,12 +83,8 @@ export default [
       ]
     },
     settings: {
-      'import/parsers': {
-        '@typescript-eslint/parser': ['.cjs', '.js']
-      },
       'import/resolver': {
-        node: true,
-        typescript: true
+        node: true
       }
     }
   },
@@ -124,7 +110,6 @@ export default [
       ]
     }
   },
-  vitest.configs.recommended,
   {
     files: [
       '.vite/**/*.js',
@@ -137,11 +122,9 @@ export default [
       vitest
     },
     languageOptions: {
-      parser: tsParser,
       parserOptions: {
         ecmaVersion: 'latest',
-        sourceType: 'module',
-        project: ['./tsconfig.json']
+        sourceType: 'module'
       },
       globals: {
         ...vitest.environments.env.globals

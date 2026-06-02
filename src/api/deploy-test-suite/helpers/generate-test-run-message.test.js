@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto'
 
-import { config } from '../../../config/index.js'
+import { config } from '#config/config.js'
 import { generateTestRunMessage } from './generate-test-run-message.js'
 
 const expectedMessageResult = (runId, userId) => {

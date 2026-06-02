@@ -2,7 +2,7 @@ import { randomUUID } from 'node:crypto'
 import * as Hapi from '@hapi/hapi'
 import { statusCodes } from '@defra/cdp-validation-kit'
 
-import { config } from '../../../config/config.js'
+import { config } from '#config/config.js'
 
 const mockRunTestSuite = vi.fn()
 vi.mock('../helpers/run-test-suite.js', () => ({

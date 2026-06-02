@@ -8,14 +8,11 @@ import { requestLogger } from '../plugins/request-logger.js'
 import { azureOidc } from '../plugins/azure-oidc.js'
 import { mongoDb } from '../plugins/mongodb.js'
 import { snsClientPlugin } from '../plugins/sns-client.js'
-import { secureContext } from '../helpers/secure-context/index.js'
-import { sqsClient } from '../plugins/sqs-client.js'
+import { secureContext } from '@defra/hapi-secure-context'
 import { pulse } from '../plugins/pulse.js'
 import { requestTracing } from '../plugins/request-tracing.js'
 import { setupProxy } from '../helpers/proxy/setup-proxy.js'
 import { catchAll } from '../helpers/errors/catch-all.js'
-
-const enableSecureContext = config.get('enableSecureContext')
 
 async function createServer() {
   setupProxy()
@@ -48,17 +45,12 @@ async function createServer() {
     }
   })
 
-  // Add tracer and request logger before all other plugins
-  await server.register([requestTracing, requestLogger])
-
-  if (enableSecureContext) {
-    await server.register(secureContext)
-  }
-
   await server.register([
+    requestLogger,
+    requestTracing,
+    secureContext,
     pulse,
     azureOidc,
-    sqsClient,
     { plugin: mongoDb.plugin, options: config.get('mongo') },
     snsClientPlugin,
     router

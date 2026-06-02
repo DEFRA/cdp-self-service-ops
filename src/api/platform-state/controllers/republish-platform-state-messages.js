@@ -1,7 +1,7 @@
 import Boom from '@hapi/boom'
 import { environments, scopes, statusCodes } from '@defra/cdp-validation-kit'
 
-import { config } from '../../../config/index.js'
+import { config } from '#config/config.js'
 import { sendSnsMessage } from '../../../helpers/sns/send-sns-message.js'
 
 export const republishPlatformStateMessagesController = {

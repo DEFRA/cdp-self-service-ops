@@ -1,5 +1,5 @@
 import { octokit } from '../oktokit/oktokit.js'
-import { config } from '../../config/index.js'
+import { config } from '#config/config.js'
 
 /**
  * Trigger a given GitHub workflow

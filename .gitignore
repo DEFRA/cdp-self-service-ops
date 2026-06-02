@@ -10,7 +10,7 @@ coverage
 
 .envrc
 .eslintcache
-
-globalConfig.json
-
 tsconfig.tsbuildinfo
+globalConfig.json
+.env
+

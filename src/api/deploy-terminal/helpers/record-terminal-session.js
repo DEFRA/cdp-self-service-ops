@@ -1,4 +1,4 @@
-import { config } from '../../../config/index.js'
+import { config } from '#config/config.js'
 
 import { createLogger } from '../../../helpers/logging/logger.js'
 import { fetcher } from '../../../helpers/fetcher.js'

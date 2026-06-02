@@ -7,7 +7,7 @@ import {
   statusCodes
 } from '@defra/cdp-validation-kit'
 
-import { config } from '../../../config/index.js'
+import { config } from '#config/config.js'
 import { sendSnsMessage } from '../../../helpers/sns/send-sns-message.js'
 import { canAddEphemeralKey } from '../helpers/can-add-ephemeral-key.js'
 

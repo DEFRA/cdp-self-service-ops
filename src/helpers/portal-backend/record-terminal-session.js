@@ -1,4 +1,4 @@
-import { config } from '../../config/index.js'
+import { config } from '#config/config.js'
 import { fetcher } from '../fetcher.js'
 
 async function recordTerminalSession(session, logger) {
