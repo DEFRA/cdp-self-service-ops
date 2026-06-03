@@ -1,6 +1,5 @@
 import { createAppAuth } from '@octokit/auth-app'
 import { octokitFactory } from './factory.js'
-import { proxyFetch } from '../proxy/proxy-fetch.js'
 
 const buildConfig = (baseUrl) => ({
   ...(baseUrl && { baseUrl }),
@@ -35,7 +34,6 @@ describe('#octokitFactory', () => {
           installationId: '456'
         },
         request: {
-          fetch: proxyFetch,
           baseUrl: stubBaseUrl
         },
         baseUrl: stubBaseUrl
@@ -45,8 +43,7 @@ describe('#octokitFactory', () => {
     test('Should call OctokitExtra for a stubbed graphql instance', () => {
       expect(mockGraphqlDefaults).toHaveBeenCalledWith({
         request: {
-          hook: 'mockAuthHook',
-          fetch: proxyFetch
+          hook: 'mockAuthHook'
         },
         baseUrl: stubBaseUrl
       })
@@ -66,9 +63,7 @@ describe('#octokitFactory', () => {
           privateKey: 'mock-private-key',
           installationId: '456'
         },
-        request: {
-          fetch: proxyFetch
-        }
+        request: {}
       })
     })
 
@@ -82,8 +77,7 @@ describe('#octokitFactory', () => {
     test('Should call OctokitExtra for a non stubbed graphql instance', () => {
       expect(mockGraphqlDefaults).toHaveBeenCalledWith({
         request: {
-          hook: 'mockAuthHook',
-          fetch: proxyFetch
+          hook: 'mockAuthHook'
         }
       })
     })

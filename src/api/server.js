@@ -11,12 +11,9 @@ import { snsClientPlugin } from '../plugins/sns-client.js'
 import { secureContext } from '@defra/hapi-secure-context'
 import { pulse } from '../plugins/pulse.js'
 import { requestTracing } from '../plugins/request-tracing.js'
-import { setupProxy } from '../helpers/proxy/setup-proxy.js'
 import { catchAll } from '../helpers/errors/catch-all.js'
 
 async function createServer() {
-  setupProxy()
-
   const server = hapi.server({
     port: config.get('port'),
     routes: {

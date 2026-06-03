@@ -1,13 +1,13 @@
 import { createRemoteJWKSet, jwtVerify } from 'jose'
 import { config } from '../config/index.js'
-import { proxyFetch } from '../helpers/proxy/proxy-fetch.js'
 import Boom from '@hapi/boom'
+import { fetcher } from '../helpers/fetcher.js'
 
 const azureOidc = {
   plugin: {
     name: 'azure-oidc',
     register: async (server) => {
-      const oidc = await proxyFetch(
+      const oidc = await fetcher(
         config.get('oidc.wellKnownConfigurationUrl')
       ).then((res) => res.json())
 

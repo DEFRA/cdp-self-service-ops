@@ -1,7 +1,6 @@
 import { createAppAuth } from '@octokit/auth-app'
 
 import { removeNil } from '../remove-nil.js'
-import { proxyFetch } from '../proxy/proxy-fetch.js'
 
 /**
  * @typedef {object} GitHubConfig
@@ -38,7 +37,7 @@ function octokitFactory(OctokitExtra, gitHubConfig) {
     removeNil({
       authStrategy: createAppAuth,
       auth,
-      request: { fetch: proxyFetch, baseUrl },
+      request: { baseUrl },
       baseUrl
     })
   )
@@ -46,8 +45,7 @@ function octokitFactory(OctokitExtra, gitHubConfig) {
   const graphql = octokit.graphql.defaults(
     removeNil({
       request: {
-        hook: octokit.auth.hook,
-        fetch: proxyFetch
+        hook: octokit.auth.hook
       },
       baseUrl
     })
