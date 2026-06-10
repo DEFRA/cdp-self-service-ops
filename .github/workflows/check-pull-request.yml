@@ -15,7 +15,7 @@ jobs:
     name: Run Pull Request Checks
     runs-on: ubuntu-latest
     steps:
-      - uses: v
+      - uses: DEFRA/cdp-build-action/checkout@stable
       - uses: actions/setup-node@v6
         with:
           node-version-file: .nvmrc
