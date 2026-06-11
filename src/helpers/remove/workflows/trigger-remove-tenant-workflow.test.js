@@ -15,10 +15,11 @@ describe('#triggerRemoveTenantWorkflow', () => {
 
     const serviceName = 'my-service-name'
     const type = 'Microservice'
+    const subtype = 'Frontend'
 
     triggerWorkflow.mockReturnValue({})
 
-    await triggerRemoveTenantWorkflow(serviceName, type, logger)
+    await triggerRemoveTenantWorkflow(serviceName, type, subtype, logger)
 
     expect(triggerWorkflow).toHaveBeenCalledWith(
       'DEFRA',
@@ -26,7 +27,8 @@ describe('#triggerRemoveTenantWorkflow', () => {
       'remove-service.yml',
       {
         service: serviceName,
-        type
+        type,
+        subtype
       },
       serviceName,
       logger
