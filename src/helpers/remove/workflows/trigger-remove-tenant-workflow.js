@@ -7,14 +7,15 @@ import { config } from '#config/config.js'
  * @param {import("pino").Logger} logger
  * @returns {Promise<void>}
  */
-async function triggerRemoveTenantWorkflow(name, type, logger) {
+async function triggerRemoveTenantWorkflow(name, type, subtype, logger) {
   const org = config.get('github.org')
   const repo = config.get('github.repos.cdpTenantConfig')
   const workflowId = config.get('workflows.removeTenantService')
 
   const inputs = {
     service: name,
-    type
+    type,
+    subtype
   }
 
   await triggerWorkflow(org, repo, workflowId, inputs, name, logger)

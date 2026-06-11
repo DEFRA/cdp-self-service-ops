@@ -7,7 +7,12 @@ import { triggerRemoveTenantWorkflow } from '../../../helpers/remove/workflows/t
  */
 async function triggerRemoveWorkflow(entity, logger) {
   logger.info(`Triggering remove workflow for: ${entity.name}`)
-  await triggerRemoveTenantWorkflow(entity.name, entity.type, logger)
+  await triggerRemoveTenantWorkflow(
+    entity.name,
+    entity.type,
+    entity.subType,
+    logger
+  )
 }
 
 export { triggerRemoveWorkflow }

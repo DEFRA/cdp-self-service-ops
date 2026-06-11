@@ -39,6 +39,7 @@ describe('#triggerRemoveWorkflow', () => {
     expect(triggerRemoveTenantWorkflow).toHaveBeenCalledWith(
       serviceName,
       'Microservice',
+      'Backend',
       logger
     )
   })
@@ -52,6 +53,7 @@ describe('#triggerRemoveWorkflow', () => {
     expect(triggerRemoveTenantWorkflow).toHaveBeenCalledWith(
       serviceName,
       'Microservice',
+      'Frontend',
       logger
     )
   })
@@ -65,6 +67,7 @@ describe('#triggerRemoveWorkflow', () => {
     expect(triggerRemoveTenantWorkflow).toHaveBeenCalledWith(
       serviceName,
       'TestSuite',
+      'Journey',
       logger
     )
   })
