@@ -9,7 +9,7 @@ import {
   entitySubTypes
 } from '@defra/cdp-validation-kit'
 
-const tenantTemplateSchema = Joi.object({
+export const tenantTemplateSchema = Joi.object({
   repositoryName: Joi.string().required(), // repositoryNameValidation doesn't apply here as its not a tenant repo.
   zone: zoneValidation,
   mongo: Joi.boolean().required(),
@@ -23,7 +23,7 @@ const tenantTemplateSchema = Joi.object({
   entitySubType: entitySubTypeValidation
 })
 
-const tenantTemplateLookupSchema = Joi.object().pattern(
+export const tenantTemplateLookupSchema = Joi.object().pattern(
   Joi.string(),
   tenantTemplateSchema
 )
@@ -49,7 +49,7 @@ const tenantTemplateLookupSchema = Joi.object().pattern(
  * Available template for the platform
  * @type {Object.<string, TenantTemplate>}
  */
-const tenantTemplates = {
+export const tenantTemplates = {
   'cdp-node-frontend-template': {
     id: 'cdp-node-frontend-template',
     repositoryName: 'cdp-node-frontend-template',
@@ -139,21 +139,30 @@ const tenantTemplates = {
     language: 'node',
     entityType: entityTypes.testSuite,
     entitySubType: entitySubTypes.journey
+  },
+  'cdp-java-backend-template': {
+    id: 'cdp-java-backend-template',
+    repositoryName: 'cdp-java-backend-template',
+    zone: 'protected',
+    mongo: true,
+    redis: false,
+    templateName: 'Java Backend',
+    language: 'java',
+    requiredScope: 'permission:restrictedTechJava',
+    entityType: entityTypes.microservice,
+    entitySubType: entitySubTypes.backend
   }
 }
 
-function filterTemplates({ scopes = null, type = null, subtype = null }) {
+export function filterTemplates({
+  scopes = null,
+  type = null,
+  subtype = null
+}) {
   return Object.values(tenantTemplates).filter(
     (template) =>
       (!template.requiredScope || scopes?.includes(template.requiredScope)) &&
       (!type || template.entityType === type) &&
       (!subtype || template.entitySubType === subtype)
   )
-}
-
-export {
-  tenantTemplates,
-  tenantTemplateSchema,
-  tenantTemplateLookupSchema,
-  filterTemplates
 }
