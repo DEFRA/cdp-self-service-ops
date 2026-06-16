@@ -23,7 +23,9 @@ describe('filterTemplates', () => {
   })
 
   test('Should include restricted templates if user has required scope', () => {
-    const result = filterTemplates({ scopes: [scopes.restrictedTechPython] })
+    const result = filterTemplates({
+      scopes: [scopes.restrictedTechPython, 'permission:restrictedTechJava']
+    })
 
     expect(result.length).toBe(Object.keys(tenantTemplates).length)
     expect(result).toContain(tenantTemplates['cdp-python-backend-template'])
