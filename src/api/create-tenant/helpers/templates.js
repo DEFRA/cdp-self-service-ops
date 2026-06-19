@@ -17,7 +17,10 @@ export const tenantTemplateSchema = Joi.object({
   templateName: Joi.string().required(),
   language: Joi.string().required(),
   defaultBranch: templateBranchNameValidation,
-  requiredScope: Joi.string().optional(),
+  requiredScope: Joi.array()
+    .items(Joi.string())
+    .optional()
+    .description('User must have at least one of these scopes if set'),
   id: Joi.string().required(),
   entityType: entityTypeValidation,
   entitySubType: entitySubTypeValidation
@@ -41,7 +44,7 @@ export const tenantTemplateLookupSchema = Joi.object().pattern(
  * @property {string} language
  * @property {string} entityType
  * @property {string} entitySubType
- * @property {string|null} requiredScope
+ * @property {string[]|null} requiredScope
  * @export { TenantTemplate }
  */
 
@@ -114,7 +117,7 @@ export const tenantTemplates = {
     redis: false,
     templateName: 'Python Backend',
     language: 'python',
-    requiredScope: cdpScopes.restrictedTechPython,
+    requiredScope: [cdpScopes.restrictedTechPython, cdpScopes.admin],
     entityType: entityTypes.microservice,
     entitySubType: entitySubTypes.backend
   },
@@ -148,7 +151,7 @@ export const tenantTemplates = {
     redis: false,
     templateName: 'Java Backend',
     language: 'java',
-    requiredScope: 'permission:restrictedTechJava',
+    requiredScope: ['permission:restrictedTechJava', cdpScopes.admin],
     entityType: entityTypes.microservice,
     entitySubType: entitySubTypes.backend
   }
@@ -159,9 +162,11 @@ export function filterTemplates({
   type = null,
   subtype = null
 }) {
+  const scopeSet = new Set(scopes ?? [])
   return Object.values(tenantTemplates).filter(
     (template) =>
-      (!template.requiredScope || scopes?.includes(template.requiredScope)) &&
+      (!template.requiredScope ||
+        template.requiredScope.some((s) => scopeSet.has(s))) &&
       (!type || template.entityType === type) &&
       (!subtype || template.entitySubType === subtype)
   )

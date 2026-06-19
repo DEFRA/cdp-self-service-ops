@@ -17,9 +17,7 @@ describe('tenantTemplateSchema', () => {
 describe('filterTemplates', () => {
   test('Should filter out restricted templates if user doesnt have required scope', () => {
     const result = filterTemplates({ scopes: [] })
-    Object.values(tenantTemplates)
-      .filter((t) => t.requiredScope)
-      .forEach((t) => expect(result).not.toContainEqual(t))
+    expect(result.some((t) => t.requiredScope)).toBe(false)
   })
 
   test('Should include restricted templates if user has required scope', () => {
@@ -29,6 +27,17 @@ describe('filterTemplates', () => {
 
     expect(result.length).toBe(Object.keys(tenantTemplates).length)
     expect(result).toContain(tenantTemplates['cdp-python-backend-template'])
+    expect(result).toContain(tenantTemplates['cdp-java-backend-template'])
+  })
+
+  test('Should include restricted templates if user has admin scope', () => {
+    const result = filterTemplates({
+      scopes: [scopes.admin]
+    })
+
+    expect(result.length).toBe(Object.keys(tenantTemplates).length)
+    expect(result).toContain(tenantTemplates['cdp-python-backend-template'])
+    expect(result).toContain(tenantTemplates['cdp-java-backend-template'])
   })
 
   test('Should filter by type', () => {
@@ -59,8 +68,8 @@ describe('filterTemplates', () => {
     expect(
       result.every((r) => r.entitySubType === entitySubTypes.backend)
     ).toBe(true)
-    expect(
-      result.some((r) => r.requiredScope === scopes.restrictedTechPython)
-    ).toBe(true)
+    expect(result.some((r) => r.id === 'cdp-python-backend-template')).toBe(
+      true
+    )
   })
 })
