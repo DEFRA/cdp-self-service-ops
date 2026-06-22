@@ -5,16 +5,24 @@ import { scaleEcsToZeroInEnvironment } from './scale-ecs-to-zero-in-environment.
  * @param {string} serviceName
  * @param {{id: string, displayName: string}} user
  * @param {import("pino").Logger} logger
+ * @param {import("@aws-sdk/client-sns").SNSClient} snsClient
  */
 export async function scaleEcsToZeroInAllEnvironments(
   serviceName,
   user,
-  logger
+  logger,
+  snsClient
 ) {
   logger.info(
     `Scaling ECS to Zero for ${serviceName} in all environments in progress`
   )
   for (const environment of orderedEnvironments) {
-    await scaleEcsToZeroInEnvironment(serviceName, environment, user, logger)
+    await scaleEcsToZeroInEnvironment(
+      serviceName,
+      environment,
+      user,
+      logger,
+      snsClient
+    )
   }
 }

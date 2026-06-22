@@ -17,13 +17,17 @@ const deployToZeroController = {
     const { serviceName, environment } = params
     const user = await getScopedUser(serviceName, auth, logger)
 
-    const deploymentId = await deployToZero(
-      request,
-      serviceName,
-      environment,
-      user
-    )
-    return h.response({ deploymentId }).code(statusCodes.ok)
+    try {
+      const deploymentId = await deployToZero(
+        request,
+        serviceName,
+        environment,
+        user
+      )
+      return h.response({ deploymentId }).code(statusCodes.ok)
+    } catch (err) {
+      return h.response({ message: err }).code(statusCodes.internalError)
+    }
   }
 }
 

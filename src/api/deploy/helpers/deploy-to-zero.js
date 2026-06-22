@@ -1,73 +1,50 @@
-import { getEntity } from '../../../helpers/portal-backend/get-entity.js'
-import { registerDeployment } from './register-deployment.js'
-import { generateGitHubDeployment } from '../../../helpers/deployments/generate-deployment.js'
-import { commitDeploymentFile } from '../../../helpers/deployments/commit-deployment-file.js'
-import { getServiceInfo } from './get-service-info.js'
+import { deployService } from './deploy-service.js'
+import { findRunningDetails } from '../../../helpers/deployments/find-running-details.js'
+import isEmpty from 'lodash/isEmpty.js'
+import { shouldDirectDeploy } from './should-direct-deploy.js'
 
-async function deployToZero({ logger }, serviceName, environment, user) {
+async function deployToZero(
+  { logger, snsClient },
+  serviceName,
+  environment,
+  user
+) {
   logger.info(
     `Deployment to zero of ${serviceName} in ${environment} in progress`
   )
 
-  const deploymentId = crypto.randomUUID()
-
-  const entity = await getEntity(serviceName, logger)
-  const isTestSuite = entity?.type === 'TestSuite'
-  if (isTestSuite) {
-    logger.info(`${serviceName} is a test suite, nothing to deploy to zero`)
-    return deploymentId
-  }
-
-  const zone = entity.environments[environment]?.tenant_config?.zone
-
-  if (!zone) {
-    logger.warn(`Unable to find zone for ${serviceName} in ${environment}`)
-    return
-  }
-
-  const deployment = await getServiceInfo(serviceName, environment, logger)
-
-  if (deployment === null) {
-    logger.warn(
-      `Deployment for ${serviceName} not found, skipping deployment to zero`
+  const runningDetails = await findRunningDetails(serviceName, environment)
+  if (!runningDetails || isEmpty(runningDetails)) {
+    logger.info(
+      `Deployment details not found for ${serviceName} in ${environment}, may not be running`
     )
-    return deploymentId
+    throw new Error(
+      `Deployment details not found for ${serviceName} in ${environment}, may not be running`
+    )
   }
 
-  await registerDeployment(
-    serviceName,
-    deployment.service.version,
+  if (runningDetails.instanceCount === 0) {
+    logger.info('ECS Service already scaled to 0')
+    throw new Error('ECS Service already scaled to 0')
+  }
+
+  const details = {
+    imageName: serviceName,
     environment,
-    0,
-    deployment.resources.cpu,
-    deployment.resources.memory,
+    version: runningDetails.version,
+    instanceCount: 0,
+    cpu: Number(runningDetails.cpu),
+    memory: Number(runningDetails.memory),
+    configVersion: runningDetails.configVersion
+  }
+
+  const { deploymentId } = await deployService(
+    details,
     user,
-    deploymentId,
-    deployment.service.configuration.commitSha
+    snsClient,
+    logger,
+    shouldDirectDeploy(environment)
   )
-
-  logger.info('Deployment to zero registered')
-
-  const undeployment = generateGitHubDeployment({
-    payload: {
-      imageName: serviceName,
-      version: deployment.service.version,
-      environment,
-      instanceCount: 0,
-      cpu: deployment.resources.cpu,
-      memory: deployment.resources.memory
-    },
-    deploymentId,
-    zone,
-    commitSha: deployment.service.configuration.commitSha,
-    serviceCode: entity.metadata.service_code,
-    deploy: true,
-    user
-  })
-
-  await commitDeploymentFile(undeployment, logger)
-
-  logger.info('Deployment to zero commit file created')
 
   return deploymentId
 }

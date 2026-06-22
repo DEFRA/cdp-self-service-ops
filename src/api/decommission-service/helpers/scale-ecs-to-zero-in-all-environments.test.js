@@ -8,13 +8,19 @@ vi.mock('./scale-ecs-to-zero-in-environment.js', () => {
   }
 })
 const mockLogger = { info: vi.fn() }
+const mockSnsClient = {}
 
 const serviceName = 'some-service'
 const user = { id: 'some-user-id', displayName: 'some-name' }
 
 describe('#scaleEcsToZeroInAllEnvironments', () => {
   test('Should call scaleEcsToZeroInEnvironment', async () => {
-    await scaleEcsToZeroInAllEnvironments(serviceName, user, mockLogger)
+    await scaleEcsToZeroInAllEnvironments(
+      serviceName,
+      user,
+      mockLogger,
+      mockSnsClient
+    )
 
     expect(scaleEcsToZeroInEnvironment).toHaveBeenCalledTimes(7)
     orderedEnvironments.forEach((env) => {
@@ -22,7 +28,8 @@ describe('#scaleEcsToZeroInAllEnvironments', () => {
         serviceName,
         env,
         user,
-        mockLogger
+        mockLogger,
+        mockSnsClient
       )
     })
   })

@@ -1,7 +1,6 @@
 import {
   deployServiceController,
-  deployServiceOptionsController,
-  existingServiceInfoController
+  deployServiceOptionsController
 } from './controllers/index.js'
 import { autoDeployServiceController } from './controllers/auto-deploy-service.js'
 import { deployToZeroController } from './controllers/deploy-to-zero.js'
@@ -25,11 +24,6 @@ const deploy = {
           method: 'GET',
           path: '/deploy-service/options',
           ...deployServiceOptionsController
-        },
-        {
-          method: 'GET',
-          path: '/deploy-service/info/{environment}/{imageName}',
-          ...existingServiceInfoController
         },
         {
           method: 'POST',
