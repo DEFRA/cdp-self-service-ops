@@ -22,7 +22,12 @@ const scaleEcsToZeroController = {
     const entityName = request.params.entityName
     const user = await request.payload
 
-    await scaleEcsToZeroInAllEnvironments(entityName, user, request.logger)
+    await scaleEcsToZeroInAllEnvironments(
+      entityName,
+      user,
+      request.logger,
+      request.snsClient
+    )
     return h.response().code(statusCodes.ok)
   }
 }

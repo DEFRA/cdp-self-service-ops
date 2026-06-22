@@ -6,12 +6,14 @@ vi.mock('../../../helpers/oktokit/oktokit.js', () => ({
 const getEntity = vi.fn()
 vi.mock('../../../helpers/portal-backend/get-entity.js', () => ({ getEntity }))
 
-const scaleEcsToZero = vi.fn()
-vi.mock('./scale-ecs-to-zero.js', () => ({
-  scaleEcsToZero
+const deployToZero = vi.fn()
+vi.mock('../../deploy/helpers/deploy-to-zero.js', () => ({
+  deployToZero
 }))
 
 const logger = { info: vi.fn(), warn: vi.fn() }
+const snsClient = {}
+
 getEntity.mockResolvedValue({
   name: 'some-service',
   type: 'Microservice',
@@ -24,7 +26,7 @@ getEntity.mockResolvedValue({
     }
   }
 })
-scaleEcsToZero.mockResolvedValue()
+deployToZero.mockResolvedValue('1234')
 
 const repositoryName = 'some-service'
 const environment = 'dev'
@@ -44,21 +46,20 @@ describe('#scaleEcsToZeroInEnvironment', () => {
       repositoryName,
       environment,
       user,
-      logger
+      logger,
+      snsClient
     )
   }
 
   test('should call scaleEcsToZero', async () => {
     await callScaleEcsToZeroInEnvironment()
 
-    expect(scaleEcsToZero).toHaveBeenCalledTimes(1)
-    expect(scaleEcsToZero).toHaveBeenCalledWith(
+    expect(deployToZero).toHaveBeenCalledTimes(1)
+    expect(deployToZero).toHaveBeenCalledWith(
+      { logger, snsClient },
       repositoryName,
       environment,
-      'public',
-      user,
-      expect.anything(),
-      logger
+      user
     )
   })
 
@@ -68,7 +69,7 @@ describe('#scaleEcsToZeroInEnvironment', () => {
     await callScaleEcsToZeroInEnvironment()
 
     expect(getEntity).toHaveBeenCalledTimes(1)
-    expect(scaleEcsToZero).toHaveBeenCalledTimes(0)
+    expect(deployToZero).toHaveBeenCalledTimes(0)
   })
 
   test('if repository should not call scale to zero', async () => {
@@ -77,6 +78,6 @@ describe('#scaleEcsToZeroInEnvironment', () => {
     await callScaleEcsToZeroInEnvironment()
 
     expect(getEntity).toHaveBeenCalledTimes(1)
-    expect(scaleEcsToZero).toHaveBeenCalledTimes(0)
+    expect(deployToZero).toHaveBeenCalledTimes(0)
   })
 })
