@@ -1,4 +1,4 @@
-import { generateDeployment } from './generate-deployment.js'
+import { generateGitHubDeployment } from './generate-deployment.js'
 
 /**
  * @param {{cdpDeploymentId: string, status: string, service: string, version:string, configVersion: string, environment: string, memory: number, cpu: number, instanceCount: number, user: object}} runningDetails
@@ -20,7 +20,7 @@ export function transformRunningDetailsToDeployment(
   },
   zone
 ) {
-  return generateDeployment({
+  return generateGitHubDeployment({
     payload: {
       imageName: service,
       version,
