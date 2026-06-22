@@ -1,7 +1,7 @@
 import { statusCodes } from '@defra/cdp-validation-kit'
 import { deployService } from './deploy-service.js'
 import { registerDeployment } from '../helpers/register-deployment.js'
-import { generateDeployment } from '../../../helpers/deployments/generate-deployment.js'
+import { generateGitHubDeployment } from '../../../helpers/deployments/generate-deployment.js'
 import { commitDeploymentFile } from '../../../helpers/deployments/commit-deployment-file.js'
 import { getEntity } from '../../../helpers/portal-backend/get-entity.js'
 
@@ -10,7 +10,8 @@ vi.mock('../helpers/register-deployment.js', () => ({
 }))
 
 vi.mock('../../../helpers/deployments/generate-deployment.js', () => ({
-  generateDeployment: vi.fn()
+  generateGitHubDeployment: vi.fn(),
+  generateLambdaDeployment: vi.fn()
 }))
 
 vi.mock('../../../helpers/deployments/commit-deployment-file.js', () => ({
@@ -40,6 +41,7 @@ describe('#deploy-service', () => {
       configVersion: 'abc123'
     }
     const logger = { info: vi.fn() }
+    const snsClient = {}
     const user = { id: 'user-123', displayName: 'Portal User' }
 
     const code = vi.fn().mockReturnValue('hapi-response')
@@ -54,11 +56,18 @@ describe('#deploy-service', () => {
       metadata: { service_code: 'service-code' }
     })
     const generatedDeployment = { deploymentId }
-    generateDeployment.mockReturnValue(generatedDeployment)
+    generateGitHubDeployment.mockReturnValue(generatedDeployment)
     registerDeployment.mockResolvedValue()
     commitDeploymentFile.mockResolvedValue()
 
-    const response = await deployService(payload, logger, h, user)
+    const response = await deployService(
+      payload,
+      snsClient,
+      logger,
+      h,
+      user,
+      []
+    )
 
     expect(registerDeployment).toHaveBeenCalledWith(
       payload.imageName,
@@ -72,7 +81,7 @@ describe('#deploy-service', () => {
       payload.configVersion
     )
     expect(getEntity).toHaveBeenCalledWith(payload.imageName)
-    expect(generateDeployment).toHaveBeenCalledWith({
+    expect(generateGitHubDeployment).toHaveBeenCalledWith({
       deploymentId: expect.any(String),
       payload,
       zone: 'zone-a',
@@ -102,6 +111,7 @@ describe('#deploy-service', () => {
       memory: 2048,
       configVersion: 'abc123'
     }
+    const snsClient = {}
     const logger = { info: vi.fn() }
     const user = { id: 'user-123', displayName: 'Portal User' }
 
@@ -109,7 +119,7 @@ describe('#deploy-service', () => {
 
     getEntity.mockRejectedValue('Resource not found')
 
-    const promise = deployService(payload, logger, h, user)
+    const promise = deployService(payload, snsClient, logger, h, user, [])
     await expect(promise).rejects.toThrowError()
 
     expect(registerDeployment).toHaveBeenCalledWith(
@@ -123,7 +133,7 @@ describe('#deploy-service', () => {
       expect.any(String),
       payload.configVersion
     )
-    expect(generateDeployment).not.toHaveBeenCalled()
+    expect(generateGitHubDeployment).not.toHaveBeenCalled()
     expect(commitDeploymentFile).not.toHaveBeenCalled()
   })
 })

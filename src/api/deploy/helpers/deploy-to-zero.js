@@ -1,6 +1,6 @@
 import { getEntity } from '../../../helpers/portal-backend/get-entity.js'
 import { registerDeployment } from './register-deployment.js'
-import { generateDeployment } from '../../../helpers/deployments/generate-deployment.js'
+import { generateGitHubDeployment } from '../../../helpers/deployments/generate-deployment.js'
 import { commitDeploymentFile } from '../../../helpers/deployments/commit-deployment-file.js'
 import { getServiceInfo } from './get-service-info.js'
 
@@ -48,7 +48,7 @@ async function deployToZero({ logger }, serviceName, environment, user) {
 
   logger.info('Deployment to zero registered')
 
-  const undeployment = generateDeployment({
+  const undeployment = generateGitHubDeployment({
     payload: {
       imageName: serviceName,
       version: deployment.service.version,
