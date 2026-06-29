@@ -1,7 +1,6 @@
 import { deployServiceValidation } from '../helpers/schema/deploy-service-validation.js'
 import { getScopedUser } from '../../../helpers/user/get-scoped-user.js'
 import { statusCodes } from '@defra/cdp-validation-kit'
-import { shouldDirectDeploy } from '../helpers/should-direct-deploy.js'
 import { deployService } from '../helpers/deploy-service.js'
 
 const deployServiceController = {
@@ -23,13 +22,7 @@ const deployServiceController = {
     const user = await getScopedUser(payload.imageName, auth, logger)
 
     try {
-      const result = await deployService(
-        payload,
-        user,
-        snsClient,
-        logger,
-        shouldDirectDeploy(payload.environment)
-      )
+      const result = await deployService(payload, user, snsClient, logger)
       return h.response(result).code(statusCodes.ok)
     } catch (err) {
       logger.error(err)

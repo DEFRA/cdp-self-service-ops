@@ -1,7 +1,6 @@
 import { deployService } from './deploy-service.js'
 import { findRunningDetails } from '../../../helpers/deployments/find-running-details.js'
 import isEmpty from 'lodash/isEmpty.js'
-import { shouldDirectDeploy } from './should-direct-deploy.js'
 
 async function deployToZero(
   { logger, snsClient },
@@ -38,13 +37,7 @@ async function deployToZero(
     configVersion: runningDetails.configVersion
   }
 
-  const { deploymentId } = await deployService(
-    details,
-    user,
-    snsClient,
-    logger,
-    shouldDirectDeploy(environment)
-  )
+  const { deploymentId } = await deployService(details, user, snsClient, logger)
 
   return deploymentId
 }
