@@ -142,12 +142,6 @@ const config = convict({
     format: Boolean,
     default: isTest
   },
-  directDeployments: {
-    doc: 'Enable direct deployments via the lambda for specific environments (comma separated)',
-    format: String,
-    default: '',
-    env: 'DIRECT_DEPLOYMENTS'
-  },
   mongo: {
     mongoUrl: {
       doc: 'URL for mongodb',

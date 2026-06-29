@@ -10,16 +10,9 @@ import { triggerDeployment } from '../../../helpers/deployments/trigger-deployme
  * @param {{ id: string, displayName: string }} user
  * @param {import("@aws-sdk/client-sns").SNSClient} snsClient
  * @param {import("pino").Logger} logger
- * @param {boolean} deployDirectly
  * @return {Promise<{deploymentId: string}>}
  */
-export async function deployService(
-  details,
-  user,
-  snsClient,
-  logger,
-  deployDirectly = false
-) {
+export async function deployService(details, user, snsClient, logger) {
   const {
     imageName,
     environment,
@@ -72,14 +65,12 @@ export async function deployService(
     user
   }
 
-  if (deployDirectly) {
-    await triggerDeployment(
-      deploymentRequest,
-      details.environment,
-      snsClient,
-      logger
-    )
-  }
+  await triggerDeployment(
+    deploymentRequest,
+    details.environment,
+    snsClient,
+    logger
+  )
 
   const deployment = generateGitHubDeployment({
     deploymentId,
