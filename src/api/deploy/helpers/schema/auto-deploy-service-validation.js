@@ -9,7 +9,7 @@ import {
   userWithIdValidation,
   versionValidation
 } from '@defra/cdp-validation-kit'
-import { canAutoDeployToProd } from '../can-auto-deploy-to-prod.js'
+import { canAutoDeploy } from '../can-auto-deploy.js'
 
 const autoDeployServiceValidation = Joi.object({
   imageName: repositoryNameValidation,
@@ -21,7 +21,7 @@ const autoDeployServiceValidation = Joi.object({
   memory: memoryValidation,
   configVersion: commitShaValidation
 }).custom((payload, helpers) => {
-  if (canAutoDeployToProd(payload)) {
+  if (canAutoDeploy(payload)) {
     return payload
   }
 
