@@ -50,12 +50,10 @@ describe('#autoDeployServiceValidation', () => {
 
     expect(
       autoDeployServiceValidation.validate(payload).error.details.at(0).message
-    ).toContain(
-      '"environment" must be one of [infra-dev, management, dev, test, perf-test, ext-test]'
-    )
+    ).toContain('"environment" must be one of [')
   })
 
-  test("Schema shouldn't allow prod environment", () => {
+  test("Schema shouldn't allow prod environment for auto-deployment user", () => {
     const payload = {
       imageName: 'cdp-portal-frontend',
       environment: 'prod',
@@ -75,6 +73,48 @@ describe('#autoDeployServiceValidation', () => {
     ).toContain(
       '"environment" must be one of [infra-dev, management, dev, test, perf-test, ext-test]'
     )
+  })
+
+  test("Schema shouldn't allow prod environment for scheduled user on non-canary service", () => {
+    const payload = {
+      imageName: 'cdp-portal-frontend',
+      environment: 'prod',
+      version: '1.0.0',
+      instanceCount: 4,
+      cpu: 1024,
+      memory: 2048,
+      user: {
+        id: '00000000-0000-0000-0000-00000000001',
+        displayName: 'Auto schedule'
+      },
+      configVersion: 'abc123def'
+    }
+
+    expect(
+      autoDeployServiceValidation.validate(payload).error.details.at(0).message
+    ).toContain(
+      '"environment" must be one of [infra-dev, management, dev, test, perf-test, ext-test]'
+    )
+  })
+
+  test('Schema should allow prod environment for scheduled canary deployment', () => {
+    const payload = {
+      imageName: 'cdp-canary-deployment-backend',
+      environment: 'prod',
+      version: '1.0.0',
+      instanceCount: 4,
+      cpu: 1024,
+      memory: 2048,
+      user: {
+        id: '00000000-0000-0000-0000-00000000001',
+        displayName: 'Auto schedule'
+      },
+      configVersion: 'abc123def'
+    }
+
+    expect(autoDeployServiceValidation.validate(payload)).toEqual({
+      value: payload
+    })
   })
 
   test('Schema should fail validation with expected version error', () => {
