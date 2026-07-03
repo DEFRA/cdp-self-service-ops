@@ -47,7 +47,7 @@ const createTenantController = {
 
     if (
       template.requiredScope &&
-      !scopes?.some((scope) => template.requiredScope.includes(scope))
+      !scopes.some((scope) => template.requiredScope.includes(scope))
     ) {
       throw Boom.unauthorized(
         `User does not have permissions to create ${templateId}, requires ${template.requiredScope}`
