@@ -45,7 +45,10 @@ const createTenantController = {
       throw Boom.badData(`Invalid service template: '${templateId}'`)
     }
 
-    if (template.requiredScope && !scopes?.includes(template.requiredScope)) {
+    if (
+      template.requiredScope &&
+      !scopes?.some((scope) => template.requiredScope.includes(scope))
+    ) {
       throw Boom.unauthorized(
         `User does not have permissions to create ${templateId}, requires ${template.requiredScope}`
       )
