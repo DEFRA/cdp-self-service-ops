@@ -7,7 +7,8 @@ async function sendSnsMessage(
   message,
   logger,
   environment = message?.environment,
-  deduplicationId = crypto.randomUUID()
+  deduplicationId = crypto.randomUUID(),
+  messageGroupId = environment
 ) {
   const input = {
     TopicArn: topic,
@@ -24,7 +25,7 @@ async function sendSnsMessage(
   // queue. Luckily, AWS requires all fifo queues to end with `.fifo` so we can selectively add these params.
   if (topic.endsWith('fifo')) {
     input.MessageDeduplicationId = deduplicationId
-    input.MessageGroupId = environment
+    input.MessageGroupId = messageGroupId
   }
 
   const command = new PublishCommand(input)

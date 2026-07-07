@@ -30,10 +30,10 @@ const shutterServiceController = {
     }
   },
   handler: async (request, h) => {
-    const { payload, auth, logger } = request
+    const { payload, auth, logger, snsClient } = request
     const user = await getScopedUser(payload.serviceName, auth, logger)
 
-    await shutterServiceWorkflow(payload, user, logger)
+    await shutterServiceWorkflow(payload, user, logger, snsClient)
 
     return h.response().code(statusCodes.ok)
   }

@@ -148,6 +148,12 @@ const config = convict({
     default: '',
     env: 'DIRECT_DEPLOYMENTS'
   },
+  shutterV2Environments: {
+    doc: 'Enable shutter v2 (manage_shuttering via mono-lambda) for specific environments (comma separated)',
+    format: String,
+    default: '',
+    env: 'SHUTTER_V2_ENVIRONMENTS'
+  },
   mongo: {
     mongoUrl: {
       doc: 'URL for mongodb',
