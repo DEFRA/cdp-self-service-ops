@@ -86,10 +86,15 @@ describe('#shutterServiceWorkflow', () => {
         ]
       ])(
         'routes %s to the expected ACL',
-        async (_description, urlType, url, expectedShutterType, expectedAcl) => {
-          const { shutterServiceWorkflow } = await import(
-            './shutter-service-workflow.js'
-          )
+        async (
+          _description,
+          urlType,
+          url,
+          expectedShutterType,
+          expectedAcl
+        ) => {
+          const { shutterServiceWorkflow } =
+            await import('./shutter-service-workflow.js')
           const inputs = buildInputs({ urlType, url })
 
           await shutterServiceWorkflow(inputs, user, logger, snsClient)
@@ -106,9 +111,8 @@ describe('#shutterServiceWorkflow', () => {
     })
 
     test('publishes a manage_shuttering event with MessageGroupId set to the fqdn', async () => {
-      const { shutterServiceWorkflow } = await import(
-        './shutter-service-workflow.js'
-      )
+      const { shutterServiceWorkflow } =
+        await import('./shutter-service-workflow.js')
       const inputs = buildInputs()
 
       await shutterServiceWorkflow(inputs, user, logger, snsClient)
@@ -129,9 +133,8 @@ describe('#shutterServiceWorkflow', () => {
     })
 
     test('registers shuttering as shuttered', async () => {
-      const { shutterServiceWorkflow } = await import(
-        './shutter-service-workflow.js'
-      )
+      const { shutterServiceWorkflow } =
+        await import('./shutter-service-workflow.js')
       const inputs = buildInputs()
 
       await shutterServiceWorkflow(inputs, user, logger, snsClient)
@@ -150,9 +153,8 @@ describe('#shutterServiceWorkflow', () => {
     })
 
     test('triggers the github workflow and does not publish to sns', async () => {
-      const { shutterServiceWorkflow } = await import(
-        './shutter-service-workflow.js'
-      )
+      const { shutterServiceWorkflow } =
+        await import('./shutter-service-workflow.js')
       const inputs = buildInputs()
 
       await shutterServiceWorkflow(inputs, user, logger, snsClient)
@@ -191,9 +193,8 @@ describe('#unshutterServiceWorkflow', () => {
     })
 
     test('publishes an unshutter manage_shuttering event', async () => {
-      const { unshutterServiceWorkflow } = await import(
-        './shutter-service-workflow.js'
-      )
+      const { unshutterServiceWorkflow } =
+        await import('./shutter-service-workflow.js')
       const inputs = buildInputs()
 
       await unshutterServiceWorkflow(inputs, user, logger, snsClient)
@@ -209,9 +210,8 @@ describe('#unshutterServiceWorkflow', () => {
     })
 
     test('registers shuttering as not shuttered', async () => {
-      const { unshutterServiceWorkflow } = await import(
-        './shutter-service-workflow.js'
-      )
+      const { unshutterServiceWorkflow } =
+        await import('./shutter-service-workflow.js')
       const inputs = buildInputs()
 
       await unshutterServiceWorkflow(inputs, user, logger, snsClient)
@@ -230,9 +230,8 @@ describe('#unshutterServiceWorkflow', () => {
     })
 
     test('triggers the github remove workflow and does not publish to sns', async () => {
-      const { unshutterServiceWorkflow } = await import(
-        './shutter-service-workflow.js'
-      )
+      const { unshutterServiceWorkflow } =
+        await import('./shutter-service-workflow.js')
       const inputs = buildInputs()
 
       await unshutterServiceWorkflow(inputs, user, logger, snsClient)
