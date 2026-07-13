@@ -20,8 +20,7 @@ async function publishManageShutteringEvent(inputs, action, snsClient, logger) {
     payload: {
       action,
       fqdn: inputs.url,
-      service_name: inputs.serviceName,
-      url_type: inputs.urlType
+      service_name: inputs.serviceName
     }
   }
 

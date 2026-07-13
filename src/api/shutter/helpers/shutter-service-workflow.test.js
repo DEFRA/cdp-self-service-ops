@@ -67,8 +67,7 @@ describe('#shutterServiceWorkflow', () => {
       expect(publishedEvent().payload).toEqual({
         action: 'shutter',
         fqdn: inputs.url,
-        service_name: inputs.serviceName,
-        url_type: inputs.urlType
+        service_name: inputs.serviceName
       })
     })
 
@@ -164,8 +163,7 @@ describe('#unshutterServiceWorkflow', () => {
       expect(publishedEvent().payload).toEqual({
         action: 'unshutter',
         fqdn: inputs.url,
-        service_name: inputs.serviceName,
-        url_type: inputs.urlType
+        service_name: inputs.serviceName
       })
       expect(triggerWorkflow).not.toHaveBeenCalled()
     })
