@@ -54,60 +54,22 @@ describe('#shutterServiceWorkflow', () => {
       get.mockImplementation(configValues('infra-dev'))
     })
 
-    describe('web ACL and shutter type routing', () => {
-      test.each([
-        [
-          'frontend vanity url on internal domain',
-          shutterUrlType.frontendVanityUrl,
-          'portal-test.cdp-int.defra.cloud',
-          'www',
-          'cdp-platform-acl-public-internal'
-        ],
-        [
-          'frontend vanity url on external domain',
-          shutterUrlType.frontendVanityUrl,
-          'portal.defra.gov.uk',
-          'www',
-          'cdp-platform-acl-public-external'
-        ],
-        [
-          'api gateway vanity url on internal domain',
-          shutterUrlType.apigwVanityUrl,
-          'some-service.api.infra-dev.cdp-int.defra.cloud',
-          'api',
-          'cdp-platform-api-acl-private'
-        ],
-        [
-          'api gateway vanity url on external domain',
-          shutterUrlType.apigwVanityUrl,
-          'some-service.api.defra.gov.uk',
-          'api',
-          'cdp-platform-api-acl-public'
-        ]
-      ])(
-        'routes %s to the expected ACL',
-        async (
-          _description,
-          urlType,
-          url,
-          expectedShutterType,
-          expectedAcl
-        ) => {
-          const { shutterServiceWorkflow } =
-            await import('./shutter-service-workflow.js')
-          const inputs = buildInputs({ urlType, url })
+    test('publishes a slim payload for shutter requests', async () => {
+      const { shutterServiceWorkflow } =
+        await import('./shutter-service-workflow.js')
+      const inputs = buildInputs({
+        urlType: shutterUrlType.apigwVanityUrl,
+        url: 'some-service.api.defra.gov.uk'
+      })
 
-          await shutterServiceWorkflow(inputs, user, logger, snsClient)
+      await shutterServiceWorkflow(inputs, user, logger, snsClient)
 
-          expect(publishedEvent().payload).toEqual({
-            action: 'shutter',
-            fqdn: url,
-            service_name: inputs.serviceName,
-            shutter_type: expectedShutterType,
-            web_acl_name: expectedAcl
-          })
-        }
-      )
+      expect(publishedEvent().payload).toEqual({
+        action: 'shutter',
+        fqdn: inputs.url,
+        service_name: inputs.serviceName,
+        url_type: inputs.urlType
+      })
     })
 
     test('publishes a manage_shuttering event with MessageGroupId set to the fqdn', async () => {
@@ -203,8 +165,7 @@ describe('#unshutterServiceWorkflow', () => {
         action: 'unshutter',
         fqdn: inputs.url,
         service_name: inputs.serviceName,
-        shutter_type: 'www',
-        web_acl_name: 'cdp-platform-acl-public-internal'
+        url_type: inputs.urlType
       })
       expect(triggerWorkflow).not.toHaveBeenCalled()
     })
