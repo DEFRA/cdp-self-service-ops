@@ -7,9 +7,8 @@ import {
   statusCodes
 } from '@defra/cdp-validation-kit'
 
-import { config } from '#config/config.js'
-import { sendSnsMessage } from '../../../helpers/sns/send-sns-message.js'
 import { canAddEphemeralKey } from '../helpers/can-add-ephemeral-key.js'
+import { triggerMonoLambda } from '../../../helpers/monolambda/trigger-monolambda.js'
 
 function generateBase62Secret(length) {
   const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
@@ -45,26 +44,20 @@ const addEphemeralKeyController = {
       )
     }
 
-    const topic = config.get('monoLambdaTriggerTopicArn')
-
     const apiKey = generateBase62Secret(32)
     const ttlHours = environment === environments.prod ? 2 : 24
 
     try {
-      await sendSnsMessage(
-        request.snsClient,
-        topic,
-        {
-          environment,
-          event_type: 'add_ephemeral_api_key',
-          timestamp: new Date().toISOString(),
-          payload: {
-            api_key: apiKey,
-            user: request.auth.credentials.displayName,
-            ttl: ttlHours
-          }
-        },
-        request.logger
+      const payload = {
+        api_key: apiKey,
+        user: request.auth.credentials.displayName,
+        ttl: ttlHours
+      }
+      await triggerMonoLambda(
+        request,
+        'add_ephemeral_api_key',
+        environment,
+        payload
       )
 
       return h.response({ apiKey }).code(statusCodes.ok)

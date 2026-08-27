@@ -26,7 +26,8 @@ describe('#deploy-terminal', () => {
     const payload = {
       environment: 'dev',
       service: 'foo-frontend',
-      zone: 'public'
+      zone: 'public',
+      tool: 'terminal'
     }
     const user = {
       displayName: 'user name',

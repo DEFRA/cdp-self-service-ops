@@ -1,8 +1,7 @@
 import Boom from '@hapi/boom'
 import { environments, scopes, statusCodes } from '@defra/cdp-validation-kit'
 
-import { config } from '#config/config.js'
-import { sendSnsMessage } from '../../../helpers/sns/send-sns-message.js'
+import { triggerMonoLambda } from '../../../helpers/monolambda/trigger-monolambda.js'
 
 export const republishPlatformStateMessagesController = {
   options: {
@@ -19,22 +18,16 @@ export const republishPlatformStateMessagesController = {
       )
     }
 
-    const topic = config.get('monoLambdaTriggerTopicArn')
-
     try {
+      const payload = {
+        gzip: true
+      }
       for (const environment of Object.values(environments)) {
-        await sendSnsMessage(
-          request.snsClient,
-          topic,
-          {
-            environment,
-            event_type: 'publish_environment_state',
-            timestamp: new Date().toISOString(),
-            payload: {
-              gzip: true
-            }
-          },
-          request.logger
+        await triggerMonoLambda(
+          request,
+          'publish_environment_state',
+          environment,
+          payload
         )
       }
 
