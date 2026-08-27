@@ -9,6 +9,7 @@ import { sendSnsMessage } from '../../../helpers/sns/send-sns-message.js'
 import { generateTerminalToken } from '../helpers/generate-terminal-token.js'
 import { recordTerminalSession } from '../helpers/record-terminal-session.js'
 import { isAllowedTerminalEnvironment } from '../helpers/is-allowed-terminal-environment.js'
+import { toolToImage } from '../helpers/tool-to-image.js'
 
 const deployTerminalController = {
   options: {
@@ -71,6 +72,11 @@ const deployTerminal = async function (payload, user, logger, snsClient) {
   const hasPostgres =
     entity.environments[payload.environment]?.sql_database != null
 
+  const imageAndVersion = toolToImage[payload.tool]
+  if (!imageAndVersion) {
+    throw Boom.forbidden(`Unknown tool ${payload.tool}`)
+  }
+
   const runMessage = {
     environment: payload.environment,
     deployed_by: user,
@@ -79,7 +85,8 @@ const deployTerminal = async function (payload, user, logger, snsClient) {
     role: payload.service,
     service: payload.service,
     postgres: hasPostgres,
-    timeout: timeoutInSeconds
+    timeout: timeoutInSeconds,
+    ...imageAndVersion
   }
 
   logger.info(
