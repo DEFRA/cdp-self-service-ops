@@ -1,5 +1,7 @@
 import Boom from '@hapi/boom'
 
+import { config } from '#config/config.js'
+import { sendSnsMessage } from '../../../helpers/sns/send-sns-message.js'
 import {
   secretParamsValidation,
   removeSecretPayloadValidation
@@ -8,7 +10,6 @@ import { sanitize } from '../../../helpers/sanitize.js'
 import { registerPendingSecret } from '../helpers/register-pending-secret.js'
 import { canManageSecretInEnv } from '../helpers/can-manage-secret.js'
 import { statusCodes } from '@defra/cdp-validation-kit'
-import { triggerMonoLambda } from '../../../helpers/monolambda/trigger-monolambda.js'
 
 const removeSecretController = {
   options: {
@@ -28,36 +29,35 @@ const removeSecretController = {
     }
   },
   handler: async (request, h) => {
-    const { params, auth, payload, logger } = request
+    const { params, auth, payload, snsClient, logger } = request
     const { serviceName, environment } = params
     const scope = auth?.credentials?.scope
 
     const canManageSecret = await canManageSecretInEnv(
       serviceName,
       environment,
-      scope,
-      logger
+      scope
     )
-
     if (!canManageSecret) {
       throw Boom.forbidden('Insufficient permissions to update this secret')
     }
 
     const { secretKey } = payload
+    const topic = config.get('snsSecretsManagementTopicArn')
     const description = `Secret ${secretKey} removal pending for ${serviceName}`
 
-    const removeSecretPayload = {
-      action: 'remove_secret_by_key',
-      secret_name: `cdp/services/${serviceName}`,
-      secret_key_pair_name: secretKey
-    }
-
     try {
-      await triggerMonoLambda(
-        request,
-        'manage_secrets',
-        environment,
-        removeSecretPayload
+      await sendSnsMessage(
+        snsClient,
+        topic,
+        {
+          environment,
+          name: `cdp/services/${serviceName}`,
+          description,
+          secret_key: secretKey,
+          action: 'remove_secret_by_key'
+        },
+        logger
       )
 
       await registerPendingSecret({

@@ -1,5 +1,7 @@
 import Boom from '@hapi/boom'
 
+import { config } from '#config/config.js'
+import { sendSnsMessage } from '../../../helpers/sns/send-sns-message.js'
 import {
   secretParamsValidation,
   addSecretPayloadValidation
@@ -8,7 +10,6 @@ import { sanitize } from '../../../helpers/sanitize.js'
 import { registerPendingSecret } from '../helpers/register-pending-secret.js'
 import { canManageSecretInEnv } from '../helpers/can-manage-secret.js'
 import { statusCodes } from '@defra/cdp-validation-kit'
-import { triggerMonoLambda } from '../../../helpers/monolambda/trigger-monolambda.js'
 
 const addSecretController = {
   options: {
@@ -28,7 +29,7 @@ const addSecretController = {
     }
   },
   handler: async (request, h) => {
-    const { params, payload, auth, logger } = request
+    const { params, payload, auth, snsClient, logger } = request
     const { serviceName, environment } = params
     const scope = auth?.credentials?.scope
 
@@ -43,20 +44,22 @@ const addSecretController = {
     }
 
     const { secretValue, secretKey } = payload
-
-    const createSecretPayload = {
-      action: 'add_secret_key_value_pair',
-      secret_name: `cdp/services/${serviceName}`,
-      secret_key_pair_name: secretKey,
-      secret_key_pair_value: secretValue
-    }
+    const topic = config.get('snsSecretsManagementTopicArn')
+    const description = `Secret ${secretKey} pending for ${serviceName}`
 
     try {
-      await triggerMonoLambda(
-        request,
-        'manage_secrets',
-        environment,
-        createSecretPayload
+      await sendSnsMessage(
+        snsClient,
+        topic,
+        {
+          environment,
+          name: `cdp/services/${serviceName}`,
+          description,
+          secret_key: secretKey,
+          secret_value: secretValue,
+          action: 'add_secret'
+        },
+        logger
       )
 
       await registerPendingSecret({
@@ -65,6 +68,8 @@ const addSecretController = {
         secretKey,
         action: 'add_secret'
       })
+
+      logger.debug(description)
 
       return h.response().code(statusCodes.ok)
     } catch (error) {
