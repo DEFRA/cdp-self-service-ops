@@ -2,7 +2,6 @@ import { autoDeployServiceValidation } from '../helpers/schema/auto-deploy-servi
 import { validatePortalBackendRequest } from '../../helpers/pre/validate-portal-backend-request.js'
 import { deployService } from '../helpers/deploy-service.js'
 import { statusCodes } from '@defra/cdp-validation-kit'
-import { shouldDirectDeploy } from '../helpers/should-direct-deploy.js'
 
 const autoDeployServiceController = {
   options: {
@@ -20,13 +19,7 @@ const autoDeployServiceController = {
     const { payload, snsClient, logger } = request
     const user = payload.user
     try {
-      const result = await deployService(
-        payload,
-        user,
-        snsClient,
-        logger,
-        shouldDirectDeploy(payload.environment)
-      )
+      const result = await deployService(payload, user, snsClient, logger)
       return h.response(result).code(statusCodes.ok)
     } catch (err) {
       logger.error(err)
