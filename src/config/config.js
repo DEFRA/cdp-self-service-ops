@@ -370,18 +370,6 @@ const config = convict({
       format: String,
       default: 'create_repository.yml',
       env: 'CREATE_REPOSITORY_WORKFLOW'
-    },
-    addShutterWorkflow: {
-      doc: 'Name of workflow to trigger when enabling shuttering for a url',
-      format: String,
-      default: 'create-shuttering.yml',
-      env: 'ADD_SHUTTER_URL_WORKFLOW'
-    },
-    removeShutterWorkflow: {
-      doc: 'Name of workflow to trigger when removing shuttering for a url',
-      format: String,
-      default: 'remove-shuttering.yml',
-      env: 'REMOVE_SHUTTER_URL_WORKFLOW'
     }
   },
   portalBackendSharedSecret: {
