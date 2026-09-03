@@ -3,7 +3,6 @@ import { deploy } from '../api/deploy/index.js'
 import { deployTestSuite } from '../api/deploy-test-suite/index.js'
 import { deployTerminal } from '../api/deploy-terminal/index.js'
 import { health } from '../api/health/index.js'
-import { secrets } from '../api/secrets/index.js'
 import { decommissionService } from '../api/decommission-service/index.js'
 import { databaseMigrations } from '../api/deploy-database-migration/index.js'
 import { shutter } from '../api/shutter/index.js'
@@ -26,7 +25,6 @@ const router = {
         databaseMigrations,
         ephemeralKeys,
         platformState,
-        secrets,
         shutter
       ])
     }
