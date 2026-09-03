@@ -196,12 +196,6 @@ const config = convict({
     default: 'arn:aws:sns:eu-west-2:000000000000:stop-test-topic',
     env: 'SNS_STOP_TEST_TOPIC_ARN'
   },
-  snsSecretsManagementTopicArn: {
-    doc: 'SNS Secrets Management Topic ARN',
-    format: String,
-    default: 'arn:aws:sns:eu-west-2:000000000000:secret_management',
-    env: 'SNS_SECRETS_MANAGEMENT_TOPIC_ARN'
-  },
   snsRunTerminalTopicArn: {
     doc: 'SNS Run Terminal Topic ARN',
     format: String,
