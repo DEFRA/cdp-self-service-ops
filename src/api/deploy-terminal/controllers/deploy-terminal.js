@@ -1,6 +1,6 @@
 import Boom from '@hapi/boom'
 import { UTCDate } from '@date-fns/utc'
-import { differenceInSeconds, addHours } from 'date-fns'
+import { differenceInSeconds, addMinutes } from 'date-fns'
 import { statusCodes } from '@defra/cdp-validation-kit'
 import { getEntity } from '../../../helpers/portal-backend/get-entity.js'
 import { config } from '#config/config.js'
@@ -9,7 +9,7 @@ import { sendSnsMessage } from '../../../helpers/sns/send-sns-message.js'
 import { generateTerminalToken } from '../helpers/generate-terminal-token.js'
 import { recordTerminalSession } from '../helpers/record-terminal-session.js'
 import { isAllowedTerminalEnvironment } from '../helpers/is-allowed-terminal-environment.js'
-import { toolToImage } from '../helpers/tool-to-image.js'
+import { toolConfig } from '../helpers/tool-config.js'
 
 const deployTerminalController = {
   options: {
@@ -66,16 +66,17 @@ const deployTerminal = async function (payload, user, logger, snsClient) {
 
   const token = generateTerminalToken(64)
 
+  const tool = toolConfig[payload.tool]
+  if (!tool) {
+    throw Boom.forbidden(`Unknown tool ${payload.tool}`)
+  }
+
   const now = new UTCDate()
-  const expiresDate = payload.expiresAt ?? addHours(now, 2)
+  const expiresDate =
+    payload.expiresAt ?? addMinutes(now, tool.timeout_minutes ?? 120)
   const timeoutInSeconds = Math.abs(differenceInSeconds(expiresDate, now))
   const hasPostgres =
     entity.environments[payload.environment]?.sql_database != null
-
-  const imageAndVersion = toolToImage[payload.tool]
-  if (!imageAndVersion) {
-    throw Boom.forbidden(`Unknown tool ${payload.tool}`)
-  }
 
   const runMessage = {
     environment: payload.environment,
@@ -86,7 +87,8 @@ const deployTerminal = async function (payload, user, logger, snsClient) {
     service: payload.service,
     postgres: hasPostgres,
     timeout: timeoutInSeconds,
-    ...imageAndVersion
+    image: tool.image,
+    image_version: tool.image_version
   }
 
   logger.info(
