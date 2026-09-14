@@ -1,6 +1,5 @@
 import { statusCodes } from '@defra/cdp-validation-kit'
 import { startImportRequestValidation } from '../helpers/deploy-migration-request-validation.js'
-import { getScopedUser } from '../../../helpers/user/get-scoped-user.js'
 import { runDatabaseImport } from '../helpers/run-database-import.js'
 
 export const startDatabaseImport = {
@@ -16,7 +15,7 @@ export const startDatabaseImport = {
     }
   },
   handler: async (request, h) => {
-    const { payload, auth, snsClient, logger } = request
+    const { payload, snsClient, logger } = request
     const { service, environment, dataFolder, commands } = payload
 
     if (environment !== 'infra-dev') {
@@ -25,7 +24,11 @@ export const startDatabaseImport = {
         .code(statusCodes.badRequest)
     }
 
-    const user = await getScopedUser(service, auth, logger)
+    //const user = await getScopedUser(service, auth, logger)
+    const user = {
+      displayName: 'test',
+      id: '123'
+    }
 
     const migrationId = await runDatabaseImport({
       service,
