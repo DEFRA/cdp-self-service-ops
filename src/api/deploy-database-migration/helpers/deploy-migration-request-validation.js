@@ -5,10 +5,15 @@ import {
   repositoryNameValidation
 } from '@defra/cdp-validation-kit'
 
-const deployMigrationRequestValidation = Joi.object({
+export const deployMigrationRequestValidation = Joi.object({
   service: repositoryNameValidation,
   version: migrationIdValidation,
   environment: environmentValidation
 })
 
-export { deployMigrationRequestValidation }
+export const startImportRequestValidation = Joi.object({
+  service: repositoryNameValidation,
+  environment: environmentValidation,
+  dataFolder: Joi.string().required(),
+  commands: Joi.array().items(Joi.string()).min(1).required()
+})
