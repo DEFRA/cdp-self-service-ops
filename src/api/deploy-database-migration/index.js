@@ -1,4 +1,5 @@
 import { deployDatabaseMigration } from './controllers/deploy-database-migration.js'
+import { startDatabaseImport } from './controllers/start-database-import.js'
 
 export const databaseMigrations = {
   plugin: {
@@ -9,6 +10,11 @@ export const databaseMigrations = {
           method: 'POST',
           path: '/deploy-database-migration',
           ...deployDatabaseMigration
+        },
+        {
+          method: 'POST',
+          path: '/start-database-import',
+          ...startDatabaseImport
         }
       ])
     }
