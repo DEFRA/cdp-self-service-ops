@@ -18,6 +18,7 @@ const runImportValidation = Joi.object({
   version: Joi.string(),
   overrides: Joi.object({
     imageOverride: Joi.string(),
+    sourceTypeOverride: Joi.string(),
     sourceLocationOverride: Joi.string(),
     environmentTypeOverride: Joi.string(),
     buildspecOverride: Joi.string()
@@ -47,20 +48,19 @@ export async function runDatabaseImport({
        ${commands.map((c) => `       - ${c}\n`)}
   `
 
-  const overrides = {
-    imageOverride: defaultImportImage,
-    sourceLocationOverride: dataFolder,
-    environmentTypeOverride: 'LINUX_CONTAINER',
-    buildspecOverride: buildSpec
-  }
-
   const runMessage = {
     cdpMigrationId,
     service,
     version: '0.0.0',
     environment,
     user,
-    overrides
+    overrides: {
+      imageOverride: defaultImportImage,
+      sourceTypeOverride: 'S3',
+      sourceLocationOverride: dataFolder,
+      environmentTypeOverride: 'LINUX_CONTAINER',
+      buildspecOverride: buildSpec
+    }
   }
 
   Joi.assert(runMessage, runImportValidation)
