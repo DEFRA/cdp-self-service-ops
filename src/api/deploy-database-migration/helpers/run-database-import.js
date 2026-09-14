@@ -15,12 +15,13 @@ const runImportValidation = Joi.object({
   service: repositoryNameValidation,
   environment: environmentValidation,
   user: userWithIdValidation,
+  version: Joi.string(),
   overrides: Joi.object({
     imageOverride: Joi.string(),
     sourceLocationOverride: Joi.string(),
     environmentTypeOverride: Joi.string(),
     buildspecOverride: Joi.string()
-  })
+  }).unknown(true)
 })
 
 const snsRunMigrationTopic = config.get('snsRunDatabaseMigrationTopicArn')
