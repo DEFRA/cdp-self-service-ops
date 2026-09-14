@@ -23,7 +23,7 @@ const runImportValidation = Joi.object({
   })
 })
 
-const snsRunTestTopic = config.get('snsRunDatabaseMigrationTopicArn')
+const snsRunMigrationTopic = config.get('snsRunDatabaseMigrationTopicArn')
 
 const defaultImportImage = 'cdp-webshell:stable'
 
@@ -56,6 +56,7 @@ export async function runDatabaseImport({
   const runMessage = {
     cdpMigrationId,
     service,
+    version: '0.0.0',
     environment,
     user,
     overrides
@@ -63,7 +64,7 @@ export async function runDatabaseImport({
 
   Joi.assert(runMessage, runImportValidation)
 
-  await sendSnsMessage(snsClient, snsRunTestTopic, runMessage, logger)
+  await sendSnsMessage(snsClient, snsRunMigrationTopic, runMessage, logger)
 
   // TODO: track import in PBE (maybe extend migration?)
 
