@@ -18,10 +18,14 @@ const runImportValidation = Joi.object({
   version: Joi.string(),
   overrides: Joi.object({
     imageOverride: Joi.string(),
-    sourceTypeOverride: Joi.string(),
-    sourceLocationOverride: Joi.string(),
+    sourceTypeOverride: Joi.string().valid('S3', 'NO_SOURCE'),
+    sourceLocationOverride: Joi.string().description(
+      'S3 path inc bucket but without s3:// prefix'
+    ),
     environmentTypeOverride: Joi.string(),
-    buildspecOverride: Joi.string()
+    buildspecOverride: Joi.string().description(
+      'coebuild buildspec in yaml format'
+    )
   }).unknown(true)
 })
 
