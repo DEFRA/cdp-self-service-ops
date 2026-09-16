@@ -30,8 +30,7 @@ const runImportValidation = Joi.object({
 })
 
 const snsRunMigrationTopic = config.get('snsRunDatabaseMigrationTopicArn')
-
-const defaultImportImage = 'cdp-webshell:stable'
+const defaultImportImage = config.get('dataImportDefaultImage')
 
 export async function runDatabaseImport({
   service,
