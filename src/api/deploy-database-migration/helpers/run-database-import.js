@@ -43,13 +43,7 @@ export async function runDatabaseImport({
 }) {
   const cdpMigrationId = randomUUID()
 
-  const buildSpec = `version: 0.2
-
-  phases:
-  build:
-    commands:
-       ${commands.map((c) => `       - ${c}\n`)}
-  `
+  const buildSpec = generateBuildSpec(commands)
 
   const runMessage = {
     cdpMigrationId,
@@ -79,4 +73,14 @@ export async function runDatabaseImport({
   logger.info(`importId: ${cdpMigrationId} buildspec: ${buildSpec}`)
 
   return cdpMigrationId
+}
+
+export function generateBuildSpec(commands) {
+  return `version: 0.2
+
+  phases:
+  build:
+    commands:
+${commands.map((c) => `      - ${c}`).join('\n')}
+`
 }
