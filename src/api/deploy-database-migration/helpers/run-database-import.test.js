@@ -1,4 +1,4 @@
-import { runDatabaseImport } from './run-database-import.js'
+import { generateBuildSpec, runDatabaseImport } from './run-database-import.js'
 
 const mockInfoLogger = vi.fn()
 const mockErrorLogger = vi.fn()
@@ -43,5 +43,19 @@ describe('#runDatabaseImport', () => {
       logger: mockLogger
     })
     expect(mockSNSClient.send).toHaveBeenCalledTimes(1)
+  })
+})
+
+describe('#generateBuildSpec', () => {
+  test('Should generate a valid yaml buildspec', async () => {
+    const result = generateBuildSpec(['ls -la', 'pgrestore test.sql'])
+    expect(result).toEqual(`version: 0.2
+
+  phases:
+  build:
+    commands:
+      - ls -la
+      - pgrestore test.sql
+`)
   })
 })
