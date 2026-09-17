@@ -1,10 +1,13 @@
 import { statusCodes } from '@defra/cdp-validation-kit'
 import { startImportRequestValidation } from '../helpers/deploy-migration-request-validation.js'
 import { runDatabaseImport } from '../helpers/run-database-import.js'
+import { getScopedUser } from '../../../helpers/user/get-scoped-user.js'
 
 export const startDatabaseImport = {
   options: {
-    // Auth disabled for testing
+    auth: {
+      strategy: 'azure-oidc'
+    },
     validate: {
       payload: startImportRequestValidation
     },
@@ -15,20 +18,17 @@ export const startDatabaseImport = {
     }
   },
   handler: async (request, h) => {
-    const { payload, snsClient, logger } = request
+    const { payload, snsClient, auth, logger } = request
     const { service, environment, dataFolder, commands } = payload
 
+    // While its still in development it's restricted to infra-dev
     if (environment !== 'infra-dev') {
       return h
         .response({ message: 'Restricted to infra-dev only' })
         .code(statusCodes.badRequest)
     }
 
-    //const user = await getScopedUser(service, auth, logger)
-    const user = {
-      displayName: 'test',
-      id: '123'
-    }
+    const user = await getScopedUser(service, auth, logger)
 
     const migrationId = await runDatabaseImport({
       service,
