@@ -106,6 +106,7 @@ const deployTerminal = async function (payload, user, logger, snsClient) {
     await recordTerminalSession({
       service: payload.service,
       environment: payload.environment,
+      tool: payload.tool,
       user,
       token
     })

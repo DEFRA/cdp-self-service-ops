@@ -24,7 +24,8 @@ describe('#recordTestRun', () => {
       recordTerminalSession({
         service: 'some-service',
         environment: 'infra-dev',
-        user: { id: randomUUID(), displayName: 'My Name' }
+        user: { id: randomUUID(), displayName: 'My Name' },
+        tool: 'pgweb'
       })
     ).toThrow('"token" is required')
   })
@@ -36,7 +37,8 @@ describe('#recordTestRun', () => {
       service: 'some-service',
       environment: 'infra-dev',
       user: { id: randomUUID(), displayName: 'My Name' },
-      token: '1234'
+      token: '1234',
+      tool: 'terminal'
     }
     await recordTerminalSession(payload)
 
