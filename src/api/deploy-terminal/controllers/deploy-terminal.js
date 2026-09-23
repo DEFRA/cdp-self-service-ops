@@ -77,6 +77,8 @@ const deployTerminal = async function (payload, user, logger, snsClient) {
   const timeoutInSeconds = Math.abs(differenceInSeconds(expiresDate, now))
   const hasPostgres =
     entity.environments[payload.environment]?.sql_database != null
+  // DbGate mongo must use the service role, not the postgres -ddl role.
+  const postgres = payload.tool?.startsWith('dbgate') ? false : hasPostgres
 
   const runMessage = {
     environment: payload.environment,
@@ -85,7 +87,7 @@ const deployTerminal = async function (payload, user, logger, snsClient) {
     token,
     role: payload.service,
     service: payload.service,
-    postgres: hasPostgres,
+    postgres,
     timeout: timeoutInSeconds,
     image: tool.image,
     image_version: tool.image_version

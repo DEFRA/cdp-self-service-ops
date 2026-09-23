@@ -54,4 +54,79 @@ describe('#deploy-terminal', () => {
       expect.anything()
     )
   })
+
+  it('Should force postgres false for dbgate even when the service has sql', async () => {
+    getEntity.mockResolvedValue({
+      environments: {
+        dev: {
+          tenant_config: { zone: 'public' },
+          sql_database: { arn: 'arn:aws:rds:example' }
+        }
+      }
+    })
+    generateTerminalToken.mockReturnValue('1234567890')
+    const logger = { info: vi.fn(), error: vi.fn() }
+
+    await deployTerminal(
+      {
+        environment: 'dev',
+        service: 'foo-backend',
+        zone: 'public',
+        tool: 'dbgate'
+      },
+      { displayName: 'user name', id: '1234' },
+      logger,
+      sendSnsMessage
+    )
+
+    expect(sendSnsMessage).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.anything(),
+      expect.objectContaining({
+        postgres: false,
+        image: 'cdp-dbgate',
+        image_version: 'stable',
+        timeout: 21600,
+        role: 'foo-backend',
+        service: 'foo-backend'
+      }),
+      expect.anything()
+    )
+  })
+
+  it('Should keep postgres true for terminal when the service has sql', async () => {
+    getEntity.mockResolvedValue({
+      environments: {
+        dev: {
+          tenant_config: { zone: 'public' },
+          sql_database: { arn: 'arn:aws:rds:example' }
+        }
+      }
+    })
+    generateTerminalToken.mockReturnValue('1234567890')
+    const logger = { info: vi.fn(), error: vi.fn() }
+
+    await deployTerminal(
+      {
+        environment: 'dev',
+        service: 'foo-backend',
+        zone: 'public',
+        tool: 'terminal'
+      },
+      { displayName: 'user name', id: '1234' },
+      logger,
+      sendSnsMessage
+    )
+
+    expect(sendSnsMessage).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.anything(),
+      expect.objectContaining({
+        postgres: true,
+        image: 'cdp-webshell',
+        image_version: 'stable'
+      }),
+      expect.anything()
+    )
+  })
 })
