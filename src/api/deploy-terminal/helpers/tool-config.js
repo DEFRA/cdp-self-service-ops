@@ -22,5 +22,15 @@ export const toolConfig = {
     image: 'cdp-pgweb',
     image_version: 'latest',
     timeout_minutes: 60 * 6
+  },
+  dbgate: {
+    image: 'cdp-dbgate',
+    image_version: 'stable',
+    timeout_minutes: 60 * 6
+  },
+  dbgate_latest: {
+    image: 'cdp-dbgate',
+    image_version: 'latest',
+    timeout_minutes: 60 * 6
   }
 }
