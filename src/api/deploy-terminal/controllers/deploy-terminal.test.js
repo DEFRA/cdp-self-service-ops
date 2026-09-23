@@ -2,10 +2,12 @@ import { deployTerminal } from './deploy-terminal.js'
 import { sendSnsMessage } from '../../../helpers/sns/send-sns-message.js'
 import { getEntity } from '../../../helpers/portal-backend/get-entity.js'
 import { generateTerminalToken } from '../helpers/generate-terminal-token.js'
+import { recordTerminalSession } from '../helpers/record-terminal-session.js'
 
 vi.mock('../../../helpers/sns/send-sns-message.js')
 vi.mock('../../../helpers/portal-backend/get-entity.js')
 vi.mock('../helpers/generate-terminal-token.js')
+vi.mock('../helpers/record-terminal-session.js')
 
 describe('#deploy-terminal', () => {
   it('Should send a valid payload to sns', async () => {
@@ -19,7 +21,10 @@ describe('#deploy-terminal', () => {
       }
     })
 
-    generateTerminalToken.mockReturnValue('1234567890')
+    const mockToken = '1234567890'
+    generateTerminalToken.mockReturnValue(mockToken)
+
+    recordTerminalSession.mockResolvedValue({})
 
     const logger = { info: vi.fn(), error: vi.fn() }
 
@@ -53,5 +58,13 @@ describe('#deploy-terminal', () => {
       }),
       expect.anything()
     )
+
+    expect(recordTerminalSession).toHaveBeenCalledWith({
+      service: payload.service,
+      environment: payload.environment,
+      tool: payload.tool,
+      user,
+      token: mockToken
+    })
   })
 })

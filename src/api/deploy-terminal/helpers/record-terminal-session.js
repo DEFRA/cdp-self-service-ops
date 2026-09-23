@@ -13,7 +13,8 @@ const recordTerminalSessionValidation = Joi.object({
   token: Joi.string().min(1).required(),
   environment: environmentValidation.required(),
   service: repositoryNameValidation.required(),
-  user: userWithIdValidation.required()
+  user: userWithIdValidation.required(),
+  tool: Joi.string().default('terminal')
 })
 
 /**
