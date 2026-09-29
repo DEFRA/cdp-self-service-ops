@@ -1,11 +1,11 @@
 import { deployServiceOptionsController } from './deploy-service-options.js'
-import {
-  ecsCpuToMemoryOptionsMap,
-  prototypeCpuToMemoryOptionsMap
-} from '../helpers/ecs-cpu-to-memory-options-map.js'
 import { statusCodes } from '@defra/cdp-validation-kit'
 import { entitySubTypes } from '@defra/cdp-validation-kit/src/constants/entities.js'
 import * as Hapi from '@hapi/hapi'
+import {
+  ecsCpuToMemoryOptionsMap,
+  prototypeCpuToMemoryOptionsMap
+} from '@defra/cdp-validation-kit/src/constants/ecs-cpu-to-memory-options-map.js'
 
 let server
 

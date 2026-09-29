@@ -9,7 +9,7 @@ import {
   versionValidation
 } from '@defra/cdp-validation-kit'
 
-const deployServiceValidation = Joi.object({
+export const deployServiceValidation = Joi.object({
   imageName: repositoryNameValidation,
   version: versionValidation,
   environment: environmentValidation,
@@ -18,5 +18,3 @@ const deployServiceValidation = Joi.object({
   memory: memoryValidation,
   configVersion: commitShaValidation
 })
-
-export { deployServiceValidation }
