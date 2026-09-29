@@ -53,6 +53,7 @@ describe('#deploy-terminal', () => {
         role: 'foo-frontend',
         service: 'foo-frontend',
         timeout: 7200,
+        idle_timeout_seconds: 1200,
         token: '1234567890',
         zone: 'public'
       }),
