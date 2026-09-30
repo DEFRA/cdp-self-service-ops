@@ -9,7 +9,7 @@ import { sendSnsMessage } from '../../../helpers/sns/send-sns-message.js'
 import { generateTerminalToken } from '../helpers/generate-terminal-token.js'
 import { recordTerminalSession } from '../helpers/record-terminal-session.js'
 import { isAllowedTerminalEnvironment } from '../helpers/is-allowed-terminal-environment.js'
-import { toolConfig } from '../helpers/tool-config.js'
+import { toolConfig, getMaxLifetimeMinutes } from '../helpers/tool-config.js'
 
 const deployTerminalController = {
   options: {
@@ -73,7 +73,8 @@ const deployTerminal = async function (payload, user, logger, snsClient) {
 
   const now = new UTCDate()
   const expiresDate =
-    payload.expiresAt ?? addMinutes(now, tool.timeout_minutes ?? 120)
+    payload.expiresAt ??
+    addMinutes(now, getMaxLifetimeMinutes(payload.environment))
   const timeoutInSeconds = Math.abs(differenceInSeconds(expiresDate, now))
   const idleTimeoutInSeconds = tool.idle_timeout_minutes * 60
   const hasPostgres =

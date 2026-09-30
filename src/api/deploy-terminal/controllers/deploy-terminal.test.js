@@ -52,8 +52,8 @@ describe('#deploy-terminal', () => {
         postgres: false,
         role: 'foo-frontend',
         service: 'foo-frontend',
-        timeout: 7200,
-        idle_timeout_seconds: 1200,
+        timeout: 28800,
+        idle_timeout_seconds: 3600,
         token: '1234567890',
         zone: 'public'
       }),
@@ -100,9 +100,42 @@ describe('#deploy-terminal', () => {
         postgres: false,
         image: 'cdp-dbgate',
         image_version: 'stable',
-        timeout: 21600,
+        timeout: 28800,
         role: 'foo-backend',
         service: 'foo-backend'
+      }),
+      expect.anything()
+    )
+  })
+
+  it('Should limit the task lifetime to 2 hours in prod, with 1 hour idle timeout', async () => {
+    getEntity.mockResolvedValue({
+      environments: {
+        prod: { tenant_config: { zone: 'protected' } }
+      }
+    })
+    generateTerminalToken.mockReturnValue('1234567890')
+    const logger = { info: vi.fn(), error: vi.fn() }
+
+    await deployTerminal(
+      {
+        environment: 'prod',
+        service: 'foo-backend',
+        zone: 'protected',
+        tool: 'pgweb'
+      },
+      { displayName: 'user name', id: '1234' },
+      logger,
+      sendSnsMessage
+    )
+
+    expect(sendSnsMessage).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.anything(),
+      expect.objectContaining({
+        environment: 'prod',
+        timeout: 7200,
+        idle_timeout_seconds: 3600
       }),
       expect.anything()
     )
