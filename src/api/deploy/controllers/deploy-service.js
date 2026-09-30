@@ -3,6 +3,9 @@ import { getScopedUser } from '../../../helpers/user/get-scoped-user.js'
 import { statusCodes } from '@defra/cdp-validation-kit'
 import { deployService } from '../helpers/deploy-service.js'
 
+import { provideEntity } from '../../helpers/pre/provide-entity.js'
+import { validateDeploymentOptions } from '../../helpers/pre/validate-deployment-options.js'
+
 const deployServiceController = {
   options: {
     auth: {
@@ -15,7 +18,11 @@ const deployServiceController = {
       output: 'data',
       parse: true,
       allow: 'application/json'
-    }
+    },
+    pre: [
+      provideEntity((request) => request.payload?.imageName),
+      validateDeploymentOptions
+    ]
   },
   handler: async (request, h) => {
     const { payload, snsClient, logger, auth } = request
