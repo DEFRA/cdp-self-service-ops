@@ -52,8 +52,8 @@ describe('#deploy-terminal', () => {
         postgres: false,
         role: 'foo-frontend',
         service: 'foo-frontend',
-        timeout: 7200,
-        idle_timeout_seconds: 1200,
+        timeout: 28800,
+        idle_timeout_seconds: 3600,
         token: '1234567890',
         zone: 'public'
       }),
@@ -100,7 +100,7 @@ describe('#deploy-terminal', () => {
         postgres: false,
         image: 'cdp-dbgate',
         image_version: 'stable',
-        timeout: 21600,
+        timeout: 28800,
         role: 'foo-backend',
         service: 'foo-backend'
       }),

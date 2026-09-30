@@ -6,37 +6,37 @@ export const toolConfig = {
   terminal: {
     image: 'cdp-webshell',
     image_version: 'stable',
-    timeout_minutes: 120,
-    idle_timeout_minutes: 20
+    timeout_minutes: 60 * 8,
+    idle_timeout_minutes: 60
   },
   terminal_latest: {
     image: 'cdp-webshell',
     image_version: 'latest',
-    timeout_minutes: 120,
-    idle_timeout_minutes: 20
+    timeout_minutes: 60 * 8,
+    idle_timeout_minutes: 60
   },
   pgweb: {
     image: 'cdp-pgweb',
     image_version: 'stable',
-    timeout_minutes: 60 * 6,
-    idle_timeout_minutes: 20
+    timeout_minutes: 60 * 8,
+    idle_timeout_minutes: 60
   },
   pgweb_latest: {
     image: 'cdp-pgweb',
     image_version: 'latest',
-    timeout_minutes: 60 * 6,
-    idle_timeout_minutes: 20
+    timeout_minutes: 60 * 8,
+    idle_timeout_minutes: 60
   },
   dbgate: {
     image: 'cdp-dbgate',
     image_version: 'stable',
-    timeout_minutes: 60 * 6,
-    idle_timeout_minutes: 20
+    timeout_minutes: 60 * 8,
+    idle_timeout_minutes: 60
   },
   dbgate_latest: {
     image: 'cdp-dbgate',
     image_version: 'latest',
-    timeout_minutes: 60 * 6,
-    idle_timeout_minutes: 20
+    timeout_minutes: 60 * 8,
+    idle_timeout_minutes: 60
   }
 }
