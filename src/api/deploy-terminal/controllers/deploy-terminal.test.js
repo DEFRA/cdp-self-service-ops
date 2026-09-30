@@ -108,6 +108,39 @@ describe('#deploy-terminal', () => {
     )
   })
 
+  it('Should limit the task lifetime to 2 hours in prod, with 1 hour idle timeout', async () => {
+    getEntity.mockResolvedValue({
+      environments: {
+        prod: { tenant_config: { zone: 'protected' } }
+      }
+    })
+    generateTerminalToken.mockReturnValue('1234567890')
+    const logger = { info: vi.fn(), error: vi.fn() }
+
+    await deployTerminal(
+      {
+        environment: 'prod',
+        service: 'foo-backend',
+        zone: 'protected',
+        tool: 'pgweb'
+      },
+      { displayName: 'user name', id: '1234' },
+      logger,
+      sendSnsMessage
+    )
+
+    expect(sendSnsMessage).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.anything(),
+      expect.objectContaining({
+        environment: 'prod',
+        timeout: 7200,
+        idle_timeout_seconds: 3600
+      }),
+      expect.anything()
+    )
+  })
+
   it('Should keep postgres true for terminal when the service has sql', async () => {
     getEntity.mockResolvedValue({
       environments: {
