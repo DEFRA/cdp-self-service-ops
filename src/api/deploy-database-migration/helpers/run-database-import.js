@@ -76,11 +76,13 @@ export async function runDatabaseImport({
 }
 
 export function generateBuildSpec(commands) {
-  return `version: 0.2
+  let spec = 'version: 0.2\n\n'
+  spec += 'phases:\n'
+  spec += `  build:\n`
+  spec += `    commands:\n`
+  commands.forEach((c) => {
+    spec += `      - ${c}\n`
+  })
 
-  phases:
-  build:
-    commands:
-${commands.map((c) => `      - ${c}`).join('\n')}
-`
+  return spec
 }
