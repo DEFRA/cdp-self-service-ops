@@ -49,13 +49,15 @@ describe('#runDatabaseImport', () => {
 describe('#generateBuildSpec', () => {
   test('Should generate a valid yaml buildspec', async () => {
     const result = generateBuildSpec(['ls -la', 'pgrestore test.sql'])
-    expect(result).toEqual(`version: 0.2
+    expect(result).toEqual(
+      `version: 0.2
 
-  phases:
+phases:
   build:
     commands:
       - ls -la
       - pgrestore test.sql
-`)
+`
+    )
   })
 })
