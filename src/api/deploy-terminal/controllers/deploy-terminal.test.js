@@ -38,7 +38,8 @@ describe('#deploy-terminal', () => {
       displayName: 'user name',
       id: '1234'
     }
-    await deployTerminal(payload, user, logger, sendSnsMessage)
+    const scope = ['admin', 'serviceOwner:team:team-1']
+    await deployTerminal(payload, user, logger, sendSnsMessage, scope)
 
     expect(sendSnsMessage).toHaveBeenCalledWith(
       expect.anything(),
@@ -46,7 +47,8 @@ describe('#deploy-terminal', () => {
       expect.objectContaining({
         deployed_by: {
           displayName: 'user name',
-          id: '1234'
+          id: '1234',
+          scope
         },
         environment: 'dev',
         postgres: false,
@@ -67,6 +69,35 @@ describe('#deploy-terminal', () => {
       user,
       token: mockToken
     })
+  })
+
+  it('Should default scope to an empty list when none is provided', async () => {
+    getEntity.mockResolvedValue({
+      environments: { dev: { tenant_config: { zone: 'public' } } }
+    })
+    generateTerminalToken.mockReturnValue('1234567890')
+    const logger = { info: vi.fn(), error: vi.fn() }
+
+    await deployTerminal(
+      {
+        environment: 'dev',
+        service: 'foo-backend',
+        zone: 'public',
+        tool: 'terminal'
+      },
+      { displayName: 'user name', id: '1234' },
+      logger,
+      sendSnsMessage
+    )
+
+    expect(sendSnsMessage).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.anything(),
+      expect.objectContaining({
+        deployed_by: { displayName: 'user name', id: '1234', scope: [] }
+      }),
+      expect.anything()
+    )
   })
 
   it('Should force postgres false for dbgate even when the service has sql', async () => {
