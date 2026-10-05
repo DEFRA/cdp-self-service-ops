@@ -41,7 +41,7 @@ export const startDatabaseImport = {
         commands.push(
           'export PGPASSWORD=$(aws rds generate-db-auth-token --hostname $PGHOST --port $PGPORT --region $REGION --username $PGUSER)'
         )
-        commands.push(`pg_restore --data-only ${fileName}`)
+        commands.push(`/usr/bin/pg_restore --data-only ${fileName}`)
         break
       default:
         return h
