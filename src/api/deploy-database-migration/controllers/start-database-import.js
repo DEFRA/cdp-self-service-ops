@@ -31,7 +31,7 @@ export const startDatabaseImport = {
 
     // Split up the S3 URL
     const s3Url = new URL(s3File) // assumes a full S3://bucket/path/file.ext url
-    const dataFolder = s3Url.hostname + path.dirname(s3Url.pathname) // bucket name + path, no prefix
+    const dataFolder = s3Url.hostname + path.dirname(s3Url.pathname) + '/' // bucket name + path, no prefix
     const fileName = './' + path.basename(s3Url.pathname) // file gets mounted into the base dir
 
     const commands = []
