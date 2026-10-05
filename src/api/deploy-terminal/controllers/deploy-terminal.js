@@ -47,13 +47,33 @@ const deployTerminalController = {
       )
     }
 
-    const response = await deployTerminal(payload, user, logger, snsClient)
+    const response = await deployTerminal(
+      payload,
+      user,
+      logger,
+      snsClient,
+      scope
+    )
 
     return h.response(response).code(statusCodes.ok)
   }
 }
 
-const deployTerminal = async function (payload, user, logger, snsClient) {
+/**
+ * @param {object} payload
+ * @param {{id: string, displayName: string}} user
+ * @param {object} logger
+ * @param {object} snsClient
+ * @param {string[]} [scope] The launching user's scopes at launch time. Sent on `deployed_by` so the
+ * webshell-proxy can store them alongside the shell's owner.
+ */
+const deployTerminal = async function (
+  payload,
+  user,
+  logger,
+  snsClient,
+  scope = []
+) {
   const entity = await getEntity(payload.service)
 
   const zone = entity.environments[payload.environment]?.tenant_config?.zone
@@ -84,7 +104,7 @@ const deployTerminal = async function (payload, user, logger, snsClient) {
 
   const runMessage = {
     environment: payload.environment,
-    deployed_by: user,
+    deployed_by: { ...user, scope },
     zone,
     token,
     role: payload.service,
