@@ -16,7 +16,7 @@ const recordImportValidation = Joi.object({
   service: repositoryNameValidation,
   version: migrationVersionValidation,
   environment: environmentValidation,
-  importTarget: Joi.string().valid('posgress').required(),
+  importTarget: Joi.string().valid('postgres').required(),
   user: userWithIdValidation
 })
 
