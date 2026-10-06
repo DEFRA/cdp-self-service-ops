@@ -9,6 +9,7 @@ import {
   migrationIdValidation,
   repositoryNameValidation
 } from '@defra/cdp-validation-kit'
+import { recordDataImport } from './record-database-import.js'
 
 const runImportValidation = Joi.object({
   cdpMigrationId: migrationIdValidation,
@@ -35,20 +36,22 @@ const defaultImportImage = config.get('dataImportDefaultImage')
 export async function runDatabaseImport({
   service,
   environment,
+  version,
   user,
+  target,
   dataFolder,
   commands,
   snsClient,
   logger
 }) {
-  const cdpMigrationId = randomUUID()
+  const cdpImportId = randomUUID()
 
   const buildSpec = generateBuildSpec(commands)
 
   const runMessage = {
-    cdpMigrationId,
+    cdpImportId,
     service,
-    version: '0.0.0',
+    version,
     environment,
     user,
     overrides: {
@@ -64,15 +67,22 @@ export async function runDatabaseImport({
 
   await sendSnsMessage(snsClient, snsRunMigrationTopic, runMessage, logger)
 
-  // TODO: track import in PBE (maybe extend migration?)
+  await recordDataImport({
+    cdpImportId,
+    service,
+    version,
+    target,
+    environment,
+    user
+  })
 
   logger.info(
-    `Ran database import ${cdpMigrationId} ${service}:/${dataFolder} in ${environment}`
+    `Ran database import ${cdpImportId} ${service}:/${dataFolder} in ${environment}`
   )
 
-  logger.info(`importId: ${cdpMigrationId} buildspec: ${buildSpec}`)
+  logger.info(`importId: ${cdpImportId} buildspec: ${buildSpec}`)
 
-  return cdpMigrationId
+  return cdpImportId
 }
 
 export function generateBuildSpec(commands) {
