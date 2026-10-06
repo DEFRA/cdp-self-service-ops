@@ -60,8 +60,10 @@ export const startDatabaseImport = {
     const migrationId = await runDatabaseImport({
       service,
       environment,
+      version: '0.0.0',
       user,
       dataFolder,
+      target,
       commands,
       snsClient,
       logger
