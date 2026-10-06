@@ -57,7 +57,7 @@ export const startDatabaseImport = {
 
     const user = await getScopedUser(service, auth, logger)
 
-    const migrationId = await runDatabaseImport({
+    const importId = await runDatabaseImport({
       service,
       environment,
       version: '0.0.0',
@@ -69,12 +69,12 @@ export const startDatabaseImport = {
       logger
     })
 
-    if (!migrationId) {
+    if (!importId) {
       return h
         .response({ message: 'Failed to send SNS message' })
         .code(statusCodes.internalError)
     }
 
-    return h.response({ migrationId }).code(statusCodes.ok)
+    return h.response({ importId }).code(statusCodes.ok)
   }
 }
