@@ -49,7 +49,7 @@ export async function runDatabaseImport({
   const buildSpec = generateBuildSpec(commands)
 
   const runMessage = {
-    cdpImportId,
+    cdpMigrationId: cdpImportId,
     service,
     version,
     environment,
