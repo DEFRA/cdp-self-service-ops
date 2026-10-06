@@ -25,8 +25,6 @@ vi.mock('../../../helpers/logging/logger.js', () => ({
   })
 }))
 
-vi.mock('../../../helpers/logging/logger.js', () => ({}))
-
 describe('#runDatabaseImport', () => {
   beforeEach(() => {
     mockSNSClientSend.mockResolvedValue({})
@@ -36,7 +34,9 @@ describe('#runDatabaseImport', () => {
     await runDatabaseImport({
       service: 'some-service',
       environment: 'infra-dev',
+      version: '0.0.0',
       user: { id: userId, displayName: 'My Name' },
+      target: 'posgress',
       dataFolder: 'some-service/foo/bar/',
       commands: ['pgrestore foo.sql'],
       snsClient: mockSNSClient,
