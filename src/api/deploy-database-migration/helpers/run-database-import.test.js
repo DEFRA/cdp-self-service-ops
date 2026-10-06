@@ -36,7 +36,7 @@ describe('#runDatabaseImport', () => {
       environment: 'infra-dev',
       version: '0.0.0',
       user: { id: userId, displayName: 'My Name' },
-      target: 'posgress',
+      target: 'postgres',
       dataFolder: 'some-service/foo/bar/',
       commands: ['pgrestore foo.sql'],
       snsClient: mockSNSClient,
