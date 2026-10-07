@@ -36,7 +36,7 @@ const defaultImportImage = config.get('dataImportDefaultImage')
 export async function runDatabaseImport({
   service,
   environment,
-  version,
+  path,
   user,
   target,
   dataFolder,
@@ -51,7 +51,7 @@ export async function runDatabaseImport({
   const runMessage = {
     cdpMigrationId: cdpImportId,
     service,
-    version,
+    version: '0.0.0',
     environment,
     user,
     overrides: {
@@ -70,14 +70,14 @@ export async function runDatabaseImport({
   await recordDataImport({
     cdpImportId,
     service,
-    version,
-    target,
     environment,
+    path,
+    target,
     user
   })
 
   logger.info(
-    `Ran database import ${cdpImportId} ${service}:/${dataFolder} in ${environment}`
+    `Ran database import ${cdpImportId} ${service}:/${path} in ${environment}`
   )
 
   logger.info(`importId: ${cdpImportId} buildspec: ${buildSpec}`)

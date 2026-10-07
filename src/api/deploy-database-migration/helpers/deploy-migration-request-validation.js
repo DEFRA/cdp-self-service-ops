@@ -14,6 +14,6 @@ export const deployMigrationRequestValidation = Joi.object({
 export const startImportRequestValidation = Joi.object({
   service: repositoryNameValidation,
   environment: environmentValidation,
-  s3File: Joi.string().uri({ scheme: 's3' }).required(),
+  path: Joi.string().required(),
   target: Joi.string().valid('postgres', 'mongo').default('postgres')
 })

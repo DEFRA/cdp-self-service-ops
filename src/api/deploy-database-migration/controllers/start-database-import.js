@@ -2,7 +2,7 @@ import { statusCodes } from '@defra/cdp-validation-kit'
 import { startImportRequestValidation } from '../helpers/deploy-migration-request-validation.js'
 import { runDatabaseImport } from '../helpers/run-database-import.js'
 import { getScopedUser } from '../../../helpers/user/get-scoped-user.js'
-import path from 'path'
+import { dirname, basename } from 'path'
 
 export const startDatabaseImport = {
   options: {
@@ -20,7 +20,7 @@ export const startDatabaseImport = {
   },
   handler: async (request, h) => {
     const { payload, snsClient, auth, logger } = request
-    const { service, environment, s3File, target } = payload
+    const { service, environment, path, target } = payload
 
     // While it's still in development it's restricted to infra-dev
     if (environment !== 'infra-dev') {
@@ -28,11 +28,12 @@ export const startDatabaseImport = {
         .response({ message: 'Restricted to infra-dev only' })
         .code(statusCodes.badRequest)
     }
+    // TODO: Get from config
+    const bucket = 'cdp-infra-dev-database-migrations'
 
-    // Split up the S3 URL
-    const s3Url = new URL(s3File) // assumes a full S3://bucket/path/file.ext url
-    const dataFolder = s3Url.hostname + path.dirname(s3Url.pathname) + '/' // bucket name + path, no prefix
-    const fileName = './' + path.basename(s3Url.pathname) // file gets mounted into the base dir
+    // Split up path
+    const dataFolder = bucket + dirname(path) + '/' // bucket name + path, no prefix
+    const fileName = './' + basename(path) // file gets mounted into the base dir
 
     const commands = []
     switch (target) {
@@ -60,7 +61,7 @@ export const startDatabaseImport = {
     const importId = await runDatabaseImport({
       service,
       environment,
-      version: '0.0.0',
+      path,
       user,
       dataFolder,
       target,
