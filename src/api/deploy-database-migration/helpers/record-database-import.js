@@ -6,7 +6,6 @@ import Joi from 'joi'
 import {
   environmentValidation,
   userWithIdValidation,
-  migrationVersionValidation,
   migrationIdValidation,
   repositoryNameValidation
 } from '@defra/cdp-validation-kit'
@@ -14,7 +13,7 @@ import {
 const recordImportValidation = Joi.object({
   cdpImportId: migrationIdValidation,
   service: repositoryNameValidation,
-  version: migrationVersionValidation,
+  path: Joi.string().required(),
   environment: environmentValidation,
   importTarget: Joi.string().valid('postgres').required(),
   user: userWithIdValidation
@@ -29,7 +28,7 @@ export async function recordDataImport({
   cdpImportId,
   service,
   environment,
-  version,
+  path,
   target,
   user
 }) {
@@ -38,13 +37,13 @@ export async function recordDataImport({
   const url = `${config.get('portalBackendUrl')}/imports/runs`
 
   logger.info(
-    `Recording db ${target} import ${service}:${version} in ${environment} run ${cdpImportId} by ${user.displayName}`
+    `Recording db ${target} import ${service}:${path} in ${environment} run ${cdpImportId} by ${user.displayName}`
   )
 
   const body = {
     cdpImportId,
     service,
-    version,
+    path,
     environment,
     importTarget: target,
     user
