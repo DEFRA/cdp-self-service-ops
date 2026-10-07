@@ -8,7 +8,8 @@ describe('#isAllowedTerminalEnvironment', () => {
     const result = isAllowedTerminalEnvironment({
       userScopes: [scopes.breakGlass],
       environment: environments.prod,
-      teamIds: []
+      teamIds: [],
+      tool: 'terminal'
     })
 
     expect(result).toBe(true)
@@ -18,7 +19,8 @@ describe('#isAllowedTerminalEnvironment', () => {
     const result = isAllowedTerminalEnvironment({
       userScopes: [`${scopes.breakGlass}:team:platform`],
       environment: environments.prod,
-      teamIds: ['platform']
+      teamIds: ['platform'],
+      tool: 'terminal'
     })
 
     expect(result).toBe(true)
@@ -28,7 +30,8 @@ describe('#isAllowedTerminalEnvironment', () => {
     const result = isAllowedTerminalEnvironment({
       userScopes: [],
       environment: environments.prod,
-      teamIds: []
+      teamIds: [],
+      tool: 'terminal'
     })
 
     expect(result).toBe(false)
@@ -38,7 +41,8 @@ describe('#isAllowedTerminalEnvironment', () => {
     const result = isAllowedTerminalEnvironment({
       userScopes: [],
       environment: environments.infraDev,
-      teamIds: []
+      teamIds: [],
+      tool: 'terminal'
     })
 
     expect(result).toBe(false)
@@ -48,7 +52,8 @@ describe('#isAllowedTerminalEnvironment', () => {
     const result = isAllowedTerminalEnvironment({
       userScopes: [scopes.admin],
       environment: environments.management,
-      teamIds: []
+      teamIds: [],
+      tool: 'terminal'
     })
 
     expect(result).toBe(true)
@@ -58,7 +63,8 @@ describe('#isAllowedTerminalEnvironment', () => {
     const result = isAllowedTerminalEnvironment({
       userScopes: [scopes.breakGlass],
       environment: environments.management,
-      teamIds: []
+      teamIds: [],
+      tool: 'terminal'
     })
 
     expect(result).toBe(false)
@@ -72,7 +78,8 @@ describe('#isAllowedTerminalEnvironment', () => {
         'user:01b99595-27b5-4ab0-9807-f104c09d2cd0'
       ],
       environment: environments.dev,
-      teamIds: ['forms']
+      teamIds: ['forms'],
+      tool: 'terminal'
     })
 
     expect(result).toBe(true)
@@ -86,7 +93,8 @@ describe('#isAllowedTerminalEnvironment', () => {
         'user:01b99595-27b5-4ab0-9807-f104c09d2cd0'
       ],
       environment: environments.dev,
-      teamIds: ['platform']
+      teamIds: ['platform'],
+      tool: 'terminal'
     })
 
     expect(result).toBe(false)
@@ -96,9 +104,46 @@ describe('#isAllowedTerminalEnvironment', () => {
     const result = isAllowedTerminalEnvironment({
       userScopes: [scopes.admin],
       environment: environments.dev,
-      teamIds: ['forms']
+      teamIds: ['forms'],
+      tool: 'terminal'
     })
 
     expect(result).toBe(true)
+  })
+
+  test('Should allow prod for beta tester service owner with sqs tool without breakglass', () => {
+    const result = isAllowedTerminalEnvironment({
+      userScopes: [
+        'permission:betaTester',
+        'permission:serviceOwner:team:forms'
+      ],
+      environment: environments.prod,
+      teamIds: ['forms'],
+      tool: 'sqs_tool'
+    })
+
+    expect(result).toBe(true)
+  })
+
+  test('Should deny prod for service owner with sqs tool without beta tester', () => {
+    const result = isAllowedTerminalEnvironment({
+      userScopes: ['permission:serviceOwner:team:forms'],
+      environment: environments.prod,
+      teamIds: ['forms'],
+      tool: 'sqs_tool'
+    })
+
+    expect(result).toBe(false)
+  })
+
+  test('Should deny prod for service owner with terminal without breakglass', () => {
+    const result = isAllowedTerminalEnvironment({
+      userScopes: ['permission:serviceOwner:team:forms'],
+      environment: environments.prod,
+      teamIds: ['forms'],
+      tool: 'terminal'
+    })
+
+    expect(result).toBe(false)
   })
 })

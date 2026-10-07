@@ -16,8 +16,11 @@ export function getMaxLifetimeMinutes(environment) {
 }
 
 /**
- * Expands out the selected tool to a image + image tag.
- * @type {Object.<string, {image:string, image_version: string, idle_timeout_minutes: int}>}
+ * Expands out the selected tool to a image + image tag, plus optional capability flags:
+ * - usesPostgresRole: false forces the service role even when the service has postgres (DbGate mongo, SQS).
+ * - sqs: the tool is sent the service's redrivable queues.
+ * - allowInProdWithoutBreakGlass: service owners may launch it in prod without break glass.
+ * @type {Object.<string, {image:string, image_version: string, idle_timeout_minutes: int, usesPostgresRole?: boolean, sqs?: boolean, allowInProdWithoutBreakGlass?: boolean}>}
  */
 export const toolConfig = {
   terminal: {
@@ -43,11 +46,29 @@ export const toolConfig = {
   dbgate: {
     image: 'cdp-dbgate',
     image_version: 'stable',
-    idle_timeout_minutes: idleTimeoutMinutes
+    idle_timeout_minutes: idleTimeoutMinutes,
+    usesPostgresRole: false
   },
   dbgate_latest: {
     image: 'cdp-dbgate',
     image_version: 'latest',
-    idle_timeout_minutes: idleTimeoutMinutes
+    idle_timeout_minutes: idleTimeoutMinutes,
+    usesPostgresRole: false
+  },
+  sqs_tool: {
+    image: 'cdp-aws-tools',
+    image_version: 'stable',
+    idle_timeout_minutes: idleTimeoutMinutes,
+    usesPostgresRole: false,
+    sqs: true,
+    allowInProdWithoutBreakGlass: true
+  },
+  sqs_tool_latest: {
+    image: 'cdp-aws-tools',
+    image_version: 'latest',
+    idle_timeout_minutes: idleTimeoutMinutes,
+    usesPostgresRole: false,
+    sqs: true,
+    allowInProdWithoutBreakGlass: true
   }
 }
