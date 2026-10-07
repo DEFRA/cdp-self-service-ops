@@ -34,7 +34,7 @@ describe('#runDatabaseImport', () => {
     await runDatabaseImport({
       service: 'some-service',
       environment: 'infra-dev',
-      version: '0.0.0',
+      path: 'some-service/foo/bar/foo.sql',
       user: { id: userId, displayName: 'My Name' },
       target: 'postgres',
       dataFolder: 'some-service/foo/bar/',
