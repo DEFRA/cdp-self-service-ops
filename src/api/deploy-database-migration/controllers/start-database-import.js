@@ -32,8 +32,8 @@ export const startDatabaseImport = {
     const bucket = 'cdp-infra-dev-database-migrations'
 
     // Split up path
-    const dataFolder = bucket + dirname(path) + '/' // bucket name + path, no prefix
-    const fileName = './' + basename(path) // file gets mounted into the base dir
+    const dataFolder = `${bucket}/${service}/imports/${dirname(path)}/` // bucket name + path, no prefix
+    const fileName = `./${basename(path)}` // file gets mounted into the base dir
 
     const commands = []
     switch (target) {
