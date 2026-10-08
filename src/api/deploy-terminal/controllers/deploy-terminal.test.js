@@ -212,7 +212,7 @@ describe('#deploy-terminal', () => {
     )
   })
 
-  it('Should include sqs queue metadata and disable postgres for sqs tool', async () => {
+  it('Should include environment resources and disable postgres for sqs tool', async () => {
     const entity = {
       environments: {
         dev: {
@@ -261,19 +261,30 @@ describe('#deploy-terminal', () => {
         image: 'cdp-aws-tools',
         image_version: 'stable',
         show_message_content: true,
-        sqs_queues: [
-          {
-            name: 'orders',
-            arn: 'arn:aws:sqs:eu-west-2:123456789012:orders',
-            url: 'https://sqs.eu-west-2.amazonaws.com/123456789012/orders',
-            deadletter_queue_arn:
-              'arn:aws:sqs:eu-west-2:123456789012:orders-deadletter'
-          }
-        ]
+        resources: entity.environments.dev
       }),
       expect.anything()
     )
     expect(logger.warn).toHaveBeenCalled()
+  })
+
+  it('Should reject sqs tool when sqs_queues is null', async () => {
+    const entity = {
+      environments: {
+        dev: { tenant_config: { zone: 'public' }, sqs_queues: null }
+      }
+    }
+    const logger = { info: vi.fn(), warn: vi.fn(), error: vi.fn() }
+
+    await expect(
+      deployTerminal(
+        { environment: 'dev', service: 'foo-backend', tool: 'sqs_tool' },
+        entity,
+        { displayName: 'user name', id: '1234' },
+        logger,
+        sendSnsMessage
+      )
+    ).rejects.toThrow('No queues with a dead letter queue')
   })
 
   it('Should hide sqs message content in prod without breakglass', async () => {
