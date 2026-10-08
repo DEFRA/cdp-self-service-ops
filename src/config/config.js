@@ -371,6 +371,12 @@ const config = convict({
     format: String,
     default: '',
     env: 'PORTAL_BACKEND_SHARED_SECRET'
+  },
+  dataImportDefaultImage: {
+    doc: 'Default container to run import jobs in',
+    format: String,
+    default: '094954420758.dkr.ecr.eu-west-2.amazonaws.com/cdp-webshell:stable',
+    env: 'DATA_IMPORT_DEFAULT_IMAGE'
   }
 })
 

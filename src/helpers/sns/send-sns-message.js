@@ -21,8 +21,6 @@ async function sendSnsMessage(
     }
   }
 
-  // At the time of writing localstack doesn't support fifo queues and will fail if you set these values on a non-fifo
-  // queue. Luckily, AWS requires all fifo queues to end with `.fifo` so we can selectively add these params.
   if (topic.endsWith('fifo')) {
     input.MessageDeduplicationId = deduplicationId
     input.MessageGroupId = messageGroupId

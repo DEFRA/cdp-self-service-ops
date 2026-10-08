@@ -1,0 +1,63 @@
+import { generateBuildSpec, runDatabaseImport } from './run-database-import.js'
+
+const mockInfoLogger = vi.fn()
+const mockErrorLogger = vi.fn()
+const mockDebugLogger = vi.fn()
+const mockLogger = {
+  info: mockInfoLogger,
+  error: mockErrorLogger,
+  debug: mockDebugLogger
+}
+const userId = '4bbc4178-28ee-4a2c-9a1b-2c5f174d228b'
+
+const mockSNSClientSend = vi.fn()
+const mockSNSClient = {
+  send: mockSNSClientSend
+}
+
+vi.mock('@aws-sdk/client-sns', () => ({
+  PublishCommand: vi.fn()
+}))
+vi.mock('../../../helpers/logging/logger.js', () => ({
+  createLogger: () => ({
+    info: (value) => mockInfoLogger(value),
+    error: (value) => mockErrorLogger(value)
+  })
+}))
+
+describe('#runDatabaseImport', () => {
+  beforeEach(() => {
+    mockSNSClientSend.mockResolvedValue({})
+  })
+
+  test('Should accept the request and trigger an sns message', async () => {
+    await runDatabaseImport({
+      service: 'some-service',
+      environment: 'infra-dev',
+      path: 'some-service/foo/bar/foo.sql',
+      user: { id: userId, displayName: 'My Name' },
+      target: 'postgres',
+      dataFolder: 'some-service/foo/bar/',
+      commands: ['pgrestore foo.sql'],
+      snsClient: mockSNSClient,
+      logger: mockLogger
+    })
+    expect(mockSNSClient.send).toHaveBeenCalledTimes(1)
+  })
+})
+
+describe('#generateBuildSpec', () => {
+  test('Should generate a valid yaml buildspec', async () => {
+    const result = generateBuildSpec(['ls -la', 'pgrestore test.sql'])
+    expect(result).toEqual(
+      `version: 0.2
+
+phases:
+  build:
+    commands:
+      - ls -la
+      - pgrestore test.sql
+`
+    )
+  })
+})
