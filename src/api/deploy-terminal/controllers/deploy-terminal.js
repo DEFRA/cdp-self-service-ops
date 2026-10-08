@@ -21,27 +21,20 @@ const ownerTeamIds = (entity) =>
 
 /**
  * Queues the SQS tool can redrive: only those with both a queue arn and a dead letter queue.
- * @param {object[]} queues
+ * @param {object[]|null|undefined} queues
  * @param {object} payload
  * @param {object} logger
  */
-function redrivableQueues(queues = [], payload, logger) {
-  return queues
-    .filter((queue) => {
-      const isRedrivable = Boolean(queue.arn && queue.deadletter_queue_arn)
-      if (!isRedrivable) {
-        logger.warn(
-          `Skipping queue ${queue.name} for ${payload.service} in ${payload.environment} because arn or deadletter_queue_arn is missing`
-        )
-      }
-      return isRedrivable
-    })
-    .map((queue) => ({
-      name: queue.name,
-      arn: queue.arn,
-      url: queue.url,
-      deadletter_queue_arn: queue.deadletter_queue_arn
-    }))
+function redrivableQueues(queues, payload, logger) {
+  return (queues ?? []).filter((queue) => {
+    const isRedrivable = Boolean(queue.arn && queue.deadletter_queue_arn)
+    if (!isRedrivable) {
+      logger.warn(
+        `Skipping queue ${queue.name} for ${payload.service} in ${payload.environment} because arn or deadletter_queue_arn is missing`
+      )
+    }
+    return isRedrivable
+  })
 }
 
 export const deployTerminalController = {
@@ -162,11 +155,12 @@ export const deployTerminal = async function (
     image: tool.image,
     image_version: tool.image_version,
     show_message_content: showMessageContent,
-    sqs_queues: sqsQueues
+    resources: envConfig
   }
 
+  const { resources, ...loggedMessage } = runMessage
   logger.info(
-    `Terminal requested ${JSON.stringify(runMessage)} by ${user.displayName}`
+    `Terminal requested ${JSON.stringify(loggedMessage)} by ${user.displayName}`
   )
 
   const snsResponse = await sendSnsMessage(
