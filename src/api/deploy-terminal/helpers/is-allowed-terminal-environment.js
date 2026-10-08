@@ -1,7 +1,24 @@
 import { scopes } from '@defra/cdp-validation-kit'
 import { environments } from '../../../config/index.js'
+import { toolConfig } from './tool-config.js'
 
-function isAllowedTerminalEnvironment({ userScopes, environment, teamIds }) {
+const betaTesterScope = 'permission:betaTester'
+
+function hasBreakGlassScope({ userScopes, teamIds }) {
+  return (
+    userScopes.includes(scopes.breakGlass) ||
+    teamIds.some((teamId) =>
+      userScopes.includes(`${scopes.breakGlass}:team:${teamId}`)
+    )
+  )
+}
+
+function isAllowedTerminalEnvironment({
+  userScopes,
+  environment,
+  teamIds,
+  tool
+}) {
   const adminEnvs = [environments.infraDev, environments.management]
   const lowerEnvs = [
     environments.dev,
@@ -18,11 +35,17 @@ function isAllowedTerminalEnvironment({ userScopes, environment, teamIds }) {
     return true
   }
 
-  if (
-    environment === environments.prod &&
-    (hasScope(scopes.breakGlass) || hasTeamScope(scopes.breakGlass))
-  ) {
-    return true
+  if (environment === environments.prod) {
+    if (hasBreakGlassScope({ userScopes, teamIds })) {
+      return true
+    }
+
+    // TODO: When SQS leaves beta: drop betaTester here and the matching admin/beta gates in the portal.
+    return (
+      toolConfig[tool]?.allowInProdWithoutBreakGlass === true &&
+      hasScope(betaTesterScope) &&
+      hasTeamScope(scopes.serviceOwner)
+    )
   }
 
   if (adminEnvs.includes(environment)) {
@@ -36,4 +59,4 @@ function isAllowedTerminalEnvironment({ userScopes, environment, teamIds }) {
   return false
 }
 
-export { isAllowedTerminalEnvironment }
+export { isAllowedTerminalEnvironment, hasBreakGlassScope }

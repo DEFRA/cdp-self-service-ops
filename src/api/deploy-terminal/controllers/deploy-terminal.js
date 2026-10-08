@@ -1,6 +1,6 @@
 import Boom from '@hapi/boom'
 import { UTCDate } from '@date-fns/utc'
-import { differenceInSeconds, addMinutes } from 'date-fns'
+import { differenceInSeconds, addMinutes, min } from 'date-fns'
 import { statusCodes } from '@defra/cdp-validation-kit'
 import { getEntity } from '../../../helpers/portal-backend/get-entity.js'
 import { config } from '#config/config.js'
@@ -8,10 +8,43 @@ import { deployTerminalValidation } from '../helpers/deploy-terminal-validation.
 import { sendSnsMessage } from '../../../helpers/sns/send-sns-message.js'
 import { generateTerminalToken } from '../helpers/generate-terminal-token.js'
 import { recordTerminalSession } from '../helpers/record-terminal-session.js'
-import { isAllowedTerminalEnvironment } from '../helpers/is-allowed-terminal-environment.js'
+import {
+  hasBreakGlassScope,
+  isAllowedTerminalEnvironment
+} from '../helpers/is-allowed-terminal-environment.js'
 import { toolConfig, getMaxLifetimeMinutes } from '../helpers/tool-config.js'
+import { environments } from '../../../config/index.js'
 
-const deployTerminalController = {
+// Owning teams come from the entity, never from the request, so a caller cannot claim another team's service.
+const ownerTeamIds = (entity) =>
+  entity?.teams?.map(({ teamId }) => teamId) ?? []
+
+/**
+ * Queues the SQS tool can redrive: only those with both a queue arn and a dead letter queue.
+ * @param {object[]} queues
+ * @param {object} payload
+ * @param {object} logger
+ */
+function redrivableQueues(queues = [], payload, logger) {
+  return queues
+    .filter((queue) => {
+      const isRedrivable = Boolean(queue.arn && queue.deadletter_queue_arn)
+      if (!isRedrivable) {
+        logger.warn(
+          `Skipping queue ${queue.name} for ${payload.service} in ${payload.environment} because arn or deadletter_queue_arn is missing`
+        )
+      }
+      return isRedrivable
+    })
+    .map((queue) => ({
+      name: queue.name,
+      arn: queue.arn,
+      url: queue.url,
+      deadletter_queue_arn: queue.deadletter_queue_arn
+    }))
+}
+
+export const deployTerminalController = {
   options: {
     auth: {
       strategy: 'azure-oidc'
@@ -34,12 +67,14 @@ const deployTerminalController = {
     }
 
     const scope = auth?.credentials?.scope ?? []
+    const entity = await getEntity(payload.service, logger)
 
     if (
       !isAllowedTerminalEnvironment({
         userScopes: scope,
         environment: payload.environment,
-        teamIds: payload.teamIds
+        teamIds: ownerTeamIds(entity),
+        tool: payload.tool
       })
     ) {
       throw Boom.forbidden(
@@ -49,6 +84,7 @@ const deployTerminalController = {
 
     const response = await deployTerminal(
       payload,
+      entity,
       user,
       logger,
       snsClient,
@@ -61,22 +97,23 @@ const deployTerminalController = {
 
 /**
  * @param {object} payload
+ * @param {object} entity The service's portal-backend entity
  * @param {{id: string, displayName: string}} user
  * @param {object} logger
  * @param {object} snsClient
  * @param {string[]} [scope] The launching user's scopes at launch time. Sent on `deployed_by` so the
  * webshell-proxy can store them alongside the shell's owner.
  */
-const deployTerminal = async function (
+export const deployTerminal = async function (
   payload,
+  entity,
   user,
   logger,
   snsClient,
   scope = []
 ) {
-  const entity = await getEntity(payload.service)
-
-  const zone = entity.environments[payload.environment]?.tenant_config?.zone
+  const envConfig = entity?.environments?.[payload.environment]
+  const zone = envConfig?.tenant_config?.zone
   if (!zone) {
     logger.error(
       `failed to find zone for ${payload.service} in ${payload.environment}`
@@ -92,15 +129,25 @@ const deployTerminal = async function (
   }
 
   const now = new UTCDate()
-  const expiresDate =
-    payload.expiresAt ??
-    addMinutes(now, getMaxLifetimeMinutes(payload.environment))
-  const timeoutInSeconds = Math.abs(differenceInSeconds(expiresDate, now))
+  const maxExpiry = addMinutes(now, getMaxLifetimeMinutes(payload.environment))
+  const expiresDate = min([payload.expiresAt ?? maxExpiry, maxExpiry])
+  const timeoutInSeconds = Math.max(0, differenceInSeconds(expiresDate, now))
   const idleTimeoutInSeconds = tool.idle_timeout_minutes * 60
-  const hasPostgres =
-    entity.environments[payload.environment]?.sql_database != null
-  // DbGate mongo must use the service role, not the postgres -ddl role.
-  const postgres = payload.tool?.startsWith('dbgate') ? false : hasPostgres
+  const hasPostgres = envConfig.sql_database != null
+  const postgres = tool.usesPostgresRole === false ? false : hasPostgres
+
+  const sqsQueues = tool.sqs
+    ? redrivableQueues(envConfig.sqs_queues, payload, logger)
+    : []
+  if (tool.sqs && sqsQueues.length === 0) {
+    throw Boom.badRequest(
+      `No queues with a dead letter queue for ${payload.service} in ${payload.environment}`
+    )
+  }
+  const showMessageContent =
+    tool.sqs === true &&
+    (payload.environment !== environments.prod ||
+      hasBreakGlassScope({ userScopes: scope, teamIds: ownerTeamIds(entity) }))
 
   const runMessage = {
     environment: payload.environment,
@@ -113,7 +160,9 @@ const deployTerminal = async function (
     timeout: timeoutInSeconds,
     idle_timeout_seconds: idleTimeoutInSeconds,
     image: tool.image,
-    image_version: tool.image_version
+    image_version: tool.image_version,
+    show_message_content: showMessageContent,
+    sqs_queues: sqsQueues
   }
 
   logger.info(
@@ -153,5 +202,3 @@ const deployTerminal = async function (
     service: payload.service
   }
 }
-
-export { deployTerminalController, deployTerminal }
