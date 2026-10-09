@@ -137,7 +137,7 @@ export const deployTerminal = async function (
       `No queues with a dead letter queue for ${payload.service} in ${payload.environment}`
     )
   }
-  const showMessageContent =
+  const hasFullQueueAccess =
     tool.sqs === true &&
     (payload.environment !== environments.prod ||
       hasBreakGlassScope({ userScopes: scope, teamIds: ownerTeamIds(entity) }))
@@ -154,7 +154,8 @@ export const deployTerminal = async function (
     idle_timeout_seconds: idleTimeoutInSeconds,
     image: tool.image,
     image_version: tool.image_version,
-    show_message_content: showMessageContent,
+    show_message_content: hasFullQueueAccess,
+    allow_purge: hasFullQueueAccess,
     resources: envConfig
   }
 

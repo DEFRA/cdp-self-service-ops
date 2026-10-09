@@ -261,6 +261,7 @@ describe('#deploy-terminal', () => {
         image: 'cdp-aws-tools',
         image_version: 'stable',
         show_message_content: true,
+        allow_purge: true,
         resources: entity.environments.dev
       }),
       expect.anything()
@@ -326,7 +327,8 @@ describe('#deploy-terminal', () => {
       expect.anything(),
       expect.anything(),
       expect.objectContaining({
-        show_message_content: false
+        show_message_content: false,
+        allow_purge: false
       }),
       expect.anything()
     )
@@ -373,7 +375,24 @@ describe('#deploy-terminal', () => {
       expect(sendSnsMessage).toHaveBeenCalledWith(
         expect.anything(),
         expect.anything(),
-        expect.objectContaining({ show_message_content: true }),
+        expect.objectContaining({
+          show_message_content: true,
+          allow_purge: true
+        }),
+        expect.anything()
+      )
+    })
+
+    it('Should show purge with general break glass access', async () => {
+      await launch(prodEntity([queue]), ['permission:breakGlass'])
+
+      expect(sendSnsMessage).toHaveBeenCalledWith(
+        expect.anything(),
+        expect.anything(),
+        expect.objectContaining({
+          show_message_content: true,
+          allow_purge: true
+        }),
         expect.anything()
       )
     })
@@ -386,7 +405,10 @@ describe('#deploy-terminal', () => {
       expect(sendSnsMessage).toHaveBeenCalledWith(
         expect.anything(),
         expect.anything(),
-        expect.objectContaining({ show_message_content: false }),
+        expect.objectContaining({
+          show_message_content: false,
+          allow_purge: false
+        }),
         expect.anything()
       )
     })
