@@ -133,12 +133,81 @@ describe('#deploy-terminal', () => {
         postgres: false,
         image: 'cdp-dbgate',
         image_version: 'stable',
+        extra_env: { DBGATE_ENGINE: 'mongo' },
         timeout: 28800,
         role: 'foo-backend',
         service: 'foo-backend'
       }),
       expect.anything()
     )
+  })
+
+  it('Should set extra_env for dbgate_redis_latest', async () => {
+    const entity = {
+      environments: {
+        dev: {
+          tenant_config: { zone: 'public', redis: true }
+        }
+      }
+    }
+    generateTerminalToken.mockReturnValue('1234567890')
+    const logger = { info: vi.fn(), error: vi.fn() }
+
+    await deployTerminal(
+      {
+        environment: 'dev',
+        service: 'foo-frontend',
+        zone: 'public',
+        tool: 'dbgate_redis_latest'
+      },
+      entity,
+      { displayName: 'user name', id: '1234' },
+      logger,
+      sendSnsMessage
+    )
+
+    expect(sendSnsMessage).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.anything(),
+      expect.objectContaining({
+        postgres: false,
+        image: 'cdp-dbgate',
+        image_version: 'latest',
+        tool: 'dbgate_redis',
+        extra_env: { DBGATE_ENGINE: 'redis' }
+      }),
+      expect.anything()
+    )
+  })
+
+  it('Should reject dbgate_redis_latest when the service has no Redis', async () => {
+    const entity = {
+      environments: {
+        dev: {
+          tenant_config: { zone: 'protected', redis: false }
+        }
+      }
+    }
+    generateTerminalToken.mockReturnValue('1234567890')
+    const logger = { info: vi.fn(), error: vi.fn() }
+    sendSnsMessage.mockClear()
+
+    await expect(
+      deployTerminal(
+        {
+          environment: 'dev',
+          service: 'foo-backend',
+          zone: 'protected',
+          tool: 'dbgate_redis_latest'
+        },
+        entity,
+        { displayName: 'user name', id: '1234' },
+        logger,
+        sendSnsMessage
+      )
+    ).rejects.toThrow('No Redis for foo-backend in dev')
+
+    expect(sendSnsMessage).not.toHaveBeenCalled()
   })
 
   it('Should limit the task lifetime to 2 hours in prod, with 1 hour idle timeout', async () => {

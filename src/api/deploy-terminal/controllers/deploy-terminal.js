@@ -137,6 +137,11 @@ export const deployTerminal = async function (
       `No queues with a dead letter queue for ${payload.service} in ${payload.environment}`
     )
   }
+  if (tool.redis && !envConfig.tenant_config.redis) {
+    throw Boom.badRequest(
+      `No Redis for ${payload.service} in ${payload.environment}`
+    )
+  }
   const hasFullQueueAccess =
     tool.sqs === true &&
     (payload.environment !== environments.prod ||
@@ -154,6 +159,8 @@ export const deployTerminal = async function (
     idle_timeout_seconds: idleTimeoutInSeconds,
     image: tool.image,
     image_version: tool.image_version,
+    tool: tool.tool,
+    extra_env: tool.extra_env,
     show_message_content: hasFullQueueAccess,
     allow_purge: hasFullQueueAccess,
     resources: envConfig
