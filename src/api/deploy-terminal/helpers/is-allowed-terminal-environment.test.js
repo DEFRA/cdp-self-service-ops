@@ -146,4 +146,29 @@ describe('#isAllowedTerminalEnvironment', () => {
 
     expect(result).toBe(false)
   })
+
+  test('Should deny prod for beta tester service owner with dbgate_redis_latest without breakglass', () => {
+    const result = isAllowedTerminalEnvironment({
+      userScopes: [
+        'permission:betaTester',
+        'permission:serviceOwner:team:forms'
+      ],
+      environment: environments.prod,
+      teamIds: ['forms'],
+      tool: 'dbgate_redis_latest'
+    })
+
+    expect(result).toBe(false)
+  })
+
+  test('Should allow dev for service owner with dbgate_redis_latest', () => {
+    const result = isAllowedTerminalEnvironment({
+      userScopes: ['permission:serviceOwner:team:forms'],
+      environment: environments.dev,
+      teamIds: ['forms'],
+      tool: 'dbgate_redis_latest'
+    })
+
+    expect(result).toBe(true)
+  })
 })
