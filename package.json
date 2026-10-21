@@ -77,7 +77,7 @@
     "prettier": "3.8.2",
     "resolve-url-loader": "5.0.0",
     "timers": "0.1.1",
-    "vitest": "4.1.8",
+    "vitest": "5.0.5",
     "vitest-fetch-mock": "0.4.5",
     "vitest-mongodb": "1.0.3"
   }
