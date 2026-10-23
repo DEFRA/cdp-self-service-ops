@@ -3,6 +3,8 @@ import { startImportRequestValidation } from '../helpers/deploy-migration-reques
 import { runDatabaseImport } from '../helpers/run-database-import.js'
 import { getScopedUser } from '../../../helpers/user/get-scoped-user.js'
 import { dirname, basename } from 'path'
+import userHasBreakGlass from '../../../helpers/user/user-has-break-glass.js'
+import { getEntity } from '../../../helpers/portal-backend/get-entity.js'
 
 export const startDatabaseImport = {
   options: {
@@ -22,23 +24,33 @@ export const startDatabaseImport = {
     const { payload, snsClient, auth, logger } = request
     const { service, environment, path, target } = payload
 
-    // While it's still in development it's restricted to infra-dev
-    if (environment !== 'infra-dev') {
+    // While it's still in development it's restricted to admins
+    if (!auth?.credentials?.scopeFlags?.isAdmin) {
       return h
-        .response({ message: 'Restricted to infra-dev only' })
+        .response({ message: 'Restricted to admin only' })
         .code(statusCodes.badRequest)
     }
-    // TODO: Get from config
-    const bucket = 'cdp-infra-dev-database-migrations'
+
+    const entity = await getEntity(service, logger)
+
+    if (
+      environment === 'prod' &&
+      !userHasBreakGlass(auth?.credentials, entity)
+    ) {
+      return h
+        .response({ message: 'Break-glass required' })
+        .code(statusCodes.badRequest)
+    }
+
+    const bucket = `cdp-${environment}-imports`
 
     // Split up path
-    const dataFolder = `${bucket}/${service}/imports/${dirname(path)}/` // bucket name + path, no prefix
+    const dataFolder = `${bucket}/${service}/${dirname(path)}/` // bucket name + path, no prefix
     const fileName = `./${basename(path)}` // file gets mounted into the base dir
 
     const commands = []
     switch (target) {
       case 'postgres':
-        // TODO: fetch the entity, check it has a database & estimate the cores (ACU / 4 roughly) and set -j accordingly
         commands.push(
           'export PGPASSWORD=$(aws rds generate-db-auth-token --hostname $PGHOST --port $PGPORT --region $REGION --username $PGUSER)'
         )
@@ -47,7 +59,7 @@ export const startDatabaseImport = {
           'export PGDATABASE="${PGDATABASE:=$(echo "$SERVICE" | tr \'-\' \'_\')}"'
         )
         commands.push(
-          `/usr/bin/pg_restore -d postgresql://$PGHOST/$PGDATABASE --data-only ${fileName}`
+          `/usr/bin/pg_restore -d postgresql://$PGHOST/$PGDATABASE --data-only ${fileName} --single-transaction`
         )
         break
       default:
