@@ -5,10 +5,15 @@ import {
   repositoryNameValidation
 } from '@defra/cdp-validation-kit'
 
-const deployMigrationRequestValidation = Joi.object({
+export const deployMigrationRequestValidation = Joi.object({
   service: repositoryNameValidation,
   version: migrationIdValidation,
   environment: environmentValidation
 })
 
-export { deployMigrationRequestValidation }
+export const startImportRequestValidation = Joi.object({
+  service: repositoryNameValidation,
+  environment: environmentValidation,
+  path: Joi.string().required(),
+  target: Joi.string().valid('postgres', 'mongo').default('postgres')
+})
