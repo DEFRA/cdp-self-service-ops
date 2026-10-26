@@ -5,7 +5,6 @@ import { config } from '#config/config.js'
 import { repositoryValidation } from './helpers/schema/repository-validation.js'
 import { fetchTeam } from '../../helpers/fetch-team.js'
 import { createTemplatedRepo } from '../../helpers/create/workflows/index.js'
-import { createInitialEntity } from '../../helpers/create/create-initial-entity.js'
 
 const createRepositoryController = {
   options: {
@@ -32,14 +31,6 @@ const createRepositoryController = {
 
     request.logger.info(`Creating repository: ${repositoryName}`)
 
-    await createInitialEntity({
-      repositoryName,
-      entityType: 'Repository',
-      undefined,
-      team,
-      user: request.auth?.credentials
-    })
-
     await createTemplatedRepo(
       request.logger,
       config.get('workflows.createRepository'),
@@ -52,8 +43,7 @@ const createRepositoryController = {
     return h
       .response({
         message: 'Repository creation has started',
-        repositoryName,
-        statusUrl: `/status/${repositoryName}`
+        repositoryName
       })
       .code(statusCodes.ok)
   }
