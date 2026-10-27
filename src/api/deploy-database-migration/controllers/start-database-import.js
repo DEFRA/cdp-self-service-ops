@@ -45,7 +45,8 @@ export const startDatabaseImport = {
     const bucket = `cdp-${environment}-imports`
 
     // Split up path
-    const dataFolder = `${bucket}/${service}/${dirname(path)}/` // bucket name + path, no prefix
+    const serviceFolder = dirname(path) === '.' ? '' : `${dirname(path)}/`
+    const dataFolder = `${bucket}/${service}/${serviceFolder}` // bucket name + path, no prefix
     const fileName = `./${basename(path)}` // file gets mounted into the base dir
 
     const commands = []
