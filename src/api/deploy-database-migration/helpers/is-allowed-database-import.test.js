@@ -44,4 +44,24 @@ describe('#isAllowedDatabaseImport', () => {
       })
     ).toBe(false)
   })
+
+  test('Should reject a beta tester owner in an admin-only environment', () => {
+    expect(
+      isAllowedDatabaseImport({
+        userScopes: [betaTesterScope, ownerScope],
+        teamIds,
+        environment: 'management'
+      })
+    ).toBe(false)
+  })
+
+  test('Should allow an admin in an admin-only environment', () => {
+    expect(
+      isAllowedDatabaseImport({
+        userScopes: [scopes.admin],
+        teamIds,
+        environment: 'infra-dev'
+      })
+    ).toBe(true)
+  })
 })

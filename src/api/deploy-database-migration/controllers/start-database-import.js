@@ -30,7 +30,8 @@ export const startDatabaseImport = {
     if (
       !isAllowedDatabaseImport({
         userScopes: auth?.credentials?.scope ?? [],
-        teamIds: entity?.teams?.map(({ teamId }) => teamId) ?? []
+        teamIds: entity?.teams?.map(({ teamId }) => teamId) ?? [],
+        environment
       })
     ) {
       throw Boom.forbidden(
