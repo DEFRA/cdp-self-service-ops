@@ -1,8 +1,7 @@
 import { scopes } from '@defra/cdp-validation-kit'
 import { environments } from '../../../config/index.js'
 import { toolConfig } from './tool-config.js'
-
-const betaTesterScope = 'permission:betaTester'
+import { betaTesterScope } from '../../../constants/scopes.js'
 
 function hasBreakGlassScope({ userScopes, teamIds }) {
   return (
