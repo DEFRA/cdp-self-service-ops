@@ -1,6 +1,8 @@
+import Boom from '@hapi/boom'
 import { statusCodes } from '@defra/cdp-validation-kit'
 import { startImportRequestValidation } from '../helpers/deploy-migration-request-validation.js'
 import { runDatabaseImport } from '../helpers/run-database-import.js'
+import { isAllowedDatabaseImport } from '../helpers/is-allowed-database-import.js'
 import { getScopedUser } from '../../../helpers/user/get-scoped-user.js'
 import { dirname, basename } from 'path'
 import userHasBreakGlass from '../../../helpers/user/user-has-break-glass.js'
@@ -23,15 +25,18 @@ export const startDatabaseImport = {
   handler: async (request, h) => {
     const { payload, snsClient, auth, logger } = request
     const { service, environment, path, target } = payload
-
-    // While it's still in development it's restricted to admins
-    if (!auth?.credentials?.scopeFlags?.isAdmin) {
-      return h
-        .response({ message: 'Restricted to admin only' })
-        .code(statusCodes.badRequest)
-    }
-
     const entity = await getEntity(service, logger)
+
+    if (
+      !isAllowedDatabaseImport({
+        userScopes: auth?.credentials?.scope ?? [],
+        teamIds: entity?.teams?.map(({ teamId }) => teamId) ?? []
+      })
+    ) {
+      throw Boom.forbidden(
+        'Insufficient permissions to start a database import'
+      )
+    }
 
     if (
       environment === 'prod' &&
