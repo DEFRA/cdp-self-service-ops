@@ -111,21 +111,7 @@ describe('#isAllowedTerminalEnvironment', () => {
     expect(result).toBe(true)
   })
 
-  test('Should allow prod for beta tester service owner with sqs tool without breakglass', () => {
-    const result = isAllowedTerminalEnvironment({
-      userScopes: [
-        'permission:betaTester',
-        'permission:serviceOwner:team:forms'
-      ],
-      environment: environments.prod,
-      teamIds: ['forms'],
-      tool: 'sqs_tool'
-    })
-
-    expect(result).toBe(true)
-  })
-
-  test('Should deny prod for service owner with sqs tool without beta tester', () => {
+  test('Should allow prod for tenant service owner with sqs tool without breakglass', () => {
     const result = isAllowedTerminalEnvironment({
       userScopes: ['permission:serviceOwner:team:forms'],
       environment: environments.prod,
@@ -133,7 +119,7 @@ describe('#isAllowedTerminalEnvironment', () => {
       tool: 'sqs_tool'
     })
 
-    expect(result).toBe(false)
+    expect(result).toBe(true)
   })
 
   test('Should deny prod for service owner with terminal without breakglass', () => {
@@ -147,12 +133,9 @@ describe('#isAllowedTerminalEnvironment', () => {
     expect(result).toBe(false)
   })
 
-  test('Should deny prod for beta tester service owner with dbgate_redis_latest without breakglass', () => {
+  test('Should deny prod for tenant service owner with dbgate_redis_latest without breakglass', () => {
     const result = isAllowedTerminalEnvironment({
-      userScopes: [
-        'permission:betaTester',
-        'permission:serviceOwner:team:forms'
-      ],
+      userScopes: ['permission:serviceOwner:team:forms'],
       environment: environments.prod,
       teamIds: ['forms'],
       tool: 'dbgate_redis_latest'
