@@ -1,7 +1,6 @@
 import { scopes } from '@defra/cdp-validation-kit'
 import { environments } from '../../../config/index.js'
 import { toolConfig } from './tool-config.js'
-import { betaTesterScope } from '../../../constants/scopes.js'
 
 function hasBreakGlassScope({ userScopes, teamIds }) {
   return (
@@ -39,10 +38,8 @@ function isAllowedTerminalEnvironment({
       return true
     }
 
-    // TODO: When SQS leaves beta: drop betaTester here and the matching admin/beta gates in the portal.
     return (
       toolConfig[tool]?.allowInProdWithoutBreakGlass === true &&
-      hasScope(betaTesterScope) &&
       hasTeamScope(scopes.serviceOwner)
     )
   }

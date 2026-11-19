@@ -526,10 +526,9 @@ describe('#deploy-terminal', () => {
 
       await expect(
         deployTerminalController.handler(
-          request(
-            ['permission:betaTester', 'permission:serviceOwner:team:other'],
-            { teamIds: ['other'] }
-          )
+          request(['permission:serviceOwner:team:other'], {
+            teamIds: ['other']
+          })
         )
       ).rejects.toThrow(
         'Insufficient permissions to launch a terminal in this environment'
