@@ -82,9 +82,15 @@ export async function deployService(details, user, snsClient, logger) {
     user
   })
 
-  await commitDeploymentFile(deployment, logger)
-
-  logger.info('Deployment commit file created')
+  try {
+    await commitDeploymentFile(deployment, logger)
+    logger.info('Deployment commit file created')
+  } catch (error) {
+    logger.error(error)
+    logger.error(
+      `Failed to commit deployment to GitHub: ${JSON.stringify(deployment)}`
+    )
+  }
 
   return { deploymentId }
 }
